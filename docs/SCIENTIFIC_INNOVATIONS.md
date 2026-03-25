@@ -26,6 +26,21 @@ La implementación abarca **3 lenguajes de programación**:
 | **C** | Aritmética S60 integrada en `cortex_events.h` y los guardianes eBPF | Cálculos dentro del kernel Linux (Ring-0) |
 | **Python** | Prototipos originales y módulos de validación experimental | 35 experimentos empíricos que validaron la viabilidad del sistema |
 
+### Contribución Original: Arquitectura eBPF Cognitiva (Ring-0)
+
+> **La integración de análisis cognitivo directamente en hooks eBPF del kernel Linux también es creación original de Jaime Novoa.** No existe ningún firewall que combine LSM hooks con aritmética S60 para calcular entropía semántica dentro del kernel, ni un dead-man switch biométrico implementado a nivel de TC (Traffic Control).
+
+Lo que hace único a este enfoque Ring-0:
+
+| Componente | Qué hace | Por qué no existía |
+|---|---|---|
+| **LSM Guardian con entropía S60** | Calcula la entropía de cada syscall usando aritmética modular S60 *dentro del kernel* | Los LSM hooks existentes (AppArmor, SELinux) solo comparan contra listas estáticas de reglas — no calculan entropía |
+| **XDP Firewall con detección de ráfagas** | Analiza paquetes a velocidad de línea y clasifica el tráfico por umbrales S60 | Los XDP programs existentes filtran por IP/puerto — no por patrones de ráfaga con thresholds dinámicos |
+| **TC Quarantine (Dead-Man Switch)** | Bloquea **todo** el tráfico IP si el operador humano no envía pulso en 30s | No existe ningún firewall TC que se active por ausencia de señal biométrica |
+| **Contrato de 32 bytes kernel↔userspace** | Estructura `cortex_event` de exactamente 32 bytes optimizada para cache L1 | Los ring buffers eBPF típicos usan estructuras arbitrarias sin optimización de cache |
+
+**La combinación de S60 + eBPF + bio-resonancia en Ring-0 no tiene precedente.** Los firewalls existentes (iptables, nftables, Cilium, Falco) operan con reglas estáticas o políticas declarativas. Sentinel es el primero en ejecutar **lógica cognitiva determinista** directamente en el kernel.
+
 **Sin estos módulos, nada funciona.** La aritmética S60 es la base sobre la que se construyen la lógica armónica, el bio-resonador, el planificador adaptativo, y el detector de fase. Si se reemplazara por floats IEEE 754, el sistema acumularía drift térmico y produciría falsos positivos/negativos en las decisiones de seguridad.
 
 ---
