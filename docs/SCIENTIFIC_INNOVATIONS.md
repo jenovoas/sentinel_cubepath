@@ -41,6 +41,20 @@ Lo que hace único a este enfoque Ring-0:
 
 **La combinación de S60 + eBPF + bio-resonancia en Ring-0 no tiene precedente.** Los firewalls existentes (iptables, nftables, Cilium, Falco) operan con reglas estáticas o políticas declarativas. Sentinel es el primero en ejecutar **lógica cognitiva determinista** directamente en el kernel.
 
+### Contribución Original: Tecnologías de Simulación Física
+
+Además de la aritmética y la arquitectura de kernel, Sentinel incorpora un conjunto de **modelos de simulación física sin precedente** en software, todos diseñados por Jaime Novoa:
+
+| Tecnología | Qué es (para programadores) | Rol en Sentinel |
+|---|---|---|
+| **Cristales Virtuales S60** | Estructuras de datos que **vibran** — almacenan información como patrones de oscilación activa en lugar de bits estáticos. Análogo a un `EventEmitter` que nunca para de emitir mientras reciba energía. | Almacenamiento resonante de estado del firewall |
+| **Oscilador Piezoeléctrico** | Un generador de clock basado en la constante de Plimpton 322 (`1.534s`). En lugar de un `setInterval(fn, 1000)` arbitrario, el período del reloj tiene propiedades matemáticas que producen *cero drift* en operaciones trigonométricas. | Reloj maestro del sistema — todos los ciclos derivan de él |
+| **Simulación Cuántica (DTC)** | Implementación software de un *Discrete Time Crystal* — un sistema que oscila indefinidamente sin consumir energía neta, similar a un `while(true)` que no acumula deuda técnica porque se auto-regenera cada ciclo. | Mantiene el estado del firewall estable por tiempo indefinido |
+| **Matriz S60** | Grid de cálculo donde cada celda opera en aritmética Base-60. Equivalente a un `ndarray` pero con operaciones que nunca pierden precisión. | Evaluación paralela de múltiples señales de amenaza |
+| **Lattice Líquida** | Red dinámica que se reconfigura según la carga del sistema. Similar a un *consistent hash ring* que añade/quita nodos adaptativamente. | Distribución de trabajo del planificador adaptativo |
+
+> **Ninguna de estas tecnologías existe como concepto en la literatura de ciencias de la computación.** Son modelos originales que combinan principios de física del estado sólido, cristalografía y computación cuántica, traducidos a implementaciones deterministas en aritmética entera.
+
 **Sin estos módulos, nada funciona.** La aritmética S60 es la base sobre la que se construyen la lógica armónica, el bio-resonador, el planificador adaptativo, y el detector de fase. Si se reemplazara por floats IEEE 754, el sistema acumularía drift térmico y produciría falsos positivos/negativos en las decisiones de seguridad.
 
 ---
