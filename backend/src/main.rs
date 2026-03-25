@@ -14,6 +14,7 @@ mod models;
 mod memory;
 mod harmonic;
 pub mod ebpf; // Hacer público para visibilidad cruzada
+pub mod scheduler;
 
 use axum::{
     extract::ws::{Message, WebSocket, WebSocketUpgrade},
@@ -80,6 +81,7 @@ struct AppState {
     bio_resonator: Arc<Mutex<quantum::BioResonator>>,
     portal_detector: Arc<Mutex<quantum::PortalDetector>>,
     memory: Arc<memory::SentinelMemory>,
+    scheduler: Arc<Mutex<scheduler::QuantumScheduler>>,
     event_stream: broadcast::Sender<CortexEvent>,
 }
 
@@ -101,6 +103,7 @@ async fn main() {
         bio_resonator: bio_resonator.clone(),
         portal_detector: portal_detector.clone(),
         memory: Arc::new(memory::SentinelMemory::new()),
+        scheduler: Arc::new(Mutex::new(scheduler::QuantumScheduler::new())),
         event_stream: event_tx.clone(),
     });
 
@@ -128,6 +131,14 @@ async fn main() {
         loop {
             tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
             tick += 1;
+
+            let resonance = portal_detector.lock().unwrap().get_intensity(tick);
+            let mut sched = state.scheduler.lock().unwrap();
+            let pids_to_process = sched.tick_schedule(tick, resonance);
+
+            if !pids_to_process.is_empty() {
+                tracing::debug!("🔌 Processing {} events from adaptive batch...", pids_to_process.len());
+            }
 
             let mut bio = bio_task.lock().unwrap();
             bio.tick_entropy();
