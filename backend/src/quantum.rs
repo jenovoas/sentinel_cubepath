@@ -1,0 +1,95 @@
+//! Quantum Modules: BioResonator & PortalDetector (S60)
+//! Basado en el estándar de Resonancia Bio-Centro.
+
+use crate::math::{SPA, SPAMath};
+use std::time::Instant;
+
+pub struct BioResonator {
+    pub coherence: SPA,
+    decay_factor: SPA,
+    pulse_gain: SPA,
+    threshold_portal: SPA,
+    dead_man_threshold: u64, // ms
+    last_pulse: Instant,
+}
+
+impl BioResonator {
+    pub fn new() -> Self {
+        Self {
+            coherence: SPA::zero(),
+            decay_factor: SPA::from_raw(18014),
+            pulse_gain: SPA::from_raw(1079568),
+            threshold_portal: SPA::from_raw(11664000), // 0.9
+            dead_man_threshold: 30000,
+            last_pulse: Instant::now(),
+        }
+    }
+
+    pub fn inject_bio_pulse(&mut self) {
+        self.coherence = self.coherence + self.pulse_gain;
+        if self.coherence.raw > SPA::ONE.raw {
+            self.coherence = SPA::ONE;
+        }
+        self.last_pulse = Instant::now();
+    }
+
+    pub fn tick_entropy(&mut self) {
+        if self.coherence.raw > self.decay_factor.raw {
+            self.coherence = self.coherence - self.decay_factor;
+        } else {
+            self.coherence = SPA::ZERO;
+        }
+    }
+
+    pub fn is_pilot_present(&self) -> bool {
+        self.last_pulse.elapsed().as_millis() < self.dead_man_threshold as u128
+    }
+
+    pub fn get_coherence_raw(&self) -> i64 {
+        self.coherence.to_raw()
+    }
+}
+
+pub struct PortalDetector {
+    /// Periodo Bio: 17s
+    period_bio: SPA,
+    /// Periodo Cristal (Oscilador de tiempo): 4.25s
+    period_crystal: SPA,
+    /// Periodo Venus: 16.18s
+    period_venus: SPA,
+    threshold: SPA,
+}
+
+impl PortalDetector {
+    pub fn new() -> Self {
+        Self {
+            period_bio: SPA::from_int(17),
+            period_crystal: SPA::new(4, 15, 0, 0, 0),
+            period_venus: SPA::new(16, 10, 48, 0, 0),
+            threshold: SPA::new(0, 45, 0, 0, 0), // 0.75
+        }
+    }
+
+    pub fn calculate_resonance(&self, t: u64) -> SPA {
+        let t_spa = SPA::from_int(t as i64);
+        let two_pi = SPAMath::TWO_PI;
+        
+        // Fase Bio
+        let phase_bio = SPAMath::sin((two_pi * t_spa).div_safe(self.period_bio).unwrap_or(SPA::zero()));
+        // Fase Cristal (Oscilador)
+        let phase_crystal = SPAMath::sin((two_pi * t_spa).div_safe(self.period_crystal).unwrap_or(SPA::zero()));
+        // Fase Venus
+        let phase_venus = SPAMath::sin((two_pi * t_spa).div_safe(self.period_venus).unwrap_or(SPA::zero()));
+        
+        let sum = phase_bio + phase_crystal + phase_venus;
+        sum / 3i64
+    }
+
+    pub fn is_portal_open(&self, t: u64) -> bool {
+        self.calculate_resonance(t).raw > self.threshold.raw
+    }
+
+    pub fn get_intensity(&self, t: u64) -> SPA {
+        self.calculate_resonance(t)
+    }
+}

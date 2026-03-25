@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0a0c10;
+  --foreground: #f0fdfa;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-cyber-gray/40 backdrop-blur-md border border-sentinel-500/20 rounded-xl shadow-2xl;
+  }
+  
+  .neon-text {
+    @apply text-sentinel-400 drop-shadow-[0_0_8px_rgba(45,212,191,0.5)];
+  }
+}

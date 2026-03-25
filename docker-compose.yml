@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # Backend API (Rust)
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - RUST_LOG=info
+      - CORS_ORIGIN=https://sentinel.cubepath.app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend Dashboard (Next.js)
+  dashboard:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=https://api.sentinel.cubepath.app
+    depends_on:
+      - api
+    restart: unless-stopped
+
+networks:
+  default:
+    name: sentinel-network
