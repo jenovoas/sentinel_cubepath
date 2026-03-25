@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Terminal, AlertTriangle, ShieldCheck, Zap, Heart, Activity, Cpu } from "lucide-react";
+import React, { useEffect, useState, useRef } from "react";
+import { Terminal, AlertTriangle, ShieldCheck, Zap, Heart, Activity, Cpu, ShieldX } from "lucide-react";
 import { clsx } from "clsx";
 
 interface Event {
@@ -12,17 +12,43 @@ interface Event {
   severity: number;
 }
 
+const EVENT_CONFIG: Record<string, { icon: any; label: string; colorSet: string }> = {
+  FILE_BLOCKED: { icon: ShieldX, label: "FILE BLOCKED", colorSet: "rose" },
+  EXEC_BLOCKED: { icon: AlertTriangle, label: "EXEC BLOCKED", colorSet: "rose" },
+  FILE_ALLOWED: { icon: ShieldCheck, label: "FILE OK", colorSet: "emerald" },
+  EXEC_ALLOWED: { icon: ShieldCheck, label: "EXEC OK", colorSet: "emerald" },
+  NETWORK_BURST: { icon: Zap, label: "NET BURST", colorSet: "amber" },
+  NETWORK_NORMAL: { icon: Activity, label: "NET OK", colorSet: "slate" },
+  SYSTEM_METRIC: { icon: Cpu, label: "METRIC", colorSet: "slate" },
+  BIO_PULSE: { icon: Heart, label: "BIO PULSE", colorSet: "emerald" },
+  PHASE_RESYNC: { icon: Activity, label: "PHASE RESYNC", colorSet: "sky" },
+  SYSTEM_ONLINE: { icon: ShieldCheck, label: "SYSTEM ONLINE", colorSet: "emerald" },
+};
+
+const COLOR_MAP: Record<string, { border: string; bg: string; text: string; dot: string }> = {
+  rose: { border: "border-rose-500/20", bg: "bg-rose-500/5", text: "text-rose-400", dot: "bg-rose-500" },
+  emerald: { border: "border-emerald-500/20", bg: "bg-emerald-500/5", text: "text-emerald-400", dot: "bg-emerald-500" },
+  amber: { border: "border-amber-500/20", bg: "bg-amber-500/5", text: "text-amber-400", dot: "bg-amber-500" },
+  sky: { border: "border-sky-500/20", bg: "bg-sky-500/5", text: "text-sky-400", dot: "bg-sky-500" },
+  slate: { border: "border-slate-700/50", bg: "bg-slate-800/30", text: "text-slate-500", dot: "bg-slate-600" },
+};
+
 export function TelemetryFeed() {
   const [events, setEvents] = useState<Event[]>([]);
+  const [connected, setConnected] = useState(false);
+  const feedRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const wsUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000").replace("http", "ws") + "/api/v1/telemetry";
     const ws = new WebSocket(wsUrl);
 
+    ws.onopen = () => setConnected(true);
+    ws.onclose = () => setConnected(false);
+
     ws.onmessage = (e) => {
       try {
         const event = JSON.parse(e.data);
-        setEvents((prev) => [event, ...prev].slice(0, 100));
+        setEvents((prev) => [event, ...prev].slice(0, 150));
       } catch (err) {
         console.error("WS parse error", err);
       }
@@ -31,59 +57,92 @@ export function TelemetryFeed() {
     return () => ws.close();
   }, []);
 
-  const getEventStyle = (type: string, severity: number) => {
-    if (severity >= 3 || type.includes("BLOCKED")) return "border-rose-500/30 bg-rose-500/5 text-rose-400";
-    if (type.includes("BURST")) return "border-amber-500/30 bg-amber-500/5 text-amber-400";
-    if (type === "BIO_PULSE") return "border-emerald-500/30 bg-emerald-500/5 text-emerald-400";
-    if (type === "QHC_RESET") return "border-sky-500/30 bg-sky-500/5 text-sky-400";
-    return "border-slate-800 bg-slate-900/40 text-slate-400";
+  const getConfig = (ev: Event) => {
+    const cfg = EVENT_CONFIG[ev.event_type] || { icon: Cpu, label: ev.event_type, colorSet: "slate" };
+    const colors = COLOR_MAP[cfg.colorSet] || COLOR_MAP.slate;
+    return { ...cfg, colors };
   };
 
-  const getEventIcon = (type: string, severity: number) => {
-    if (severity >= 3 || type.includes("BLOCKED")) return <AlertTriangle className="w-3.5 h-3.5 text-rose-500" />;
-    if (type === "BIO_PULSE") return <Heart className="w-3.5 h-3.5 text-emerald-500 animate-pulse" />;
-    if (type.includes("BURST")) return <Zap className="w-3.5 h-3.5 text-amber-400" />;
-    if (type === "QHC_RESET") return <Activity className="w-3.5 h-3.5 text-sky-400" />;
-    return <Cpu className="w-3.5 h-3.5 text-slate-500" />;
+  const formatTime = (ns: number) => {
+    try {
+      return new Date(ns / 1000000).toLocaleTimeString("es-CL", { hour12: false });
+    } catch {
+      return "--:--:--";
+    }
   };
+
+  const resonancePercent = (raw: number) => ((raw / 12960000) * 100).toFixed(1);
 
   return (
-    <div className="h-full overflow-y-auto w-full font-mono text-[10px] p-4 space-y-2 custom-scrollbar">
+    <div ref={feedRef} className="h-full overflow-y-auto w-full font-mono text-[10px] p-4 space-y-1.5 custom-scrollbar">
+      {/* Connection status */}
+      <div className={clsx(
+        "flex items-center gap-2 px-3 py-1.5 rounded-lg mb-3 text-[9px] font-bold uppercase tracking-widest",
+        connected ? "bg-emerald-500/5 text-emerald-500 border border-emerald-500/10" : "bg-rose-500/5 text-rose-400 border border-rose-500/10"
+      )}>
+        <div className={clsx("w-1.5 h-1.5 rounded-full", connected ? "bg-emerald-500 animate-pulse" : "bg-rose-500")} />
+        {connected ? "Ring-0 Stream Active" : "Connecting to Kernel..."}
+      </div>
+
       {events.length === 0 && (
-        <div className="flex flex-col items-center justify-center h-full text-slate-600 gap-4 opacity-50">
-          <Terminal className="w-12 h-12 text-slate-800 animate-pulse" />
-          <p className="uppercase tracking-[0.2em] font-bold">Awaiting Ring-0 Telemetry...</p>
+        <div className="flex flex-col items-center justify-center h-[calc(100%-40px)] text-slate-600 gap-4">
+          <div className="phase-ring p-6">
+            <Terminal className="w-10 h-10 text-slate-700" />
+          </div>
+          <div className="text-center space-y-1">
+            <p className="uppercase tracking-[0.25em] font-bold text-[10px]">Awaiting Ring-0 Events</p>
+            <p className="text-[9px] text-slate-700 normal-case tracking-normal">Kernel telemetry will appear here in real-time</p>
+          </div>
         </div>
       )}
-      {events.map((ev, i) => (
-        <div 
-          key={i} 
-          className={clsx(
-            "p-2.5 border rounded-lg transition-all hover:bg-white/5 animate-in slide-in-from-left-2 duration-300",
-            getEventStyle(ev.event_type, ev.severity)
-          )}
-        >
-           <div className="flex items-center gap-3">
-              <span className="opacity-40 tabular-nums">[{new Date(ev.timestamp_ns / 1000000).toLocaleTimeString()}]</span>
-              
-              <div className="flex items-center gap-2 flex-1">
-                {getEventIcon(ev.event_type, ev.severity)}
-                <span className="font-bold uppercase tracking-wider">{ev.event_type}</span>
-              </div>
 
-              <div className="flex items-center gap-4 text-xs">
-                {ev.pid !== 0 && (
-                  <span className="opacity-70">
-                    PID <span className="text-white">{ev.pid}</span>
-                  </span>
-                )}
-                <span className="opacity-70">
-                  RESONANCE <span className="text-white mono">{(ev.entropy_s60_raw / 129600).toFixed(2)}%</span>
+      {events.map((ev, i) => {
+        const { icon: Icon, label, colors } = getConfig(ev);
+        const isCritical = ev.severity >= 3 || ev.event_type.includes("BLOCKED");
+
+        return (
+          <div
+            key={`${ev.timestamp_ns}-${i}`}
+            className={clsx(
+              "px-3 py-2 border rounded-lg transition-all animate-slide-in group",
+              colors.border,
+              colors.bg,
+              isCritical && "severity-critical"
+            )}
+            style={{ animationDelay: `${i * 20}ms` }}
+          >
+            <div className="flex items-center gap-3">
+              {/* Timestamp */}
+              <span className="text-slate-600 tabular-nums shrink-0 w-[56px]">
+                {formatTime(ev.timestamp_ns)}
+              </span>
+
+              {/* Severity dot */}
+              <div className={clsx("w-1.5 h-1.5 rounded-full shrink-0", colors.dot)} />
+
+              {/* Icon + Label */}
+              <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                <Icon className={clsx("w-3 h-3 shrink-0", colors.text, ev.event_type === "BIO_PULSE" && "bio-heartbeat")} />
+                <span className={clsx("font-bold uppercase tracking-wider truncate", colors.text)}>
+                  {label}
                 </span>
               </div>
-           </div>
-        </div>
-      ))}
+
+              {/* PID */}
+              {ev.pid !== 0 && (
+                <span className="text-slate-600 shrink-0">
+                  PID <span className="text-slate-400 font-bold">{ev.pid}</span>
+                </span>
+              )}
+
+              {/* S60 Resonance */}
+              <span className="text-slate-600 shrink-0 tabular-nums">
+                <span className={clsx("font-bold", colors.text)}>{resonancePercent(ev.entropy_s60_raw)}%</span>
+              </span>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
