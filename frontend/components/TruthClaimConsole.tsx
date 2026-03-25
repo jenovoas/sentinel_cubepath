@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Loader2, Scale, AlertCircle } from "lucide-react";
+import { Search, Loader2, Scale, AlertCircle, CheckCircle2 } from "lucide-react";
 import { clsx } from "clsx";
 
 export function TruthClaimConsole() {
@@ -18,7 +18,7 @@ export function TruthClaimConsole() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          engine: "claude-assistant",
+          engine: "sentinel-sovereign-agent",
           claim_payload: claim,
           trust_threshold: 0.8
         })
@@ -34,63 +34,76 @@ export function TruthClaimConsole() {
 
   return (
     <div className="space-y-4 flex-1 flex flex-col">
-      <div className="relative group">
+      <div className="relative group flex-1">
         <textarea
           value={claim}
           onChange={(e) => setClaim(e.target.value)}
-          placeholder="Escribe la intención del agente de IA aquí..."
-          className="w-full h-32 bg-cyber-black/50 border border-sentinel-500/20 rounded-lg p-3 text-xs text-sentinel-100 placeholder:text-sentinel-500/40 focus:outline-none focus:border-sentinel-400 transition-all resize-none font-mono"
+          placeholder="Enter AI Agent intent to analyze..."
+          className="w-full h-full bg-slate-950/50 border border-white/5 rounded-xl p-4 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-emerald-500/50 transition-all resize-none font-mono custom-scrollbar"
         />
-        <div className="absolute top-2 right-2 opacity-20 group-hover:opacity-100 transition-opacity">
-           <Search className="w-4 h-4 text-sentinel-400" />
+        <div className="absolute top-3 right-3 opacity-20 group-hover:opacity-100 transition-opacity">
+           <Search className="w-4 h-4 text-emerald-400" />
         </div>
       </div>
 
       <button
         onClick={verifyClaim}
         disabled={loading || !claim}
-        className="w-full bg-sentinel-600 hover:bg-sentinel-500 disabled:bg-sentinel-900 text-sentinel-50 font-bold py-2 rounded-lg text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+        className="sentinel-btn sentinel-btn-primary w-full disabled:opacity-50 disabled:scale-100"
       >
         {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scale className="w-4 h-4" />}
-        {loading ? "Analizando semántica..." : "Verificar Claim"}
+        {loading ? "Analizando semántica..." : "Verify Cognitive Claim"}
       </button>
 
       {result && (
         <div className={clsx(
-          "p-4 rounded-lg flex-1 border animate-in fade-in slide-in-from-bottom-2 duration-500",
-          result.claim_valid ? "bg-emerald-500/10 border-emerald-500/20" : "bg-red-500/10 border-red-500/20"
+          "p-5 rounded-xl flex-1 border animate-in fade-in slide-in-from-bottom-4 duration-500 transition-all",
+          result.claim_valid ? "bg-emerald-500/10 border-emerald-500/20" : "bg-rose-500/10 border-rose-500/20"
         )}>
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-[10px] font-bold uppercase tracking-tighter text-sentinel-400">Escaneo Cognitivo</span>
-            {result.claim_valid ? <CheckCircle className="w-4 h-4 text-emerald-400" /> : <AlertCircle className="w-4 h-4 text-red-500" />}
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Cognitive Scan Result</span>
+            {result.claim_valid ? (
+              <div className="flex items-center gap-1.5 text-emerald-400 text-[10px] font-bold uppercase">
+                <CheckCircle2 className="w-4 h-4" /> Consonant
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 text-rose-500 text-[10px] font-bold uppercase">
+                <AlertCircle className="w-4 h-4" /> Dissonant
+              </div>
+            )}
           </div>
           
-          <div className="space-y-2">
-            <div className="flex justify-between items-center text-[10px] uppercase font-bold text-sentinel-300">
-               <span>Puntaje de Confianza</span>
-               <span className={result.claim_valid ? "text-emerald-400" : "text-red-400"}>{(result.sentinel_score * 100).toFixed(1)}%</span>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center text-[10px] uppercase font-black tracking-widest text-slate-400">
+               <span>Trust Score</span>
+               <span className={clsx("mono text-xs", result.claim_valid ? "text-emerald-400" : "text-rose-400")}>{(result.sentinel_score * 100).toFixed(1)}%</span>
             </div>
-            <div className="w-full bg-cyber-black rounded-full h-1 overflow-hidden">
+            <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
                <div 
-                 className={clsx("h-full transition-all duration-1000", result.claim_valid ? "bg-emerald-500" : "bg-red-500")}
+                 className={clsx("h-full transition-all duration-1000", result.claim_valid ? "bg-emerald-500 shadow-[0_0_10px_#10b981]" : "bg-rose-500 shadow-[0_0_10px_#f43f5e]")}
                  style={{ width: `${result.sentinel_score * 100}%` }}
                />
             </div>
-            <div className="mt-4 pt-2 border-t border-sentinel-500/10">
-               <div className="text-[9px] uppercase font-bold text-sentinel-500 mb-1">Estado Armónico</div>
-               <div className="text-xs font-mono text-sentinel-100">{result.harmonic_state}</div>
+            
+            <div className="mt-6 pt-4 border-t border-white/5">
+                <div className="flex items-center justify-between">
+                   <div className="space-y-1">
+                      <div className="text-[9px] uppercase font-black tracking-[0.2em] text-slate-600">Harmonic State</div>
+                      <div className={clsx("text-xs font-bold mono", result.claim_valid ? "text-emerald-400" : "text-rose-400")}>
+                        {result.harmonic_state}
+                      </div>
+                   </div>
+                   <div className={clsx(
+                     "px-2 py-1 rounded text-[9px] font-bold border",
+                     result.claim_valid ? "border-emerald-500/20 text-emerald-400" : "border-rose-500/20 text-rose-400"
+                   )}>
+                      S60 VERIFIED
+                   </div>
+                </div>
             </div>
           </div>
         </div>
       )}
     </div>
-  );
-}
-
-function CheckCircle({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
   );
 }

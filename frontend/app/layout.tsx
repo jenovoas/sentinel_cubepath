@@ -13,10 +13,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className="bg-cyber-black selection:bg-sentinel-500/30 selection:text-sentinel-200">
-        <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,#134e4a_0%,#0a0c10_50%)] pointer-events-none" />
-        <main className="relative z-10 min-h-screen">
-          {children}
+      <body className="antialiased selection:bg-emerald-500/30 selection:text-emerald-200">
+        {/* Animated Cyber Grid Overlay */}
+        <div className="fixed inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+        
+        {/* Radial Depth Gradient */}
+        <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(16,185,129,0.15)_0%,transparent_50%)] pointer-events-none" />
+        
+        <main className="relative z-10 min-h-screen p-4 lg:p-8">
+          <div className="max-w-7xl mx-auto h-full">
+            {children}
+          </div>
         </main>
       </body>
     </html>

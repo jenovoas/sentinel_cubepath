@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
-import { Terminal, AlertTriangle, Info, CheckCircle2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Terminal, AlertTriangle, ShieldCheck, Zap, Heart, Activity, Cpu } from "lucide-react";
 import { clsx } from "clsx";
 
 interface Event {
@@ -14,7 +14,6 @@ interface Event {
 
 export function TelemetryFeed() {
   const [events, setEvents] = useState<Event[]>([]);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const wsUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000").replace("http", "ws") + "/api/v1/telemetry";
@@ -32,35 +31,59 @@ export function TelemetryFeed() {
     return () => ws.close();
   }, []);
 
+  const getEventStyle = (type: string, severity: number) => {
+    if (severity >= 3 || type.includes("BLOCKED")) return "border-rose-500/30 bg-rose-500/5 text-rose-400";
+    if (type.includes("BURST")) return "border-amber-500/30 bg-amber-500/5 text-amber-400";
+    if (type === "BIO_PULSE") return "border-emerald-500/30 bg-emerald-500/5 text-emerald-400";
+    if (type === "QHC_RESET") return "border-sky-500/30 bg-sky-500/5 text-sky-400";
+    return "border-slate-800 bg-slate-900/40 text-slate-400";
+  };
+
+  const getEventIcon = (type: string, severity: number) => {
+    if (severity >= 3 || type.includes("BLOCKED")) return <AlertTriangle className="w-3.5 h-3.5 text-rose-500" />;
+    if (type === "BIO_PULSE") return <Heart className="w-3.5 h-3.5 text-emerald-500 animate-pulse" />;
+    if (type.includes("BURST")) return <Zap className="w-3.5 h-3.5 text-amber-400" />;
+    if (type === "QHC_RESET") return <Activity className="w-3.5 h-3.5 text-sky-400" />;
+    return <Cpu className="w-3.5 h-3.5 text-slate-500" />;
+  };
+
   return (
-    <div className="h-full overflow-y-auto w-full font-mono text-[11px] p-4 space-y-2 custom-scrollbar">
+    <div className="h-full overflow-y-auto w-full font-mono text-[10px] p-4 space-y-2 custom-scrollbar">
       {events.length === 0 && (
-        <div className="flex items-center justify-center h-full text-sentinel-500/30 uppercase italic">
-          Esperando flujo de datos del kernel...
+        <div className="flex flex-col items-center justify-center h-full text-slate-600 gap-4 opacity-50">
+          <Terminal className="w-12 h-12 text-slate-800 animate-pulse" />
+          <p className="uppercase tracking-[0.2em] font-bold">Awaiting Ring-0 Telemetry...</p>
         </div>
       )}
       {events.map((ev, i) => (
-        <div key={i} className={clsx(
-          "p-2 border border-sentinel-500/5 rounded bg-sentinel-950/20 group transition-all hover:bg-sentinel-500/5",
-          ev.severity >= 3 ? "border-red-500/30 bg-red-950/10" : "border-sentinel-500/5"
-        )}>
+        <div 
+          key={i} 
+          className={clsx(
+            "p-2.5 border rounded-lg transition-all hover:bg-white/5 animate-in slide-in-from-left-2 duration-300",
+            getEventStyle(ev.event_type, ev.severity)
+          )}
+        >
            <div className="flex items-center gap-3">
-              <span className="text-sentinel-500/40 tabular-nums">[{new Date(ev.timestamp_ns / 1000000).toLocaleTimeString()}]</span>
-              <span className={clsx(
-                "px-1.5 py-0.5 rounded text-[9px] font-bold uppercase",
-                ev.severity >= 3 ? "bg-red-500/20 text-red-400" : "bg-sentinel-500/10 text-sentinel-400"
-              )}>
-                {ev.event_type}
-              </span>
-              <span className="text-sentinel-300 flex-1 truncate">{ev.pid !== 0 ? `PID: ${ev.pid} | Entropía: ${ev.entropy_s60_raw}` : "System Heartbeat"}</span>
-              {ev.severity >= 3 ? <AlertTriangle className="w-3 h-3 text-red-500" /> : <ShieldCheck className="w-3 h-3 text-sentinel-500/40" />}
+              <span className="opacity-40 tabular-nums">[{new Date(ev.timestamp_ns / 1000000).toLocaleTimeString()}]</span>
+              
+              <div className="flex items-center gap-2 flex-1">
+                {getEventIcon(ev.event_type, ev.severity)}
+                <span className="font-bold uppercase tracking-wider">{ev.event_type}</span>
+              </div>
+
+              <div className="flex items-center gap-4 text-xs">
+                {ev.pid !== 0 && (
+                  <span className="opacity-70">
+                    PID <span className="text-white">{ev.pid}</span>
+                  </span>
+                )}
+                <span className="opacity-70">
+                  RESONANCE <span className="text-white mono">{(ev.entropy_s60_raw / 129600).toFixed(2)}%</span>
+                </span>
+              </div>
            </div>
         </div>
       ))}
     </div>
   );
-}
-
-function ShieldCheck({ className }: { className?: string }) {
-  return <CheckCircle2 className={className} />;
 }

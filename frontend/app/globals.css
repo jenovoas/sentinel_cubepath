@@ -1,24 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #0a0c10;
-  --foreground: #f0fdfa;
+  --sentinel-bg: #030712;
+  --sentinel-card: #0b1120;
+  --sentinel-border: #1e293b;
+  --sentinel-primary: #10b981; /* Emerald */
+  --sentinel-secondary: #0ea5e9; /* Sky */
+  --sentinel-accent: #f43f5e; /* Rose/Red for Critical */
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 3, 7, 18;
+  --background-end-rgb: 15, 23, 42;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: rgb(var(--foreground-rgb));
+  background: radial-gradient(circle at top center, #111827 0%, #030712 100%);
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
 }
 
 @layer components {
   .glass-card {
-    @apply bg-cyber-gray/40 backdrop-blur-md border border-sentinel-500/20 rounded-xl shadow-2xl;
+    @apply bg-slate-900/50 backdrop-blur-xl border border-white/5 rounded-2xl shadow-2xl transition-all duration-300;
   }
   
-  .neon-text {
-    @apply text-sentinel-400 drop-shadow-[0_0_8px_rgba(45,212,191,0.5)];
+  .glass-card:hover {
+    @apply border-white/10 bg-slate-900/60 shadow-sentinel-500/5;
   }
+
+  .sentinel-gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-sky-400 to-indigo-400 font-extrabold;
+  }
+
+  .sentinel-btn {
+    @apply px-6 py-3 rounded-xl font-bold transition-all duration-200 flex items-center justify-center gap-2;
+  }
+
+  .sentinel-btn-primary {
+    @apply bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-lg shadow-emerald-500/20 active:scale-95;
+  }
+
+  .sentinel-btn-secondary {
+    @apply bg-white/5 text-white hover:bg-white/10 border border-white/10 active:scale-95;
+  }
+}
+
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Pulsing rings for the Dashboard */
+.status-pulse {
+  position: relative;
+}
+
+.status-pulse::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  border: 1px solid currentColor;
+  animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  100% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
