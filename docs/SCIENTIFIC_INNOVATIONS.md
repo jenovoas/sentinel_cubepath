@@ -6,11 +6,17 @@
 
 ---
 
-## Validación Académica
+## Contexto Académico
 
-La base matemática de Sentinel (aritmética sexagesimal y trigonometría racional) ha sido desarrollada en correspondencia directa con **Dr. Daniel Mansfield** (University of New South Wales, Australia), autor del paper *"Plimpton 322 is Babylonian exact sexagesimal trigonometry"* publicado en Historia Mathematica (2017). El Dr. Mansfield validó los módulos matemáticos core del sistema, confirmando la viabilidad de usar aritmética sexagesimal exacta para cómputo determinista moderno.
+La base matemática de Sentinel utiliza aritmética sexagesimal inspirada en la tablilla babilónica **Plimpton 322**, cuyo significado trigonom étrico fue descubierto por el **Dr. Daniel Mansfield** (University of New South Wales, Australia) en su paper *"Plimpton 322 is Babylonian exact sexagesimal trigonometry"* (Historia Mathematica, 2017).
 
-> **Referencia académica:** Mansfield, D.F., Wildberger, N.J. (2017). *Plimpton 322 is Babylonian exact sexagesimal trigonometry.* Historia Mathematica, 44(4), pp. 395–419.
+Jaime Novoa contactó directamente al Dr. Mansfield presentándole la aplicación de sus descubrimientos a sistemas distribuidos modernos. La respuesta del Dr. Mansfield (diciembre 2025):
+
+> *"I can see that you've understood what I wrote about Plimpton 322. It is not often that I get contacted by people who have actually read what I wrote. Your direction of research sounds promising."*
+>
+> — Dr. Daniel Mansfield, UNSW
+
+El Dr. Mansfield confirmó que Jaime **comprendió correctamente** su trabajo sobre Plimpton 322 y consideró la dirección de investigación **prometedora**, aunque indicó que no es un campo que él esté explorando personalmente, sugiriendo buscar investigadores más orientados a computación.
 
 La constante de sintonización del cristal oscilador (`1;32,2,24,0` = Fila 12 de la tablilla Plimpton 322, ~1.534 decimal) no es arbitraria: es uno de los 15 valores trigonométricos exactos que los Babilonios calcularon hace 3,800 años, y que producen cero error de redondeo en operaciones de seno y coseno.
 
