@@ -43,7 +43,15 @@ impl SentinelMemory {
         }
     }
 
-    pub fn add_event(&self, content: String, severity: u8, vector: Vec<f32>) {
+    pub fn add_event(&self, mut content: String, severity: u8, vector: Vec<f32>) {
+        // QUANTUM HACK: Dual Injection Padding (min 512 bytes)
+        // Requerido para que la firma SHA256 (fase) tenga portadora (amplitude)
+        let min_data_len = 512;
+        if content.len() < min_data_len {
+            let padding = min_data_len - content.len();
+            content.push_str(&"\0".repeat(padding));
+        }
+
         let mut store = self.store.lock().unwrap();
         store.add(MemoryEntry {
             content,

@@ -117,8 +117,9 @@ async fn main() {
         }
     });
 
-    // Spawn bio-resonance background task
+    // Spawn bio-resonance background task (The heartbeat of S60)
     let bio_task = bio_resonator.clone();
+    let reset_tx = event_tx.clone();
     tokio::spawn(async move {
         let mut tick = 0u64;
         let mut system_quarantined = false;
@@ -142,10 +143,38 @@ async fn main() {
                 system_quarantined = false;
             }
 
-            // Every 17 seconds: bio pulse check
+            // MODULO HACK (T%17): Sincronía con el pulso biométrico 
             if tick % 17 == 0 {
                 bio.inject_bio_pulse();
                 tracing::info!("💓 Bio-pulse injected (T={})", tick);
+                
+                // Optomechanical Cooling: Inyectar 'frío lógico' (limpieza)
+                // En este Hackathon, simulamos la limpieza de buffers temporales
+                tracing::debug!("🧊 Optomechanical Cooling: Absorbing entropy...");
+            }
+
+            // QHC RESET (T=68s): El Gran Secreto - Limpieza de karma del sistema
+            if tick % 68 == 0 {
+                tracing::warn!("🌌 QHC SINGULARITY: Resetting system phase (T=68s)");
+                
+                let reset_event = CortexEvent {
+                    timestamp_ns: std::time::SystemTime::now()
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .unwrap()
+                        .as_nanos() as u64,
+                    pid: 0,
+                    event_type: "QHC_RESET".to_string(),
+                    entropy_s60_raw: 0, // Reset to pure coherence
+                    severity: 0,
+                };
+                
+                let _ = reset_tx.send(reset_event);
+                
+                // Forzar un reset de la coherencia si hay mucha disonancia
+                if bio.coherence.raw < (12_960_000 / 2) {
+                     tracing::info!("✨ Karma Cleared: Restoring bio-resonance.");
+                     bio.coherence = crate::math::SPA::ONE; 
+                }
             }
         }
     });

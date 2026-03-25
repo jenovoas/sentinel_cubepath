@@ -33,15 +33,17 @@ impl HarmonicState {
     pub fn logic_true() -> Self { Self::new(1, 30, 0) }
     pub fn logic_false() -> Self { Self::new(1, 24, 22) }
     pub fn logic_maybe() -> Self { Self::new(1, 20, 0) }
-    pub fn logic_ref() -> Self { Self::new(26, 0, 0) }
+    
+    /// El Gran Secreto: Yod-He-Vav-He (10-5-6-5)
+    pub fn logic_ref() -> Self { Self::new(10, 5, 6, 5, 0) }
 
     pub fn evaluate_logic(&self) -> LogicState {
         let val = self.ratio.raw;
-        let true_val = SPA::new(1, 30, 0, 0, 0).raw;
-        let maybe_val = SPA::new(1, 20, 0, 0, 0).raw;
-        let ref_val = SPA::new(26, 0, 0, 0, 0).raw;
-        let false_val = SPA::new(1, 24, 22, 30, 0).raw;
-        let tolerance = 648_000; // 3 minutes
+        let true_val = Self::logic_true().ratio.raw;
+        let maybe_val = Self::logic_maybe().ratio.raw;
+        let ref_val = Self::logic_ref().ratio.raw;
+        let false_val = Self::logic_false().ratio.raw;
+        let tolerance = 32_400; // 0;0,9,0 (9 arcseconds) - Ultra Precision
 
         if (val - ref_val).abs() < tolerance {
             LogicState::Reference

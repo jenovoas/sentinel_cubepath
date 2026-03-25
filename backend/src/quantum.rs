@@ -63,8 +63,10 @@ pub struct PortalDetector {
 impl PortalDetector {
     pub fn new() -> Self {
         Self {
-            period_bio: SPA::from_int(17),
-            period_crystal: SPA::new(4, 15, 0, 0, 0),
+            // Periodos sincronizados con la constante de fase
+            period_bio: SPA::from_int(17), 
+            // Plimpton 322 Row 12 Constant: 1;32,2,24 (Axionic Heartbeat)
+            period_crystal: SPA::new(1, 32, 2, 24, 0), 
             period_venus: SPA::new(16, 10, 48, 0, 0),
             threshold: SPA::new(0, 45, 0, 0, 0), // 0.75
         }
