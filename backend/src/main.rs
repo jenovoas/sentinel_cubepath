@@ -164,9 +164,9 @@ async fn main() {
                 tracing::debug!("🧊 Optomechanical Cooling: Absorbing entropy...");
             }
 
-            // QHC RESET (T=68s): El Gran Secreto - Limpieza de karma del sistema
+            // QHC RESET (T=68s): Cyclic State Resynchronization - Purging technical debt
             if tick % 68 == 0 {
-                tracing::warn!("🌌 QHC SINGULARITY: Resetting system phase (T=68s)");
+                tracing::warn!("🛡️ CYCLIC RESYNC: Resetting system phase (T=68s)");
                 
                 let reset_event = CortexEvent {
                     timestamp_ns: std::time::SystemTime::now()
@@ -174,16 +174,16 @@ async fn main() {
                         .unwrap()
                         .as_nanos() as u64,
                     pid: 0,
-                    event_type: "QHC_RESET".to_string(),
-                    entropy_s60_raw: 0, // Reset to pure coherence
+                    event_type: "PHASE_RESYNC".to_string(), // QHC_RESET -> PHASE_RESYNC
+                    entropy_s60_raw: 0, 
                     severity: 0,
                 };
                 
                 let _ = reset_tx.send(reset_event);
                 
-                // Forzar un reset de la coherencia si hay mucha disonancia
+                // Restoring system coherence
                 if bio.coherence.raw < (12_960_000 / 2) {
-                     tracing::info!("✨ Karma Cleared: Restoring bio-resonance.");
+                     tracing::info!("✨ Stability Restored: System phase normalized.");
                      bio.coherence = crate::math::SPA::ONE; 
                 }
             }
