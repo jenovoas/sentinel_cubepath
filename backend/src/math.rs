@@ -1,5 +1,7 @@
-//! 🛡️ BASE-60 FIXED-POINT: RUST CORE (Sentinel Edition) 🛡️
-//! Pure sexagesimal arithmetic. Zero-allocation, fixed-point (60^4 scaling).
+//! BASE-60 FIXED-POINT ARITHMETIC: Sentinel Ring-0 Core
+//! Pure sexagesimal integer arithmetic. Zero-allocation, deterministic layout.
+//! Precision: 1/12,960,000 per unit (60^-4). No IEEE 754 rounding errors.
+//! Reference: Plimpton 322 (Babylonian mathematics, c. 1800 BCE)
 
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Rem, Sub};
@@ -18,7 +20,12 @@ impl fmt::Display for SPAError {
 }
 
 /// Sexagesimal (Base-60) Fixed-Point Number.
+/// 
+/// Implements the mathematical field S60 = {k * 60^-4 | k ∈ ℤ}.
+/// Memory layout is `#[repr(C)]` for direct hardware buffer mapping.
+/// One unit of `raw` represents 1/12,960,000 of a whole.
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default, Serialize, Deserialize)]
+#[repr(C)]
 pub struct SPA {
     pub raw: i64,
 }
