@@ -43,31 +43,50 @@ export function TelemetryFeed() {
   const queueRef = useRef<Event[]>([]);
 
   useEffect(() => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
-    let wsUrl: string;
-    if (apiUrl.startsWith("http://") || apiUrl.startsWith("https://")) {
-      wsUrl = apiUrl.replace(/^http/, "ws") + "/api/v1/telemetry";
-    } else {
-      const proto = typeof window !== "undefined" && window.location.protocol === "https:" ? "wss" : "ws";
-      const host = typeof window !== "undefined" ? window.location.host : "localhost";
-      wsUrl = `${proto}://${host}/api/v1/telemetry`;
-    }
-    const ws = new WebSocket(wsUrl);
+    let ws: WebSocket | null = null;
+    let reconnectTimer: NodeJS.Timeout | null = null;
 
-    ws.onopen = () => setConnected(true);
-    ws.onclose = () => setConnected(false);
-
-    ws.onmessage = (e) => {
-      try {
-        const event = JSON.parse(e.data);
-        // Acumular en buffer — la UI actualiza cada 800ms
-        queueRef.current = [event, ...queueRef.current].slice(0, 200);
-      } catch (err) {
-        console.error("WS parse error", err);
+    const connect = () => {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
+      let wsUrl: string;
+      if (apiUrl.startsWith("http://") || apiUrl.startsWith("https://")) {
+        wsUrl = apiUrl.replace(/^http/, "ws") + "/api/v1/telemetry";
+      } else {
+        const proto = typeof window !== "undefined" && window.location.protocol === "https:" ? "wss" : "ws";
+        const host = typeof window !== "undefined" ? window.location.host : "localhost";
+        wsUrl = `${proto}://${host}/api/v1/telemetry`;
       }
+      
+      ws = new WebSocket(wsUrl);
+
+      ws.onopen = () => {
+        setConnected(true);
+        console.log("Ring-0 Sentinel: Telemetry WebSocket Connected");
+      };
+
+      ws.onclose = () => {
+        setConnected(false);
+        console.warn("Ring-0 Sentinel: Telemetry WebSocket Closed. Reconnecting in 3s...");
+        reconnectTimer = setTimeout(connect, 3000);
+      };
+
+      ws.onerror = (err) => {
+        console.error("Ring-0 Sentinel: Telemetry WebSocket Error", err);
+        ws?.close();
+      };
+
+      ws.onmessage = (e) => {
+        try {
+          const event = JSON.parse(e.data);
+          queueRef.current = [event, ...queueRef.current].slice(0, 200);
+        } catch (err) {
+          console.error("WS parse error", err);
+        }
+      };
     };
 
-    // Volcar buffer a la UI cada 800ms — legible para un humano
+    connect();
+
     const flushTimer = setInterval(() => {
       if (queueRef.current.length > 0) {
         setEvents(queueRef.current.slice(0, 150));
@@ -75,7 +94,8 @@ export function TelemetryFeed() {
     }, 800);
 
     return () => {
-      ws.close();
+      ws?.close();
+      if (reconnectTimer) clearTimeout(reconnectTimer);
       clearInterval(flushTimer);
     };
   }, []);

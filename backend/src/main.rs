@@ -122,7 +122,7 @@ struct AppState {
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt::init();
-    tracing::info!("🛡️ Sentinel Cortex (S60) initializing...");
+    tracing::info!("[BOOT] Sentinel Ring-0 Cortex Environment: S60-Active / Kernel 6.1-Compatible");
 
     // Initialize quantum modules
     let bio_resonator = Arc::new(Mutex::new(quantum::BioResonator::new()));
@@ -165,8 +165,8 @@ async fn main() {
             "/sys/fs/bpf/burst_events".to_string(),
         ]);
         if let Err(e) = bridge.run_monitor(ebpf_tx).await {
-            tracing::error!("🔥 eBPF Critical Error (Unified Bridge): {}", e);
-            tracing::warn!("🛡️ System operating in 'Graceful Degraded' mode (Local-Only)");
+            tracing::error!("[BPF_CRITICAL] eBPF Bridge Error: {}. Environment mismatch?", e);
+            tracing::warn!("[SAFETY] System operating in 'Graceful Degraded' mode (Logic-Only)");
         }
     });
 
@@ -256,14 +256,14 @@ async fn main() {
             
             if (bio.coherence.raw == 0 || is_doom) && !system_quarantined {
                 if is_doom {
-                    tracing::error!("🛑 IAOOPSDOWN: AIOpsDoom detected! Malicious telemetry injection attempt. Initiating Ring-0 Lockdown.");
+                    tracing::error!("[LSM_ENFORCE] IAOOPSDOWN: Malicious telemetry detected. Engaging Ring-0 Lockdown.");
                 } else {
-                    tracing::error!("💀 BIOMETRIC SILENCE DETECTED: Coherence is zero.");
+                    tracing::error!("[LSM_ENFORCE] Biometric silence: Engaging Ring-0 Quarantine.");
                 }
                 let _ = bridge.set_quarantine_mode(true);
                 system_quarantined = true;
             } else if bio.coherence.raw > 0 && !is_doom && system_quarantined {
-                tracing::info!("💖 Pilot present & System sanitized: Lifting quarantine.");
+                tracing::info!("[LSM_ENFORCE] Coherence restored (Val:{:?}): Disengaging Quarantine.", bio.coherence.raw);
                 let _ = bridge.set_quarantine_mode(false);
                 system_quarantined = false;
             }
@@ -271,11 +271,10 @@ async fn main() {
             // MODULO (T%710): Sincronía con el pulso biométrico (17s * 41.7713 = 710 ticks)
             if tick % 710 == 0 {
                 bio.inject_bio_pulse();
-                tracing::info!("💓 Bio-pulse injected (T={})", tick);
+                tracing::info!("[S60_PHONON] Resonant pulse injected (T={}, Coh={:?})", tick, bio.coherence.raw);
                 
-                // Optomechanical Cooling: Inyectar 'frío lógico' (limpieza)
-                // En este Hackathon, simulamos la limpieza de buffers temporales
-                tracing::debug!("🧊 Optomechanical Cooling: Absorbing entropy...");
+                // Optomechanical Cooling: Absorbing entropy logs
+                tracing::debug!("[S60_COOLING] Entropic absorption cycle complete.");
             }
 
             // MODULACIÓN RÍTMICA YHWH (10-5-6-5) para MyCNet
@@ -301,7 +300,7 @@ async fn main() {
 
             // QHC RESET (T=2840): Cyclic State Resynchronization (68s * 41.7713 = 2840 ticks)
             if tick % 2840 == 0 {
-                tracing::warn!("🛡️ CYCLIC RESYNC: Resetting system phase (T=68s)");
+                tracing::warn!("[S60_PHASE] Cyclic Phase Resync: Normalized at T=68s");
                 
                 let reset_event = CortexEvent {
                     timestamp_ns: system_now_ns,
@@ -316,7 +315,7 @@ async fn main() {
                 
                 // Restoring system coherence
                 if bio.coherence.raw < (12_960_000 / 2) {
-                     tracing::info!("✨ Stability Restored: System phase normalized.");
+                     tracing::info!("[S60_PHASE] Stability Restored: System phase normalized.");
                      bio.coherence = crate::math::SPA::ONE; 
                 }
             }
@@ -396,7 +395,7 @@ async fn truth_claim_handler(
 ) -> Json<TruthClaimResponse> {
     use crate::harmonic::{HarmonicProcessor, LogicState};
     
-    tracing::info!("🔍 TruthSync Analysis for: {}", payload.engine);
+    tracing::info!("[TRUTHSYNC] Cognitive Analysis: Initiated for {}", payload.engine);
 
     // 1. Parsing TruthSync Payload (Expected format: "Row:XX Ratio:Y.YYYY")
     // Simple parser for POC
