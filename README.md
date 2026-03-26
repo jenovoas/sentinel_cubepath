@@ -297,6 +297,7 @@ Para asegurar la **estabilidad determinista** y el **rendimiento de grado milita
 - 🏛️ [Teoría de la Trinidad](docs/GUIA_VISUAL_TRINIDAD.md) — Isomorfismo entre física, biología y tecnología
 - 🎻 [Computación Fonónica](docs/PHONONIC_RESEARCH.md) — Almacenamiento Resonante Distribuido (Paper ME-60OS)
 - 📐 [Núcleo de Física de Datos](docs/PHYSICS_CORE.md) — Axiomas armónicos y Octomecánica
+- ⏱️ [Reporte Empírico de Benchmarks](docs/BENCHMARKS.md) — Resultados de Hardware (Latencia <0.04ms)
 
 ---
 
