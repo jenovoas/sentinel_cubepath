@@ -44,7 +44,7 @@ export default function Home() {
             </div>
             <div className="flex flex-col">
               <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Knowledge</span>
-              <span className="text-[10px] font-bold uppercase tracking-tighter">Technical Vault</span>
+              <span className="text-[10px] font-bold uppercase tracking-tighter">/docs</span>
             </div>
           </Link>
 
