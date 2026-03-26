@@ -52,6 +52,18 @@ Sentinel intercepta **todas** las llamadas al sistema antes de ejecutarse y apli
 
 ---
 
+## 🎨 Visual Dashboard
+
+| Dashboard Principal (Ring-0) | IA Ops Shield (4-Layer Defense) |
+|---|---|
+| ![Dashboard](docs/img/dashboard_main.png) | ![Shield View](docs/img/shield_view.png) |
+
+### 🔍 Truth Claim Console (Cognitive Scan)
+![Console Scan](docs/img/console_scan.png)
+*Escaneo semántico en tiempo real: Detectando intenciones maliciosas a nivel de bit.*
+
+---
+
 ## ✨ Características Principales
 
 | Característica | Descripción |

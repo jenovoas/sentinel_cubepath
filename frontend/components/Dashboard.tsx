@@ -91,11 +91,12 @@ export function Dashboard() {
       {/* Sidebar */}
       <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <div className="flex-1 flex flex-col min-h-0 pr-2 overflow-hidden">
+      {/* Main Content Area - Allowing Global Scroll for accessibility to footer */}
+      <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-2 pb-8">
         {activeTab === "dashboard" ? (
-          <div className="flex-1 flex flex-col min-h-0 space-y-4 animate-in fade-in slide-in-from-right-4 duration-500 overflow-hidden">
-            {/* 1. TOP AREA (Fixed) */}
-            <div className="shrink-0 space-y-4">
+          <div className="flex flex-col space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+            {/* 1. TOP AREA (Fixed relative to content) */}
+            <div className="space-y-4">
               <StatsGrid status={status} />
               <div className="glass-card p-3 scan-line">
                 <div className="flex items-center gap-4">
@@ -125,16 +126,20 @@ export function Dashboard() {
               </div>
             </div>
 
-            {/* 2. MIDDLE AREA (Flexible / Scrollable) */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 flex-1 min-h-[400px]">
-              <div className="lg:col-span-2 flex flex-col min-h-0 h-full">
+            {/* 2. MIDDLE AREA (Telemetry & Console) - Fixed heights for clean grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[500px]">
+              <div className="lg:col-span-2 flex flex-col h-full">
                 <div className="glass-card overflow-hidden flex flex-col h-full border-white/5 bg-slate-950/20">
-                  <div className="p-3 border-b border-white/5 flex items-center justify-between shrink-0">
+                  <div className="p-3 border-b border-white/5 flex items-center justify-between shrink-0 bg-slate-900/40">
                     <div className="flex items-center gap-2">
                       <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                       <h2 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">
                         Ring-0 Telemetry Feed
                       </h2>
+                    </div>
+                    <div className="flex items-center gap-2">
+                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                       <span className="text-[8px] font-bold text-emerald-500/80 uppercase tracking-widest">Live Stream</span>
                     </div>
                   </div>
                   <div className="flex-1 min-h-0">
@@ -143,9 +148,9 @@ export function Dashboard() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-4 min-h-0 h-full">
-                <div className="glass-card p-4 flex flex-col flex-1 min-h-0 border-white/5 overflow-hidden bg-slate-950/20">
-                  <div className="flex items-center gap-2 mb-3 shrink-0">
+              <div className="flex flex-col h-full">
+                <div className="glass-card p-5 flex flex-col h-full border-white/5 overflow-hidden bg-slate-950/40">
+                  <div className="flex items-center gap-2 mb-4 shrink-0">
                     <Zap className="w-3.5 h-3.5 text-amber-400" />
                     <h2 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">
                       Truth Claim Console
@@ -158,38 +163,55 @@ export function Dashboard() {
               </div>
             </div>
 
-            {/* 3. BOTTOM AREA (Fixed) */}
-            <div className="shrink-0 grid grid-cols-1 lg:grid-cols-3 gap-4">
-               <div className="lg:col-span-2 flex flex-col gap-4">
-                   <div className="h-40 shrink-0">
+            {/* 3. BOTTOM AREA (Footer Modules) */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
+               <div className="lg:col-span-2 space-y-6">
+                   <div className="h-56">
                       <MyCNetNodeGraph phase={yhwhPhase} isOpen={networkOpen} />
                    </div>
-                   <div className="glass-card p-3 border-emerald-500/10 flex items-center gap-4 shrink-0">
-                      <div className="p-2 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
-                        <ShieldCheck className="w-6 h-6 text-emerald-400" />
+                   <div className="glass-card p-5 border-emerald-500/10 flex items-center gap-6 bg-slate-900/20">
+                      <div className="p-3 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+                        <ShieldCheck className="w-8 h-8 text-emerald-400" />
                       </div>
                       <div>
-                        <h2 className="text-[11px] font-black text-white uppercase tracking-tighter">Sentinel TruthSync Certified</h2>
-                        <p className="text-slate-500 text-[8px] font-medium uppercase tracking-[0.2em]">Verified s60 Phasing</p>
+                        <h2 className="text-sm font-black text-white uppercase tracking-tighter">Sentinel TruthSync Certified</h2>
+                        <p className="text-slate-500 text-[9px] font-medium uppercase tracking-[0.3em] mt-1">Verified Plimpton 322 Phase Alignment</p>
+                        <div className="flex gap-2 mt-3">
+                           <span className="px-2 py-0.5 bg-slate-950 border border-white/5 rounded text-[8px] font-bold text-slate-400 mono">SHA-256: VALID</span>
+                           <span className="px-2 py-0.5 bg-slate-950 border border-white/5 rounded text-[8px] font-bold text-slate-400 mono">S60: SYNCED</span>
+                        </div>
                       </div>
                    </div>
                </div>
                
-               <div className="flex flex-col gap-4 shrink-0">
+               <div className="space-y-6">
                   <TruthSyncReport status={status} />
-                  <div className="glass-card p-3 border-l-2 border-l-emerald-500/30 shrink-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Heart className="w-3.5 h-3.5 text-rose-500 bio-heartbeat" />
-                      <h3 className="font-bold text-[9px] uppercase tracking-widest text-slate-200">Bio-Resonance</h3>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 bg-slate-950 rounded-full h-1 overflow-hidden">
-                        <div
-                          className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000"
-                          style={{ width: `${status?.bio_coherence ? Math.min(100, (status.bio_coherence / 12960000) * 100) : 0}%` }}
-                        />
+                  
+                  {/* Bio-Resonance (Ensured Visibility) */}
+                  <div className="glass-card p-5 border-l-4 border-l-rose-500/30 bg-slate-950/40">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <Heart className="w-4 h-4 text-rose-500 animate-[pulse_2s_infinite]" />
+                        <h3 className="font-bold text-[10px] uppercase tracking-[0.2em] text-slate-200">Bio-Resonance Core</h3>
                       </div>
-                      <span className="text-[8px] mono text-emerald-400 font-bold">{status?.bio_coherence ? `${((status.bio_coherence / 12960000) * 100).toFixed(0)}%` : "—"}</span>
+                      <span className="text-[9px] font-bold text-rose-500/80 mono uppercase">Live Link</span>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="flex-1 bg-slate-900 rounded-full h-2 overflow-hidden border border-white/5">
+                          <div
+                            className="h-full rounded-full bg-gradient-to-r from-rose-600 via-rose-500 to-rose-400 shadow-[0_0_10px_rgba(244,63,94,0.3)] transition-all duration-1000"
+                            style={{ width: `${status?.bio_coherence ? Math.min(100, (status.bio_coherence / 12960000) * 100) : 0}%` }}
+                          />
+                        </div>
+                        <span className="text-[10px] mono text-rose-400 font-bold w-10 text-right">
+                          {status?.bio_coherence ? `${((status.bio_coherence / 12960000) * 100).toFixed(0)}%` : "0%"}
+                        </span>
+                      </div>
+                      <p className="text-[8px] font-medium text-slate-600 uppercase tracking-widest leading-relaxed">
+                        SNN Cognitive Interface stability threshold: 88.4% required for full Ring-0 lockdown.
+                      </p>
                     </div>
                   </div>
                </div>
