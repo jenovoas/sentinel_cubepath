@@ -1,0 +1,18 @@
+name: sentinel-ring0
+services:
+  - name: api
+    port: 8000
+    build:
+      context: ./backend
+    env:
+      - RUST_LOG=info
+      - CORS_ORIGIN=https://sentinel.cubepath.app
+  
+  - name: dashboard
+    port: 3000
+    build:
+      context: ./frontend
+    env:
+      - NEXT_PUBLIC_API_URL=https://api.sentinel.cubepath.app
+    depends_on:
+      - api
