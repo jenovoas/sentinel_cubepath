@@ -172,7 +172,7 @@ Basado en 35 experimentos empíricos. Ajusta dinámicamente el throughput de eve
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/jnovoas/sentinel-cubepath.git
+git clone https://github.com/jenovoas/sentinel_cubepath.git
 cd sentinel-cubepath
 
 # Backend
