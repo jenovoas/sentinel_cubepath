@@ -117,18 +117,20 @@ export function TelemetryFeed() {
   const resonancePercent = (raw: number) => ((raw / 12960000) * 100).toFixed(1);
 
   return (
-    <div ref={feedRef} className="h-full overflow-y-auto w-full font-mono text-[10px] p-4 space-y-1.5 custom-scrollbar">
-      {/* Connection status */}
+    <div ref={feedRef} className="flex flex-col h-full w-full font-mono text-[10px] custom-scrollbar overflow-hidden">
+      {/* Connection status - fixed header */}
       <div className={clsx(
-        "flex items-center gap-2 px-3 py-1.5 rounded-lg mb-3 text-[9px] font-bold uppercase tracking-widest",
-        connected ? "bg-emerald-500/5 text-emerald-500 border border-emerald-500/10" : "bg-rose-500/5 text-rose-400 border border-rose-500/10"
+        "flex items-center gap-2 px-4 py-1.5 shrink-0 text-[9px] font-bold uppercase tracking-widest border-b",
+        connected ? "bg-emerald-500/5 text-emerald-500 border-emerald-500/10" : "bg-rose-500/5 text-rose-400 border-rose-500/10"
       )}>
         <div className={clsx("w-1.5 h-1.5 rounded-full", connected ? "bg-emerald-500 animate-pulse" : "bg-rose-500")} />
         {connected ? "Ring-0 Stream Active" : "Connecting to Kernel..."}
       </div>
 
+      {/* Scrollable area - strictly contained */}
+      <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-1.5">
       {events.length === 0 && (
-        <div className="flex flex-col items-center justify-center h-[calc(100%-40px)] text-slate-600 gap-4">
+        <div className="flex flex-col items-center justify-center h-full text-slate-600 gap-4">
           <div className="phase-ring p-6">
             <Terminal className="w-10 h-10 text-slate-700" />
           </div>
@@ -196,6 +198,7 @@ export function TelemetryFeed() {
           </div>
         );
       })}
+      </div>
     </div>
   );
 }
