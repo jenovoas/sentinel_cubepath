@@ -86,7 +86,7 @@ export function Dashboard() {
   const isResyncTime = cycleTime === 0;
 
   return (
-    <div className="flex gap-6 h-[calc(100vh-180px)] min-h-[700px]">
+    <div className="flex gap-6 h-[calc(100vh-240px)] overflow-hidden">
       {/* Sidebar */}
       <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
 
@@ -128,7 +128,7 @@ export function Dashboard() {
             </div>
 
             {/* Main Content Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 min-h-[500px]">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 flex-1 min-h-0">
               <div className="lg:col-span-2 flex flex-col overflow-hidden">
                 <div className="glass-card overflow-hidden flex flex-col h-full border-white/5">
                   <div className="p-4 border-b border-white/5 flex items-center justify-between shrink-0">
