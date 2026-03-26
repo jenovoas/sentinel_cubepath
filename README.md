@@ -59,15 +59,28 @@ Sentinel intercepta **todas** las llamadas al sistema antes de ejecutarse y apli
 
 ---
 
-## 🎨 Visual Dashboard
+## 🎨 Evidencia Visual (Dashboard Ring-0)
 
-| Dashboard Principal (Ring-0) | IA Ops Shield (4-Layer Defense) |
+El firewall no es una caja negra impenetrable. Sentinel mapea la telemetría del núcleo Linux en un dashboard resiliente, utilizando una arquitectura de vista única dividida en 3 capas de aislamiento.
+
+| Dashboard Principal (Single-Page) | IA Ops Shield (Carga Fonónica) |
 |---|---|
 | ![Dashboard](docs/img/dashboard_main.png) | ![Shield View](docs/img/shield_view.png) |
 
-### 🔍 Truth Claim Console (Cognitive Scan)
-![Console Scan](docs/img/console_scan.png)
-*Escaneo semántico en tiempo real: Detectando intenciones maliciosas a nivel de bit.*
+***
+
+### 1. Intercepción Cognitiva (Disonancia Detectada)
+El motor evalúa intenciones antes de ceder memoria. Aquí intercepta `rm -rf /` con un estado crítico.
+![Console Scan](docs/img/cognitive_scan.png)
+
+### 2. Aislamiento Visual del Footer y Nodo MyCNet
+El tráfico a nivel de kernel fluye libremente sin "sangrar" sobre los componentes p2p MyCNet.
+![Detalle del Footer](docs/img/footer_detail.png)
+
+### 3. Evidencias de Bloqueo en BPF/Kernel
+Contadores de intercepción Ring-0 incrementando en vivo, validando la detención previa a la _syscall_.
+![Bloqueos BPF](docs/img/block_evidence.png)
+
 
 ---
 
@@ -282,6 +295,8 @@ Para asegurar la **estabilidad determinista** y el **rendimiento de grado milita
 - 📋 [Plan Maestro S60](docs/MASTER_S60_PLAN.md) — Fases de despliegue
 - 🧪 [Módulos Cuánticos](docs/QUANTUM_MODULES.md) — Física de los módulos
 - 🏛️ [Teoría de la Trinidad](docs/GUIA_VISUAL_TRINIDAD.md) — Isomorfismo entre física, biología y tecnología
+- 🎻 [Computación Fonónica](docs/PHONONIC_RESEARCH.md) — Almacenamiento Resonante Distribuido (Paper ME-60OS)
+- 📐 [Núcleo de Física de Datos](docs/PHYSICS_CORE.md) — Axiomas armónicos y Octomecánica
 
 ---
 
