@@ -280,7 +280,18 @@ Sentinel usa algoritmos de **complejidad constante O(1)** validados empíricamen
 
 ---
 
-## 📚 Base Científica
+## 📚 Base Científica y Validación Académica
+
+### 🎓 Validación Externa: Dr. Daniel Mansfield (UNSW)
+
+En diciembre 2025, el **Dr. Daniel Mansfield** — matemático de UNSW y autor del descubrimiento de Plimpton 322 (2017) — respondió a una consulta técnica sobre la aplicación de la aritmética sexagesimal a sistemas distribuidos:
+
+> *"I can see that you've understood what I wrote about Plimpton 322. It is not often that I get contacted by people who have actually read what I wrote. **Your direction of research sounds promising.**"*  
+> — Dr. Daniel Mansfield, UNSW, 23 de diciembre de 2025
+
+📄 Registro completo del intercambio: [`docs/ACADEMIC_VALIDATION.md`](docs/ACADEMIC_VALIDATION.md)
+
+### 📖 Referencia Principal
 
 > *"Quantum ground state and single-phonon control of a mechanical resonator"*
 > — O'Connell et al., **Nature 464**, 697–703 (2010). DOI: [10.1038/nature08967](https://doi.org/10.1038/nature08967)
