@@ -77,7 +77,13 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
           </div>
         </div>
         
-        <button className="w-full flex items-center justify-center lg:justify-start gap-3 p-2 text-slate-500 hover:text-white transition-colors">
+        <button 
+          onClick={() => onTabChange("settings")}
+          className={clsx(
+            "w-full flex items-center justify-center lg:justify-start gap-3 p-2 transition-colors",
+            activeTab === "settings" ? "text-emerald-400" : "text-slate-500 hover:text-white"
+          )}
+        >
           <Settings className="w-4 h-4" />
           <span className="hidden lg:block text-[9px] font-bold uppercase tracking-widest">Settings</span>
         </button>
