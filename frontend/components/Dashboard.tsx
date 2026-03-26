@@ -86,7 +86,7 @@ export function Dashboard() {
   const isResyncTime = cycleTime === 0;
 
   return (
-    <div className="flex gap-6 h-[calc(100vh-240px)] overflow-hidden">
+    <div className="flex gap-6 h-full overflow-hidden">
       {/* Sidebar */}
       <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
 
@@ -224,8 +224,8 @@ export function Dashboard() {
              <AIOpsShieldView status={status} />
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center min-h-[400px] text-slate-600 space-y-4 glass-card border-dashed">
-             <Lock className="w-12 h-12 opacity-20" />
+          <div className="flex flex-col items-center justify-center h-full min-h-[400px] text-slate-600 space-y-4 glass-card border-dashed">
+             <ShieldAlert className="w-12 h-12 opacity-20" />
              <p className="text-[10px] font-black uppercase tracking-widest opacity-30 italic">Modulo: {activeTab} en proceso de sincronización s60...</p>
           </div>
         )}

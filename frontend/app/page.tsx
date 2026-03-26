@@ -15,7 +15,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="space-y-8 pb-12">
+    <div className="h-screen flex flex-col overflow-hidden p-2 lg:p-4 space-y-2 bg-slate-950">
       {/* Premium Header */}
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 px-2">
         <div className="space-y-1">
@@ -66,11 +66,13 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Main Dashboard UI */}
-      <Dashboard />
+      {/* Main Dashboard UI - Takes remaining space */}
+      <div className="flex-1 min-h-0 overflow-hidden">
+        <Dashboard />
+      </div>
       
-      {/* Bottom Identity Footer */}
-      <footer className="pt-8 border-t border-white/5 flex justify-between items-center text-[10px] text-slate-600 font-bold uppercase tracking-widest px-2">
+      {/* Bottom Identity Footer - Stick to bottom */}
+      <footer className="shrink-0 p-2 border-t border-white/5 flex justify-between items-center text-[9px] text-slate-600 font-extrabold uppercase tracking-widest bg-slate-950/80 backdrop-blur-sm z-50">
          <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
