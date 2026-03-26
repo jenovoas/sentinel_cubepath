@@ -17,6 +17,7 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 anyhow = "1"
 libbpf-rs = "0.23"
+rand = "0.8"
 
 # Memory & AI (Using same versions as sentinel_media)
 candle-core = "0.9.2"

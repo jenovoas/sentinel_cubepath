@@ -47,7 +47,7 @@ export function MyCNetNodeGraph({ phase, isOpen }: { phase: string, isOpen: bool
         </div>
       </div>
 
-      <div className="flex-1 min-h-[250px] relative flex flex-col items-center justify-center p-6 z-10">
+      <div className="flex-1 min-h-[140px] relative flex flex-col items-center justify-center p-4 z-10">
         
         {/* State Indicator */}
         <div className="absolute top-4 right-4 flex flex-col items-end">

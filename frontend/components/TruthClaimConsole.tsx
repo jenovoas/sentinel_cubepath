@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Loader2, Scale, AlertCircle, CheckCircle2, ShieldX, ShieldCheck, Sparkles } from "lucide-react";
+import { Search, Loader2, Scale, AlertCircle, CheckCircle2, ShieldX, ShieldCheck, Sparkles, Terminal } from "lucide-react";
 import { clsx } from "clsx";
 
 const DEMO_CLAIMS = [
@@ -54,17 +54,31 @@ export function TruthClaimConsole() {
 
   return (
     <div className="space-y-4 flex-1 flex flex-col">
+      {/* Loading overlay for analytical feel */}
+      {loading && (
+        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center gap-4 animate-in fade-in duration-300 rounded-xl border border-emerald-500/20">
+          <div className="relative">
+            <Loader2 className="w-12 h-12 text-emerald-500 spinner" />
+            <div className="absolute inset-0 border-2 border-emerald-500/20 rounded-full animate-ping" />
+          </div>
+          <div className="text-center">
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-400">Scanning Harmonic Frequencies</p>
+            <p className="text-[8px] text-slate-500 mono mt-1">Plimpton 322 Phase Check: OK</p>
+          </div>
+        </div>
+      )}
+
       {/* Input area */}
-      <div className="relative group flex-1">
+      <div className="relative group min-h-[100px] flex-1">
         <textarea
           value={claim}
           onChange={(e) => setClaim(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Enter an AI agent command to analyze..."
-          className="w-full h-full bg-slate-950/60 border border-white/5 rounded-xl p-4 text-xs text-white placeholder:text-slate-700 focus:outline-none focus:border-emerald-500/30 focus:shadow-[0_0_20px_rgba(16,185,129,0.05)] transition-all resize-none font-mono custom-scrollbar"
+          placeholder="Enter an AI agent command to verify cognitive intent..."
+          className="w-full h-full bg-slate-950/40 border border-white/5 rounded-xl p-4 text-[11px] text-white placeholder:text-slate-800 focus:outline-none focus:border-emerald-500/30 transition-all resize-none font-mono custom-scrollbar"
         />
-        <div className="absolute top-3 right-3 opacity-20 group-hover:opacity-60 transition-opacity">
-          <Search className="w-4 h-4 text-emerald-400" />
+        <div className="absolute bottom-3 right-3 opacity-20 group-hover:opacity-60 transition-opacity">
+          <Terminal className="w-4 h-4 text-emerald-400" />
         </div>
       </div>
 

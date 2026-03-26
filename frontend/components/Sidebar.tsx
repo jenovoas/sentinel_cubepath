@@ -27,7 +27,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
   ];
 
   return (
-    <div className="w-20 lg:w-48 bg-slate-950/40 border-r border-white/5 flex flex-col h-full shrink-0">
+    <div className="w-20 md:w-56 bg-slate-950/40 border-r border-white/5 flex flex-col h-full shrink-0 transition-all duration-500">
       <div className="flex-1 py-8 space-y-2">
         {menuItems.map((item) => (
           <button
@@ -45,20 +45,22 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
             )}
             
             <item.icon className={clsx(
-              "w-5 h-5",
+              "w-5 h-5 shrink-0",
               activeTab === item.id ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-300",
               item.highlight && "animate-pulse"
             )} />
             
             <span className={clsx(
-              "hidden lg:block text-[10px] font-black uppercase tracking-widest",
-              activeTab === item.id ? "opacity-100" : "opacity-0 group-hover:opacity-100 transition-opacity"
+              "hidden md:block text-[10px] uppercase tracking-widest transition-all",
+              activeTab === item.id 
+                ? "opacity-100 font-black text-emerald-400" 
+                : "opacity-40 font-bold group-hover:opacity-100"
             )}>
               {item.label}
             </span>
 
             {item.highlight && (
-              <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-rose-500 rounded-full border border-slate-950" />
+              <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-rose-500 rounded-full border border-slate-950 animate-pulse" />
             )}
           </button>
         ))}

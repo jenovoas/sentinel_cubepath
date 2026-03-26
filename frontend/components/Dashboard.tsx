@@ -4,13 +4,14 @@ import React, { useState, useEffect } from "react";
 import { TelemetryFeed } from "./TelemetryFeed";
 import { TruthClaimConsole } from "./TruthClaimConsole";
 import { StatsGrid } from "./StatsGrid";
-import { ShieldCheck, Zap, Heart, Timer, BarChart3, Fingerprint } from "lucide-react";
+import { ShieldCheck, Zap, Heart, Timer, BarChart3, Fingerprint, ShieldAlert } from "lucide-react";
 import { ShieldControl } from "./ShieldControl";
 import { TruthSyncReport } from "./TruthSyncReport";
 import { MyCNetNodeGraph } from "./MyCNetNodeGraph";
 import { Sidebar } from "./Sidebar";
 import { AIOpsShieldView } from "./AIOpsShieldView";
 import { clsx } from "clsx";
+import { ShieldAlert as ShieldAlertIcon } from "lucide-react"; // Alias if needed, but we'll stick to ShieldAlert
 
 export function Dashboard() {
   const [status, setStatus] = useState<any>(null);
@@ -90,52 +91,49 @@ export function Dashboard() {
       {/* Sidebar */}
       <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
 
-      {/* Main Content Area */}
-      <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-6 pb-20">
+      <div className="flex-1 flex flex-col min-h-0 pr-2 overflow-hidden">
         {activeTab === "dashboard" ? (
-          <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
-            {/* Stats Grid */}
-            <StatsGrid status={status} />
-
-            {/* Phase Cycle Bar */}
-            <div className="glass-card p-3 scan-line">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 shrink-0">
-                  <Timer className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-500">Phase Cycle</span>
-                </div>
-
-                <div className="flex-1 bg-slate-950 rounded-full h-1.5 overflow-hidden">
-                  <div
-                    className="h-full rounded-full transition-all duration-1000 ease-linear"
-                    style={{
-                      width: `${cyclePercent}%`,
-                      background: isResyncTime
-                        ? "linear-gradient(90deg, #0ea5e9, #818cf8)"
-                        : isPulseTime
-                        ? "linear-gradient(90deg, #10b981, #2dd4bf)"
-                        : "linear-gradient(90deg, #1e293b, #334155)",
-                    }}
-                  />
-                </div>
-
-                <div className="flex items-center gap-3 shrink-0">
-                  <span className="mono text-[10px] tabular-nums text-slate-500">
-                    T=<span className="text-white font-bold">{cycleTime}</span>/68s
-                  </span>
+          <div className="flex-1 flex flex-col min-h-0 space-y-4 animate-in fade-in slide-in-from-right-4 duration-500 overflow-hidden">
+            {/* 1. TOP AREA (Fixed) */}
+            <div className="shrink-0 space-y-4">
+              <StatsGrid status={status} />
+              <div className="glass-card p-3 scan-line">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 shrink-0">
+                    <Timer className="w-3.5 h-3.5 text-sky-400" />
+                    <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-500">Phase Cycle</span>
+                  </div>
+                  <div className="flex-1 bg-slate-950 rounded-full h-1.5 overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all duration-1000 ease-linear"
+                      style={{
+                        width: `${cyclePercent}%`,
+                        background: isResyncTime
+                          ? "linear-gradient(90deg, #0ea5e9, #818cf8)"
+                          : isPulseTime
+                          ? "linear-gradient(90deg, #10b981, #2dd4bf)"
+                          : "linear-gradient(90deg, #1e293b, #334155)",
+                      }}
+                    />
+                  </div>
+                  <div className="flex items-center gap-3 shrink-0">
+                    <span className="mono text-[10px] tabular-nums text-slate-500">
+                      T=<span className="text-white font-bold">{cycleTime}</span>/68s
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Main Content Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 flex-1 min-h-0">
-              <div className="lg:col-span-2 flex flex-col overflow-hidden">
-                <div className="glass-card overflow-hidden flex flex-col h-full border-white/5">
-                  <div className="p-4 border-b border-white/5 flex items-center justify-between shrink-0">
+            {/* 2. MIDDLE AREA (Flexible / Scrollable) */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 flex-1 min-h-[400px]">
+              <div className="lg:col-span-2 flex flex-col min-h-0 h-full">
+                <div className="glass-card overflow-hidden flex flex-col h-full border-white/5 bg-slate-950/20">
+                  <div className="p-3 border-b border-white/5 flex items-center justify-between shrink-0">
                     <div className="flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                      <h2 className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-slate-300">
-                        Ring-0 Telemetry
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                      <h2 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">
+                        Ring-0 Telemetry Feed
                       </h2>
                     </div>
                   </div>
@@ -145,68 +143,56 @@ export function Dashboard() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-5">
-                <div className="glass-card p-5 flex flex-col flex-1 border-white/5">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Zap className="w-4 h-4 text-amber-400" />
-                    <h2 className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-slate-300">
+              <div className="flex flex-col gap-4 min-h-0 h-full">
+                <div className="glass-card p-4 flex flex-col flex-1 min-h-0 border-white/5 overflow-hidden bg-slate-950/20">
+                  <div className="flex items-center gap-2 mb-3 shrink-0">
+                    <Zap className="w-3.5 h-3.5 text-amber-400" />
+                    <h2 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">
                       Truth Claim Console
                     </h2>
                   </div>
-                  <TruthClaimConsole />
-                </div>
-
-                <TruthSyncReport status={status} />
-
-                <div className="glass-card p-5 border-l-2 border-l-emerald-500/30">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="phase-ring p-2">
-                      <Heart className="w-5 h-5 text-rose-500 bio-heartbeat" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-sm text-slate-200">Bio-Resonance</h3>
-                    </div>
-                  </div>
-                  <div className="mt-3 flex items-center gap-2">
-                    <div className="flex-1 bg-slate-950 rounded-full h-1 overflow-hidden">
-                      <div
-                        className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000"
-                        style={{ width: `${status?.bio_coherence ? Math.min(100, (status.bio_coherence / 12960000) * 100) : 0}%` }}
-                      />
-                    </div>
-                    <span className="text-[9px] mono text-emerald-400 font-bold w-10 text-right">
-                      {status?.bio_coherence ? `${((status.bio_coherence / 12960000) * 100).toFixed(0)}%` : "—"}
-                    </span>
+                  <div className="flex-1 min-h-0">
+                    <TruthClaimConsole />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* MyCNet Hexagonal Mesh */}
-            <div className="h-64">
-              <MyCNetNodeGraph phase={yhwhPhase} isOpen={networkOpen} />
-            </div>
-
-            {/* Specialized Controls Bottom */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-              <div className="lg:col-span-1">
-                <ShieldControl status={status} />
-              </div>
-              <div className="lg:col-span-2 flex gap-5">
-                <div className="glass-card p-6 border-emerald-500/10 flex-1 flex flex-col justify-center">
-                  <div className="flex items-center gap-4">
-                    <div className="p-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 shrink-0">
-                      <ShieldCheck className="w-10 h-10 text-emerald-400" />
+            {/* 3. BOTTOM AREA (Fixed) */}
+            <div className="shrink-0 grid grid-cols-1 lg:grid-cols-3 gap-4">
+               <div className="lg:col-span-2 flex flex-col gap-4">
+                   <div className="h-40 shrink-0">
+                      <MyCNetNodeGraph phase={yhwhPhase} isOpen={networkOpen} />
+                   </div>
+                   <div className="glass-card p-3 border-emerald-500/10 flex items-center gap-4 shrink-0">
+                      <div className="p-2 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                        <ShieldCheck className="w-6 h-6 text-emerald-400" />
+                      </div>
+                      <div>
+                        <h2 className="text-[11px] font-black text-white uppercase tracking-tighter">Sentinel TruthSync Certified</h2>
+                        <p className="text-slate-500 text-[8px] font-medium uppercase tracking-[0.2em]">Verified s60 Phasing</p>
+                      </div>
+                   </div>
+               </div>
+               
+               <div className="flex flex-col gap-4 shrink-0">
+                  <TruthSyncReport status={status} />
+                  <div className="glass-card p-3 border-l-2 border-l-emerald-500/30 shrink-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Heart className="w-3.5 h-3.5 text-rose-500 bio-heartbeat" />
+                      <h3 className="font-bold text-[9px] uppercase tracking-widest text-slate-200">Bio-Resonance</h3>
                     </div>
-                    <div>
-                      <h2 className="text-lg font-black text-white uppercase tracking-tighter">Sentinel TruthSync Certified</h2>
-                      <p className="text-slate-500 text-[10px] font-medium mt-1 uppercase tracking-[0.2em]">
-                        Plimpton 322 Phase Alignment Verified
-                      </p>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 bg-slate-950 rounded-full h-1 overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000"
+                          style={{ width: `${status?.bio_coherence ? Math.min(100, (status.bio_coherence / 12960000) * 100) : 0}%` }}
+                        />
+                      </div>
+                      <span className="text-[8px] mono text-emerald-400 font-bold">{status?.bio_coherence ? `${((status.bio_coherence / 12960000) * 100).toFixed(0)}%` : "—"}</span>
                     </div>
                   </div>
-                </div>
-              </div>
+               </div>
             </div>
           </div>
         ) : activeTab === "aiops_shield" ? (
