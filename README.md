@@ -250,6 +250,7 @@ curl -X POST http://localhost:8000/api/v1/truth_claim \
 - 🔬 [Innovaciones Científicas](docs/SCIENTIFIC_INNOVATIONS.md) — Las 4 contribuciones de frontera
 - 📋 [Plan Maestro S60](docs/MASTER_S60_PLAN.md) — Fases de despliegue
 - 🧪 [Módulos Cuánticos](docs/QUANTUM_MODULES.md) — Física de los módulos
+- 🏛️ [Teoría de la Trinidad](docs/GUIA_VISUAL_TRINIDAD.md) — Isomorfismo entre física, biología y tecnología
 
 ---
 

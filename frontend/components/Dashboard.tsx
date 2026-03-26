@@ -126,10 +126,10 @@ export function Dashboard() {
               </div>
             </div>
 
-            {/* 2. MIDDLE AREA (Telemetry & Console) - Fixed heights for clean grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[500px]">
+            {/* 2. MIDDLE AREA (Telemetry & Console) - Fixed heights with strict isolation */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[500px] relative z-10">
               <div className="lg:col-span-2 flex flex-col h-full">
-                <div className="glass-card overflow-hidden flex flex-col h-full border-white/5 bg-slate-950/20">
+                <div className="glass-card overflow-hidden flex flex-col h-full border-white/5 bg-slate-950/20 relative isolate [clip-path:inset(0)]">
                   <div className="p-3 border-b border-white/5 flex items-center justify-between shrink-0 bg-slate-900/40">
                     <div className="flex items-center gap-2">
                       <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
@@ -149,7 +149,7 @@ export function Dashboard() {
               </div>
 
               <div className="flex flex-col h-full">
-                <div className="glass-card p-5 flex flex-col h-full border-white/5 overflow-hidden bg-slate-950/40">
+                <div className="glass-card p-5 flex flex-col h-full border-white/5 overflow-hidden bg-slate-950/40 relative isolate [clip-path:inset(0)]">
                   <div className="flex items-center gap-2 mb-4 shrink-0">
                     <Zap className="w-3.5 h-3.5 text-amber-400" />
                     <h2 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">
