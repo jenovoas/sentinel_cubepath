@@ -23,6 +23,25 @@ positions:
   filename: /tmp/positions.yaml
 
 scrape_configs:
+  # LANE 1: Deterministic Security Audit (WAL)
+  - job_name: sentinel-security-wal
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: sentinel-cortex
+          host: sentinel-cubepath-vps
+          layer: ring0
+          lane: security
+          source: wal
+          __path__: /var/log/sentinel/audit_lane.log
+    pipeline_stages:
+      - json:
+          expressions:
+            timestamp: timestamp
+            payload: payload
+      - labels:
+          source:
   # Kernel audit logs (Watchdog LSM)
   - job_name: auditd-kernel-watchdog
     static_configs:
@@ -32,6 +51,7 @@ scrape_configs:
           job: auditd
           host: sentinel-cubepath-vps
           layer: ring0
+          lane: security
           __path__: /var/log/audit/audit.log
     pipeline_stages:
       - regex:
@@ -52,6 +72,7 @@ scrape_configs:
       max_age: 12h
       labels:
         job: systemd-journal
+        lane: ops
         host: sentinel-cubepath-vps
     relabel_configs:
       - source_labels: ['__journal__systemd_unit']
@@ -70,3 +91,5 @@ scrape_configs:
         target_label: container
       - source_labels: ['__meta_docker_container_label_com_docker_compose_service']
         target_label: service
+      - replacement: ops
+        target_label: lane

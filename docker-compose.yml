@@ -63,6 +63,11 @@ services:
   prometheus:
     image: prom/prometheus:latest
     container_name: sentinel-prometheus
+    mem_limit: 512mb
+    deploy:
+      resources:
+        limits:
+          memory: 512mb
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
@@ -86,6 +91,11 @@ services:
   loki:
     image: grafana/loki:latest
     container_name: sentinel-loki
+    mem_limit: 512mb
+    deploy:
+      resources:
+        limits:
+          memory: 512mb
     command: -config.file=/etc/loki/loki-config.yml
     volumes:
       - ./observability/loki/loki-config.yml:/etc/loki/loki-config.yml:ro
@@ -141,6 +151,11 @@ services:
     restart: unless-stopped
     networks:
       - sentinel-network
+    mem_limit: 1gb
+    deploy:
+      resources:
+        limits:
+          memory: 1gb
 
   # ============================================================
   # AUTOMATION — n8n Defense Workflows (Reflex Arc)
@@ -157,12 +172,14 @@ services:
       N8N_HOST: ${N8N_HOST:-localhost}
       N8N_PORT: 5678
       N8N_PROTOCOL: https
-      N8N_PATH: /n8n/
-      WEBHOOK_URL: https://vps23309.cubepath.net/n8n/
       N8N_EDITOR_BASE_URL: https://vps23309.cubepath.net/n8n/
+      N8N_PATH: /n8n/
       EXECUTIONS_DATA_PRUNE: "true"
       EXECUTIONS_DATA_MAX_AGE: "168"
-      N8N_API_KEY_REQUIRED: "false"
+    deploy:
+      resources:
+        limits:
+          memory: 1gb
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:

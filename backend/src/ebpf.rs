@@ -35,7 +35,8 @@ impl EbpfBridge {
     /// Primary monitor loop using libbpf-rs
     pub async fn run_monitor(
         &self, 
-        tx: broadcast::Sender<CortexEvent>
+        tx: broadcast::Sender<CortexEvent>,
+        wal: crate::security::wal::WalState
     ) -> anyhow::Result<()> {
         let paths = self.ringbuf_paths.clone();
         
@@ -43,6 +44,7 @@ impl EbpfBridge {
 
         for path in paths {
             let tx_clone = tx.clone();
+            let wal_clone = wal.clone();
             let p = path.clone();
             
             tokio::task::spawn_blocking(move || -> anyhow::Result<()> {
@@ -105,6 +107,12 @@ impl EbpfBridge {
                         entropy_s60_raw: raw.entropy_signal as i64,
                         severity: raw.severity,
                     };
+
+                    // LANE 1: Security Audit Log (WAL)
+                    // If severity >= 2 or it's a BLOCKED/CHECK event, it goes to Lane 1
+                    if raw.severity >= 2 || (raw.event_type <= 2) || (raw.event_type >= 10) {
+                        let _ = wal_clone.log_security(event.clone());
+                    }
 
                     let _ = tx_clone.send(event);
                     0

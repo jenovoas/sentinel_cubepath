@@ -56,7 +56,10 @@ limits_config:
   max_streams_per_user: 0
   max_entries_limit_per_query: 5000
   retention_period: 720h
-  unordered_writes: true
+  unordered_writes: false
+  # Window for Ops Lane (buffered/predictive)
+  # Security Lane (non-buffered) will stay ordered via Promtail
+  out_of_order_time_window: 2s
 
 compactor:
   working_directory: /loki/compactor

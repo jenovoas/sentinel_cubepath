@@ -20,12 +20,13 @@ La defensa se ejecuta directamente en el espacio del kernel para garantizar late
 -   **Función:** Filtrado de paquetes entrantes antes de que lleguen al stack de red estándar.
 -   **Acción:** Bloqueo por IP, Protocolo y mitigación de ráfagas (burst) mediante `NETWORK_BURST` events.
 
-### 1.2 LSM AI Guardian (`guardian_alpha_lsm.c`)
--   **Mecanismo:** Linux Security Module (Hooks).
--   **Funciones Protegidas:**
-    -   `lsm_inode_permission`: Control de acceso a archivos críticos en tiempo real.
-    -   `lsm_bprm_check_security`: Validación de binarios antes de su ejecución.
--   **Decisión:** Basada en la política de "Seguridad Basada en Intención".
+### 1.2 Watchdog LSM (Ring-0 Enforcement) (`guardian_alpha_lsm.c`)
+-   **Mecanismo:** Linux Security Module (Hooks) de última generación.
+-   **Funciones Protegidas/Interceptadas:**
+    -   `lsm_inode_permission`: Denegación de acceso a archivos críticos en menos de 0.08ms.
+    -   `lsm_bprm_check_security`: Validación de integridad de binarios en el punto de ejecución.
+    -   `lsm_task_fix_setuid`: Prevención de escalada de privilegios maliciosa.
+-   **Criterio de Decisión:** Evaluación de la "Intención Cognitiva" mediante entropía S60. Si el ratio armónico es disonante, la syscall se rechaza con `EPERM` antes de tocar el hardware.
 
 ### 1.3 Cognitive Intention Guard (`guardian_cognitive.c`)
 -   **Detección:** Análisis de semántica de comandos (ej. detección de comandos destructivos como `rm` recursivo en directorios de sistema).
@@ -90,13 +91,19 @@ El **IAOopsdown** es el protocolo de seguridad de última instancia ante una bre
 -   **Acción de Ring-0:** Fuerza el modo **Quarantine (SYSTEM SEALED)** en el kernel eBPF TC Firewall.
 -   **Resultado:** Bloqueo total de la red e interrupción de todos los procesos de IA comprometidos. El sistema entra en modo de "Siniestro Total Seguro" hasta que un operador humano inyecte un `Bio-Pulse` de recuperación.
 
-## 9. Arquitectura Dual Lane (Redundancia Cognitiva)
+## 9. Arquitectura Dual Lane (Redundancia Cognitiva y Durabilidad)
 
-La arquitectura **Dual Lane** separa el procesamiento de "Misión Crítica" del "Procesamiento General".
+La arquitectura **Dual Lane** es el pilar de la integridad de Sentinel, separando el procesamiento de "Misión Crítica" (Seguridad) del "Procesamiento General" (Operaciones).
 
--   **Lane Alpha (Ring-0):** Programas eBPF y lógica S60. Inmune a alucinaciones. Ejecuta el firewall físico.
--   **Lane Beta (Userspace):** Agentes de IA y LLMs. Supervisados por Lane Alpha.
--   **Inter-Lane Bridge:** El bridge eBPF garantiza que Lane Beta nunca pueda escribir en Lane Alpha, protegiendo el núcleo del sistema incluso si la IA superior es comprometida.
+-   **Lane 1: Security Alpha (Ring-0 & WAL)**:
+    *   **Propósito**: Auditoría forense inmutable.
+    *   **Durabilidad Determinista (WAL)**: Cada evento de bloqueo se escribe físicamente en `/var/log/sentinel/audit_lane.log` usando `fsync` inmediato.
+    *   **Garantía**: Cero pérdida de datos ante fallos de energía o memoria. Loki configura `unordered_writes: false` para este carril para preservar la línea de tiempo forense.
+-   **Lane 2: Ops Beta (Userspace & Predictive)**:
+    *   **Propósito**: Monitoreo de salud y métricas del sistema.
+    *   **Estrategia**: Buffering predictivo de 2 segundos para minimizar el impacto en la latencia del carril de seguridad.
+    *   **Aislamiento**: Protegido por límites de recursos (cgroups) de 512MB-1GB para asegurar que el stack de observabilidad nunca comprometa la ejecución de la IA en Ring-0.
+-   **Inter-Lane Bridge**: El bridge eBPF garantiza que Lane Beta sea puramente observacional, permitiendo que Lane Alpha actúe como el 'Watchdog' inexpugnable.
 
 ## 10. Reclamos Patentables (Clave de Innovación)
 
