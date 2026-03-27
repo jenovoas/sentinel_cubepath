@@ -185,6 +185,3 @@ Resultado: Base de datos de producción eliminada
 **Sentinel Cortex™ - El Futuro de la Observabilidad Segura**
 
 ---
-
-**Versión**: 1.0.0-S60  
-**Última Actualización**: -03-18

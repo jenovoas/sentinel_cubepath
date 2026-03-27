@@ -77,8 +77,8 @@ impl EbpfBridge {
                         7 => "SYSTEM_METRIC".to_string(),
                         8 => "BIO_PULSE".to_string(),
                         9 => "QHC_RESET".to_string(),
-                        10 => "SEMANTIC_BLOCK".to_string(),
-                        11 => "XDP_BLOCK".to_string(),
+                        10 => "PTRACE_CHECK".to_string(),
+                        11 => "CHMOD_CHECK".to_string(),
                         _ => "UNKNOWN".to_string(),
                     };
 
@@ -92,8 +92,8 @@ impl EbpfBridge {
                         7 => "System metric updated in kernel space".to_string(),
                         8 => "Bio-pulse detected: Operator presence verified".to_string(),
                         9 => "Quantum Harmonic Controller cache reset".to_string(),
-                        10 => "Cognitive Guardian: Semantic block triggered".to_string(),
-                        11 => "XDP: Malicious packet dropped at Ring-0".to_string(),
+                        10 => "Watchdog: Suspicious PTRACE access check intercepted".to_string(),
+                        11 => "Watchdog: Unauthorized chmod attempt detected".to_string(),
                         _ => "Unknown kernel-level event detected".to_string(),
                     };
 

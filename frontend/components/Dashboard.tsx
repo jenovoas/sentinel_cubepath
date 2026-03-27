@@ -278,7 +278,20 @@ export function Dashboard() {
               ))}
             </div>
           </div>
-
+        ) : activeTab === "aiops_shield" ? (
+          <div className="animate-in fade-in slide-in-from-right-4 duration-500 space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-black uppercase tracking-tighter text-white">IA Ops Shield</h1>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">S60 Cognitive Defense Matrix — Ring-0 Realtime</p>
+              </div>
+              <div className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[10px] font-black text-emerald-400 tracking-widest uppercase">Guardian Active</span>
+              </div>
+            </div>
+            <AIOpsShieldView status={status} />
+          </div>
         ) : activeTab === "mycnet" ? (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
             <div className="flex items-center justify-between">

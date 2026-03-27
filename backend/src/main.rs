@@ -381,7 +381,7 @@ async fn sentinel_status_handler(
         crystal_oscillator_active: true,
         harmonic_sync: if portal.is_portal_open(current_time_u64) { "RESONANCE_MAX".to_string() } else { "STABLE".to_string() },
         effective_mass: state.physics_engine.calculate_effective_mass(
-            crate::math::S60::ONE, 
+            crate::math::S60::one(), 
             portal.get_intensity(current_time_u64)
         ).to_raw(),
         quantum_load: state.physics_engine.calculate_effective_load(

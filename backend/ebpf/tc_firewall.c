@@ -37,7 +37,7 @@ struct dropped_packet {
 };
 
 // TC BPF program
-SEC("tc")
+SEC("classifier")
 int tc_firewall_prog(struct __sk_buff *ctx) {
     // 0. Reflex Arc: Check Panic Mode first
     u32 key = 0;
@@ -63,6 +63,17 @@ int tc_firewall_prog(struct __sk_buff *ctx) {
     struct iphdr *iph = data + sizeof(struct ethhdr);
     if ((void *)(iph + 1) > data_end)
         return TC_ACT_OK;
+
+    // --- SSH WHITELIST (Port 22) ---
+    // We allow SSH traffic even in quarantine to prevent losing the agent connection.
+    if (iph->protocol == IPPROTO_TCP) {
+        struct tcphdr *tcp = (void *)iph + sizeof(struct iphdr);
+        if ((void *)(tcp + 1) <= data_end) {
+            if (tcp->dest == bpf_htons(22) || tcp->source == bpf_htons(22)) {
+                return TC_ACT_OK;
+            }
+        }
+    }
 
     // Get source IP
     u32 src_ip = iph->saddr;

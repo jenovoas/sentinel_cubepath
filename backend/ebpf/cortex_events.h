@@ -31,6 +31,8 @@
 #define EVENT_SYSTEM_METRIC     7   /* Métrica del sistema (bio-resonancia) */
 #define EVENT_BIO_PULSE         8   /* Señal de pulso biológico (17s) */
 #define EVENT_QHC_RESET         9   /* Reset cuántico T=68s */
+#define EVENT_PTRACE_CHECK      10  /* Intento de PTRACE interceptado */
+#define EVENT_CHMOD_CHECK       11  /* Cambio de permisos interceptado */
 
 /* ─────────────────────────────── NIVELES DE SEVERIDAD (S60) ───────────── */
 

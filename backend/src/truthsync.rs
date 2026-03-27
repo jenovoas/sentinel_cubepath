@@ -73,4 +73,24 @@ impl TruthSync {
         }
         false
     }
+
+    pub fn sanitize_telemetry(
+        &self, 
+        entropy_raw: i64, 
+        neural: &mut crate::neural::NeuralMemory, 
+        resonant: &mut crate::resonant::ResonantMemory, 
+        timestamp: u64
+    ) -> u8 {
+        if self.detect_aiops_doom(entropy_raw) {
+            return 5; // CRITICAL / QUARANTINE
+        }
+        
+        // Simular validación semántica cruzada simple
+        let coherence = resonant.get_coherence();
+        if coherence < 1000 {
+            return 2; // WARN
+        }
+        
+        0 // OK
+    }
 }

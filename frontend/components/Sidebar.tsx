@@ -8,7 +8,11 @@ import {
   Network, 
   Terminal, 
   Settings,
-  Lock
+  Lock,
+  BarChart3,
+  Activity,
+  Workflow,
+  ExternalLink
 } from "lucide-react";
 import { clsx } from "clsx";
 
@@ -17,10 +21,37 @@ interface SidebarProps {
   onTabChange: (tab: string) => void;
 }
 
+const EXTERNAL_SERVICES = [
+  {
+    id: "grafana",
+    label: "Grafana",
+    icon: BarChart3,
+    href: "http://localhost:3001",
+    color: "text-orange-400",
+    dot: "bg-orange-500",
+  },
+  {
+    id: "prometheus",
+    label: "Prometheus",
+    icon: Activity,
+    href: "http://localhost:9090",
+    color: "text-red-400",
+    dot: "bg-red-500",
+  },
+  {
+    id: "n8n",
+    label: "n8n Reflex",
+    icon: Workflow,
+    href: "http://localhost:5678",
+    color: "text-violet-400",
+    dot: "bg-violet-500",
+  },
+];
+
 export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "aiops_shield", label: "AIOps Shield", icon: ShieldAlert, highlight: true },
+    { id: "aiops_shield", label: "AIOps Shield", icon: ShieldAlert },
     { id: "matrix", label: "Matrix", icon: Grid3X3 },
     { id: "mycnet", label: "MyCNet", icon: Network },
     { id: "vault", label: "Vault", icon: Terminal },
@@ -28,7 +59,8 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
 
   return (
     <div className="w-20 md:w-56 bg-slate-950/40 border-r border-white/5 flex flex-col h-full shrink-0 transition-all duration-500">
-      <div className="flex-1 py-8 space-y-2">
+      <div className="flex-1 py-8 space-y-1 overflow-y-auto">
+        {/* Internal views */}
         {menuItems.map((item) => (
           <button
             key={item.id}
@@ -46,8 +78,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
             
             <item.icon className={clsx(
               "w-5 h-5 shrink-0",
-              activeTab === item.id ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-300",
-              item.highlight && "animate-pulse"
+              activeTab === item.id ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-300"
             )} />
             
             <span className={clsx(
@@ -59,10 +90,36 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
               {item.label}
             </span>
 
-            {item.highlight && (
+            {(activeTab === item.id) && (
               <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-rose-500 rounded-full border border-slate-950 animate-pulse" />
             )}
           </button>
+        ))}
+
+        {/* Observability / Automation separator */}
+        <div className="mx-4 my-3 border-t border-white/5" />
+        <div className="hidden md:block px-4 pb-1">
+          <span className="text-[7px] font-black uppercase tracking-[0.25em] text-slate-700">Observability</span>
+        </div>
+
+        {/* External service links */}
+        {EXTERNAL_SERVICES.map((svc) => (
+          <a
+            key={svc.id}
+            href={svc.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full flex items-center gap-3 px-4 py-3 transition-all group relative text-slate-500 hover:bg-white/5"
+          >
+            <div className="relative">
+              <svc.icon className={clsx("w-5 h-5 shrink-0 group-hover:opacity-100 opacity-60", svc.color)} />
+              <div className={clsx("absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full animate-pulse border border-slate-950", svc.dot)} />
+            </div>
+            <span className="hidden md:block text-[10px] uppercase tracking-widest font-bold opacity-40 group-hover:opacity-100 transition-all">
+              {svc.label}
+            </span>
+            <ExternalLink className="hidden md:block w-2.5 h-2.5 ml-auto opacity-0 group-hover:opacity-30 transition-opacity shrink-0" />
+          </a>
         ))}
       </div>
 

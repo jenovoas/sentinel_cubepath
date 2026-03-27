@@ -23,7 +23,7 @@ impl std::fmt::Display for S60Error {
 impl std::error::Error for S60Error {}
 
 /// Sexagesimal (Base-60) Fixed-Point Number.
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default, Serialize, Deserialize)]
 pub struct S60 {
     pub components: [i64; 5],
 }
@@ -75,6 +75,12 @@ impl S60 {
         if v2 == 0 { return Err(S60Error::DivisionByZero); }
         let v1 = self.to_raw() as i128;
         Ok(Self::from_raw(((v1 * Self::SCALE_0 as i128) / v2 as i128) as i64))
+    }
+
+    pub fn is_harmonic_ratio(value: Self) -> bool {
+        let raw = value.to_raw();
+        // Fallback simple harmonic detection: value is multiple of S60::SCALE_4
+        raw > 0 && raw % Self::SCALE_4 == 0
     }
 }
 

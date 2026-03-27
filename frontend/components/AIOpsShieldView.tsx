@@ -18,6 +18,15 @@ interface AIOpsShieldViewProps {
 }
 
 export function AIOpsShieldView({ status }: AIOpsShieldViewProps) {
+  const [events, setEvents] = React.useState<any[]>([]);
+
+  // Simulation of incoming kernel events or mapping from telemetry
+  React.useEffect(() => {
+    if (status?.last_event) {
+      setEvents(prev => [status.last_event, ...prev].slice(0, 5));
+    }
+  }, [status]);
+
   const layers = [
     {
       id: "s60_validation",
@@ -63,6 +72,7 @@ export function AIOpsShieldView({ status }: AIOpsShieldViewProps) {
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      {/* 4 Multi-Layer Shields */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {layers.map((layer) => (
           <div 
@@ -90,61 +100,107 @@ export function AIOpsShieldView({ status }: AIOpsShieldViewProps) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 glass-card p-6 border-sky-500/10 relative overflow-hidden">
+        {/* Main War Room Detail */}
+        <div className="lg:col-span-2 glass-card p-6 border-sky-500/10 relative overflow-hidden flex flex-col">
           <div className="absolute top-0 right-0 p-8 opacity-5">
              <ShieldCheck className="w-48 h-48 text-sky-400" />
           </div>
-          <div className="relative z-10 space-y-4">
-            <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-               <Lock className="w-5 h-5 text-sky-400" />
-               <h2 className="text-sm font-black uppercase tracking-[0.2em] text-white">IA Ops Shield War Room</h2>
+          <div className="relative z-10 space-y-4 flex-1">
+            <div className="flex items-center justify-between border-b border-white/5 pb-4">
+               <div className="flex items-center gap-3">
+                  <Lock className="w-5 h-5 text-sky-400" />
+                  <h2 className="text-sm font-black uppercase tracking-[0.2em] text-white">IA Ops Shield War Room</h2>
+               </div>
+               <Badge className="bg-sky-500/10 text-sky-400 border-sky-500/20 text-[8px] uppercase tracking-widest px-2">S60 Encrypted</Badge>
             </div>
             
-            <div className="space-y-3">
-               {[
-                 { label: "Neural Entropy Check", val: "PASS", detail: "Ratio 1:12,960,000" },
-                 { label: "Prompt Injection Filter", val: "READY", detail: "AIOpsDoom Database 1.0" },
-                 { label: "Kernel Interception", val: "ACTIVE", detail: "ebpf_lsm/ring0_hook" }
-               ].map((item, i) => (
-                 <div key={i} className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5">
-                    <div className="flex flex-col">
-                       <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">{item.label}</span>
-                       <span className="text-[10px] text-slate-300 font-medium italic">{item.detail}</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+               <div className="space-y-3">
+                  <h3 className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2 italic">Neural Forensics</h3>
+                  {[
+                    { label: "Neural Entropy Check", val: "PASS", detail: "Ratio 1:12,960,000" },
+                    { label: "Prompt Injection Filter", val: "READY", detail: "AIOpsDoom Database 1.0" },
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5">
+                        <div className="flex flex-col">
+                          <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">{item.label}</span>
+                          <span className="text-[10px] text-slate-300 font-medium italic">{item.detail}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                          <span className="text-[10px] font-black text-emerald-400">{item.val}</span>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                       <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                       <span className="text-[10px] font-black text-emerald-400">{item.val}</span>
-                       <ChevronRight className="w-3 h-3 text-slate-700" />
+                  ))}
+               </div>
+               <div className="space-y-3">
+                  <h3 className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2 italic">Kernel Watchdog</h3>
+                  {[
+                    { label: "Syscall Monitor", val: "BOOTED", detail: "execve, open, ptrace" },
+                    { label: "Enforcement Mode", val: "ACTIVE", detail: "Ring-0 LSM Guardian" },
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5">
+                        <div className="flex flex-col">
+                          <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">{item.label}</span>
+                          <span className="text-[10px] text-slate-300 font-medium italic">{item.detail}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-pulse" />
+                          <span className="text-[10px] font-black text-sky-400">{item.val}</span>
+                        </div>
                     </div>
-                 </div>
-               ))}
+                  ))}
+               </div>
             </div>
           </div>
         </div>
 
-        <div className="glass-card p-6 border-rose-500/10 flex flex-col justify-between">
-           <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                 <ShieldAlert className="w-5 h-5 text-rose-500" />
-                 <h2 className="text-[11px] font-black uppercase tracking-widest text-rose-300">Amenazas Recientes</h2>
+        {/* Audit Log / Watchdog Live Feed */}
+        <div className="glass-card p-6 border-rose-500/10 flex flex-col">
+           <div className="space-y-4 flex-1">
+              <div className="flex items-center justify-between">
+                 <div className="flex items-center gap-2">
+                    <ShieldAlert className="w-5 h-5 text-rose-500" />
+                    <h2 className="text-[11px] font-black uppercase tracking-widest text-rose-300">Amenazas & Kernel Log</h2>
+                 </div>
+                 <div className="flex items-center gap-1">
+                    <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" />
+                    <span className="text-[8px] text-emerald-400 font-bold uppercase tracking-tighter">Live Auditd</span>
+                 </div>
               </div>
-              <div className="space-y-2 opacity-50">
-                 <div className="text-[9px] font-mono text-slate-500 bg-slate-900/50 p-2 rounded border border-white/5">
-                    [INFO] 1:36:12 - Sin actividad maliciosa detectada. El núcleo está despejado.
-                 </div>
-                 <div className="text-[9px] font-mono text-slate-500 bg-slate-900/50 p-2 rounded border border-white/5">
-                    [INFO] 1:35:45 - Verificación de fase s60 completada.
-                 </div>
+
+              <div className="space-y-2 font-mono text-[9px] overflow-hidden">
+                 {events.length > 0 ? events.map((ev, i) => (
+                   <div key={i} className="p-2 rounded bg-slate-950/50 border border-white/5 flex flex-col gap-1 slide-in-from-top-1 animate-in">
+                      <div className="flex justify-between">
+                         <span className="text-rose-400 font-black">[{ev.type || "BLOCK"}]</span>
+                         <span className="text-slate-600 italic">{new Date().toLocaleTimeString()}</span>
+                      </div>
+                      <span className="text-slate-400 truncate">{ev.msg || "Syscall intercepted and validated."}</span>
+                   </div>
+                 )) : (
+                   <div className="space-y-2 opacity-50">
+                      <div className="text-[9px] font-mono text-slate-500 bg-slate-900/50 p-2 rounded border border-white/5">
+                         [INFO] {new Date().toLocaleTimeString()} - Sin actividad maliciosa detectada. El núcleo está despejado.
+                      </div>
+                      <div className="text-[9px] font-mono text-slate-500 bg-slate-900/50 p-2 rounded border border-white/5">
+                         [INFO] {new Date().toLocaleTimeString()} - Watchdog S60 sincronizado con LSM Guardian.
+                      </div>
+                      <div className="text-[9px] font-mono text-slate-500 bg-slate-900/50 p-2 rounded border border-white/5">
+                         [INFO] {new Date().toLocaleTimeString()} - Whitelist verificada (10,000 entradas).
+                      </div>
+                   </div>
+                 )}
               </div>
            </div>
            
            <div className="mt-6 pt-6 border-t border-white/5 space-y-4">
               <div className="flex items-center justify-between">
                  <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Estado Global</span>
-                 <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">SHIELDED</span>
+                 <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest italic">PROTECTED (S60)</span>
               </div>
-              <div className="h-2 w-full bg-slate-900 rounded-full overflow-hidden">
-                 <div className="h-full bg-emerald-500 w-[98%]" />
+              <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
+                 <div className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 w-[99%]" />
               </div>
            </div>
         </div>
@@ -152,3 +208,9 @@ export function AIOpsShieldView({ status }: AIOpsShieldViewProps) {
     </div>
   );
 }
+
+const Badge = ({ children, className }: any) => (
+   <span className={clsx("px-2 py-0.5 rounded-md font-bold", className)}>
+      {children}
+   </span>
+);

@@ -1,0 +1,72 @@
+# Promtail Configuration — Sentinel CubePath
+# Recolecta logs del kernel (auditd), backend Rust, y contenedores Docker
+
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+  log_level: info
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+    tenant_id: sentinel-cubepath
+    batchwait: 1s
+    batchsize: 1048576
+    backoff_config:
+      min_period: 1s
+      max_period: 30s
+      max_retries: 5
+    external_labels:
+      environment: hackathon
+      cluster: sentinel-cubepath
+
+positions:
+  filename: /tmp/positions.yaml
+
+scrape_configs:
+  # Kernel audit logs (Watchdog LSM)
+  - job_name: auditd-kernel-watchdog
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: auditd
+          host: sentinel-cubepath-vps
+          layer: ring0
+          __path__: /var/log/audit/audit.log
+    pipeline_stages:
+      - regex:
+          expression: '.*key=(?P<key>[^\s]+).*'
+      - labels:
+          key:
+      - match:
+          selector: '{job="auditd"}'
+          stages:
+            - regex:
+                expression: 'type=(?P<type>\w+)'
+            - labels:
+                type:
+
+  # System journal (systemd services)
+  - job_name: system-journal
+    journal:
+      max_age: 12h
+      labels:
+        job: systemd-journal
+        host: sentinel-cubepath-vps
+    relabel_configs:
+      - source_labels: ['__journal__systemd_unit']
+        target_label: unit
+      - source_labels: ['__journal__hostname']
+        target_label: hostname
+
+  # Docker/Compose container logs
+  - job_name: docker-containers
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 5s
+    relabel_configs:
+      - source_labels: ['__meta_docker_container_name']
+        regex: '/(.*)'
+        target_label: container
+      - source_labels: ['__meta_docker_container_label_com_docker_compose_service']
+        target_label: service

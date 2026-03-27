@@ -155,4 +155,22 @@ int BPF_PROG(ai_guardian_exec, struct linux_binprm *bprm)
     return 0;
 }
 
+// LSM Hook: ptrace_access_check (Watchdog)
+SEC("lsm/ptrace_access_check")
+int BPF_PROG(ai_guardian_ptrace, struct task_struct *child, unsigned int mode)
+{
+    __u32 pid = bpf_get_current_pid_tgid() >> 32;
+    emit_cortex_event(child, EVENT_PTRACE_CHECK, SEVERITY_HIGH, pid);
+    return 0;
+}
+
+// LSM Hook: path_chmod (Watchdog)
+SEC("lsm/path_chmod")
+int BPF_PROG(ai_guardian_chmod, const struct path *path, umode_t mode)
+{
+    __u32 pid = bpf_get_current_pid_tgid() >> 32;
+    emit_cortex_event(path, EVENT_CHMOD_CHECK, SEVERITY_MEDIUM, pid);
+    return 0;
+}
+
 char LICENSE[] SEC("license") = "GPL";
