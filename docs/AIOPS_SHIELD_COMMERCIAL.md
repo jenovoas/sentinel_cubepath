@@ -40,17 +40,6 @@ Resultado: Base de datos de producción eliminada
 
 ---
 
-## 💰 Valor Comercial
-
-### Ventaja Competitiva
-
-| Característica | Datadog | Splunk | Sentinel + AIOpsShield |
-|:---:|:---:|:---:|:---:|
-| **Protección AIOpsDoom** | ❌ No | ❌ No | ✅ Sí (Nativa) |
-| **Costo** | $15/host/mes | $150/GB/mes | $5-50K/año (Ilimitado) |
-| **Integración LLM** | ⚠ Básica | ❌ No | ✅ Avanzada (Local/Base-60) |
-| **Defensa a nivel Kernel** | ❌ No | ❌ No | ✅ eBPF LSM |
-
 ### Modelo de Ingresos
 
 **Freemium**:
@@ -162,7 +151,7 @@ Resultado: Base de datos de producción eliminada
 
 ### Para Inversores
 
-**Buscando Financiación Semilla** ($500K-1M):
+**Buscando Financiación Semilla** :
 
 - Acelerar el desarrollo del eBPF Guardian.
 - Contratar equipo especializado en Rust/Seguridad.
@@ -197,6 +186,5 @@ Resultado: Base de datos de producción eliminada
 
 ---
 
-**Estado**: LISTO PARA PRODUCCIÓN ✅  
 **Versión**: 1.0.0-S60  
 **Última Actualización**: 2026-03-18

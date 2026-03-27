@@ -1,10 +1,11 @@
-#  CAPTURA RÁPIDA - Ideas Clave Antes de Olvidar
+# CAPTURA RÁPIDA - Ideas Clave Antes de Olvidar
 
 **Fecha**: 20 Dic 2024 19:42
 
 ## 💡 IDEAS CENTRALES
 
 ### 1. Resonancia de Datos (Tesla → Sentinel)
+
 ```
 Tesla: Tierra como conductor → Energía sin cables
 Sentinel: Kernel como conductor → Datos sin fricción
@@ -17,6 +18,7 @@ Mecanismo:
 ```
 
 ### 2. Coprocesador Matemático
+
 ```
 Software (CPU): 10-60ms latencia
 Coprocesador (FPGA/GPU): <120μs latencia
@@ -29,6 +31,7 @@ Función:
 ```
 
 ### 3. Buffers en Serie con IA
+
 ```
 Cada buffer en cascada:
 1. Predice tamaño óptimo (ML)
@@ -41,6 +44,7 @@ Smooth_factor(N) = 1.5^N (exponencial)
 ```
 
 ### 4. Aplicación a Internet Global
+
 ```
 Nodos intermedios:
 - Sincronizan estado (no retransmiten)
@@ -56,6 +60,7 @@ Resultado:
 ```
 
 ### 5. Economía Viable
+
 ```
 Datadog global: no factible ($$$$$)
 Sentinel LGTM: VIABLE
@@ -67,7 +72,7 @@ eBPF: Zero-Copy (sin fricción)
 Costo: Casi plano vs volumen
 ```
 
-##  CLAIMS PATENTABLES
+## CLAIMS PATENTABLES
 
 1. **Dual-Lane** ($4-6M) ✅ Validado
 2. **Semantic Firewall** ($5-8M) ✅ Validado
@@ -79,29 +84,33 @@ Costo: Casi plano vs volumen
 8. **Flow Coprocessor** ($10-20M) 💡 Diseño
 9. **Planetary Resonance** ($100-500M) 🌍 Visión
 
-**Total**: $157-600M
+**Total**: $M
 
 ## 🔬 FUNDAMENTOS CIENTÍFICOS
 
 ### BDP (Bandwidth-Delay Product)
+
 ```
 Buffer_size = Capacidad × RTT (baseline)
 Sentinel: Buffer_size = f_ML(Throughput, Latency, Pattern, History)
 ```
 
 ### Teoría de Colas (BMAP/G/1/K)
+
 ```
 Tráfico bursty requiere multiplicadores sobre BDP
 Pattern_factor = 1.0 (steady) a 3.0 (bursty)
 ```
 
 ### Física de Tesla
+
 ```
 Resonancia electromagnética → Transmisión sin cables
 Aplicado a datos → Sincronización de estado
 ```
 
 ### eBPF/XDP
+
 ```
 Ring 0 (kernel space)
 Zero-Copy networking
@@ -124,7 +133,7 @@ Throughput >10M paquetes/s
 Resultado: Velocidad de luz sin fricción de software
 ```
 
-##  DIFERENCIADORES ÚNICOS
+## DIFERENCIADORES ÚNICOS
 
 1. **Ring 0 Enforcement** (no factible bypassear)
 2. **Sincronización Anticipada** (predictiva, no reactiva)
@@ -150,7 +159,7 @@ Resultado: Velocidad de luz sin fricción de software
 5. **Mes 1**: Filing provisional patent
 6. **Año 1**: Validación a escala
 
-##  ESENCIA DE LA VISIÓN
+## ESENCIA DE LA VISIÓN
 
 **No es solo observabilidad**
 **Es el monitoring architecture de la próxima Internet**
