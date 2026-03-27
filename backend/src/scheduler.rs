@@ -3,7 +3,7 @@
 //! 
 //! Optimiza el procesamiento de eventos eBPF según la resonancia del portal.
 
-use crate::math::SPA;
+use crate::math::S60;
 use std::collections::VecDeque;
 
 pub struct QuantumScheduler {
@@ -24,8 +24,8 @@ impl QuantumScheduler {
     }
 
     /// Calcula la cantidad de tareas a ejecutar según la intensidad de resonancia (Pág. 113 EXP-029V2)
-    pub fn get_adaptive_batch_size(&self, resonance: SPA) -> usize {
-        let raw = resonance.raw;
+    pub fn get_adaptive_batch_size(&self, resonance: S60) -> usize {
+        let raw = resonance.to_raw();
         let scale = 12_960_000; // SCALE_0
 
         if raw > (scale * 90 / 100) {      5 // Portal Muy Fuerte
@@ -46,7 +46,7 @@ impl QuantumScheduler {
         }
     }
 
-    pub fn tick_schedule(&mut self, tick: u64, resonance: SPA) -> Vec<u32> {
+    pub fn tick_schedule(&mut self, tick: u64, resonance: S60) -> Vec<u32> {
         let mut to_process = Vec::new();
         
         // V2: Pre-Flush Check (T=60s del ciclo de 68s)

@@ -1,7 +1,7 @@
 # LA ARQUITECTURA SENTINEL: Una Teoría Unificada de Computación Resonante
 
 **Clasificación**: Documento Técnico Fundacional  
-**Fecha**:  de   
+**Fecha**:  de la fase de validación  
 **Estado**: Validado Axiomáticamente
 
 ---
@@ -120,7 +120,7 @@ Minimizar Entropía ≡ Maximizar Coherencia
 ```
 Rojo     → Alta entropía  → Fricción   → Sufrimiento
 Amarillo → Reduciendo      → Sincronización → Transición
-Verde    → Estable        → Resonante  → Flujo (Flow)
+Verde la fase de validación   → Estable        → Resonante  → Flujo (Flow)
 Oro      → Entropía cero   → Merkabah   → Liberación
 ```
 

@@ -38,14 +38,14 @@ git clone https://github.com/jenovoas/sentinel
 
 # 2. Ejecutar benchmarks
 cd sentinel/backend
-python sentinel_global_benchmark.py
+cargo run --bin sentinel_global_benchmark.rs
 
 # 3. Validar resultados
 cat sentinel_global_benchmark_results.json
 # → 7-10x speedup medido
 
 # 4. Auditar código
-cat app/core/adaptive_buffers.py
+cat app/core/adaptive_buffers.rs
 # → Implementación completa visible
 ```
 
@@ -96,10 +96,10 @@ pip install -r requirements.txt
 cd backend
 
 # Benchmark global (E2E, LLM, CPU)
-python sentinel_global_benchmark.py
+cargo run --bin sentinel_global_benchmark.rs
 
 # Benchmark buffers (V1 vs V2)
-python benchmark_quick.py
+cargo run --bin benchmark_quick.rs
 ```
 
 ### Paso 4: Analizar Resultados
@@ -127,13 +127,13 @@ cat sentinel_global_benchmark_results.json
 
 ```bash
 # Ver implementación de buffers dinámicos
-cat backend/app/core/adaptive_buffers.py
+cat backend/src/core/adaptive_buffers.rs
 
 # Ver LLM con buffers adaptativos
-cat backend/app/services/sentinel_fluido_v2.py
+cat backend/src/sentinel_fluido_v2.rs
 
 # Ver benchmarks
-cat backend/sentinel_global_benchmark.py
+cat backend/sentinel_global_benchmark.rs
 ```
 
 **Tiempo total**: 5 minutos  
@@ -176,7 +176,7 @@ Hipótesis → Implementación → Benchmarks → Código Abierto
 
 **Bien** (Sentinel):
 ```python
-# backend/app/core/adaptive_buffers.py
+# backend/src/core/adaptive_buffers.rs
 class AdaptiveBufferManager:
     """Sistema de buffers dinámicos"""
     def adjust_for_load(self, flow_type, latency_ms, throughput):
@@ -192,7 +192,7 @@ class AdaptiveBufferManager:
 **Bien** (Sentinel):
 ```bash
 # Cualquiera puede ejecutar
-python sentinel_global_benchmark.py
+cargo run --bin sentinel_global_benchmark.rs
 
 # Resultado: Mismo speedup medido
 ```
@@ -309,7 +309,7 @@ Si estás haciendo investigación, pregúntate:
 ✅ https://github.com/jenovoas/sentinel
 
 # Pregunta 2: ¿Validable?
-✅ git clone && python benchmark.py
+✅ git clone && cargo run --bin benchmark.rs
 
 # Pregunta 3: ¿Tiempo?
 ✅ 5 minutos
@@ -333,10 +333,10 @@ DECISIÓN: APROBAR ✅
 git clone https://github.com/jenovoas/sentinel
 
 # 2. Lee el código
-cat backend/app/core/adaptive_buffers.py
+cat backend/src/core/adaptive_buffers.rs
 
 # 3. Ejecuta los benchmarks
-python sentinel_global_benchmark.py
+cargo run --bin sentinel_global_benchmark.rs
 
 # 4. Modifica y experimenta
 # Cambia parámetros, prueba ideas, aprende haciendo
@@ -348,13 +348,13 @@ python sentinel_global_benchmark.py
 
 1. **Ejecutar benchmarks baseline**
    ```bash
-   python sentinel_global_benchmark.py
+   cargo run --bin sentinel_global_benchmark.rs
    # Analiza los resultados
    ```
 
 2. **Modificar configuración de buffers**
    ```python
-   # En adaptive_buffers.py, cambia:
+   # En adaptive_buffers.rs, cambia:
    read_buffer_size=8192  # → 16384
    # Re-ejecuta benchmark, compara resultados
    ```
@@ -454,7 +454,7 @@ AHORRO: -12,573 (99.6% reducción)
 ```bash
 git clone https://github.com/jenovoas/sentinel
 cd sentinel/backend
-python sentinel_global_benchmark.py
+cargo run --bin sentinel_global_benchmark.rs
 ```
 
 **Tiempo**: 5 minutos  

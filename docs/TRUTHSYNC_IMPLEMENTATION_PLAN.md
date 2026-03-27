@@ -40,7 +40,7 @@ cd truthsync/edge && cargo test
 ### Integration Tests
 
 ```bash
-pytest tests/integration/test_truthsync_integration.py
+pytest tests/integration/test_truthsync_integration.rs
 ```
 
 ### Performance

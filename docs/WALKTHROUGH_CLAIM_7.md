@@ -6,7 +6,7 @@ Intentos previos usaban un modelo incorrecto (multiplicar eventos), lo que aumen
 Esta validación implementa el **Modelo de Reducción de Latencia** correcto, donde cada etapa de buffer reduce el tiempo de procesamiento para la siguiente.
 
 ## Cambios
-### Refactorización de `backend/test_buffer_cascade.py`
+### Refactorización de `backend/test_buffer_cascade.rs`
 -   **Modelo Antiguo**: Multiplicaba eventos por 1.5x por etapa.
     -   Resultado: Más carga, throughput constante.
 -   **Modelo Nuevo**: Reduce la latencia de procesamiento en 1.5x por etapa.
@@ -16,7 +16,7 @@ Esta validación implementa el **Modelo de Reducción de Latencia** correcto, do
 ## Resultados de Verificación
 
 ### Benchmark Automatizado
-Ejecutado: `python3 backend/test_buffer_cascade.py`.
+Ejecutado: `cargo run -p backend test_buffer_cascade.rs`.
 
 **Resumen de Resultados:**
 -   **Línea Base (Etapa 0)**: ~1,000 eventos/seg.
@@ -36,5 +36,5 @@ La hipótesis está **VALIDADA**.
 Al implementar Buffers Adaptativos con IA que reducen la latencia efectiva de procesamiento en cada salto, logramos un escalado exponencial del throughput, negando efectivamente la penalización por transmisión de telemetría a larga distancia.
 
 ## Próximos Pasos
--   Integrar esta lógica en el módulo core `wal.py` o un nuevo `buffer_manager.py`.
+-   Integrar esta lógica en el módulo core `wal.rs` o un nuevo `buffer_manager.rs`.
 -   Presentar patente provisional para "Reducción de Latencia Compuesta en Serie en Flujos de Telemetría".

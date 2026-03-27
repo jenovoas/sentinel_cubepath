@@ -27,7 +27,7 @@ Sentinel Cortex is a monitoring and security system with 5 validated technical i
 
 **Validation**: 4/4 tests passing, 2,857x faster than Datadog
 
-**Code**: `backend/app/services/dual_lane.py`
+**Code**: `backend/src/dual_lane.rs`
 
 ---
 
@@ -38,7 +38,7 @@ Sentinel Cortex is a monitoring and security system with 5 validated technical i
 
 **Validation**: 40/40 payloads detected, 100% accuracy, 0.20ms latency
 
-**Code**: `backend/fuzzer_aiopsdoom.py`
+**Code**: `backend/fuzzer_aiopsdoom.rs`
 
 ---
 
@@ -62,7 +62,7 @@ Sentinel Cortex is a monitoring and security system with 5 validated technical i
 
 **Validation**: 5/5 tests passing, 10/10 replay attacks blocked
 
-**Code**: `backend/app/services/forensic_wal.py`
+**Code**: `backend/src/forensic_wal.rs`
 
 ---
 
@@ -73,7 +73,7 @@ Sentinel Cortex is a monitoring and security system with 5 validated technical i
 
 **Validation**: 6/6 tests passing, 5/5 SSRF attacks blocked
 
-**Code**: `backend/app/services/zero_trust_mtls.py`
+**Code**: `backend/src/zero_trust_mtls.rs`
 
 ---
 
@@ -87,11 +87,11 @@ Sentinel Cortex is a monitoring and security system with 5 validated technical i
 - **Tests**: 11/11 passing
 
 **Main services**:
-- `dual_lane.py` - Telemetry routing
-- `aiops_shield.py` - Payload detection
-- `forensic_wal.py` - Audit log
-- `zero_trust_mtls.py` - Request authentication
-- `truthsync_service.py` - Content verification
+- `dual_lane.rs` - Telemetry routing
+- `aiops_shield.rs` - Payload detection
+- `forensic_wal.rs` - Audit log
+- `zero_trust_mtls.rs` - Request authentication
+- `truthsync_service.rs` - Content verification
 
 ---
 
@@ -158,12 +158,12 @@ Sentinel Cortex is a monitoring and security system with 5 validated technical i
 - `validar_proyecto.sh` - Validation script
 
 ### Backend
-- `backend/app/` - Main application code
+- `backend/src/` - Main application code
 - `backend/tests/` - Test files
-- `backend/fuzzer_aiopsdoom.py` - AIOpsDoom test
-- `backend/test_dual_lane.py` - Dual-lane test
-- `backend/test_forensic_wal_runner.py` - WAL test
-- `backend/test_mtls_runner.py` - mTLS test
+- `backend/fuzzer_aiopsdoom.rs` - AIOpsDoom test
+- `backend/test_dual_lane.rs` - Dual-lane test
+- `backend/test_forensic_wal_runner.rs` - WAL test
+- `backend/test_mtls_runner.rs` - mTLS test
 
 ### Frontend
 - `frontend/app/` - Next.js application
@@ -191,7 +191,7 @@ Sentinel Cortex is a monitoring and security system with 5 validated technical i
 
 ### TruthSync
 - `truthsync-poc/` - Rust + Python hybrid
-- `truthsync-poc/benchmark_with_cache.py` - Performance test
+- `truthsync-poc/benchmark_with_cache.rs` - Performance test
 - `truthsync-poc/FINAL_RESULTS.md` - Results
 
 ---

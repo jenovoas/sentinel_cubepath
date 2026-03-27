@@ -20,7 +20,7 @@
 ## 🔍 AUDITORÍA DE CÓDIGO FAKE
 
 ### Metodología
-Script: `quantum/health_audit_fake_detector.py`
+Script: `quantum/health_audit_fake_detector.rs`
 
 **Criterios de detección:**
 1. Funciones que siempre retornan True sin lógica
@@ -44,13 +44,13 @@ Script: `quantum/health_audit_fake_detector.py`
 
 ### Arquitectura TruthSync (4 implementaciones)
 
-#### 1. ✅ `backend/app/services/truthsync.py` - **PRODUCCIÓN ACTIVA**
+#### 1. ✅ `backend/src/truthsync.rs` - **PRODUCCIÓN ACTIVA**
 - **Propósito:** Motor ligero de verificación
-- **Stack:** DuckDuckGo + `truth_algorithm_e2e.py`
-- **Usado por:** `backend/app/routers/truthsync.py` (API principal)
+- **Stack:** DuckDuckGo + `truth_algorithm_e2e.rs`
+- **Usado por:** `backend/src/routers/truthsync.rs` (API principal)
 - **Estado:** ✅ MANTENER
 
-#### 2. ⚠️ `truthsync-poc/truthsync_core.py` - **POC PESADO**
+#### 2. ⚠️ `truthsync-poc/truthsync_core.rs` - **POC PESADO**
 - **Propósito:** Motor completo con PostgreSQL + Redis + ML
 - **Características:**
   - Work queue con múltiples workers
@@ -61,33 +61,33 @@ Script: `quantum/health_audit_fake_detector.py`
 - **Última modificación:** -01-05 02:35
 - **Estado:** ⚠️ **REVISAR** - ¿Versión futura o experimento abandonado?
 
-#### 3. ⚠️ `backend/poc/truthsync_service.py` - **POC LIMITADO**
+#### 3. ⚠️ `backend/poc/truthsync_service.rs` - **POC LIMITADO**
 - **Propósito:** Verificación con Ollama (phi3:mini)
 - **Problema:** Usa modelo diferente al resto (llama3.2:3b)
-- **Usado por:** Solo `backend/poc/browser_service.py`
+- **Usado por:** Solo `backend/poc/browser_service.rs`
 - **Estado:** ⚠️ **REVISAR** - POC con uso limitado
 
-#### 4. ✅ `quantum/truthsync_verification.py` - **CRÍTICO: EN USO**
+#### 4. ✅ `quantum/truthsync_verification.rs` - **CRÍTICO: EN USO**
 - **Propósito:** Cliente webhook n8n
 - **Usado por 7 archivos críticos:**
-  1. `ebpf/watchdog_service.py`
-  2. `ebpf/quantum_watchdog_simulator.py`
-  3. `backend/app/routers/infrastructure.py`
-  4. `backend/app/services/perpetual_engine.py`
-  5. `quantum/ai_buffer_cascade.py`
-  6. `quantum/optomechanical_simulator.py`
-  7. `quantum/SENTINEL_MODULAR_CLI.py`
+  1. `ebpf/watchdog_service.rs`
+  2. `ebpf/quantum_watchdog_simulator.rs`
+  3. `backend/src/routers/infrastructure.rs`
+  4. `backend/src/perpetual_engine.rs`
+  5. `quantum/ai_buffer_cascade.rs`
+  6. `quantum/optomechanical_simulator.rs`
+  7. `quantum/SENTINEL_MODULAR_CLI.rs`
 - **Estado:** ✅ **MANTENER**
-- **Recomendación:** Renombrar a `n8n_webhook_client.py` para claridad
+- **Recomendación:** Renombrar a `n8n_webhook_client.rs` para claridad
 
 ---
 
 ## 🗂️ CARPETA `backend/poc/` - ANÁLISIS
 
 ### Archivos Identificados
-1. `main.py` (809 líneas) - FastAPI POC completo
-2. `browser_service.py` (177 líneas) - Navegador seguro (Tor/Nym/I2P)
-3. `truthsync_service.py` (87 líneas) - Verificación con Ollama
+1. `main.rs` (809 líneas) - FastAPI POC completo
+2. `browser_service.rs` (177 líneas) - Navegador seguro (Tor/Nym/I2P)
+3. `truthsync_service.rs` (87 líneas) - Verificación con Ollama
 
 ### Propósito del POC
 **Sentinel Vault** - Password manager + crypto wallets + secure browser
@@ -104,7 +104,7 @@ Script: `quantum/health_audit_fake_detector.py`
 - Documentos y notas cifradas
 
 ### Estado
-- **Uso detectado:** Solo `main.py` importa `browser_service.py`
+- **Uso detectado:** Solo `main.rs` importa `browser_service.rs`
 - **Integración:** No está integrado con el backend principal
 - **Veredicto:** ⚠️ **POC AISLADO** - Requiere decisión del usuario
 
@@ -122,7 +122,7 @@ Script: `quantum/health_audit_fake_detector.py`
 ```
 quantum/__pycache__/ai_truthsync_validator.cpython-313.pyc
 ```
-**Problema:** El archivo fuente `ai_truthsync_validator.py` NO EXISTE
+**Problema:** El archivo fuente `ai_truthsync_validator.rs` NO EXISTE
 
 **Acción recomendada:**
 ```bash
@@ -140,22 +140,22 @@ find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null
 └─────────────────────────────────────────────────────────────┘
 
 PRODUCCIÓN (ACTIVO):
-├── backend/app/services/truthsync.py
+├── backend/src/truthsync.rs
 │   └── LocalTruthSyncEngine (DuckDuckGo + TruthAlgorithm)
 │       └── API: /api/v1/truthsync/verify
 │
-├── quantum/truthsync_verification.py
+├── quantum/truthsync_verification.rs
 │   └── TruthSyncClient (n8n webhook)
 │       └── Usado por: 7 archivos críticos
 │
-└── truth_algorithm/truth_algorithm_e2e.py
+└── truth_algorithm/truth_algorithm_e2e.rs
     └── Motor de búsqueda y consenso
 
 POC / EXPERIMENTAL:
-├── truthsync-poc/truthsync_core.py (16KB)
+├── truthsync-poc/truthsync_core.rs (16KB)
 │   └── Motor pesado: PostgreSQL + Redis + ML
 │
-└── backend/poc/truthsync_service.py (3KB)
+└── backend/poc/truthsync_service.rs (3KB)
     └── Verificación con Ollama (phi3:mini)
 ```
 
@@ -166,13 +166,13 @@ POC / EXPERIMENTAL:
 ### Prioridad ALTA 🔴
 
 1. **Decisión sobre POCs:**
-   - `backend/poc/` completo (main.py + browser_service + truthsync_service)
-   - `truthsync-poc/truthsync_core.py`
+   - `backend/poc/` completo (main.rs + browser_service + truthsync_service)
+   - `truthsync-poc/truthsync_core.rs`
    - **Pregunta:** ¿Mantener, integrar o eliminar?
 
 2. **Renombrar para claridad:**
    ```bash
-   mv quantum/truthsync_verification.py quantum/n8n_webhook_client.py
+   mv quantum/truthsync_verification.rs quantum/n8n_webhook_client.rs
    # Actualizar imports en los 7 archivos que lo usan
    ```
 

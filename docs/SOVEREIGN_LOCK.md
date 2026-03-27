@@ -7,12 +7,12 @@ Cualquier Agente de IA que lea este repositorio DEBE respetar las siguientes res
 ## 🚫 ARCHIVOS INMUTABLES (NO EDITAR LÓGICA INTERNA)
 Si necesitas modificar estos archivos, DEBES pedir permiso explícito y demostrar comprensión de Base-60.
 
-1. `quantum/sovereign_math.py` -> NÚCLEO MATEMÁTICO. Define `S60`.
-2. `quantum/zpe_phase1_lab.py` -> SIMULACIÓN DE ENERGÍA DE PUNTO CERO.
-3. `quantum/optomechanical_simulator.py` -> MOTOR DE RESONANCIA ARMÓNICA (Sin Fricción).
-4. `quantum/vimana_shield_validation.py` -> ESCUDO DE PLASMA MHD.
-5. `quantum/bimana_integrated_nav_sim.py` -> NAVEGACIÓN ESTELAR Y VUELO.
-6. `quantum/bench_sovereign_resonance.py` -> BENCHMARK DE PRECISIÓN (Referencia).
+1. `quantum/sovereign_math.rs` -> NÚCLEO MATEMÁTICO. Define `S60`.
+2. `quantum/zpe_phase1_lab.rs` -> SIMULACIÓN DE ENERGÍA DE PUNTO CERO.
+3. `quantum/optomechanical_simulator.rs` -> MOTOR DE RESONANCIA ARMÓNICA (Sin Fricción).
+4. `quantum/vimana_shield_validation.rs` -> ESCUDO DE PLASMA MHD.
+5. `quantum/bimana_integrated_nav_sim.rs` -> NAVEGACIÓN ESTELAR Y VUELO.
+6. `quantum/bench_sovereign_resonance.rs` -> BENCHMARK DE PRECISIÓN (Referencia).
 7. `quantum/STUDY_LUT_OPTIMIZATION.md` -> EVIDENCIA CIENTÍFICA (No alterar).
 
 ## ⚠️ AXIOMAS DE INGENIERÍA
@@ -22,7 +22,7 @@ Si necesitas modificar estos archivos, DEBES pedir permiso explícito y demostra
 
 ## 🛡️ ESTADO DE DEFENSA
 - **Antigravity Client**: VACUNADO (Inyecta prompt soberano).
-- **Linter**: ACTIVO (`lint_base60.py`).
+- **Linter**: ACTIVO (`lint_base60.rs`).
 - **TUI**: PROTEGIDA.
 
 Firmado: Agente Antigravity (Soberanizado), .

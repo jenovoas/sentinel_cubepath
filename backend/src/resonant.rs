@@ -1,11 +1,11 @@
 //! Resonant Memory - Resonant Memory Matrix (RMM)
 //! Correlación de eventos basada en la métrica Plimpton 322 (Base-60).
 
-use crate::math::SPA;
+use crate::math::S60;
 
 /// Matriz de Resonancia: Nodos x Nodos de la red Sentinel.
 pub struct ResonantMatrix {
-    matrix: Vec<Vec<u64>>, // Valores SPA raw (Base-60)
+    matrix: Vec<Vec<u64>>, // Valores S60 raw (Base-60)
     size: usize,
 }
 
@@ -21,14 +21,14 @@ impl ResonantMatrix {
     /// Si los nodos vibran en ratios de Plimpton 322, la resonancia se amplifica.
     pub fn inject_resonance(&mut self, node_a: usize, node_b: usize, value: u64) {
         if node_a < self.size && node_b < self.size {
-            // Actualización por interferencia constructiva (SPA Addition)
+            // Actualización por interferencia constructiva (S60 Addition)
             self.matrix[node_a][node_b] = self.matrix[node_a][node_b].wrapping_add(value);
             self.matrix[node_b][node_a] = self.matrix[node_a][node_b]; // Simetría
         }
     }
 
     /// Obtiene la "Coherencia Global" de la matriz.
-    /// Retorna un valor SPA que representa el alineamiento de fase del sistema.
+    /// Retorna un valor S60 que representa el alineamiento de fase del sistema.
     pub fn get_global_coherence(&self) -> u64 {
         let mut sum = 0u64;
         let mut count = 0u64;
@@ -51,7 +51,7 @@ impl ResonantMatrix {
         let val = self.matrix[node_a][node_b];
         // Ejemplo: Si el valor es múltiplo de la constante maestra 1.0 (en S60)
         // O si cumple con los ratios de la tabla Plimpton 322.
-        SPA::is_harmonic_ratio(SPA::from_raw(val as i64))
+        S60::is_harmonic_ratio(S60::from_raw(val as i64))
     }
 }
 

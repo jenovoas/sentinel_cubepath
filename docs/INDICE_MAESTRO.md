@@ -292,7 +292,7 @@ TOTAL CAPTURADO HOY:         -803M (corto plazo)
 
 **Implementar**:
 ```python
-# backend/data_analysis_suite.py
+# backend/data_analysis_suite.rs
 
 import pandas as pd
 import numpy as np
@@ -427,7 +427,7 @@ class MacroDataAnalyzer:
 ### Dataset 1: Benchmark Dual-Lane
 ```bash
 # Generar 100K eventos con diferentes configuraciones
-python backend/benchmark_dual_lane.py \
+cargo run -p backend benchmark_dual_lane.rs \
     --events 100000 \
     --output benchmark_data.json
 ```
@@ -435,7 +435,7 @@ python backend/benchmark_dual_lane.py \
 ### Dataset 2: AI Buffer Cascade
 ```bash
 # Simular 1M eventos con buffers adaptativos
-python backend/test_buffer_cascade.py \
+cargo run -p backend test_buffer_cascade.rs \
     --events 1000000 \
     --stages 3 \
     --output cascade_data.json
@@ -444,7 +444,7 @@ python backend/test_buffer_cascade.py \
 ### Dataset 3: Network Conditions
 ```bash
 # Probar 50 escenarios de red diferentes
-python backend/test_network_conditions.py \
+cargo run -p backend test_network_conditions.rs \
     --scenarios 50 \
     --duration 60 \
     --output network_data.json

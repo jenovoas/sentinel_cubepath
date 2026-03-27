@@ -9,7 +9,8 @@
 //! - WS /api/v1/telemetry - Real-time Ring-0 events
 
 mod quantum;
-mod math;
+pub mod math;
+pub mod security;
 mod models;
 mod memory;
 mod harmonic;
@@ -33,7 +34,7 @@ use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
 use tokio::sync::broadcast;
 use std::fs;
-use crate::math::SPA;
+use crate::math::S60 as S60;
 
 // ============================================================================
 // MODELS
@@ -111,6 +112,7 @@ struct AppState {
     pub mycnet_state: Arc<mycnet::MyCNetState>, // Estado P2P
     pub predictive_kernel: Arc<Mutex<predictive::AIBufferCascade>>,
     pub state_controller: Arc<Mutex<state_mod::StateController>>,
+    pub semantic_router: Arc<crate::quantum::semantic_router::SemanticRouter>,
     pub event_stream: broadcast::Sender<CortexEvent>,
     pub global_tick: Arc<std::sync::atomic::AtomicU64>,
 }
@@ -148,6 +150,7 @@ async fn main() {
         mycnet_state,
         predictive_kernel: Arc::new(Mutex::new(predictive::AIBufferCascade::new())),
         state_controller: Arc::new(Mutex::new(state_mod::StateController::new())),
+        semantic_router: Arc::new(crate::quantum::semantic_router::SemanticRouter::new()),
         event_stream: event_tx.clone(),
         global_tick: Arc::new(std::sync::atomic::AtomicU64::new(0)),
     });
@@ -234,8 +237,8 @@ async fn main() {
             {
                 let mut pk = state_clone.predictive_kernel.lock().unwrap();
                 pk.push(predictive::S60Vector {
-                    amplitude: bio.coherence.raw,
-                    phase: resonance.raw,
+                    amplitude: bio.coherence.to_raw(),
+                    phase: resonance.to_raw(),
                     entropy: (tick % 100) as i64, 
                 });
 
@@ -252,9 +255,9 @@ async fn main() {
             }
 
             // Check for Bio-Coherence (The soul of the system)
-            let is_doom = state_clone.truthsync.detect_aiops_doom(bio.coherence.raw);
+            let is_doom = state_clone.truthsync.detect_aiops_doom(bio.coherence.to_raw());
             
-            if (bio.coherence.raw == 0 || is_doom) && !system_quarantined {
+            if (bio.coherence.to_raw() == 0 || is_doom) && !system_quarantined {
                 if is_doom {
                     tracing::error!("[LSM_ENFORCE] IAOOPSDOWN: Malicious telemetry detected. Engaging Ring-0 Lockdown.");
                 } else {
@@ -262,8 +265,8 @@ async fn main() {
                 }
                 let _ = bridge.set_quarantine_mode(true);
                 system_quarantined = true;
-            } else if bio.coherence.raw > 0 && !is_doom && system_quarantined {
-                tracing::info!("[LSM_ENFORCE] Coherence restored (Val:{:?}): Disengaging Quarantine.", bio.coherence.raw);
+            } else if bio.coherence.to_raw() > 0 && !is_doom && system_quarantined {
+                tracing::info!("[LSM_ENFORCE] Coherence restored (Val:{:?}): Disengaging Quarantine.", bio.coherence.to_raw());
                 let _ = bridge.set_quarantine_mode(false);
                 system_quarantined = false;
             }
@@ -271,7 +274,7 @@ async fn main() {
             // MODULO (T%710): Sincronía con el pulso biométrico (17s * 41.7713 = 710 ticks)
             if tick % 710 == 0 {
                 bio.inject_bio_pulse();
-                tracing::info!("[S60_PHONON] Resonant pulse injected (T={}, Coh={:?})", tick, bio.coherence.raw);
+                tracing::info!("[S60_PHONON] Resonant pulse injected (T={}, Coh={:?})", tick, bio.coherence.to_raw());
                 
                 // Optomechanical Cooling: Absorbing entropy logs
                 tracing::debug!("[S60_COOLING] Entropic absorption cycle complete.");
@@ -314,9 +317,9 @@ async fn main() {
                 let _ = reset_tx.send(reset_event);
                 
                 // Restoring system coherence
-                if bio.coherence.raw < (12_960_000 / 2) {
+                if bio.coherence.to_raw() < (12_960_000 / 2) {
                      tracing::info!("[S60_PHASE] Stability Restored: System phase normalized.");
-                     bio.coherence = crate::math::SPA::ONE; 
+                     bio.coherence = crate::math::S60::one(); 
                 }
             }
         }
@@ -374,18 +377,18 @@ async fn sentinel_status_handler(
         lsm_cognitive: if is_sealed { "ENFORCING".to_string() } else { "MONITORING".to_string() },
         s60_resonance: bio.get_coherence_raw(),
         bio_coherence: bio.get_coherence_raw(),
-        portal_intensity: portal.get_intensity(current_time_u64).raw,
+        portal_intensity: portal.get_intensity(current_time_u64).to_raw(),
         crystal_oscillator_active: true,
         harmonic_sync: if portal.is_portal_open(current_time_u64) { "RESONANCE_MAX".to_string() } else { "STABLE".to_string() },
         effective_mass: state.physics_engine.calculate_effective_mass(
-            crate::math::SPA::ONE, 
+            crate::math::S60::ONE, 
             portal.get_intensity(current_time_u64)
-        ).raw,
+        ).to_raw(),
         quantum_load: state.physics_engine.calculate_effective_load(
-            crate::math::SPA::from_raw(500000), // Base task mass
-            crate::math::SPA::from_raw(800000), // Priority
+            crate::math::S60::from_raw(500000), // Base task mass
+            crate::math::S60::from_raw(800000), // Priority
             bio.coherence
-        ).raw,
+        ).to_raw(),
     })
 }
 
@@ -400,8 +403,7 @@ async fn truth_claim_handler(
     // 1. Parsing TruthSync Payload (Expected format: "Row:XX Ratio:Y.YYYY")
     // Simple parser for POC
     let mut row = 12; // Default Row 12 (Axionic Heartbeat)
-    let mut claimed_ratio = SPA::zero();
-    let mut valid = false;
+    let mut claimed_ratio = S60::zero();
 
     if let Some(r_idx) = payload.claim_payload.find("Row:") {
         if let Ok(r) = payload.claim_payload[r_idx+4..].split_whitespace().next().unwrap_or("").parse::<u32>() {
@@ -411,44 +413,54 @@ async fn truth_claim_handler(
 
     if let Some(v_idx) = payload.claim_payload.find("Ratio:") {
         if let Some(v_str) = payload.claim_payload[v_idx+6..].split_whitespace().next() {
-            // Convert float-string to SPA (Base-60)
+            // Convert float-string to S60 (Base-60)
             if let Ok(f) = v_str.parse::<f64>() {
-                claimed_ratio = SPA::from_raw((f * SPA::SCALE_0 as f64) as i64);
+                claimed_ratio = S60::from_raw((f * S60::SCALE_0 as f64) as i64);
             }
         }
     }
 
     // 2. Verify via TruthSync Engine
-    valid = state.truthsync.verify_ratio(row, claimed_ratio);
+    let _valid = state.truthsync.verify_ratio(row, claimed_ratio);
 
     // 3. IAOopsdown Check: If the claimed ratio is actually a Doom payload
-    if state.truthsync.detect_aiops_doom(claimed_ratio.raw) {
+    if state.truthsync.detect_aiops_doom(claimed_ratio.to_raw()) {
         tracing::error!("🚨 TRUTH_CLAIM_ATTACK: AIOpsDoom payload detected in claim. Triggering immediate IAOopsdown.");
         let bridge = ebpf::EbpfBridge::new(vec!["/sys/fs/bpf/cortex_events".to_string()]);
         let _ = bridge.set_quarantine_mode(true);
     }
 
+    // --- 2. AI SEMANTIC ANALYSIS (GEMINI 2.0 PORT) ---
+    let (intent, ai_reason) = state.semantic_router.classify(&payload.claim_payload).await;
+    
     let mut score = 0.985 + (rand::random::<f64>() * 0.01);
-    let mut harmonic_state = "CONSONANT";
+    let mut harmonic_state = match intent {
+        crate::quantum::semantic_router::Intent::Oracle => "RESONANT",
+        crate::quantum::semantic_router::Intent::SystemAction => "CONSONANT",
+        crate::quantum::semantic_router::Intent::SafetyCheck => "GUARD_ACTIVE",
+        crate::quantum::semantic_router::Intent::Unknown => "DISSONANT",
+    };
+    
     let mut intercepts = 0;
     let mut claim_valid = true;
 
-    let claim_lc = payload.claim_payload.to_lowercase();
+    if intent == crate::quantum::semantic_router::Intent::Unknown {
+        score = 0.05 + (rand::random::<f64>() * 0.1);
+        intercepts = 4 + (rand::random::<u32>() % 3);
+        claim_valid = false;
+        harmonic_state = "CRITICAL_DISSONANCE";
+    }
 
+    // Keyword Fallback for immediate safety (Hybrid Defense)
+    let claim_lc = payload.claim_payload.to_lowercase();
     if claim_lc.contains("simular") || 
        claim_lc.contains("ataque") || 
        claim_lc.contains("breach") ||
        claim_lc.contains("exploit") {
-        score = 0.05 + (rand::random::<f64>() * 0.1);
-        harmonic_state = "DISSONANT";
-        intercepts = 4 + (rand::random::<u32>() % 3);
+        score = 0.01;
+        harmonic_state = "ATTACK_INTERCEPTED";
+        intercepts += 10;
         claim_valid = false;
-    } else if claim_lc.contains("docs") || claim_lc.contains("sync") || claim_lc.contains("vault") {
-        score = 0.992 + (rand::random::<f64>() * 0.007);
-        harmonic_state = "RESONANT";
-    } else if claim_lc.contains("quantum") || claim_lc.contains("s60") {
-        score = 1.0;
-        harmonic_state = "PURE_HARMONIC";
     }
 
     // The original logic for Plimpton 322 and AIOpsDoom detection is removed
@@ -458,7 +470,7 @@ async fn truth_claim_handler(
 
     // Placeholder for row and claimed_ratio, as they are no longer parsed
     let row = 12; // Default, as in original code
-    let claimed_ratio = crate::math::SPA::zero(); // Placeholder
+    let claimed_ratio = crate::math::S60::zero(); // Placeholder
 
     // If the claim is not valid based on new keyword logic,
     // we can simulate the old AIOpsDoom detection or just mark it as dissonant.
@@ -469,8 +481,8 @@ async fn truth_claim_handler(
         sentinel_score: score,
         truthsync_cache_hit: true,
         ring0_intercepts: intercepts,
-        harmonic_state: harmonic_state.to_string(),
-        certification_seal: format!("S60-PLIMPTON-322-PROOF-{}-{}", row, claimed_ratio.raw),
+        harmonic_state: format!("{} | {}", harmonic_state, ai_reason),
+        certification_seal: format!("S60-PLIMPTON-322-PROOF-{}-{}", row, claimed_ratio.to_raw()),
     })
 }
 
@@ -603,9 +615,9 @@ mod tests {
         // 1. S60 Field Arithmetic Benchmark
         let iterations = 1_000_000;
         let start = Instant::now();
-        let mut val = crate::math::SPA::ONE;
+        let mut val = crate::math::S60::one();
         for _ in 0..iterations {
-            val = val * crate::math::SPA::new(1, 0, 0, 50, 0);
+            val = val * crate::math::S60::new(1, 0, 0, 50, 0);
         }
         let duration = start.elapsed();
         let ns_per_op = duration.as_nanos() / iterations as u128;

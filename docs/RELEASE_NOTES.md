@@ -16,7 +16,7 @@ Version 1.0.0 marks the initial release of the Sentinel Cortex platform as a **Q
 
 ### 👥 Dual-Guardian Architecture ("Los Dos Nervios")
 - **Dead Man's Switch**: The Init process emits heartbeat pulses through the secure channel.
-- **Fail-Closed**: If the Host Watchdog (`guardian_beta.py`) stops receiving heartbeats (indicating kernel panic or tampering), it instantaneously terminates the Guest VM to prevent unauthorized access.
+- **Fail-Closed**: If the Host Watchdog (`guardian_beta.rs`) stops receiving heartbeats (indicating kernel panic or tampering), it instantaneously terminates the Guest VM to prevent unauthorized access.
 
 ### ⚡ Neural Reflex Arc
 - **Automated Containment**: Integration between Memory Hunter and XDP Firewall.

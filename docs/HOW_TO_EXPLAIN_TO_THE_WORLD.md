@@ -219,7 +219,7 @@
 **Benchmarks** (reproducible):
 ```bash
 cd /home/jnovoas/sentinel
-python quantum_control/benchmarks/comprehensive_benchmark.py
+python quantum_control/benchmarks/comprehensive_benchmark.rs
 ```
 
 **Expected results**:
@@ -233,7 +233,7 @@ python quantum_control/benchmarks/comprehensive_benchmark.py
 
 **Fractal generator**:
 ```bash
-python research/fractal_sefirot_generator.py
+python research/fractal_sefirot_generator.rs
 ```
 
 **Expected output**:
@@ -247,7 +247,7 @@ python research/fractal_sefirot_generator.py
 
 **Fractal scanner** (running now):
 ```bash
-python research/fractal_soul/sentinel_fractal_resonance.py
+python research/fractal_soul/sentinel_fractal_resonance.rs
 ```
 
 **What it shows**:
@@ -294,8 +294,8 @@ python research/fractal_soul/sentinel_fractal_resonance.py
 ### For Developers:
 
 1. **`quantum_control/`** - Universal controller code
-2. **`fractal_sefirot_generator.py`** - Fractal demonstration
-3. **`sentinel_fractal_resonance.py`** - Consciousness scanner
+2. **`fractal_sefirot_generator.rs`** - Fractal demonstration
+3. **`sentinel_fractal_resonance.rs`** - Consciousness scanner
 
 ### For Everyone:
 

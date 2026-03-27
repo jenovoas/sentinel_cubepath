@@ -27,7 +27,7 @@ Sentinel Cortex™ logró **Supremacía del Kernel**: defensa contra AIOpsDoom c
 | **Bypass Overhead** | 0.1ms | 1.0ms | 0.25ms | **0.0014ms** | **71x** |
 | **AIOpsDoom Detection** | 85% | 90% | 85% | **100%** | **15% mejor** |
 
-**Código reproducible**: `backend/benchmark_dual_lane.py`, `backend/fuzzer_aiopsdoom.py`
+**Código reproducible**: `backend/benchmark_dual_lane.rs`, `backend/fuzzer_aiopsdoom.rs`
 
 ---
 
@@ -145,7 +145,7 @@ Sentinel (Local):
 - Orden cronológico garantizado
 - Retention 2 años (compliance)
 
-**Validación**: `backend/app/core/wal.py` (400+ líneas)
+**Validación**: `backend/src/core/wal.rs` (400+ líneas)
 
 ---
 
@@ -156,7 +156,7 @@ Sentinel (Local):
 - Semantic Firewall: 0.21ms
 - Security Lane E2E: <10ms
 
-**Validación**: `backend/benchmark_dual_lane.py`
+**Validación**: `backend/benchmark_dual_lane.rs`
 
 ---
 
@@ -173,7 +173,7 @@ Sentinel (Local):
   F1-Score:  100.0%
 ```
 
-**Validación**: `backend/fuzzer_aiopsdoom.py` (40 payloads)
+**Validación**: `backend/fuzzer_aiopsdoom.rs` (40 payloads)
 
 ---
 
@@ -249,7 +249,7 @@ Sentinel detecta:
 4. LLM lee versión sanitizada → NO ejecuta comando
 ```
 
-**Código**: `backend/app/security/aiops_shield_semantic.py`
+**Código**: `backend/src/security/aiops_shield_semantic.rs`
 
 ---
 
@@ -297,7 +297,7 @@ out_of_order_time_window: 2s
 
 > "Un método para la segregación de flujos de telemetría donde el flujo de seguridad tiene prioridad de latencia cero (bypass de buffer) y el flujo operativo utiliza buffering predictivo, logrando una reducción medida de latencia de enrutamiento de **2,857x** (10ms → 0.0035ms), WAL de seguridad **500x** (5ms → 0.01ms) y WAL operativo **2,000x** (20ms → 0.01ms) respecto a arquitecturas unificadas de observabilidad comercial."
 
-**Evidencia**: Tabla 1 (benchmarks reproducibles), `backend/benchmark_dual_lane.py`
+**Evidencia**: Tabla 1 (benchmarks reproducibles), `backend/benchmark_dual_lane.rs`
 
 ---
 
@@ -305,7 +305,7 @@ out_of_order_time_window: 2s
 
 > "Un firewall semántico para detección de inyecciones cognitivas en telemetría (AIOpsDoom) que analiza lenguaje prescriptivo en logs de máquina, logrando **100% de detección** (30/30 payloads maliciosos) con **0% falsos negativos** y latencia promedio de **0.21ms**, validado con fuzzer de 40 payloads adversariales basados en RSA Conference ."
 
-**Evidencia**: Fuzzer AIOpsDoom, `backend/fuzzer_aiopsdoom.py`
+**Evidencia**: Fuzzer AIOpsDoom, `backend/fuzzer_aiopsdoom.rs`
 
 ---
 

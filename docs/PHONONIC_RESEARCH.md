@@ -4,7 +4,7 @@
 
 **Autores**: Jaime Novoa Sepúlveda, Equipo de Desollo ME-60OS  
 **Afiliación**: Laboratorio de Investigación ME-60OS — División Cuántica  
-**Fecha**:  de   
+**Fecha**:  de la fase de validación  
 **Clasificación**: Prepublicación / Borrador v1.1
 
 ---

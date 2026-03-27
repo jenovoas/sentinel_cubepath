@@ -82,11 +82,11 @@ async for chunk, metrics in sentinel_telem_protect.responder_protegido(
 cd /home/jnovoas/sentinel/backend
 
 # Test overhead (comparación latencias)
-python test_telem_protect.py
+cargo run --bin test_telem_protect.rs
 # Opción 1
 
 # Test bloqueo malicioso
-python test_telem_protect.py
+cargo run --bin test_telem_protect.rs
 # Opción 2
 ```
 
@@ -248,4 +248,4 @@ print(f"Detection rate: {stats['detection_rate']:.1%}")
 - ✅ Código limpio y mantenible
 - ✅ Listo para producción
 
-**Próxima acción**: Ejecutar `test_telem_protect.py` para validar 0ms overhead.
+**Próxima acción**: Ejecutar `test_telem_protect.rs` para validar 0ms overhead.

@@ -49,7 +49,7 @@ de seguridad vs operacionales"
 **Licensing Potential**: -40M  
 **Prior Art**: Ninguno encontrado combinando dual-lane + differential policies
 
-**Evidencia**: `backend/benchmark_dual_lane.py`
+**Evidencia**: `backend/benchmark_dual_lane.rs`
 
 ---
 
@@ -77,7 +77,7 @@ inyecciones cognitivas en telemetría destinada a sistemas AIOps
 **Licensing Potential**: -50M  
 **Prior Art**: US12130917B1 (HiddenLayer) - pero post-fact, no pre-ingestion
 
-**Evidencia**: `backend/fuzzer_aiopsdoom.py` (40 attack payloads)
+**Evidencia**: `backend/fuzzer_aiopsdoom.rs` (40 attack payloads)
 
 ---
 
@@ -130,7 +130,7 @@ nonce monotónico y timestamps de kernel para prevención de replay attacks"
 **Licensing Potential**: -30M  
 **Prior Art**: Ninguno con HMAC + dual-lane + replay detection combinados
 
-**Evidencia**: `backend/app/core/wal.py`
+**Evidencia**: `backend/src/core/wal.rs`
 
 ---
 

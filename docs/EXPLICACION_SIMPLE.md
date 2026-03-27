@@ -43,7 +43,7 @@ Imagina que tu computadora es como un **cuerpo humano**.
 ##  ¿Qué problema resuelve?
 
 ### Problema 1: Ataques son más rápidos que humanos
-**Antes**: Hacker ataca → Humano lo ve 5 minutos después → Ya es tarde  
+**Antes**: Hacker ataca → Humano lo ve 5 minutos después → Ya es tarde la fase de validación 
 **Con Sentinel**: Hacker ataca → Guardian Beta bloquea en 0.00001 segundos → Ataque detenido
 
 ### Problema 2: Sistemas colapsan por sobrecarga
@@ -81,7 +81,7 @@ Imagina que tu computadora es como un **cuerpo humano**.
 
 ## 💰 ¿Cuánto vale?
 
-**Hoy validamos**: -96 millones de  en propiedad intelectual
+**Hoy validamos**: -96 millones de la fase de validación en propiedad intelectual
 
 **¿Por qué tanto?**
 - Es único (ZERO competencia)
@@ -215,7 +215,7 @@ Más seguro que cualquier alternativa. El Guardian Gamma (humano) siempre tiene 
 **Si quieres entender técnicamente**:
 1. Lee `RESUMEN_FINAL_1221.md` (resumen ejecutivo)
 2. Lee `COGNITIVE_OS_KERNEL_DESIGN.md` (arquitectura)
-3. Ejecuta `python3 ebpf/cognitive_os_poc.py` (demo)
+3. Ejecuta `python3 ebpf/cognitive_os_poc.rs` (demo)
 
 **Si solo quieres el concepto**:
 - Este documento es suficiente
@@ -246,7 +246,7 @@ Más seguro que cualquier alternativa. El Guardian Gamma (humano) siempre tiene 
 
 ---
 
-**Fecha**: 21 de Diciembre de   
+**Fecha**: 21 de Diciembre de la fase de validación  
 **Creado por**: Jaime Novoa  
 **Versión**: 1.0 (Explicación Simple)
 

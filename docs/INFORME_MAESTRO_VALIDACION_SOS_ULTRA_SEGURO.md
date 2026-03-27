@@ -8,7 +8,7 @@
 
 ## 1. Resiliencia Física: Watchdog Hardware
 - **Evidencia:**
-  - Scripts y servicios activos (`ebpf/watchdog_service.py`, `scripts/watchdog_system.sh`).
+  - Scripts y servicios activos (`ebpf/watchdog_service.rs`, `scripts/watchdog_system.sh`).
   - Pruebas de reinicio físico y auto-recuperación documentadas en `/proven` y `/research`.
   - Claim validado: “El sistema nunca queda sin supervisión, reinicio físico garantizado.”
 

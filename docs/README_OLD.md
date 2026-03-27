@@ -278,7 +278,7 @@ Sentinel is a **complete observability and security platform** that provides:
    AI: "High CPU usage detected. Analysis shows:
         - Process: python3 (PID 1234)
         - Cause: Infinite loop in data processing
-        - Recommendation: Check recent code changes in data_processor.py"
+        - Recommendation: Check recent code changes in data_processor.rs"
    ```
 
 2. **Root Cause Analysis**

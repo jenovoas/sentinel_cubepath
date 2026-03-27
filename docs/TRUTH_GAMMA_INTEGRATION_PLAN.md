@@ -9,7 +9,7 @@ Guardian Gamma Decision → Truth Algorithm → Certification → Display in UI
 ## 📋 Integration Points
 
 ### 1. Backend (FastAPI)
-- Add Truth Algorithm to `guardian_gamma/service.py`
+- Add Truth Algorithm to `guardian_gamma/service.rs`
 - Create `/api/gamma/certify/{decision_id}` endpoint
 - Store truth_score in Decision model
 
@@ -26,7 +26,7 @@ Guardian Gamma Decision → Truth Algorithm → Certification → Display in UI
 
 ### Step 1: Backend Integration
 ```python
-# guardian_gamma/service.py
+# guardian_gamma/service.rs
 from truth_algorithm.certification_generator import CertificationGenerator
 
 class GuardianGammaService:

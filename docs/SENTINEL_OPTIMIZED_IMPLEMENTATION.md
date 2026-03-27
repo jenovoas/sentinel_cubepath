@@ -6,7 +6,7 @@ Implementación funcional del sistema de buffers ML optimizado, adaptado para tu
 
 ## ✅ Implementado
 
-### 1. `sentinel_optimized.py`
+### 1. `sentinel_optimized.rs`
 - ✅ Buffers jerárquicos (episódico, patrones, predictivo)
 - ✅ Integración con AIOpsShield (sanitización)
 - ✅ Integración con TruthSync (verificación background)
@@ -14,7 +14,7 @@ Implementación funcional del sistema de buffers ML optimizado, adaptado para tu
 - ✅ Métricas reales medibles (TTFB, token-rate)
 - ✅ Optimizado para Ollama + phi3:mini (3GB VRAM)
 
-### 2. `benchmark_sentinel_real.py`
+### 2. `benchmark_sentinel_real.rs`
 - ✅ Test simple (1 request)
 - ✅ Benchmark (10-50 requests)
 - ✅ Stress test (60 segundos)
@@ -37,7 +37,7 @@ docker-compose up -d ollama
 
 ```bash
 cd /home/jnovoas/sentinel/backend
-python benchmark_sentinel_real.py
+cargo run --bin benchmark_sentinel_real.rs
 ```
 
 ### Opciones Disponibles
@@ -193,7 +193,7 @@ docker-compose restart ollama
 nvidia-smi
 
 # Reducir context window
-# En sentinel_optimized.py:
+# En sentinel_optimized.rs:
 "num_ctx": 1024  # Reducir de 2048
 ```
 
@@ -201,7 +201,7 @@ nvidia-smi
 ```bash
 cd /home/jnovoas/sentinel/backend
 export PYTHONPATH=/home/jnovoas/sentinel/backend:$PYTHONPATH
-python benchmark_sentinel_real.py
+cargo run --bin benchmark_sentinel_real.rs
 ```
 
 ## 📚 Referencias

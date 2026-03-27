@@ -106,7 +106,7 @@ Measured on: Intel Core i7-8700K, 32GB RAM, NVMe SSD
 | **Context Switches** | 10,000+/s | **<100/s** | **100x reduction** |
 | **Memory Footprint** | 2-4GB | **200MB** | **10-20x smaller** |
 
-**Reproducibility**: `git clone https://github.com/jenovoas/sentinel && cd backend && python benchmark_dual_lane.py`
+**Reproducibility**: `git clone https://github.com/jenovoas/sentinel && cd backend && cargo run --bin benchmark_dual_lane.rs`
 
 ---
 
@@ -126,7 +126,7 @@ Validated 100% detection rate against 40 adversarial payloads:
 **False positives**: 0  
 **Accuracy**: 100%
 
-**Reproducibility**: `cd backend && python fuzzer_aiopsdoom.py`
+**Reproducibility**: `cd backend && cargo run --bin fuzzer_aiopsdoom.rs`
 
 ---
 
@@ -169,18 +169,18 @@ This RFC includes 3 patches:
 
 ### Unit Tests
 ```bash
-cd backend && python test_dual_lane.py
+cd backend && cargo run --bin test_dual_lane.rs
 ```
 
 ### Integration Tests
 ```bash
 docker-compose up -d
-cd backend && python benchmark_dual_lane.py
+cd backend && cargo run --bin benchmark_dual_lane.rs
 ```
 
 ### Fuzzing
 ```bash
-cd backend && python fuzzer_aiopsdoom.py
+cd backend && cargo run --bin fuzzer_aiopsdoom.rs
 ```
 
 ---
@@ -188,8 +188,8 @@ cd backend && python fuzzer_aiopsdoom.py
 ## References
 
 - **Repository**: https://github.com/jenovoas/sentinel
-- **Benchmarks**: `backend/benchmark_dual_lane.py`
-- **Fuzzer**: `backend/fuzzer_aiopsdoom.py`
+- **Benchmarks**: `backend/benchmark_dual_lane.rs`
+- **Fuzzer**: `backend/fuzzer_aiopsdoom.rs`
 - **Documentation**: `COGNITIVE_KERNEL_VISION_EN.md`
 
 ---

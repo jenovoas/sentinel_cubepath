@@ -31,7 +31,7 @@ A method for segregating telemetry data flows in observability systems, comprisi
 - WAL Ops: 2,000x faster than Datadog (0.01ms vs 20ms)
 - Security Lane E2E: Instantaneous (0.00ms sub-microsecond)
 
-**Evidence**: Benchmarks reproducible via `backend/benchmark_dual_lane.py`
+**Evidence**: Benchmarks reproducible via `backend/benchmark_dual_lane.rs`
 
 ---
 
@@ -61,7 +61,7 @@ A system for detecting and neutralizing cognitive injections in telemetry data (
 - Recall: 100.0%
 - F1-Score: 100.0%
 
-**Evidence**: Fuzzer validation via `backend/fuzzer_aiopsdoom.py` (40 attack payloads)
+**Evidence**: Fuzzer validation via `backend/fuzzer_aiopsdoom.rs` (40 attack payloads)
 
 ---
 
@@ -118,7 +118,7 @@ A Write-Ahead Log (WAL) system designed for forensic integrity and replay attack
 - Integrity verification: HMAC validation on every replay
 - Replay detection: 100% (all replay attempts detected)
 
-**Evidence**: Implementation in `backend/app/core/wal.py`
+**Evidence**: Implementation in `backend/src/core/wal.rs`
 
 ---
 
@@ -200,8 +200,8 @@ A computer operating system kernel with integrated semantic verification at Ring
 **Novelty**: First OS kernel with integrated semantic verification at Ring 0 using eBPF LSM + local LLM, achieving sub-microsecond blocking latency and eliminating need for external security agents.
 
 **Evidence**: 
-- Benchmarks: `backend/benchmark_dual_lane.py`
-- Fuzzer: `backend/fuzzer_aiopsdoom.py`
+- Benchmarks: `backend/benchmark_dual_lane.rs`
+- Fuzzer: `backend/fuzzer_aiopsdoom.rs`
 - Vision document: `COGNITIVE_KERNEL_VISION.md`
 
 ---
@@ -240,8 +240,8 @@ A computer operating system kernel with integrated semantic verification at Ring
 ## EVIDENCE REPOSITORY
 
 **GitHub**: https://github.com/jenovoas/sentinel  
-**Benchmarks**: `backend/benchmark_dual_lane.py`  
-**Fuzzer**: `backend/fuzzer_aiopsdoom.py`  
+**Benchmarks**: `backend/benchmark_dual_lane.rs`  
+**Fuzzer**: `backend/fuzzer_aiopsdoom.rs`  
 **Documentation**: `BENCHMARKS_VALIDADOS.md`, `SENTINEL_CORE.md`
 
 **All code is PROPRIETARY AND CONFIDENTIAL** (See [LICENSE](LICENSE)) to ensure protection of intellectual property and patent-ready claims.

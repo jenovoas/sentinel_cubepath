@@ -291,5 +291,5 @@ Security Features:
 **Document**: Forensic WAL Benchmark Results  
 **Version**: 1.0  
 **Date**: December 22,   
-**Benchmark File**: `backend/benchmark_forensic_wal.py`  
+**Benchmark File**: `backend/benchmark_forensic_wal.rs`  
 **Results File**: `backend/forensic_wal_benchmark_results.json`

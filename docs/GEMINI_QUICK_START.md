@@ -5,7 +5,7 @@
 ### 📋 Checklist de Integración
 
 - [x] SDK de Gemini instalado (`google-generativeai`)
-- [x] Script de benchmark creado (`gemini_aiops_poc.py`)
+- [x] Script de benchmark creado (`gemini_aiops_poc.rs`)
 - [x] Plan de integración completo (`GEMINI_INTEGRATION_PLAN.md`)
 - [ ] API Key de Gemini activa
 - [ ] Ejecutar benchmark
@@ -31,7 +31,7 @@ source ~/.bashrc
 
 ```bash
 cd /home/jnovoas/sentinel/backend
-python gemini_aiops_poc.py
+cargo run --bin gemini_aiops_poc.rs
 ```
 
 ### 3. Ver Resultados
@@ -190,7 +190,7 @@ Curanilahue, Chile
 
 **Todo está listo**. Solo falta:
 1. API Key activa
-2. Ejecutar `python gemini_aiops_poc.py`
+2. Ejecutar `cargo run --bin gemini_aiops_poc.rs`
 3. Enviar resultados a Google
 
 **Cuando Google active tu key, estarás listo en 30 segundos.** 

@@ -27,7 +27,7 @@ cd sentinel
 ### 2. Run Benchmarks (Validate Claims)
 ```bash
 cd backend
-python benchmark_dual_lane.py
+cargo run --bin benchmark_dual_lane.rs
 ```
 
 **Expected output**:
@@ -46,7 +46,7 @@ CLAIMS VALIDATED: 5/5 (100%)
 ### 3. Run AIOpsDoom Fuzzer (Validate 100% Detection)
 ```bash
 cd backend
-python fuzzer_aiopsdoom.py
+cargo run --bin fuzzer_aiopsdoom.rs
 ```
 
 **Expected output**:
@@ -60,17 +60,17 @@ python fuzzer_aiopsdoom.py
 ### 4. Explore Code
 ```bash
 # Core architecture
-backend/app/core/data_lanes.py      # Dual-Lane router
-backend/app/core/wal.py              # Write-Ahead Log
-backend/app/security/aiops_shield_semantic.py  # Semantic Firewall
+backend/src/core/data_lanes.rs      # Dual-Lane router
+backend/src/core/wal.rs              # Write-Ahead Log
+backend/src/security/aiops_shield_semantic.rs  # Semantic Firewall
 
 # eBPF kernel protection
 ebpf/lsm_ai_guardian.c               # LSM hooks (Ring 0)
 
 # Security hardening
-backend/app/security/whitelist_manager.py      # ECDSA signatures
-backend/app/clients/loki_client_signed.py      # HMAC headers
-backend/app/core/wal_signed.py                 # HMAC WAL
+backend/src/security/whitelist_manager.rs      # ECDSA signatures
+backend/src/clients/loki_client_signed.rs      # HMAC headers
+backend/src/core/wal_signed.rs                 # HMAC WAL
 ```
 
 ---
@@ -246,7 +246,7 @@ docker-compose up -d
 
 1. Fork repository
 2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Run benchmarks to validate (`python benchmark_dual_lane.py`)
+3. Run benchmarks to validate (`cargo run --bin benchmark_dual_lane.rs`)
 4. Commit changes (`git commit -m 'Add amazing feature'`)
 5. Push to branch (`git push origin feature/amazing-feature`)
 6. Open Pull Request

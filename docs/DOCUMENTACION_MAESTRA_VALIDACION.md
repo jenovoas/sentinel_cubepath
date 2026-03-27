@@ -1,7 +1,7 @@
 # 📋 DOCUMENTACIÓN MAESTRA DE VALIDACIÓN
 
 **Proyecto**: Sentinel Cortex™  
-**Fecha**: 21 de Diciembre de   
+**Fecha**: 21 de Diciembre de la fase de validación  
 **Sesión**: 10:04 AM - 11:19 AM (75 minutos)  
 **Resultado**: 3 CLAIMS VALIDADOS EXPERIMENTALMENTE
 
@@ -101,7 +101,7 @@ BTF ID: 278
 
 ### Implementación
 
-**Archivo**: `backend/app/core/forensic_wal.py`  
+**Archivo**: `backend/src/core/forensic_wal.rs`  
 **Líneas de código**: 300+  
 **Lenguaje**: Python 3.11
 
@@ -113,7 +113,7 @@ BTF ID: 278
 
 ### Tests Ejecutados
 
-**Test Suite**: `backend/test_forensic_wal_runner.py`  
+**Test Suite**: `backend/test_forensic_wal_runner.rs`  
 **Fecha de ejecución**: 21 de Diciembre de , 11:19 AM  
 **Resultado**: **5/5 tests pasados (100%)**
 
@@ -221,7 +221,7 @@ BTF ID: 278
 
 ### Implementación
 
-**Archivo**: `backend/app/security/zero_trust_mtls.py`  
+**Archivo**: `backend/src/security/zero_trust_mtls.rs`  
 **Líneas de código**: 250+  
 **Lenguaje**: Python 3.11
 
@@ -233,7 +233,7 @@ BTF ID: 278
 
 ### Tests Ejecutados
 
-**Test Suite**: `backend/test_mtls_runner.py`  
+**Test Suite**: `backend/test_mtls_runner.rs`  
 **Fecha de ejecución**: 21 de Diciembre de , 11:19 AM  
 **Resultado**: **6/6 tests pasados (100%)**
 
@@ -407,14 +407,14 @@ Primer OS con verificación semántica a nivel Ring 0, integrando IA directament
 ## 📦 ARCHIVOS GENERADOS
 
 ### Código Validado (3)
-- `backend/app/core/forensic_wal.py` (300+ líneas)
-- `backend/app/security/zero_trust_mtls.py` (250+ líneas)
+- `backend/src/core/forensic_wal.rs` (300+ líneas)
+- `backend/src/security/zero_trust_mtls.rs` (250+ líneas)
 - `ebpf/guardian_alpha_lsm.o` (5.4 KB compilado)
 
 ### Tests Automáticos (3)
-- `backend/test_forensic_wal_runner.py` (5 tests)
-- `backend/test_mtls_runner.py` (6 tests)
-- `backend/tests/test_forensic_wal.py` (pytest suite)
+- `backend/test_forensic_wal_runner.rs` (5 tests)
+- `backend/test_mtls_runner.rs` (6 tests)
+- `backend/tests/test_forensic_wal.rs` (pytest suite)
 
 ### Documentación (25+)
 - EVIDENCE_LSM_ACTIVATION.md

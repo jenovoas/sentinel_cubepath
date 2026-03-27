@@ -61,13 +61,13 @@ Sentinel necesita:
 - [ ] Ejecutar fuzzer existente:
   ```bash
   cd backend
-  python fuzzer_aiopsdoom.py
+  cargo run --bin fuzzer_aiopsdoom.rs
   ```
 - [ ] Analizar resultados (detección rate)
 - [ ] Identificar payloads que evaden detección
 
 ### Tarea 2.2: Crear Payloads Avanzados
-- [ ] Archivo: `backend/security/advanced_payloads.py`
+- [ ] Archivo: `backend/security/advanced_payloads.rs`
 - [ ] Técnicas de evasión:
   - Encoding (base64, hex, unicode)
   - Obfuscation (whitespace, case variations)
@@ -76,7 +76,7 @@ Sentinel necesita:
 - [ ] Documentar en `docs/EVASION_TECHNIQUES.md`
 
 ### Tarea 2.3: Implementar Watchdog Middleware
-- [ ] Archivo: `backend/app/middleware/watchdog.py`
+- [ ] Archivo: `backend/src/middleware/watchdog.rs`
 - [ ] Implementar análisis multi-factor:
   - Rate limiting (Redis)
   - IP reputation (AbuseIPDB)
@@ -108,7 +108,7 @@ Sentinel necesita:
 - [ ] Auto-regeneration si capa cae
 
 ### Tarea 3.2: Guardian-Beta Implementation
-- [ ] Archivo: `backend/app/services/guardian_beta.py`
+- [ ] Archivo: `backend/src/guardian_beta.rs`
 - [ ] AI-powered intent analysis (Ollama)
 - [ ] Context validation
 - [ ] Anomaly detection
@@ -330,7 +330,7 @@ cat AIOPS_SHIELD.md
 
 # Ejecutar fuzzer
 cd backend
-python fuzzer_aiopsdoom.py
+cargo run --bin fuzzer_aiopsdoom.rs
 
 # Analizar resultados
 cat fuzzer_results.json

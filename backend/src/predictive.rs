@@ -1,7 +1,7 @@
 //! predictive.rs - AI Buffer Cascade & Non-Markovian Memory
 //! Implementación de telemetría predictiva basada en la métrica S60.
 
-use crate::math::SPA;
+use crate::math::S60;
 use std::collections::VecDeque;
 
 #[derive(Debug, Clone)]

@@ -1,6 +1,6 @@
 #  Mapa Mental Simple - Sentinel
 
-**Fecha**: 21 de Diciembre de   
+**Fecha**: 21 de Diciembre de la fase de validación  
 **Propósito**: Capturar lo que está en tu cabeza vs lo que está documentado
 
 ---
@@ -8,13 +8,13 @@
 ## ✅ LO QUE YA ESTÁ DOCUMENTADO (En el código)
 
 ### 1. Predicción de Bursts
-- **Archivo**: `tests/benchmark_levitation.py`
+- **Archivo**: `tests/benchmark_levitation.rs`
 - **Qué hace**: Detecta bursts 5-10s antes, pre-expande buffer
 - **Resultado**: 67% menos drops
 - **Estado**: ✅ FUNCIONA
 
 ### 2. AIOpsDoom Defense
-- **Archivo**: `backend/app/security/telemetry_sanitizer.py`
+- **Archivo**: `backend/src/security/telemetry_sanitizer.rs`
 - **Qué hace**: Detecta inyección adversarial en logs
 - **Resultado**: 100% accuracy
 - **Estado**: ✅ FUNCIONA
@@ -26,7 +26,7 @@
 - **Estado**: ✅ FUNCIONA
 
 ### 4. Dual-Lane
-- **Archivo**: `backend/app/services/sentinel_fluido_v2.py`
+- **Archivo**: `backend/src/sentinel_fluido_v2.rs`
 - **Qué hace**: Separa seguridad de observabilidad
 - **Resultado**: 2,857x vs Datadog
 - **Estado**: ✅ FUNCIONA

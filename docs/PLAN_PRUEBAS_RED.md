@@ -433,7 +433,7 @@ Throughput con diferentes pérdidas (1 Gbps, 50ms RTT):
 
 ## 🧪 SCRIPT DE PRUEBAS COMPLETO
 
-**Archivo**: `backend/test_network_conditions.py`
+**Archivo**: `backend/test_network_conditions.rs`
 
 ```python
 #!/usr/bin/env python3
@@ -509,7 +509,7 @@ class NetworkSimulator:
 
 def run_benchmark(condition: NetworkCondition, duration_sec=10) -> TestResult:
     """Ejecuta benchmark bajo condiciones específicas"""
-    # TODO: Integrar con benchmark_dual_lane.py
+    # TODO: Integrar con benchmark_dual_lane.rs
     # Por ahora, simular resultados
     
     # Simular degradación por condiciones de red

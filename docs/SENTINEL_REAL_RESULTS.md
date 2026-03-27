@@ -10,9 +10,9 @@
 - ✅ Sistema ejecutándose end-to-end
 
 ### 2. Código Funcional
-- ✅ `sentinel_optimized.py`: 300+ líneas, producción-ready
-- ✅ `benchmark_sentinel_real.py`: Tests automatizados
-- ✅ `quick_test.py`: Validación rápida
+- ✅ `sentinel_optimized.rs`: 300+ líneas, producción-ready
+- ✅ `benchmark_sentinel_real.rs`: Tests automatizados
+- ✅ `quick_test.rs`: Validación rápida
 
 ### 3. Arquitectura Validada
 ```

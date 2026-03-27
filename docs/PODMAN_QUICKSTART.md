@@ -83,7 +83,7 @@ curl http://localhost:3000
 ./scripts/pod-manager.sh start minimal
 
 # 2. Certificar código
-python3 quantum/certify_codebase.py
+python3 quantum/certify_codebase.rs
 
 # 3. Detener (modo frío)
 ./scripts/pod-manager.sh stop

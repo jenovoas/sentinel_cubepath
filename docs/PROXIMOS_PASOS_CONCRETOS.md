@@ -111,10 +111,10 @@ SECUNDARIOS (archivar):
 ```bash
 # Claim 4: Forensic WAL
 cd backend
-python test_forensic_wal_runner.py
+cargo run --bin test_forensic_wal_runner.rs
 
 # Claim 5: Zero Trust mTLS
-python test_mtls_runner.py
+cargo run --bin test_mtls_runner.rs
 
 # Verificar resultados
 ```
@@ -170,8 +170,8 @@ sha256sum guardian_alpha_lsm.o
 **Acción**:
 ```bash
 cd backend
-python smart_buffer_Proyección Cuántica.py
-python test_buffer_cascade.py
+python smart_buffer_Proyección Cuántica.rs
+cargo run --bin test_buffer_cascade.rs
 ```
 
 **Entregable**: Simulación completa con gráficos

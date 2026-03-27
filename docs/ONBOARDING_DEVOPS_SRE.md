@@ -1,7 +1,7 @@
 # Plan de Trabajo - DevOps/SRE Engineer
 
 **Perfil**: DevOps/SRE con experiencia en Kubernetes, observabilidad y HA  
-**Objetivo**: Escalar Sentinel a producción enterprise-grade  
+**Objetivo**: Escalar Sentinel a producción enterprise-grade la fase de validación 
 **Duración**: 2-4 semanas onboarding
 
 ---

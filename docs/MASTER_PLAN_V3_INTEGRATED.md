@@ -78,7 +78,7 @@
 - Coherencia 0.6936, freq 43.14 Hz, coupling 0.3570, tick 191, load 1.9
 
 **[T-F0-R02] ✅ COMPLETADO -03-07** — Crystal Agent en fenix
-- mmh-crystal-agent.py corriendo desde Mar 06 (PID 1270, uptime 26h, tick 94384)
+- mmh-crystal-agent.rs corriendo desde Mar 06 (PID 1270, uptime 26h, tick 94384)
 - Escribe swarm:crystal:coupling:fenix en Redis sentinel (0.3570)
 - Salto-17 y Quantum Leaps normales
 
@@ -99,13 +99,13 @@
 - **Pendiente futuro**: configurar credenciales para que sentinel-cortex escriba en Lane A
 
 **[T-F0-001] ✅ COMPLETADO -03-07** — Crystal Daemon fenix cubierto por T-F0-R02
-- mmh-crystal-agent.py PID 1270, corriendo desde Mar06, uptime 26h+
+- mmh-crystal-agent.rs PID 1270, corriendo desde Mar06, uptime 26h+
 - Estado en Redis: ACTIVE, coherence_source=coupling
 
 **[T-F0-002] ✅ COMPLETADO -03-07** — eBPF Bridge Lane A
-- Script nativo Python: `~/.local/bin/ebpf-bridge-lane-a.py`
+- Script nativo Python: `~/.local/bin/ebpf-bridge-lane-a.rs`
 - Lee CPU freq real (/sys/devices/.../scaling_cur_freq + /proc/cpuinfo) y memory pressure (/proc/meminfo)
-- Autenticación Lane A vía credencial de inject_crystal_memories.py
+- Autenticación Lane A vía credencial de inject_crystal_memories.rs
 - Servicio: `ebpf-bridge-lane-a.service` — active (running) 3h+, PID 3191314
 - Inyecta cada 5s. CPU consumido: 3.3s (consistente con operación correcta)
 - Nota: ebpf_cortex_bridge.rs original descartado (dependencias bash no disponibles en sentinel sin containers)
@@ -170,7 +170,7 @@ pub struct SentinelEvent {
 
 #### Semana 5-6: Integración QuantumScheduler ← NUEVO (mi mejora)
 
-**[T-QS-001] Integrar QuantumScheduler V2 en cortex_main.py**
+**[T-QS-001] Integrar QuantumScheduler V2 en cortex_main.rs**
 - `SentinelTaskOrchestrator`: wrapper Python → QuantumScheduler
 - Registrar tareas batch de Sentinel (ZPE Tune, BCI Sync, Lattice GC, S60 Backup)
 - Correr en thread daemon separado
@@ -191,7 +191,7 @@ pub struct SentinelEvent {
 - [ ] Cortex recibe eventos de Prometheus + PostgreSQL
 - [ ] 5 patrones detectando con >80% accuracy en test data
 - [ ] N8N ejecuta al menos 3 playbooks vía webhook
-- [ ] QuantumScheduler integrado en cortex_main.py, eficiencia >90%
+- [ ] QuantumScheduler integrado en cortex_main.rs, eficiencia >90%
 - [ ] Claim 2 documentado para patent
 
 ---

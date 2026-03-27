@@ -8,27 +8,27 @@
 ## ✅ COMPONENTES IMPLEMENTADOS
 
 ### 1. Core System
-- [x] `app/core/adaptive_buffers.py` - Sistema global de buffers dinámicos
+- [x] `app/core/adaptive_buffers.rs` - Sistema global de buffers dinámicos
 - [x] Configuraciones optimizadas por tipo de flujo
 - [x] Ajuste automático según latencia/throughput
 
 ### 2. LLM Inference
-- [x] `app/services/sentinel_fluido_v2.py` - LLM con buffers adaptativos
+- [x] `app/services/sentinel_fluido_v2.rs` - LLM con buffers adaptativos
 - [x] Detección automática de tipo de query (short/medium/long/code)
 - [x] Parámetros Ollama optimizados por flujo
 
 ### 3. Database (PostgreSQL)
-- [x] `app/db/dynamic_session.py` - PostgreSQL con buffers dinámicos
+- [x] `app/db/dynamic_session.rs` - PostgreSQL con buffers dinámicos
 - [x] Pool adaptativo (min-max dinámico)
 - [x] Monitoreo de métricas para ajuste automático
 
 ### 4. Cache (Redis)
-- [x] `app/cache/dynamic_redis.py` - Redis con buffers dinámicos
+- [x] `app/cache/dynamic_redis.rs` - Redis con buffers dinámicos
 - [x] Pipeline con batch size adaptativo
 - [x] Monitoreo de métricas para ajuste automático
 
 ### 5. Benchmarking
-- [x] `benchmark_buffer_comparison.py` - Comparación V1 vs V2
+- [x] `benchmark_buffer_comparison.rs` - Comparación V1 vs V2
 - [x] Generación de gráficos
 - [x] Análisis estadístico
 
@@ -39,7 +39,7 @@
 ### Paso 1: Actualizar Servicios Existentes
 
 ```python
-# backend/app/main.py
+# backend/src/main.rs
 from app.services.sentinel_fluido_v2 import SentinelFluidoV2
 from app.db.dynamic_session import DynamicPostgreSQLSession
 from app.cache.dynamic_redis import dynamic_redis_cache
@@ -54,7 +54,7 @@ cache = dynamic_redis_cache
 
 ```bash
 cd backend
-python benchmark_buffer_comparison.py
+cargo run --bin benchmark_buffer_comparison.rs
 
 # Genera:
 # - buffer_comparison_results.json
@@ -65,7 +65,7 @@ python benchmark_buffer_comparison.py
 
 ```bash
 # Ejecutar benchmark global con V2
-python sentinel_global_benchmark.py
+cargo run --bin sentinel_global_benchmark.rs
 
 # Objetivo:
 # - E2E: <1,500ms (vs 7,244ms actual)
@@ -93,7 +93,7 @@ python sentinel_global_benchmark.py
 pip install redis matplotlib sqlalchemy asyncpg
 
 # 2. Ejecutar benchmark comparativo
-cd backend && python benchmark_buffer_comparison.py
+cd backend && cargo run --bin benchmark_buffer_comparison.rs
 
 # 3. Revisar resultados
 cat buffer_comparison_results.json

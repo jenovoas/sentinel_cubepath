@@ -89,9 +89,9 @@ $ curl http://localhost:8000/api/v1/health
 
 | Archivo | Líneas | Descripción |
 |---------|--------|-------------|
-| `sentinel_tui.py` | 761 | TUI principal |
-| `sentinel_cli.py` | ~300 | CLI para consultas |
-| `backend/app/services/antigravity_client.py` | 280 | Cliente Gemini |
+| `sentinel_tui.rs` | 761 | TUI principal |
+| `sentinel_cli.rs` | ~300 | CLI para consultas |
+| `backend/src/antigravity_client.rs` | 280 | Cliente Gemini |
 | `install_sentinel_tui.sh` | ~100 | Instalador |
 | `start_tui_backend.sh` | ~100 | Inicio optimizado |
 | `SENTINEL_TUI_README.md` | Completo | Documentación |
@@ -110,10 +110,10 @@ $ curl http://localhost:8000/api/v1/health
 ./start_tui_backend.sh
 
 # 2. Usar TUI
-./sentinel_tui.py
+./sentinel_tui.rs
 
 # 3. O usar CLI
-./sentinel_cli.py "pregunta"
+./sentinel_cli.rs "pregunta"
 ```
 
 ### Opción 2: Con Google Gemini (Antigravity)
@@ -128,7 +128,7 @@ export ANTIGRAVITY_MODEL="gemini-1.5-flash"
 ./start_tui_backend.sh
 
 # 3. Usar TUI
-./sentinel_tui.py
+./sentinel_tui.rs
 ```
 
 ---
@@ -138,7 +138,7 @@ export ANTIGRAVITY_MODEL="gemini-1.5-flash"
 ### Usuarios con Acceso Sin Restricciones:
 
 ```python
-# En sem_shell.py línea 40:
+# En sem_shell.rs línea 40:
 self.WHITELISTED_USERS = ["jnovoas", "root"]
 ```
 
@@ -188,7 +188,7 @@ llama3.2:3b    2.0 GB    (GPU-enabled)
 
 ### TUI:
 ```bash
-$ ./sentinel_tui.py
+$ ./sentinel_tui.rs
 # Status: healthy
 # Provider: ollama o antigravity
 # Model: llama3.2:3b o gemini-1.5-flash
@@ -202,7 +202,7 @@ $ ./sentinel_tui.py
    ```bash
    export SENTINEL_AI_PROVIDER="antigravity"
    export GOOGLE_AI_API_KEY="tu-key"
-   ./sentinel_tui.py
+   ./sentinel_tui.rs
    ```
 
 2. **Usar desde Neovim**:
@@ -213,7 +213,7 @@ $ ./sentinel_tui.py
 
 3. **Explorar agentes**:
    ```bash
-   ./sentinel_cli.py --agent security "analiza vulnerabilidades"
+   ./sentinel_cli.rs --agent security "analiza vulnerabilidades"
    ```
 
 ---
@@ -222,7 +222,7 @@ $ ./sentinel_tui.py
 
 ### Whitelist:
 - **No hay whitelist centralizada de usuarios** en Sentinel
-- La implementación en `sem_shell.py` es **específica y correcta**
+- La implementación en `sem_shell.rs` es **específica y correcta**
 - El `WhitelistManager` es para **paths de archivos** (eBPF), no usuarios
 
 ### Seguridad:

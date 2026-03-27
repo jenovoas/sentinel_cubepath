@@ -61,8 +61,8 @@ $ systemctl status ollama
 
 | Archivo | Tamaño | Líneas | Estado |
 |---------|--------|--------|--------|
-| `sentinel_tui.py` | 24.7 KB | 722 | ✅ Funcional |
-| `sentinel_cli.py` | ~10 KB | ~300 | ✅ Funcional |
+| `sentinel_tui.rs` | 24.7 KB | 722 | ✅ Funcional |
+| `sentinel_cli.rs` | ~10 KB | ~300 | ✅ Funcional |
 | `install_sentinel_tui.sh` | ~3 KB | ~100 | ✅ Ejecutado |
 | `start_tui_backend.sh` | ~2.5 KB | ~100 | ✅ Funcional |
 | `SENTINEL_TUI_README.md` | ~15 KB | Completo | ✅ Documentado |
@@ -83,13 +83,13 @@ $ systemctl status ollama
 + while ! nc -z postgres 5432; do
 ```
 
-### 3. Backend (`backend/app/main.py`)
+### 3. Backend (`backend/src/main.rs`)
 ```diff
 - from app.routers import quantum, terminal, infrastructure
 + # Commented out routers with missing dependencies
 ```
 
-### 4. TUI (`sentinel_tui.py`)
+### 4. TUI (`sentinel_tui.rs`)
 - Integración completa con SemShell
 - Soporte para pestañas (Chat / Terminal)
 - Conexión a Ollama sistema (no Docker)
@@ -109,15 +109,15 @@ $ systemctl status ollama
 
 ### Usar TUI:
 ```bash
-./sentinel_tui.py
+./sentinel_tui.rs
 # Estado actual: RUNNING
 # Muestra: Status healthy
 ```
 
 ### Usar CLI:
 ```bash
-./sentinel_cli.py "pregunta"
-./sentinel_cli.py --status
+./sentinel_cli.rs "pregunta"
+./sentinel_cli.rs --status
 ```
 
 ---
@@ -197,7 +197,7 @@ Active: running
 $ curl http://localhost:8000/api/v1/health
 {"status":"healthy"}
 
-$ ./sentinel_tui.py
+$ ./sentinel_tui.rs
 Status: healthy (RUNNING)
 ```
 

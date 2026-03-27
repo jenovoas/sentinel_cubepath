@@ -25,7 +25,7 @@ Esta sesión ha completado la validación técnica de los componentes más crít
 -   **Escenario**: Ejecución de script desconocido `/tmp/safe_deployment_v1`.
 -   **T=0s**: Kernel bloquea (Default Deny). Log confirma intercepción.
 -   **T+0.5s**: IA Analiza semántica ("safe", "deployment"). Decisión: **ALLOW**.
--   **T+0.6s**: Script `cognitive_loop.py` inyecta hash en Mapa eBPF.
+-   **T+0.6s**: Script `cognitive_loop.rs` inyecta hash en Mapa eBPF.
 -   **T+2.0s**: Re-ejecución permitida exitosamente.
 -   **Contra-prueba**: `/tmp/malware` analizado y rechazado permanentemente.
 

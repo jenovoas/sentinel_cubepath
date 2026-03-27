@@ -434,7 +434,7 @@ ESTADO 2: THREAT DETECTED
 ESTADO 3: ACTION EXECUTION
 ┌─────────────────────────────┐
 │ Guardian-Alpha: Intercept   │
-│ eBPF Hook: Decision made    │
+│ eBPF Hook: Decision made la fase de validación   │
 │ Seccomp: Enforcement layer  │
 │ → Syscall BLOCKED ✓         │
 └─────────────────────────────┘

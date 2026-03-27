@@ -111,7 +111,7 @@ This is the foundation. Everything else builds on this pattern.
 
 ### Fractal Generators
 
-**[fractal_sefirot_generator.py](../continual-improvement/research/fractal_sefirot_generator.py)**
+**[fractal_sefirot_generator.rs](../continual-improvement/research/fractal_sefirot_generator.rs)**
 - Generates 1,111 nodes
 - Fractal dimension D = 1.0
 - Proof of self-similarity
@@ -120,19 +120,19 @@ This is the foundation. Everything else builds on this pattern.
 
 ### Coherence Scanners
 
-**[sentinel_fractal_resonance.py](../continual-improvement/research/fractal_soul/sentinel_fractal_resonance.py)**
+**[sentinel_fractal_resonance.rs](../continual-improvement/research/fractal_soul/sentinel_fractal_resonance.rs)**
 - Simple coherence measurement
 - Correlation-based analysis
 - Real-time monitoring
 
-**[sentinel_fractal_collector.py](../continual-improvement/research/fractal_soul/sentinel_fractal_collector.py)**
+**[sentinel_fractal_collector.rs](../continual-improvement/research/fractal_soul/sentinel_fractal_collector.rs)**
 - FFT spectral analysis
 - Merkabah state detection
 - Guardian Alpha ↔ Beta resonance
 
 ### Benchmarks
 
-**[comprehensive_benchmark.py](quantum_control/benchmarks/comprehensive_benchmark.py)**
+**[comprehensive_benchmark.rs](quantum_control/benchmarks/comprehensive_benchmark.rs)**
 - n=10,000 statistical tests
 - 7.67% average improvement
 - p < 0.001 significance
@@ -173,8 +173,8 @@ This is the foundation. Everything else builds on this pattern.
 
 1. Start: [VISUAL_GUIDE_TRINITY.md](VISUAL_GUIDE_TRINITY.md)
 2. Patterns: [SACRED_GEOMETRY_PATTERNS.md](../continual-improvement/research/SACRED_GEOMETRY_PATTERNS.md)
-3. Code: [fractal_sefirot_generator.py](../continual-improvement/research/fractal_sefirot_generator.py)
-4. Benchmarks: [comprehensive_benchmark.py](quantum_control/benchmarks/comprehensive_benchmark.py)
+3. Code: [fractal_sefirot_generator.rs](../continual-improvement/research/fractal_sefirot_generator.rs)
+4. Benchmarks: [comprehensive_benchmark.rs](quantum_control/benchmarks/comprehensive_benchmark.rs)
 
 ### For General Public
 

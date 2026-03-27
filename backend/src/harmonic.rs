@@ -2,7 +2,7 @@
 //!
 //! Reemplaza la lógica binaria con Lógica Armónica (Consonancia/Disonancia).
 
-use crate::math::SPA;
+use crate::math::S60;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum LogicState {
@@ -16,16 +16,16 @@ pub enum LogicState {
 
 #[derive(Debug, Clone, Copy)]
 pub struct HarmonicState {
-    pub ratio: SPA,
-    pub phase: SPA,
+    pub ratio: S60,
+    pub phase: S60,
     pub energy: u32,
 }
 
 impl HarmonicState {
     pub fn new(d: i64, m: i64, s: i64) -> Self {
         Self {
-            ratio: SPA::new(d, m, s, 0, 0),
-            phase: SPA::zero(),
+            ratio: S60::new(d, m, s, 0, 0),
+            phase: S60::zero(),
             energy: 100,
         }
     }
@@ -38,16 +38,16 @@ impl HarmonicState {
     pub fn logic_ref() -> Self { Self::new(10, 5, 6) }
 
     pub fn evaluate_logic(&self) -> LogicState {
-        let val = self.ratio.raw;
-        let true_val = Self::logic_true().ratio.raw;
-        let maybe_val = Self::logic_maybe().ratio.raw;
-        let ref_val = Self::logic_ref().ratio.raw;
-        let false_val = Self::logic_false().ratio.raw;
+        let val = self.ratio.to_raw();
+        let true_val = Self::logic_true().ratio.to_raw();
+        let maybe_val = Self::logic_maybe().ratio.to_raw();
+        let ref_val = Self::logic_ref().ratio.to_raw();
+        let false_val = Self::logic_false().ratio.to_raw();
         let tolerance = 32_400; // 0;0,9,0 (9 arcseconds) - Ultra Precision
 
         if (val - ref_val).abs() < tolerance {
             LogicState::Reference
-        } else if (val - SPA::SCALE_0).abs() < tolerance {
+        } else if (val - S60::SCALE_0).abs() < tolerance {
             LogicState::Unison
         } else if (val - true_val).abs() < tolerance {
             LogicState::True

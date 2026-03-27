@@ -23,7 +23,7 @@
 
 ```bash
 cd /home/jnovoas/sentinel/backend
-python test_mtls_runner.py
+cargo run --bin test_mtls_runner.rs
 ```
 
 **Results**:
@@ -156,7 +156,7 @@ SSRF ATTACK: claimed=tenant-analytics, actual=tenant-user-123
 
 ### Code Location
 
-**File**: `backend/app/security/zero_trust_mtls.py` (235 lines)
+**File**: `backend/src/security/zero_trust_mtls.rs` (235 lines)
 
 **Key Components**:
 1. **HMAC-SHA256 Header Signing**: Cryptographic request integrity
@@ -294,7 +294,7 @@ A computer-implemented zero trust mutual TLS system with SSRF attack prevention,
 
 **Prior Art**: Standard mTLS exists, but combination with HMAC header signing + SSRF prevention + tenant isolation is novel.
 
-**Evidence**: Test suite in `backend/test_mtls_runner.py` (292 lines)
+**Evidence**: Test suite in `backend/test_mtls_runner.rs` (292 lines)
 
 ---
 

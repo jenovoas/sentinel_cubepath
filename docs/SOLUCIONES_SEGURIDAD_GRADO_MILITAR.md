@@ -190,7 +190,7 @@ char LICENSE[] SEC("license") = "GPL";
 
 ### Controlador Python
 
-**Archivo**: `backend/app/security/ai_guardian_lsm.py`
+**Archivo**: `backend/src/security/ai_guardian_lsm.rs`
 
 ```python
 """
@@ -548,7 +548,7 @@ Con AIOpsShield (SEGURO):
 
 ### Reglas de Detección
 
-**Archivo**: `backend/app/security/aiops_shield_semantic.py`
+**Archivo**: `backend/src/security/aiops_shield_semantic.rs`
 
 ```python
 """
@@ -719,7 +719,7 @@ aiops_shield_semantic = AIOpsShieldSemantic()
 
 ### Integración con AIOpsShield Existente
 
-**Actualizar**: `backend/app/services/aiops_shield.py`
+**Actualizar**: `backend/src/aiops_shield.rs`
 
 ```python
 # Agregar al final del archivo
@@ -805,7 +805,7 @@ class AIOpsShield:
 
 ### Fase 1: eBPF LSM (1 semana)
 - [ ] Crear `ebpf/lsm_ai_guardian.c`
-- [ ] Implementar `ai_guardian_lsm.py`
+- [ ] Implementar `ai_guardian_lsm.rs`
 - [ ] Tests de bloqueo kernel-level
 - [ ] Integrar con Dual-Guardian
 
@@ -816,7 +816,7 @@ class AIOpsShield:
 - [ ] Tests de SSRF prevention
 
 ### Fase 3: Semantic Firewall (2 días)
-- [ ] Implementar `aiops_shield_semantic.py`
+- [ ] Implementar `aiops_shield_semantic.rs`
 - [ ] Integrar con AIOpsShield existente
 - [ ] Tests con payloads AIOpsDoom
 - [ ] Benchmark de detección

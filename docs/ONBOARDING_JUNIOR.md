@@ -81,7 +81,7 @@ http://localhost:8000
 ### Opción 1: Backend
 ```bash
 cd backend
-python test_dual_lane.py
+cargo run --bin test_dual_lane.rs
 ```
 **Objetivo**: Ver que los tests pasan. Luego lee el código del test.
 
@@ -95,10 +95,10 @@ npm run dev
 
 ### Opción 3: Explorar
 ```bash
-cd backend/app/services
+cd backend/src/services
 ls -la
 ```
-**Objetivo**: Ver los servicios principales. Empieza por `aiops_shield.py`.
+**Objetivo**: Ver los servicios principales. Empieza por `aiops_shield.rs`.
 
 ---
 
@@ -179,7 +179,7 @@ Elige UNA cosa:
 ##  Tu Objetivo (Primeras 2 Semanas)
 
 1. ✅ Ejecutar el proyecto localmente
-2. ✅ Entender backend/app/services/
+2. ✅ Entender backend/src/
 3. ✅ Hacer tu primer PR (fix typo, mejorar docs, etc.)
 4. ✅ Ejecutar y entender 1-2 tests
 
@@ -201,7 +201,7 @@ cd /home/jnovoas/sentinel/backend
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-python test_dual_lane.py
+cargo run --bin test_dual_lane.rs
 ```
 
 **Si funciona**: ✅ Estás listo para trabajar.  
@@ -221,6 +221,6 @@ Enfócate en UNA cosa a la vez. Pregunta cuando te pierdas.
 
 ---
 
-**Creado**: 21 de Diciembre de   
+**Creado**: 21 de Diciembre de la fase de validación  
 **Para**: Nuevos desolladores que no quieren salir corriendo 😂  
 **Actualizado**: Cuando sea necesario

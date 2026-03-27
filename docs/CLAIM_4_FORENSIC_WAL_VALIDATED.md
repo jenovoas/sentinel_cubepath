@@ -23,7 +23,7 @@
 
 ```bash
 cd /home/jnovoas/sentinel/backend
-python test_forensic_wal_runner.py
+cargo run --bin test_forensic_wal_runner.rs
 ```
 
 **Results**:
@@ -142,7 +142,7 @@ REPLAY ATTACK DETECTED: nonce 39189b7e70f43526... (x10)
 
 ### Code Location
 
-**File**: `backend/app/core/forensic_wal.py` (292 lines)
+**File**: `backend/src/core/forensic_wal.rs` (292 lines)
 
 **Key Components**:
 1. **HMAC-SHA256**: Cryptographic integrity
@@ -271,7 +271,7 @@ A computer-implemented write-ahead log system with forensic-grade protection, co
 
 **Prior Art**: None combining HMAC + nonce-based replay + multi-rule timestamp validation in dual-lane architecture.
 
-**Evidence**: Test suite in `backend/test_forensic_wal_runner.py` (267 lines)
+**Evidence**: Test suite in `backend/test_forensic_wal_runner.rs` (267 lines)
 
 ---
 

@@ -271,7 +271,7 @@ A computer operating system kernel with integrated semantic verification, compri
 
 **Prior Art**: None. First OS kernel with integrated semantic verification at Ring 0.
 
-**Evidence**: Benchmarks in `backend/benchmark_dual_lane.py`, fuzzer in `backend/fuzzer_aiopsdoom.py`
+**Evidence**: Benchmarks in `backend/benchmark_dual_lane.rs`, fuzzer in `backend/fuzzer_aiopsdoom.rs`
 
 ---
 
@@ -323,7 +323,7 @@ A computer operating system kernel with integrated semantic verification, compri
 
 ### For Researchers
 - Review our benchmarks: `github.com/jenovoas/sentinel`
-- Reproduce our results: `backend/benchmark_dual_lane.py`
+- Reproduce our results: `backend/benchmark_dual_lane.rs`
 - Contribute to the cognitive kernel vision
 
 ### For Investors

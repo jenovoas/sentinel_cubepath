@@ -19,33 +19,33 @@ Identificar tests falseados o simulados que no prueban funcionalidad real.
 ### Tests por Categoría
 
 ```
-./research/neural_interface/test_neural_control.py
-./tests/test_control_pattern.py
-./tests/test_bci_audio.py
-./tests/aiops_doom_test.py ✅ VERIFICADO (legítimo)
-./tests/test_finance.py
-./tests/test_hydrodynamic_theory.py
-./tests/stress_test_shadow.py
-./tools/scripts/scripts/test-loki-ordering.py
-./quantum_control/tests/test_all.py
-./test_api_comprehensive.py
-./bci/scripts/sentinel_bci_python_test.py
-./bci/scripts/sentinel_bci_console_test.py
-./truth_algorithm/test_google_api.py
-./truth_algorithm/test_truth_robustness.py
-./truth_algorithm/truthsync_chile_test.py
-./truth_algorithm/test_google_simple.py
-./truth_algorithm/test_certification.py
-./truth_algorithm/test_google_search.py
-./truth_algorithm/perplexity_killer_test.py
-./truth_algorithm/test_gamma_integration.py
+./research/neural_interface/test_neural_control.rs
+./tests/test_control_pattern.rs
+./tests/test_bci_audio.rs
+./tests/aiops_doom_test.rs ✅ VERIFICADO (legítimo)
+./tests/test_finance.rs
+./tests/test_hydrodynamic_theory.rs
+./tests/stress_test_shadow.rs
+./tools/scripts/scripts/test-loki-ordering.rs
+./quantum_control/tests/test_all.rs
+./test_api_comprehensive.rs
+./bci/scripts/sentinel_bci_python_test.rs
+./bci/scripts/sentinel_bci_console_test.rs
+./truth_algorithm/test_google_api.rs
+./truth_algorithm/test_truth_robustness.rs
+./truth_algorithm/truthsync_chile_test.rs
+./truth_algorithm/test_google_simple.rs
+./truth_algorithm/test_certification.rs
+./truth_algorithm/test_google_search.rs
+./truth_algorithm/perplexity_killer_test.rs
+./truth_algorithm/test_gamma_integration.rs
 ```
 
 ---
 
 ## ✅ TESTS VERIFICADOS COMO LEGÍTIMOS
 
-### 1. `tests/aiops_doom_test.py`
+### 1. `tests/aiops_doom_test.rs`
 
 **Propósito:** Verificar AIOpsShield contra inyección de logs maliciosos
 
@@ -66,15 +66,15 @@ Los siguientes tests requieren revisión manual para confirmar que no están fal
 
 ### Prioridad ALTA 🔴
 
-1. `test_api_comprehensive.py` - Nombre sugiere cobertura amplia
-2. `truth_algorithm/test_truth_robustness.py` - Tests de TruthSync
-3. `truth_algorithm/test_certification.py` - Tests de certificación
+1. `test_api_comprehensive.rs` - Nombre sugiere cobertura amplia
+2. `truth_algorithm/test_truth_robustness.rs` - Tests de TruthSync
+3. `truth_algorithm/test_certification.rs` - Tests de certificación
 
 ### Prioridad MEDIA 🟡
 
-4. `tests/test_finance.py`
-5. `tests/test_hydrodynamic_theory.py`
-6. `quantum_control/tests/test_all.py`
+4. `tests/test_finance.rs`
+5. `tests/test_hydrodynamic_theory.rs`
+6. `quantum_control/tests/test_all.rs`
 
 ### Prioridad BAJA 🟢
 
@@ -126,7 +126,7 @@ Un test es sospechoso si:
 
 ```bash
 # Buscar tests sospechosos
-python3 quantum/health_audit_fake_detector.py
+python3 quantum/health_audit_fake_detector.rs
 ```
 
 ### Paso 2: Revisar Manualmente
@@ -153,14 +153,14 @@ python3 quantum/health_audit_fake_detector.py
 ### Fase 1: Auditoría Inicial (COMPLETADA)
 
 - ✅ Inventario de tests (214 encontrados)
-- ✅ Verificación de `aiops_doom_test.py` (legítimo)
+- ✅ Verificación de `aiops_doom_test.rs` (legítimo)
 - ✅ Herramienta de detección creada
 
 ### Fase 2: Revisión Prioritaria (PENDIENTE)
 
-- [ ] Revisar `test_api_comprehensive.py`
-- [ ] Revisar `test_truth_robustness.py`
-- [ ] Revisar `test_certification.py`
+- [ ] Revisar `test_api_comprehensive.rs`
+- [ ] Revisar `test_truth_robustness.rs`
+- [ ] Revisar `test_certification.rs`
 
 ### Fase 3: Corrección Incremental (PENDIENTE)
 

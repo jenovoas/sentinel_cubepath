@@ -19,7 +19,7 @@ Create a new eBPF LSM module that extends `guardian_alpha_lsm.c` with:
     - Pattern 1: `rm` + `-rf` (Recursive Force delete)
     - Pattern 2: Target is `/` (Root directory) or Critical Paths.
 
-### 2. User-Space Cognitive Engine (`ebpf/cognitive_daemon.py`) (Optional for basic POC)
+### 2. User-Space Cognitive Engine (`ebpf/cognitive_daemon.rs`) (Optional for basic POC)
 - A daemon to update the "Semantic Rules Map".
 - For this POC, we will hardcode the rules in eBPF or use a BPF Map for "Bad Patterns" to demonstrate dynamic updates.
 

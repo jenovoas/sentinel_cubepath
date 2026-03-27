@@ -5,7 +5,7 @@
 
 use crate::neural::NeuralMemory;
 use crate::resonant::ResonantMemory;
-use crate::math::SPA;
+use crate::math::S60;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub struct DynamicEncryption {
@@ -34,14 +34,14 @@ impl DynamicEncryption {
         let spike_factor = (spike_rate * 1000.0) as u64;
         let mixed_seed = timestamp.wrapping_add(spike_factor).wrapping_add(coherence);
         
-        // Inyectamos el valor en nuestra aritmética SPA (Base-60)
-        let mut spa_val = SPA::from_raw(mixed_seed as i64);
+        // Inyectamos el valor en nuestra aritmética S60 (Base-60)
+        let mut spa_val = S60::from_raw(mixed_seed as i64);
         
         // Multiplicador caótico pero determinista basado en el Ratio de Plimpton 322 (Fila 1)
-        spa_val = spa_val * SPA::from_raw(21923999); 
+        spa_val = spa_val * S60::from_raw(21923999); 
         
         // Formateo a una representación hexadecimal fuerte que sirve como llave simétrica
-        self.current_layer_hash = format!("S60_SHIELD_{:016x}", spa_val.raw.abs());
+        self.current_layer_hash = format!("S60_SHIELD_{:016x}", spa_val.to_raw().abs());
         
         self.current_layer_hash.clone()
     }

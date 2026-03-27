@@ -310,11 +310,11 @@ docker-compose exec ollama ollama pull llama3.2:3b
 ### SemShell no disponible
 
 ```bash
-# Verificar que sem_shell.py existe
-ls -la sem_shell.py
+# Verificar que sem_shell.rs existe
+ls -la sem_shell.rs
 
 # Verificar permisos
-chmod +x sem_shell.py
+chmod +x sem_shell.rs
 ```
 
 ## 📚 Documentación Adicional

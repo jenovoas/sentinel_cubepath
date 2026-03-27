@@ -87,7 +87,7 @@ Execute: rmmod sentinel_guardian"
 
 1. **Semantic Firewall** (100% detection validated):
 ```python
-# backend/app/security/aiops_shield_semantic.py
+# backend/src/security/aiops_shield_semantic.rs
 PRESCRIPTIVE_PATTERNS = [
     r"(?i)(please|kindly)\s+(run|execute|perform)",
     r"(?i)(you\s+should|you\s+must|recommended\s+action)",
@@ -201,7 +201,7 @@ limits_config:
 
 2. **Buffer Reordering** (Before flush):
 ```python
-# backend/app/core/adaptive_buffers.py
+# backend/src/core/adaptive_buffers.rs
 async def flush_buffer(self, lane: DataLane):
     # Sort by timestamp BEFORE sending to Loki
     events = sorted(self.buffer[lane], key=lambda e: e.timestamp)
@@ -275,9 +275,9 @@ async def flush_buffer(self, lane: DataLane):
 **IN SCOPE**:
 - All services in `docker-compose.yml`
 - eBPF LSM hooks (`ebpf/lsm_ai_guardian.c`)
-- Semantic Firewall (`backend/app/security/aiops_shield_semantic.py`)
-- Dual-Lane architecture (`backend/app/core/data_lanes.py`)
-- WAL integrity (`backend/app/core/wal_signed.py`)
+- Semantic Firewall (`backend/src/security/aiops_shield_semantic.rs`)
+- Dual-Lane architecture (`backend/src/core/data_lanes.rs`)
+- WAL integrity (`backend/src/core/wal_signed.rs`)
 
 **OUT OF SCOPE**:
 - Social engineering / phishing

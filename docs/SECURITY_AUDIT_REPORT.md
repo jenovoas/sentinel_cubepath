@@ -223,7 +223,7 @@ GF_AUTH_ANONYMOUS_ORG_ROLE: "Viewer"
 
 ### 1. ✅ Telemetry Sanitizer (Excellent!)
 
-**File:** [`backend/app/security/telemetry_sanitizer.py`](file:///home/jnovoas/sentinel/backend/app/security/telemetry_sanitizer.py)
+**File:** [`backend/src/security/telemetry_sanitizer.rs`](file:///home/jnovoas/sentinel/backend/src/security/telemetry_sanitizer.rs)
 
 **Strengths:**
 
@@ -256,7 +256,7 @@ GF_AUTH_ANONYMOUS_ORG_ROLE: "Viewer"
 
 ### 5. ✅ Password Hashing
 
-**File:** [`backend/app/auth_utils.py`](file:///home/jnovoas/sentinel/backend/app/auth_utils.py)
+**File:** [`backend/src/auth_utils.rs`](file:///home/jnovoas/sentinel/backend/src/auth_utils.rs)
 
 - Using bcrypt for password hashing
 - Proper verification logic

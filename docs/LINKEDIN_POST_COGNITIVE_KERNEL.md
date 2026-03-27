@@ -46,8 +46,8 @@ A kernel that **understands** what it's executing, not just **how**:
 ## Open Source, Reproducible
 
 All code and benchmarks are public:
-📊 Benchmarks: `backend/benchmark_dual_lane.py`
-🔬 Fuzzer: `backend/fuzzer_aiopsdoom.py`
+📊 Benchmarks: `backend/benchmark_dual_lane.rs`
+🔬 Fuzzer: `backend/fuzzer_aiopsdoom.rs`
 🧬 Vision: `COGNITIVE_KERNEL_VISION.md`
 
 **GitHub**: github.com/jenovoas/sentinel

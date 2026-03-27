@@ -188,7 +188,7 @@ Sentinel: "No puedes negociar con un condensador que se descarga"
 
 **Evidencia Técnica**:
 
-- Watchdog service: `ebpf/watchdog_service.py`
+- Watchdog service: `ebpf/watchdog_service.rs`
 - Timeout: 60 segundos
 - Si no hay "pat" → Reset automático
 - Inmune a software hangs
@@ -251,7 +251,7 @@ Sentinel: "Porque la IA nunca probó tu veneno"
 - Accuracy: 100% (40/40 payloads detectados)
 - False positives: 0%
 - Latencia: 0.21ms
-- Validado: `backend/fuzzer_aiopsdoom.py`
+- Validado: `backend/fuzzer_aiopsdoom.rs`
 
 ---
 

@@ -51,7 +51,7 @@
 - Pattern matching
 - LLM integration
 
-**Rust Equivalent**: Rewrite Python `aiops_shield_semantic.py` in Rust with `regex` + `tokio`
+**Rust Equivalent**: Rewrite Python `aiops_shield_semantic.rs` in Rust with `regex` + `tokio`
 
 ---
 

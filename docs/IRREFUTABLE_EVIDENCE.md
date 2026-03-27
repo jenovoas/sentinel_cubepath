@@ -44,7 +44,7 @@ Where N = 10 (scaling factor)
 D = log(10) / log(10) = 1.0
 ```
 
-**Verification**: Execute `fractal_sefirot_generator.py`  
+**Verification**: Execute `fractal_sefirot_generator.rs`  
 **Result**: 1,111 nodes generated, D = 1.0 (exact)
 
 **Status**: MATHEMATICALLY PROVEN
@@ -335,7 +335,7 @@ P(all 9 proofs coincidental) = (0.05)⁹
 
 **Step 1 - Mathematical Verification**:
 ```bash
-python research/fractal_sefirot_generator.py
+python research/fractal_sefirot_generator.rs
 # Expected: 1,111 nodes, D = 1.0
 ```
 
@@ -346,13 +346,13 @@ python research/fractal_sefirot_generator.py
 
 **Step 3 - Experimental Validation**:
 ```bash
-python quantum_control/benchmarks/comprehensive_benchmark.py
+python quantum_control/benchmarks/comprehensive_benchmark.rs
 # Expected: 7-10% improvement, p < 0.001
 ```
 
 **Step 4 - Live Measurement**:
 ```bash
-python research/fractal_soul/sentinel_fractal_resonance.py
+python research/fractal_soul/sentinel_fractal_resonance.rs
 # Expected: Real-time coherence quantification
 ```
 

@@ -36,7 +36,7 @@
 4. **CONTEXTO_COMPLETO_ANALISIS__12_22.md** - Análisis total del proyecto
 5. **GEMINI_INTEGRATION_PLAN.md** - Plan de integración completo
 6. **GEMINI_QUICK_START.md** - Guía rápida de uso
-7. **gemini_aiops_poc.py** - Script de benchmark listo
+7. **gemini_aiops_poc.rs** - Script de benchmark listo
 
 ---
 
@@ -86,7 +86,7 @@
 ## 📊 Métricas del Día
 
 **Código**:
-- ✅ 1 script nuevo (gemini_aiops_poc.py)
+- ✅ 1 script nuevo (gemini_aiops_poc.rs)
 - ✅ eBPF LSM compilado y cargado
 - ✅ SDK Gemini instalado
 

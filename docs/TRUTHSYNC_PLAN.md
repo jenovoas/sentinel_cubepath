@@ -128,7 +128,7 @@ WHAT IT DOES:
 ### Learning Database
 
 ```python
-# truthsync/learning.py
+# truthsync/learning.rs
 
 class SelfLearningEngine:
     async def record_verification(self, claim, result, user_feedback=None):
@@ -218,7 +218,7 @@ class SelfLearningEngine:
 ### Implementation
 
 ```python
-# sentinel-backend/cortex/ollama_truthsync.py
+# sentinel-backend/cortex/ollama_truthsync.rs
 
 from truthsync import TruthSyncClient
 
@@ -280,7 +280,7 @@ class OllamaTruthSync:
 ### LLM Access to Verified Truth
 
 ```python
-# truthsync/verified_facts_db.py
+# truthsync/verified_facts_db.rs
 
 class VerifiedFactsDatabase:
     """Database of verified facts that LLM can query."""

@@ -20,8 +20,8 @@
 - [ ] Ejecutar benchmarks existentes:
   ```bash
   cd backend
-  python benchmark_dual_lane.py
-  python benchmark_buffer_comparison.py
+  cargo run --bin benchmark_dual_lane.rs
+  cargo run --bin benchmark_buffer_comparison.rs
   ```
 - [ ] Entender datasets y métricas actuales
 
@@ -49,24 +49,24 @@
 ### Objetivo: Implementar baseline de detección de anomalías
 
 ### Tarea 2.1: Dataset de Entrenamiento
-- [ ] Crear `backend/ml/datasets/telemetry_baseline.py`
+- [ ] Crear `backend/ml/datasets/telemetry_baseline.rs`
 - [ ] Recolectar 1000+ eventos normales del sistema
 - [ ] Etiquetar eventos (normal vs malicious)
 - [ ] Split train/test (80/20)
 - [ ] Guardar en formato parquet
 
 ### Tarea 2.2: Isolation Forest Baseline
-- [ ] Archivo: `backend/ml/models/anomaly_detector.py`
+- [ ] Archivo: `backend/ml/models/anomaly_detector.rs`
 - [ ] Implementar Isolation Forest (scikit-learn)
 - [ ] Features: log length, entropy, pattern frequency
 - [ ] Entrenar con datos normales
 - [ ] Evaluar: precision, recall, F1
 
 ### Tarea 2.3: Integración con AIOpsShield
-- [ ] Archivo: `backend/app/ml/anomaly_service.py`
+- [ ] Archivo: `backend/src/ml/anomaly_service.rs`
 - [ ] Cargar modelo entrenado
 - [ ] API endpoint: `/api/v1/ml/detect-anomaly`
-- [ ] Integrar con `aiops_shield.py` como capa adicional
+- [ ] Integrar con `aiops_shield.rs` como capa adicional
 
 **Entregable Semana 2**: 3 Pull Requests (dataset + modelo + integración)
 
@@ -84,14 +84,14 @@
 - [ ] Correlaciones entre queries
 
 ### Tarea 3.2: Predictive Cache Warming
-- [ ] Archivo: `backend/ml/cache_predictor.py`
+- [ ] Archivo: `backend/ml/cache_predictor.rs`
 - [ ] Modelo simple (Markov chain o LSTM básico)
 - [ ] Predecir próximas N queries
 - [ ] Pre-cargar en cache antes de que se pidan
 - [ ] Medir mejora en cache hit rate
 
 ### Tarea 3.3: A/B Testing Framework
-- [ ] Archivo: `backend/ml/ab_testing.py`
+- [ ] Archivo: `backend/ml/ab_testing.rs`
 - [ ] Framework para comparar cache strategies
 - [ ] Métricas: hit rate, latency, memory usage
 - [ ] Statistical significance testing
@@ -105,14 +105,14 @@
 ### Objetivo: Generar payloads adversariales con ML
 
 ### Tarea 4.1: Generador de Payloads
-- [ ] Archivo: `backend/ml/payload_generator.py`
+- [ ] Archivo: `backend/ml/payload_generator.rs`
 - [ ] Usar GPT-2/small LLM para generar logs maliciosos
 - [ ] Variaciones de patrones conocidos
 - [ ] Mutaciones semánticas (no solo sintácticas)
 - [ ] Guardar en `backend/ml/datasets/adversarial_payloads.json`
 
 ### Tarea 4.2: Fuzzer Automatizado
-- [ ] Archivo: `backend/fuzzer_ml_enhanced.py`
+- [ ] Archivo: `backend/fuzzer_ml_enhanced.rs`
 - [ ] Integrar generador de payloads
 - [ ] Ejecutar contra AIOpsShield
 - [ ] Medir tasa de detección
@@ -234,7 +234,7 @@
 ### Sentinel-Specific
 - `BENCHMARKS_VALIDADOS.md` - Entender métricas
 - `AIOPS_SHIELD.md` - Contexto de detección
-- `backend/fuzzer_aiopsdoom.py` - Fuzzer actual
+- `backend/fuzzer_aiopsdoom.rs` - Fuzzer actual
 
 ---
 

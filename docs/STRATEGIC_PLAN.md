@@ -98,7 +98,7 @@ Ser la primera solución de seguridad cognitiva a nivel kernel para proteger sis
      │             │             │             │             │             │
      ▼             ▼             ▼             ▼             ▼             ▼
   Roadmap      Métricas     Onboarding    Arquitectura   Deploy       Incidentes
-  Hackatón    KPIs         Demo          API/UX         CubePath    Debug
+  Hackatón de MiduDev   KPIs         Demo          API/UX         CubePath    Debug
 ```
 
 ### 3.2 Prácticas ITIL Aplicadas

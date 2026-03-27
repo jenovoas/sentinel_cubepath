@@ -46,7 +46,7 @@ sentinel/
 ├── ebpf/                       # 27 archivos
 │   ├── guardian_alpha_lsm.c    # LSM kernel module (376 líneas)
 │   ├── burst_sensor.c          # Sensor de ráfagas
-│   ├── watchdog_service.py     # Auto-regeneración
+│   ├── watchdog_service.rs     # Auto-regeneración
 │   └── benchmarks/             # Scripts de medición
 │
 ├── docs/                       # 308 archivos
@@ -56,9 +56,9 @@ sentinel/
 │   └── archive/                # 29 documentos históricos
 │
 ├── truth_algorithm/            # 66 archivos
-│   ├── source_search.py        # Motor de búsqueda
-│   ├── consensus_algorithm.py  # Consenso multi-fuente
-│   ├── certification_generator.py # Certificación de verdad
+│   ├── source_search.rs        # Motor de búsqueda
+│   ├── consensus_algorithm.rs  # Consenso multi-fuente
+│   ├── certification_generator.rs # Certificación de verdad
 │   └── benchmarks/             # Resultados validados
 │
 ├── quantum_control/            # 22 archivos
@@ -68,7 +68,7 @@ sentinel/
 │   └── benchmarks/             # 4 benchmarks (500x-2,857x)
 │
 └── truthsync-poc/              # 36 archivos
-    └── benchmark_with_cache.py # 90.5x speedup validado
+    └── benchmark_with_cache.rs # 90.5x speedup validado
 ```
 
 ---
@@ -147,7 +147,7 @@ sentinel/
 - **Licensing**: -50M
 - **Prior Art**: Bajo (US12130917B1 es post-fact, no pre-ingestion)
 - **Estado**: ✅ VALIDADO
-- **Evidencia**: `fuzzer_aiopsdoom.py`
+- **Evidencia**: `fuzzer_aiopsdoom.rs`
 - **Performance**:
   - Accuracy: 100% (40/40 payloads)
   - Precision: 100% (0 false positives)
@@ -181,21 +181,21 @@ sentinel/
 - **Throughput**: 1.54M claims/segundo
 - **Latencia p50**: 0.36 μs
 - **Cache hit rate**: 99.9%
-- **Código**: `truthsync-poc/benchmark_with_cache.py`
+- **Código**: `truthsync-poc/benchmark_with_cache.rs`
 
 ### Dual-Lane Architecture (2,857x Improvement)
 - **Routing**: 0.0035ms (2,857x vs Datadog 10ms)
 - **WAL Security**: 0.01ms (500x vs Datadog 5ms)
 - **WAL Ops**: 0.01ms (2,000x vs Datadog 20ms)
 - **Security Lane E2E**: 0.00ms (instantáneo)
-- **Código**: `backend/benchmark_dual_lane.py`
+- **Código**: `backend/benchmark_dual_lane.rs`
 
 ### AIOpsDoom Defense (100% Accuracy)
 - **Accuracy**: 100.0% (40/40 payloads detectados)
 - **False positives**: 0%
 - **Latencia**: 0.21ms
 - **Throughput**: 100K+ logs/segundo
-- **Código**: `backend/fuzzer_aiopsdoom.py`
+- **Código**: `backend/fuzzer_aiopsdoom.rs`
 
 ### Quantum Control Framework
 - **Benchmarks**: 4 validados en `/quantum_control/benchmarks/`
@@ -257,22 +257,22 @@ sentinel/
 
 ### Backend (FastAPI + Python)
 
-**Servicios Core** (`backend/app/services/`):
-- `aiops_shield.py` - AIOpsDoom defense
-- `truthsync.py` - Truth verification
-- `anomaly_detector.py` - ML anomaly detection
-- `sentinel_fluido_v2.py` - Dual-lane routing
-- `sentinel_telem_protect.py` - Telemetry protection
-- `incident_service.py` - ITIL workflows
-- `monitoring.py` - System monitoring
-- `workflow_indexer.py` - Workflow search
+**Servicios Core** (`backend/src/`):
+- `aiops_shield.rs` - AIOpsDoom defense
+- `truthsync.rs` - Truth verification
+- `anomaly_detector.rs` - ML anomaly detection
+- `sentinel_fluido_v2.rs` - Dual-lane routing
+- `sentinel_telem_protect.rs` - Telemetry protection
+- `incident_service.rs` - ITIL workflows
+- `monitoring.rs` - System monitoring
+- `workflow_indexer.rs` - Workflow search
 
-**Seguridad** (`backend/app/security/`):
-- `telemetry_sanitizer.py` - 40+ attack patterns
-- `aiops_shield_semantic.py` - Semantic firewall
-- `whitelist_manager.py` - Whitelist management
+**Seguridad** (`backend/src/security/`):
+- `telemetry_sanitizer.rs` - 40+ attack patterns
+- `aiops_shield_semantic.rs` - Semantic firewall
+- `whitelist_manager.rs` - Whitelist management
 
-**Routers** (`backend/app/routers/`):
+**Routers** (`backend/src/routers/`):
 - 12 endpoints: health, analytics, ai, auth, users, tenants, dashboard, incidents, backup, failsafe, workflows, gamma
 
 ### Frontend (Next.js + TypeScript)
@@ -294,28 +294,28 @@ sentinel/
 **Módulos**:
 - `guardian_alpha_lsm.c` - LSM kernel module (376 líneas)
 - `burst_sensor.c` - Sensor de ráfagas de datos
-- `watchdog_service.py` - Auto-regeneración física
-- `cognitive_os_poc.py` - POC de OS cognitivo
+- `watchdog_service.rs` - Auto-regeneración física
+- `cognitive_os_poc.rs` - POC de OS cognitivo
 
 **Scripts**:
 - `compilar_ebpf.sh` - Compilación automatizada
 - `load.sh` / `unload.sh` - Carga/descarga de módulos
 - `benchmark_lsm_overhead.sh` - Medición de overhead
-- `benchmark_lsm_advanced.py` - Análisis estadístico
+- `benchmark_lsm_advanced.rs` - Análisis estadístico
 
 ### Truth Algorithm
 
 **Componentes**:
-- `source_search.py` - Motor de búsqueda multi-fuente
-- `consensus_algorithm.py` - Consenso entre fuentes
-- `certification_generator.py` - Certificación de verdad
-- `truth_score_calculator.py` - Cálculo de confianza
-- `perplexity_killer_demo.py` - Demo vs Perplexity
+- `source_search.rs` - Motor de búsqueda multi-fuente
+- `consensus_algorithm.rs` - Consenso entre fuentes
+- `certification_generator.rs` - Certificación de verdad
+- `truth_score_calculator.rs` - Cálculo de confianza
+- `perplexity_killer_demo.rs` - Demo vs Perplexity
 
 **Benchmarks**:
-- `benchmark_consensus.py` - Consenso multi-fuente
-- `benchmark_e2e.py` - End-to-end
-- `benchmark_google_speed.py` - Velocidad vs Google
+- `benchmark_consensus.rs` - Consenso multi-fuente
+- `benchmark_e2e.rs` - End-to-end
+- `benchmark_google_speed.rs` - Velocidad vs Google
 
 ### Quantum Control Framework
 
@@ -410,8 +410,8 @@ Fase 5 (2035-2045):         -200B+ (Planetary Resonance)
 3. **Validar Benchmarks Existentes**
    ```bash
    cd /home/jnovoas/sentinel/backend
-   python benchmark_dual_lane.py --test all
-   python fuzzer_aiopsdoom.py --mode comprehensive
+   cargo run --bin benchmark_dual_lane.rs --test all
+   cargo run --bin fuzzer_aiopsdoom.rs --mode comprehensive
    ```
 
 ### Prioridad P1 (Próximas 2 Semanas)

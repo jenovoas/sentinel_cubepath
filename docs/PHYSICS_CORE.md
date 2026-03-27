@@ -23,14 +23,14 @@ El mecanismo de almacenamiento y compresión.
 - **Axioma**: "No guardes la ola, guarda la piedra que la causó."
 - **Mecanismo**: `FractalCodec` reduce terabytes de datos a una **Semilla de Fase** (fórmula generatriz).
 - **Reconstrucción**: Expandir la semilla (ej: Fibonacci S60) recrea el dato original deterministicamente.
-- **Ref**: `quantum/fractal_compression.py`
+- **Ref**: `quantum/fractal_compression.rs`
 
 ### D. Superradiancia y Enfriamiento (Condicional)
 El estado de alta energía que requiere intervención.
 - **Resonancia Normal**: El sistema es "frío" por defecto (Cero Resistencia, Base-60). No requiere enfriamiento activo.
 - **Superradiancia**: Estado inestable donde la coherencia crece exponencialmente (Buffer Runaway).
 - **Protocolo**: `QuantumCoolingV3` solo se activa durante simulaciones de alta energía o detección de `Runaway`.
-- **Ref**: `agents/quantum_cooling_service.py`
+- **Ref**: `agents/quantum_cooling_service.rs`
 
 ### E. Inercia de Punto Cero (Resonant Inertia)
 El motor de manipulación de masa efectiva para control de latencia cero.
@@ -39,7 +39,7 @@ El motor de manipulación de masa efectiva para control de latencia cero.
   $$ M_{eff} = \frac{M_{static}}{1 + (R / 200)} $$
   Donde $R$ es el Factor de Resonancia ($P^2 \times C \times Tuning / \Phi^2$).
 - **Objetivo**: Reducir la "masa" (resistencia al cambio) del sistema en un 95% para permitir reacciones instantáneas.
-- **Ref**: `quantum/resonant_inertia.py`
+- **Ref**: `quantum/resonant_inertia.rs`
 
 ---
 
@@ -52,9 +52,9 @@ El motor de manipulación de masa efectiva para control de latencia cero.
 ---
 
 ## 3. Referencias de Código
-- **Oscilador Base**: `quantum/time_crystal.py`
-- **Fase Driver**: `quantum/fractal_compression.py`
-- **Geometría Lattice**: `quantum/hexagonal_control.py`
+- **Oscilador Base**: `quantum/time_crystal.rs`
+- **Fase Driver**: `quantum/fractal_compression.rs`
+- **Geometría Lattice**: `quantum/hexagonal_control.rs`
 
 ---
 *Este documento es la Ley Suprema para la arquitectura de datos del ME-60OS, subyacente al Proyecto Sentinel Ring-0.*

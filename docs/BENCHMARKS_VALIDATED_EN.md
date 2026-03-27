@@ -2,7 +2,7 @@
 
 **Date**: December 19,   
 **Result**: ✅ **5/5 CLAIMS VALIDATED (100%)**  
-**Reproducible**: `cd backend && python benchmark_dual_lane.py`
+**Reproducible**: `cd backend && cargo run --bin benchmark_dual_lane.rs`
 
 ---
 
@@ -180,7 +180,7 @@ Mean: 0.0010ms
 
 ```bash
 cd /home/jnovoas/sentinel/backend
-python benchmark_dual_lane.py
+cargo run --bin benchmark_dual_lane.rs
 ```
 
 ### Expected Results

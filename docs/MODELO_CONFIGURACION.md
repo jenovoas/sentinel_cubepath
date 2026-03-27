@@ -65,7 +65,7 @@
 
 ### Sentinel Fluido
 ```python
-# backend/app/services/sentinel_fluido.py
+# backend/src/sentinel_fluido.rs
 model: str = "llama3.2:1b"  # Modelo por defecto
 ```
 
@@ -101,10 +101,10 @@ sentinel_custom = SentinelFluido(model="phi3:mini")  # Testing
 ```bash
 # Test con modelo por defecto (llama3.2:1b)
 cd backend
-python test_fluido.py
+cargo run --bin test_fluido.rs
 
 # Benchmark comparativo
-python benchmark_phi_vs_llama.py
+cargo run --bin benchmark_phi_vs_llama.rs
 ```
 
 ---

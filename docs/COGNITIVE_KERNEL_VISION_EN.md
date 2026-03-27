@@ -58,7 +58,7 @@ Cognitive Kernel (Sentinel):
 | **Security Lane** | 50.0ms | 150.0ms | 40.0ms | **0.00ms** | **∞ (Instantaneous)** |
 | **AIOpsDoom Detection** | 85% | 90% | 85% | **100%** | **15% better** |
 
-**All benchmarks are reproducible**: `backend/benchmark_dual_lane.py`
+**All benchmarks are reproducible**: `backend/benchmark_dual_lane.rs`
 
 ---
 
@@ -236,7 +236,7 @@ Cognitive Kernel (Sentinel):
 
 ### For Researchers
 - Review our benchmarks: `github.com/jenovoas/sentinel`
-- Reproduce our results: `backend/benchmark_dual_lane.py`
+- Reproduce our results: `backend/benchmark_dual_lane.rs`
 - Contribute to the cognitive kernel vision
 
 ### For Investors

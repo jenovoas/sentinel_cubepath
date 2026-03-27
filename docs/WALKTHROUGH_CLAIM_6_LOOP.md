@@ -8,7 +8,7 @@ Validar el **Ciclo Cognitivo** ("El Eslabón Perdido"):
 
 ## Configuración
 -   **Programa eBPF**: `guardian_cognitive.o` (Hook LSM).
--   **Ciclo Cognitivo**: `scripts/cognitive_loop.py` (Python + IA Simulada).
+-   **Ciclo Cognitivo**: `scripts/cognitive_loop.rs` (Python + IA Simulada).
 -   **Comunicación**: `/sys/kernel/debug/tracing/trace_pipe` $\to$ `bpftool map update`.
 
 ## Pasos de Verificación (Ejecutados)

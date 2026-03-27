@@ -150,11 +150,11 @@ curl -k https://staging.sentinel.example.com:3000/api/health
 ```bash
 # Run AIOpsDoom fuzzer
 cd backend
-python fuzzer_aiopsdoom.py --target staging.sentinel.example.com
+cargo run --bin fuzzer_aiopsdoom.rs --target staging.sentinel.example.com
 # Expected: 100% detection
 
 # Test eBPF LSM (requires root)
-sudo python test_ebpf_lsm.py
+sudo cargo run --bin test_ebpf_lsm.rs
 # Expected: All blocks successful
 
 # Test mTLS headers
@@ -169,7 +169,7 @@ curl -k -X POST https://staging.sentinel.example.com:3100/loki/api/v1/push \
 ```bash
 # Run benchmarks
 cd backend
-python benchmark_dual_lane.py --target staging
+cargo run --bin benchmark_dual_lane.rs --target staging
 # Expected: Similar to local results
 
 # Load test (requires Apache Bench)

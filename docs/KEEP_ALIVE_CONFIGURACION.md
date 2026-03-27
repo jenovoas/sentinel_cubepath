@@ -89,7 +89,7 @@ curl http://localhost:11434/api/generate -d '{
 }'
 ```
 
-### Opción 3: En Código Python
+### Opción 3: En código Rust
 
 ```python
 import httpx
@@ -245,7 +245,7 @@ sudo systemctl restart ollama
 sleep 10
 
 # 3. Ejecutar benchmark
-cd backend && python sentinel_global_benchmark.py
+cd backend && cargo run --bin sentinel_global_benchmark.rs
 
 # 4. Resultados consistentes garantizados ✅
 ```

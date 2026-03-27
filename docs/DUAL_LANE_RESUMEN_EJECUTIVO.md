@@ -37,7 +37,7 @@ El análisis forense identificó **4 riesgos existenciales** en la implementaci�
 
 ## 📦 Componentes Creados
 
-### 1. `data_lanes.py` (291 líneas)
+### 1. `data_lanes.rs` (291 líneas)
 
 **Clases principales**:
 - `DataLane` enum (SECURITY, OBSERVABILITY)
@@ -51,7 +51,7 @@ El análisis forense identificó **4 riesgos existenciales** en la implementaci�
 - Routing inteligente según contenido
 - Métricas de integridad (gaps, drops, latency)
 
-### 2. `wal.py` (400+ líneas)
+### 2. `wal.rs` (400+ líneas)
 
 **Características**:
 - Append-only per lane
@@ -69,7 +69,7 @@ async for event in wal.replay(lane):    # Replay desde WAL
 await wal.flush(lane)                   # Flush manual
 ```
 
-### 3. `adaptive_buffers.py` (actualizado)
+### 3. `adaptive_buffers.rs` (actualizado)
 
 **Cambios**:
 - `DataFlowType` ahora incluye `lane: DataLane`
@@ -83,7 +83,7 @@ await wal.flush(lane)                   # Flush manual
 
 ### Fase 2: Integración (Próxima)
 
-1. **Actualizar `sentinel_telem_protect.py`**
+1. **Actualizar `sentinel_telem_protect.rs`**
    - Integrar `DualLaneRouter`
    - Eventos AIOpsShield → Security Lane
    - Respuestas LLM → Observability Lane
@@ -221,13 +221,13 @@ print(should_bypass)  # False
 ## ✅ Próximos Pasos
 
 ### Hoy (Fase 1 - Completada ✅)
-- [x] Crear `data_lanes.py` con enums y routers
+- [x] Crear `data_lanes.rs` con enums y routers
 - [x] Implementar `WAL` con append + replay
-- [x] Modificar `adaptive_buffers.py` para dual-lane
+- [x] Modificar `adaptive_buffers.rs` para dual-lane
 - [x] Documentación completa
 
 ### Mañana (Fase 2 - Integración)
-- [ ] Actualizar `sentinel_telem_protect.py` con lane routing
+- [ ] Actualizar `sentinel_telem_protect.rs` con lane routing
 - [ ] Configurar Loki con streams separados
 - [ ] Actualizar Promtail con labels `lane`
 - [ ] Tests de integración E2E

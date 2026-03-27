@@ -24,7 +24,7 @@ ollama pull phi3:mini-q4_K_M
 
 ### 2. Código Optimizado
 
-Creado `sentinel_fluido.py`:
+Creado `sentinel_fluido.rs`:
 - ✅ TTFB real (mide primer token, no carga)
 - ✅ Streaming nativo
 - ✅ Buffers simples y efectivos
@@ -47,14 +47,14 @@ curl http://localhost:11434/api/generate -d '{
 
 ```bash
 cd /home/jnovoas/sentinel/backend
-python test_fluido.py
+cargo run --bin test_fluido.rs
 # Opción 1: Test streaming
 ```
 
 ### Benchmark
 
 ```bash
-python test_fluido.py
+cargo run --bin test_fluido.rs
 # Opción 3: Benchmark (5 requests)
 ```
 
@@ -104,14 +104,14 @@ ollama pull phi3:mini-q4_K_M
 # Usar modelo más pequeño
 ollama pull tinyllama  # 1.1B params, 637MB
 
-# Actualizar en sentinel_fluido.py:
+# Actualizar en sentinel_fluido.rs:
 model: str = "tinyllama"
 ```
 
 ## 💡 Próximos Pasos
 
 ### Corto Plazo (HOY)
-1. ✅ Probar `test_fluido.py`
+1. ✅ Probar `test_fluido.rs`
 2. ✅ Validar TTFB <2s
 3. ✅ Benchmark 5 requests
 4. 📊 Documentar resultados reales

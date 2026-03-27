@@ -61,13 +61,13 @@ Gemini (Google LLM) + Sentinel (Quantum Infrastructure) = Game Over
 
 ## 📊 INVENTARIO COMPLETO
 
-### Código Python (4 archivos, 65,132 bytes)
+### código Rust (4 archivos, 65,132 bytes)
 ```
 quantum/
-├── core_simulator.py           (15,342 bytes) - Qubits básicos
-├── optomechanical_simulator.py (16,132 bytes) - Física real
-├── sentinel_quantum_core.py    (18,695 bytes) - QAOA/VQE
-└── quantum_lite.py             (10,961 bytes) - Laptop-safe
+├── core_simulator.rs           (15,342 bytes) - Qubits básicos
+├── optomechanical_simulator.rs (16,132 bytes) - Física real
+├── sentinel_quantum_core.rs    (18,695 bytes) - QAOA/VQE
+└── quantum_lite.rs             (10,961 bytes) - Laptop-safe
 ```
 
 ### Documentación de Aprendizaje (9 archivos, 77,218 bytes)
@@ -80,8 +80,8 @@ quantum/
 ├── README.md                   (7,793 bytes)  - Quick start
 ├── INSTALL.md                  (4,076 bytes)  - Instalación
 ├── COMPLETE_SUMMARY.md         (10,775 bytes) - Técnico
-├── test_simulators.py          (7,163 bytes)  - Tests
-└── __init__.py                 (3,002 bytes)  - Package
+├── test_simulators.rs          (7,163 bytes)  - Tests
+└── __init__.rs                 (3,002 bytes)  - Package
 ```
 
 ### Documentación Google (6 archivos)
@@ -104,8 +104,8 @@ docs/
 ### Hoy (23 Dic)
 1. ✅ Revisar documentación (HECHO)
 2. ⏳ Instalar dependencias: `pip install --user numpy scipy matplotlib psutil`
-3. ⏳ Probar: `python3 quantum/test_simulators.py`
-4. ⏳ Demo: `python3 quantum/quantum_lite.py`
+3. ⏳ Probar: `python3 quantum/test_simulators.rs`
+4. ⏳ Demo: `python3 quantum/quantum_lite.rs`
 
 ### Esta Semana
 1. 📧 Personalizar email a Google (añadir tu email real)

@@ -191,7 +191,7 @@ def simulate_with_network():
 
 ### 1. Refinar POC
 
-Modificar `test_buffer_cascade.py` para:
+Modificar `test_buffer_cascade.rs` para:
 - ✅ Medir latencia de procesamiento (no multiplicar eventos)
 - ✅ Simular reducción de latencia por stage
 - ✅ Calcular throughput como 1/latencia

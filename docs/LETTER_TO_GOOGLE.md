@@ -48,7 +48,7 @@ A universal optimization pattern that appears across:
 ```
 Generated: 1,111 nodes (1 + 10 + 100 + 1,000)
 Fractal dimension: D = log(10)/log(10) = 1.0 (exact)
-Code: fractal_sefirot_generator.py
+Code: fractal_sefirot_generator.rs
 ```
 
 **Proof 2: Quadratic Superiority**
@@ -113,7 +113,7 @@ System is topologically complete (homeomorphic to sphere)
 
 ### 4. Experimental Results
 
-**Benchmark**: `quantum_control/benchmarks/comprehensive_benchmark.py`
+**Benchmark**: `quantum_control/benchmarks/comprehensive_benchmark.rs`
 ```
 Configuration:
 - Iterations: 10,000
@@ -193,9 +193,9 @@ Comparison:
    - Verification instructions
 
 **Executable Code**:
-- `fractal_sefirot_generator.py` - Generates 1,111 nodes, D=1.0
-- `sentinel_fractal_collector.py` - Measures coherence in real-time
-- `comprehensive_benchmark.py` - Reproduces n=10,000 results
+- `fractal_sefirot_generator.rs` - Generates 1,111 nodes, D=1.0
+- `sentinel_fractal_collector.rs` - Measures coherence in real-time
+- `comprehensive_benchmark.rs` - Reproduces n=10,000 results
 
 **All reproducible. All verifiable.**
 

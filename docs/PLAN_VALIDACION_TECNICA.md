@@ -40,7 +40,7 @@ Validar que la arquitectura dual-lane realmente ofrece 2,857x mejora vs Datadog.
 ```bash
 # Benchmark routing de eventos
 cd /home/jnovoas/sentinel/backend
-python benchmark_dual_lane.py --test routing --iterations 100000
+cargo run --bin benchmark_dual_lane.rs --test routing --iterations 100000
 
 # Métricas esperadas:
 # - Routing latency: <0.01ms
@@ -51,7 +51,7 @@ python benchmark_dual_lane.py --test routing --iterations 100000
 #### Test 2: WAL Performance
 ```bash
 # Benchmark Write-Ahead Log
-python benchmark_dual_lane.py --test wal --iterations 50000
+cargo run --bin benchmark_dual_lane.rs --test wal --iterations 50000
 
 # Métricas esperadas:
 # - WAL write: <0.01ms
@@ -62,7 +62,7 @@ python benchmark_dual_lane.py --test wal --iterations 50000
 #### Test 3: Security Lane E2E
 ```bash
 # Benchmark end-to-end security lane
-python benchmark_dual_lane.py --test security-lane --iterations 10000
+cargo run --bin benchmark_dual_lane.rs --test security-lane --iterations 10000
 
 # Métricas esperadas:
 # - E2E latency: <10ms
@@ -73,7 +73,7 @@ python benchmark_dual_lane.py --test security-lane --iterations 10000
 #### Test 4: Observability Lane E2E
 ```bash
 # Benchmark observability lane con buffering
-python benchmark_dual_lane.py --test obs-lane --iterations 10000
+cargo run --bin benchmark_dual_lane.rs --test obs-lane --iterations 10000
 
 # Métricas esperadas:
 # - E2E latency: <200ms
@@ -100,7 +100,7 @@ Probar 100% efectividad contra 40+ patrones de ataque adversarial.
 ```bash
 # Ejecutar fuzzer con 40 payloads
 cd /home/jnovoas/sentinel/backend
-python fuzzer_aiopsdoom.py --mode comprehensive --output results.json
+cargo run --bin fuzzer_aiopsdoom.rs --mode comprehensive --output results.json
 
 # Métricas esperadas:
 # - Detection rate: 100%
@@ -112,7 +112,7 @@ python fuzzer_aiopsdoom.py --mode comprehensive --output results.json
 #### Test 2: Load Testing
 ```bash
 # Test de carga con 100K logs/segundo
-python fuzzer_aiopsdoom.py --mode load --rate 100000 --duration 60
+cargo run --bin fuzzer_aiopsdoom.rs --mode load --rate 100000 --duration 60
 
 # Métricas esperadas:
 # - Throughput sustained: >100K logs/sec
@@ -124,7 +124,7 @@ python fuzzer_aiopsdoom.py --mode load --rate 100000 --duration 60
 #### Test 3: Evasion Attempts
 ```bash
 # Intentos de evasión (obfuscation, encoding, etc.)
-python fuzzer_aiopsdoom.py --mode evasion --techniques all
+cargo run --bin fuzzer_aiopsdoom.rs --mode evasion --techniques all
 
 # Métricas esperadas:
 # - Evasion success rate: 0%
@@ -256,7 +256,7 @@ except ReplayAttackError:
 #### Test 3: Performance Overhead
 ```bash
 # Benchmark WAL overhead
-python benchmark_dual_lane.py --test wal-overhead --iterations 10000
+cargo run --bin benchmark_dual_lane.rs --test wal-overhead --iterations 10000
 
 # Métricas esperadas:
 # - WAL write: <0.01ms
@@ -363,7 +363,7 @@ cat /boot/config-$(uname -r) | grep BPF_LSM
 #### Análisis 2: Performance Modeling
 ```python
 # Model de performance teórico
-# ebpf/performance_model.py
+# ebpf/performance_model.rs
 
 class CognitiveOSModel:
     def __init__(self):
@@ -428,8 +428,8 @@ memory = analysis.total_memory()
 ## 📋 CHECKLIST DE VALIDACIÓN
 
 ### Semana 1 (20-27 Dic)
-- [ ] Ejecutar benchmark_dual_lane.py completo
-- [ ] Ejecutar fuzzer_aiopsdoom.py con 40 payloads
+- [ ] Ejecutar benchmark_dual_lane.rs completo
+- [ ] Ejecutar fuzzer_aiopsdoom.rs con 40 payloads
 - [ ] Generar gráficos comparativos
 - [ ] Documentar resultados en `VALIDATION_RESULTS.md`
 

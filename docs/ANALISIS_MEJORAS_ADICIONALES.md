@@ -78,7 +78,7 @@ SOLUCIÓN:
     └── num_thread: 4 (optimizar para CPU)
 ```
 
-**Hipótesis 4: Código Python Overhead** ⚠ MENOS PROBABLE
+**Hipótesis 4: código Rust Overhead** ⚠ MENOS PROBABLE
 
 ```
 EVIDENCIA:
@@ -87,7 +87,7 @@ EVIDENCIA:
 └── httpx: Puede ser más lento que requests
 
 SOLUCIÓN:
-└── Optimizar código Python
+└── Optimizar código Rust
     ├── Usar aiohttp en lugar de httpx
     ├── Reducir overhead de buffers
     └── Profiling con cProfile
@@ -112,11 +112,11 @@ curl http://localhost:11434/api/generate -d '{
   "keep_alive": -1
 }'
 
-# Actualizar sentinel_fluido.py
+# Actualizar sentinel_fluido.rs
 # model: str = "qwen2.5:0.5b"
 
 # Re-ejecutar benchmark
-python sentinel_global_benchmark.py
+cargo run --bin sentinel_global_benchmark.rs
 ```
 
 **Mejora Esperada**: 1,213ms → **400-600ms** (2-3x)
@@ -126,7 +126,7 @@ python sentinel_global_benchmark.py
 **Acción**: Reducir context window y batch size
 
 ```python
-# En sentinel_fluido.py, línea ~190
+# En sentinel_fluido.rs, línea ~190
 "options": {
     "temperature": 0.7,
     "num_predict": 256,      # Reducir de 512
@@ -157,7 +157,7 @@ curl http://localhost:11434/api/generate -d '{
 
 **Mejora Esperada**: 1,213ms → **700-900ms** (1.3-1.7x)
 
-### 4. Optimizar Código Python (BAJO IMPACTO)
+### 4. Optimizar código Rust (BAJO IMPACTO)
 
 **Acción**: Reducir overhead de streaming
 
@@ -169,7 +169,7 @@ import aiohttp
 # Eliminar buffer updates en cada chunk
 
 # Opción 3: Profiling
-python -m cProfile -o profile.stats sentinel_global_benchmark.py
+python -m cProfile -o profile.stats sentinel_global_benchmark.rs
 ```
 
 **Mejora Esperada**: 1,213ms → **1,100-1,200ms** (1.01-1.1x)
@@ -200,16 +200,16 @@ curl http://localhost:11434/api/generate -d '{
 }'
 
 # 3. Actualizar modelo en código
-sed -i 's/llama3.2:1b/qwen2.5:0.5b/g' backend/app/services/sentinel_fluido.py
+sed -i 's/llama3.2:1b/qwen2.5:0.5b/g' backend/src/sentinel_fluido.rs
 
 # 4. Re-ejecutar benchmark
-cd backend && python sentinel_global_benchmark.py
+cd backend && cargo run --bin sentinel_global_benchmark.rs
 ```
 
 **Paso 2**: Optimizar parámetros Ollama
 
 ```python
-# Editar backend/app/services/sentinel_fluido.py
+# Editar backend/src/sentinel_fluido.rs
 # Línea ~190, cambiar:
 "options": {
     "temperature": 0.7,
@@ -224,7 +224,7 @@ cd backend && python sentinel_global_benchmark.py
 **Paso 3**: Re-ejecutar benchmark
 
 ```bash
-cd backend && python sentinel_global_benchmark.py
+cd backend && cargo run --bin sentinel_global_benchmark.rs
 ```
 
 ---
@@ -286,7 +286,7 @@ Speedup total: 20-50x ✅ (supera objetivo)
 ### Corto Plazo (Esta Semana)
 
 1. [ ] Probar `phi3:mini-q4_K_M` (quantizado)
-2. [ ] Optimizar código Python
+2. [ ] Optimizar código Rust
 3. [ ] Validar 10-20x speedup
 4. [ ] Preparar presentación SENTINEL_CORE
 

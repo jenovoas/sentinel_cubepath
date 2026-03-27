@@ -109,9 +109,9 @@ job: <service_name>
 
 ## 📋 Cambios Requeridos
 
-### A. Nuevo Módulo: `data_lanes.py`
+### A. Nuevo Módulo: `data_lanes.rs`
 
-**Ubicación**: `backend/app/core/data_lanes.py`
+**Ubicación**: `backend/src/core/data_lanes.rs`
 
 **Componentes**:
 1. `DataLane` enum (`SECURITY`, `OBSERVABILITY`)
@@ -127,7 +127,7 @@ job: <service_name>
 
 ---
 
-### B. Modificar `adaptive_buffers.py`
+### B. Modificar `adaptive_buffers.rs`
 
 **Cambios**:
 1. Agregar campo `lane: DataLane` a `DataFlowType`
@@ -150,7 +150,7 @@ class DataFlowType(Enum):
 
 ---
 
-### C. Actualizar `sentinel_telem_protect.py`
+### C. Actualizar `sentinel_telem_protect.rs`
 
 **Cambios**:
 1. Eventos de AIOpsShield → Security Lane (bypass buffer)
@@ -249,7 +249,7 @@ scrape_configs:
 
 ### F. Implementar WAL (Write-Ahead Log)
 
-**Ubicación**: `backend/app/core/wal.py`
+**Ubicación**: `backend/src/core/wal.rs`
 
 **Características**:
 - Append-only file per lane
@@ -351,13 +351,13 @@ class WAL:
 ## 📝 Próximos Pasos
 
 ### Fase 1: Fundamentos (Hoy)
-1. Crear `data_lanes.py` con enums y routers básicos
+1. Crear `data_lanes.rs` con enums y routers básicos
 2. Implementar `WAL` con append + replay
-3. Modificar `adaptive_buffers.py` para dual-lane
+3. Modificar `adaptive_buffers.rs` para dual-lane
 4. Tests unitarios de WAL y routing
 
 ### Fase 2: Integración (Mañana)
-1. Actualizar `sentinel_telem_protect.py` con lane routing
+1. Actualizar `sentinel_telem_protect.rs` con lane routing
 2. Configurar Loki con streams separados
 3. Actualizar Promtail con labels `lane`
 4. Tests de integración E2E

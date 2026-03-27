@@ -43,7 +43,7 @@ LABORATORIO SENTINEL (En Casa):
 # Cualquier evaluador SENTINEL_CORE puede hacer:
 git clone https://github.com/jenovoas/sentinel.git
 cd sentinel/backend
-python sentinel_global_benchmark.py
+cargo run --bin sentinel_global_benchmark.rs
 
 # Resultado: Métricas idénticas a las reportadas
 ```
@@ -110,7 +110,7 @@ Baseline → Optimizado → Speedup → Evidencia
 **Para SENTINEL_CORE, necesitas**:
 
 1. **Metodología de Benchmarking** ✅
-   - `sentinel_global_benchmark.py`
+   - `sentinel_global_benchmark.rs`
    - `SENTINEL_GLOBAL_IMPACT_ANALYSIS.md`
 
 2. **Resultados Medidos** ✅
@@ -122,9 +122,9 @@ Baseline → Optimizado → Speedup → Evidencia
    - `ollama_benchmark_comparison.json`
 
 4. **Código Fuente** ✅
-   - `sentinel_fluido.py`
-   - `sentinel_optimized.py`
-   - `sentinel_telem_protect.py`
+   - `sentinel_fluido.rs`
+   - `sentinel_optimized.rs`
+   - `sentinel_telem_protect.rs`
 
 5. **Arquitectura Técnica** ✅
    - `TRUTHSYNC_ARCHITECTURE.md`
@@ -141,14 +141,14 @@ Baseline → Optimizado → Speedup → Evidencia
 cd /home/jnovoas/sentinel/backend
 
 # 1. Benchmark baseline (sin optimización)
-python benchmark_comparativo.py
+cargo run --bin benchmark_comparativo.rs
 
 # 2. Benchmark optimizado (con llama3.2:1b)
-python test_fluido.py
+cargo run --bin test_fluido.rs
 # Opción 3: Benchmark
 
 # 3. Benchmark protección telemétrica
-python test_telem_protect.py
+cargo run --bin test_telem_protect.rs
 # Opción 1: Test overhead
 ```
 
@@ -158,7 +158,7 @@ python test_telem_protect.py
 
 ```bash
 # Benchmark completo (E2E, LLM, CPU)
-python sentinel_global_benchmark.py
+cargo run --bin sentinel_global_benchmark.rs
 
 # Resultado: sentinel_global_benchmark_results.json
 ```
@@ -178,7 +178,7 @@ cat > VALIDACION_RESULTADOS.md << 'EOF'
 ## Benchmarks Ejecutados
 
 1. **Baseline**: `ollama_benchmark_comparison.json`
-2. **Optimizado**: `test_fluido.py` output
+2. **Optimizado**: `test_fluido.rs` output
 3. **Global**: `sentinel_global_benchmark_results.json`
 
 ## Resultados Medidos
@@ -319,7 +319,7 @@ PRESENTACIÓN SENTINEL_CORE:
 ```
 EVIDENCIA SENTINEL GLOBAL:
 ├── [ ] Metodología de benchmarking
-│   └── sentinel_global_benchmark.py
+│   └── sentinel_global_benchmark.rs
 ├── [ ] Resultados medidos
 │   ├── sentinel_global_benchmark_results.json
 │   └── ollama_benchmark_comparison.json
@@ -328,9 +328,9 @@ EVIDENCIA SENTINEL GLOBAL:
 ├── [ ] Análisis de impacto
 │   └── SENTINEL_GLOBAL_IMPACT_ANALYSIS.md
 ├── [ ] Código fuente
-│   ├── sentinel_fluido.py
-│   ├── sentinel_optimized.py
-│   └── sentinel_telem_protect.py
+│   ├── sentinel_fluido.rs
+│   ├── sentinel_optimized.rs
+│   └── sentinel_telem_protect.rs
 ├── [ ] Arquitectura técnica
 │   ├── TRUTHSYNC_ARCHITECTURE.md
 │   ├── AIOPS_SHIELD.md
@@ -413,7 +413,7 @@ EVIDENCIA SENTINEL GLOBAL:
 - Más rápida
 - Más auditable
 
-**Próxima Acción**: Ejecutar `sentinel_global_benchmark.py` y documentar resultados para SENTINEL_CORE.
+**Próxima Acción**: Ejecutar `sentinel_global_benchmark.rs` y documentar resultados para SENTINEL_CORE.
 
 ---
 

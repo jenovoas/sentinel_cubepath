@@ -35,10 +35,10 @@
 - EVIDENCE_LSM_ACTIVATION.md (evidencia eBPF)
 
 ### Código y Tests
-- `backend/app/core/forensic_wal.py`
-- `backend/app/security/zero_trust_mtls.py`
-- `backend/test_forensic_wal_runner.py`
-- `backend/test_mtls_runner.py`
+- `backend/src/core/forensic_wal.rs`
+- `backend/src/security/zero_trust_mtls.rs`
+- `backend/test_forensic_wal_runner.rs`
+- `backend/test_mtls_runner.rs`
 
 ---
 

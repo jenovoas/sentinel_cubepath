@@ -44,9 +44,9 @@
 > "Gracias por el feedback! Ahora me gustaría que revisaras el código core. No busco que encuentres bugs (ya está testeado), sino **decisiones de diseño** que podrían mejorarse."
 
 **Enviar**:
-- `backend/app/core/adaptive_buffers.py`
-- `backend/app/core/data_lanes.py`
-- `backend/app/services/aiops_shield.py`
+- `backend/src/core/adaptive_buffers.rs`
+- `backend/src/core/data_lanes.rs`
+- `backend/src/aiops_shield.rs`
 
 **Pedir**:
 > "Específicamente:

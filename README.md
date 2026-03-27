@@ -330,7 +330,7 @@ Documentación interna: [`docs/PHONONIC_RESEARCH.md`](docs/PHONONIC_RESEARCH.md)
 
 ## 👥 Equipo
 
-Desarrollado por **Jaime Novoa** para la **Hackatón CubePath 2026**.
+Desarrollado por **Jaime Novoa** para la **Hackatón de MiduDev (CubePath)**.
 
 ---
 
@@ -342,7 +342,7 @@ MIT License — Ver [LICENSE](LICENSE) para más detalles.
 
 <div align="center">
 
-**Hecho con ❤️ para la Hackatón CubePath 2026**
+**Hecho con ❤️ para la Hackatón de MiduDev (CubePath)**
 
 *"AI Safety at Kernel Level — Porque el futuro de Linux necesita un sistema inmunológico."*
 

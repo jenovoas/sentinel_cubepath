@@ -34,7 +34,7 @@
 **Comando**:
 ```bash
 for i in {1..10}; do
-  python tests/benchmark_levitation.py
+  python tests/benchmark_levitation.rs
   mv /tmp/levitation_benchmark_data.json /tmp/benchmark_$i.json
 done
 ```
@@ -67,7 +67,7 @@ done
 **Tiempo estimado**: 1 hora  
 **Dificultad**: Baja
 
-**Archivo**: `src/buffer/predictive_manager.py`
+**Archivo**: `src/buffer/predictive_manager.rs`
 
 ---
 
@@ -86,8 +86,8 @@ done
 **Dificultad**: Alta
 
 **Archivos**:
-- `src/ml/lstm_trainer.py` (crear)
-- `src/ml/burst_predictor.py` (crear)
+- `src/ml/lstm_trainer.rs` (crear)
+- `src/ml/burst_predictor.rs` (crear)
 
 ---
 
@@ -105,7 +105,7 @@ done
 
 **Archivos**:
 - `src/ebpf/buffer_control.c` (crear)
-- `src/ebpf/loader.py` (crear)
+- `src/ebpf/loader.rs` (crear)
 
 **Requisitos**:
 - Kernel 5.x+
@@ -271,13 +271,13 @@ cd /home/jnovoas/sentinel
 source venv/bin/activate
 for i in {1..10}; do
   echo "Benchmark $i/10"
-  python tests/benchmark_levitation.py
+  python tests/benchmark_levitation.rs
 done
 ```
 
 ### 2. Actualizar α a 0.96 (15 min)
 ```python
-# En src/buffer/predictive_manager.py
+# En src/buffer/predictive_manager.rs
 self.decay_factor = 0.96  # Cambiar de 0.90 a 0.96
 ```
 

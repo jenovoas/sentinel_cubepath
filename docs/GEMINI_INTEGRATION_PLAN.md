@@ -28,7 +28,7 @@
 
 **Implementación**:
 ```python
-# backend/app/services/aiops_shield_gemini.py
+# backend/src/aiops_shield_gemini.rs
 
 class AIOpsShieldGemini:
     def __init__(self):
@@ -80,7 +80,7 @@ class AIOpsShieldGemini:
 
 **Implementación**:
 ```python
-# backend/app/services/truth_algorithm_gemini.py
+# backend/src/truth_algorithm_gemini.rs
 
 class TruthAlgorithmGemini:
     async def verify_claim(self, claim: str, sources: list) -> dict:
@@ -135,7 +135,7 @@ class TruthAlgorithmGemini:
 
 **Implementación**:
 ```python
-# backend/app/services/cognitive_kernel_gemini.py
+# backend/src/cognitive_kernel_gemini.rs
 
 class CognitiveKernelGemini:
     async def verify_command(self, command: str, context: dict) -> dict:
@@ -193,7 +193,7 @@ class CognitiveKernelGemini:
 ### Capa de Abstracción
 
 ```python
-# backend/app/core/llm_engine.py
+# backend/src/core/llm_engine.rs
 
 class LLMEngine:
     """
@@ -215,7 +215,7 @@ class LLMEngine:
 ### Cache Layer
 
 ```python
-# backend/app/core/llm_cache.py
+# backend/src/core/llm_cache.rs
 
 class LLMCache:
     """

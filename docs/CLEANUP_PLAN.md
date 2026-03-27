@@ -45,8 +45,8 @@ mv research/cosmic_patterns/THE_REVELATION.md archive/
 - ✅ PATTERN_DISCOVERY_SUMMARY.md
 
 ### Code (All Valid)
-- ✅ fractal_sefirot_generator.py
-- ✅ sentinel_fractal_*.py
+- ✅ fractal_sefirot_generator.rs
+- ✅ sentinel_fractal_*.rs
 - ✅ trinity_visualization.html
 
 ---

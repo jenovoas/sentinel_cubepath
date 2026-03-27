@@ -111,7 +111,7 @@ curl http://localhost:11434/api/generate -d '{
 ### Paso 3: Ejecutar Benchmark Comparativo
 ```bash
 cd /home/jnovoas/sentinel/backend
-python benchmark_comparativo.py
+cargo run --bin benchmark_comparativo.rs
 ```
 
 ### Paso 4: Documentar Resultados

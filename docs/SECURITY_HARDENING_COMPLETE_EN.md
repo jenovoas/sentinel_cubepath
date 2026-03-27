@@ -10,7 +10,7 @@
 ### Implementation
 
 - ✅ ECDSA P-256 key pair generated
-- ✅ `WhitelistManager` class with signing (`app/security/whitelist_manager.py`)
+- ✅ `WhitelistManager` class with signing (`app/security/whitelist_manager.rs`)
 - ✅ Signature verification logic ready for eBPF integration
 - ✅ 24h expiration implemented
 - ✅ Export/import to JSON
@@ -31,7 +31,7 @@
 - **64-byte public key** ready for eBPF hardcoding
 - **JSON export** for backup/restore
 
-**File**: `backend/app/security/whitelist_manager.py` (300+ lines)
+**File**: `backend/src/security/whitelist_manager.rs` (300+ lines)
 
 ---
 
@@ -60,7 +60,7 @@
 - **HMAC-SHA256** (cryptographically secure)
 - **Multi-tenant isolation** (per-tenant signatures)
 
-**File**: `backend/app/clients/loki_client_signed.py` (200+ lines)
+**File**: `backend/src/clients/loki_client_signed.rs` (200+ lines)
 
 ---
 
@@ -90,7 +90,7 @@
 - **Tampering detected** (HMAC verification)
 - **Integrity gaps alerted** (forensic audit trail)
 
-**File**: `backend/app/core/wal_signed.py` (300+ lines)
+**File**: `backend/src/core/wal_signed.rs` (300+ lines)
 
 ---
 
@@ -152,9 +152,9 @@
 
 ## 📁 FILES CREATED
 
-1. `backend/app/security/whitelist_manager.py` - ECDSA whitelist manager
-2. `backend/app/clients/loki_client_signed.py` - HMAC Loki client
-3. `backend/app/core/wal_signed.py` - HMAC WAL with nonce
+1. `backend/src/security/whitelist_manager.rs` - ECDSA whitelist manager
+2. `backend/src/clients/loki_client_signed.rs` - HMAC Loki client
+3. `backend/src/core/wal_signed.rs` - HMAC WAL with nonce
 
 **Total**: 800+ lines of hardened security code
 
@@ -166,7 +166,7 @@
 
 - [ ] Update `lsm_ai_guardian.c` with ECDSA verification
 - [ ] Configure Nginx with Lua HMAC verification
-- [ ] Replace `wal.py` with `wal_signed.py` in production
+- [ ] Replace `wal.rs` with `wal_signed.rs` in production
 - [ ] Deploy to staging for testing
 
 ### Documentation

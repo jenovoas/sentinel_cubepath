@@ -74,7 +74,7 @@ bash scripts/ollama_keep_alive.sh llama3.2:1b
 
 # 3. Ejecutar benchmark comparativo
 cd backend
-python benchmark_phi_vs_llama.py
+cargo run --bin benchmark_phi_vs_llama.rs
 ```
 
 ## 📊 Resultados Esperados
@@ -111,4 +111,4 @@ Ganador: llama3.2:1b (30% más rápido)
 ---
 
 **Estado**: 🔄 Descargando llama3.2:1b...  
-**Próxima acción**: Ejecutar `benchmark_phi_vs_llama.py`
+**Próxima acción**: Ejecutar `benchmark_phi_vs_llama.rs`

@@ -56,7 +56,7 @@
 ## Implementation Steps
 
 ### Phase 1: Backend (1 hour)
-- [ ] Create `guardian_gamma_service.py`
+- [ ] Create `guardian_gamma_service.rs`
 - [ ] Decision queue (PostgreSQL table)
 - [ ] API endpoints
 - [ ] Integration with Alpha/Beta
