@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../me-60os"
+		},
+		{
+			"path": "../sentinel"
+		}
+	],
+	"settings": {}
+}

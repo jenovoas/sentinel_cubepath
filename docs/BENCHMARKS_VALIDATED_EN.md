@@ -1,22 +1,21 @@
 # 📊 Validated Benchmarks - Dual-Lane Architecture
 
-**Date**: December 19,   
 **Result**: ✅ **5/5 CLAIMS VALIDATED (100%)**  
 **Reproducible**: `cd backend && cargo run --bin benchmark_dual_lane.rs`
 
 ---
 
-##  EXECUTIVE SUMMARY
+## EXECUTIVE SUMMARY
 
 **ALL claims were validated with measurable data**:
 
-| Claim | Target | Measured | Status |
-|-------|--------|----------|--------|
-| **Routing <1ms** | <1ms | **0.0035ms** | ✅ **285x better** |
-| **WAL Security <5ms** | <5ms | **0.01ms** | ✅ **500x better** |
-| **WAL Ops <20ms** | <20ms | **0.01ms** | ✅ **2000x better** |
-| **Security Lane <10ms** | <10ms | **0.00ms** | ✅ **Instantaneous** |
-| **Bypass overhead <0.1ms** | <0.1ms | **0.0014ms** | ✅ **71x better** |
+| Claim                      | Target | Measured     | Status               |
+| -------------------------- | ------ | ------------ | -------------------- |
+| **Routing <1ms**           | <1ms   | **0.0035ms** | ✅ **285x better**   |
+| **WAL Security <5ms**      | <5ms   | **0.01ms**   | ✅ **500x better**   |
+| **WAL Ops <20ms**          | <20ms  | **0.01ms**   | ✅ **2000x better**  |
+| **Security Lane <10ms**    | <10ms  | **0.00ms**   | ✅ **Instantaneous** |
+| **Bypass overhead <0.1ms** | <0.1ms | **0.0014ms** | ✅ **71x better**    |
 
 **Conclusion**: Dual-Lane architecture **vastly exceeds** all specifications.
 
@@ -56,6 +55,7 @@ P99:            0.0080ms
 ### Results
 
 **Security Lane**:
+
 ```
 Mean: 0.01ms  ✅
 P95:  0.01ms
@@ -63,6 +63,7 @@ P99:  0.03ms
 ```
 
 **Observability Lane**:
+
 ```
 Mean: 0.01ms  ✅
 P95:  0.01ms
@@ -91,12 +92,14 @@ P99:  0.02ms
 ### Results
 
 **Security Lane (bypass)**:
+
 ```
 Mean: 0.00ms  ✅
 P95:  0.00ms
 ```
 
 **Observability Lane (buffered)**:
+
 ```
 Mean: 200.49ms  ✅
 P95:  200.62ms
@@ -124,11 +127,13 @@ P95:  200.62ms
 ### Results
 
 **Security Flows (bypass)**:
+
 ```
 Mean: 0.0014ms  ✅
 ```
 
 **Observability Flows (no bypass)**:
+
 ```
 Mean: 0.0010ms
 ```
@@ -145,32 +150,32 @@ Mean: 0.0010ms
 
 ---
 
-##  COMPARISON WITH COMPETITION
+## COMPARISON WITH COMPETITION
 
 ### Datadog APM
 
-| Metric | Datadog | Sentinel Dual-Lane | Improvement |
-|--------|---------|-------------------|-------------|
-| **Routing** | ~10ms | **0.0035ms** | **2,857x** |
-| **WAL/Durability** | N/A | **0.01ms** | **Unique** |
-| **Security Lane** | ~50ms | **0.00ms** | **Instantaneous** |
-| **Bypass Logic** | N/A | **0.0014ms** | **Unique** |
+| Metric             | Datadog | Sentinel Dual-Lane | Improvement       |
+| ------------------ | ------- | ------------------ | ----------------- |
+| **Routing**        | ~10ms   | **0.0035ms**       | **2,857x**        |
+| **WAL/Durability** | N/A     | **0.01ms**         | **Unique**        |
+| **Security Lane**  | ~50ms   | **0.00ms**         | **Instantaneous** |
+| **Bypass Logic**   | N/A     | **0.0014ms**       | **Unique**        |
 
 ### New Relic
 
-| Metric | New Relic | Sentinel Dual-Lane | Improvement |
-|---------|-----------|-------------------|-------------|
-| **Event Processing** | ~20ms | **0.0035ms** | **5,714x** |
-| **Forensic Durability** | N/A | **0.01ms** | **Unique** |
-| **Dual-Lane Architecture** | N/A | **Yes** | **Unique** |
+| Metric                     | New Relic | Sentinel Dual-Lane | Improvement |
+| -------------------------- | --------- | ------------------ | ----------- |
+| **Event Processing**       | ~20ms     | **0.0035ms**       | **5,714x**  |
+| **Forensic Durability**    | N/A       | **0.01ms**         | **Unique**  |
+| **Dual-Lane Architecture** | N/A       | **Yes**            | **Unique**  |
 
 ### Splunk
 
-| Metric | Splunk | Sentinel Dual-Lane | Improvement |
-|--------|--------|-------------------|-------------|
-| **Indexing** | ~100ms | **0.01ms** (WAL) | **10,000x** |
-| **Security Bypass** | N/A | **0.00ms** | **Unique** |
-| **Zero-Latency Forensics** | N/A | **Yes** | **Unique** |
+| Metric                     | Splunk | Sentinel Dual-Lane | Improvement |
+| -------------------------- | ------ | ------------------ | ----------- |
+| **Indexing**               | ~100ms | **0.01ms** (WAL)   | **10,000x** |
+| **Security Bypass**        | N/A    | **0.00ms**         | **Unique**  |
+| **Zero-Latency Forensics** | N/A    | **Yes**            | **Unique**  |
 
 ---
 
@@ -212,6 +217,7 @@ cat /tmp/benchmark_results.json | jq '.routing.mean'
 Results saved in: `/tmp/benchmark_results.json`
 
 Structure:
+
 ```json
 {
   "routing": {
@@ -248,4 +254,4 @@ Structure:
 
 ---
 
-**Status**: ✅ Core benchmarks validated, architecture proven, ready for production 
+**Status**: ✅ Core benchmarks validated, architecture proven, ready for production
