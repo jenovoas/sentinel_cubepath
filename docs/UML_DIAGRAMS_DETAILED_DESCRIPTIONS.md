@@ -466,14 +466,14 @@ Failure paths:
 
 **DIAGRAM 1 (eBPF Flow):**
 - [ ] 7 connected boxes (phases)
-- [ ] Arrows showing data flow
+- [ ] ows showing data flow
 - [ ] Color code: Red = blocked, Green = allowed
-- [ ] Timing annotations on arrows
+- [ ] Timing annotations on ows
 - [ ] Include syscall examples
 
 **DIAGRAM 2 (Dual-Guardian):**
 - [ ] 5 layers (stacked boxes)
-- [ ] Bidirectional arrows between Alpha ↔ Beta
+- [ ] Bidirectional ows between Alpha ↔ Beta
 - [ ] "Concern" labels on each guardian
 - [ ] Compromise scenarios as side notes
 - [ ] Include health check signals

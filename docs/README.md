@@ -96,12 +96,12 @@ docker-compose up -d --build
 
 ---
 
-##  Hackathon Challenge: $1,000,000 Bounty
+##  Hackathon Challenge:  Bounty
 
 We are so confident in our **Truth Integrity** layer that we have invited the world to break it.
 
 - **Objective**: Forge a telemetry packet that bypasses the TPM 2.0 signature verification.
-- **Reward**: $1,000,000 USD (in BTC/ETH).
+- **Reward**:   (in BTC/ETH).
 - **Status**: OPEN.
 
 [**View Challenge Details**](docs/en/HACKATHON_LAUNCH_STATUS.md)
@@ -116,5 +116,5 @@ We are so confident in our **Truth Integrity** layer that we have invited the wo
 📧 `jaime.novoase@gmail.com`
 
 ---
-**© 2025 Sentinel Core. All Rights Reserved.**  
+**©  Sentinel Core. All Rights Reserved.**  
 *Immutable. Unbreakable. Absolute.*

@@ -182,7 +182,7 @@ Sentinel Cortex is a monitoring and security system with 5 validated technical i
   - Future experiments
   - Speculative ideas
 
-- `docs/archive/2025-12-21/` - Today's session docs (16 files)
+- `docs/archive/-12-21/` - Today's session docs (16 files)
 
 ### eBPF
 - `ebpf/guardian_alpha_lsm.c` - Kernel module source
@@ -240,7 +240,7 @@ Sentinel Cortex is a monitoring and security system with 5 validated technical i
    - 5 validated claims
    - Technical evidence
 
-3. **File provisional patent** (by Feb 15, 2026)
+3. **File provisional patent** (by Feb 15, )
    - Work with attorney
    - Submit to USPTO
 
@@ -294,5 +294,5 @@ Theoretical work (claims 6-9) that isn't validated yet. Good ideas, but not read
 
 ---
 
-**Last updated**: 21 December 2025, 19:50  
+**Last updated**: 21 December , 19:50  
 **Status**: Complete technical overview

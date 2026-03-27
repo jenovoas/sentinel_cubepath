@@ -1,6 +1,6 @@
 # 📡 Plan de Pruebas: Distancias y Pérdidas de Señal en Sistema de Buffers
 
-**Fecha**: 20 Diciembre 2024  
+**Fecha**: 20 Diciembre   
 **Propósito**: Validar performance de buffers en escenarios de red distribuida  
 **Componente**: Dual-Lane Architecture + Adaptive Buffers
 

@@ -1,8 +1,8 @@
 # 📋 Planificación Estratégica - Sentinel Ring-0
 
 **Proyecto**: Sentinel Ring-0 - AI Safety at Kernel Level  
-**Hackatón**: CubePath 2026  
-**Deadline**: 31 de Marzo 2026, 23:59 CET  
+**Hackatón**: CubePath   
+**Deadline**: 31 de Marzo , 23:59 CET  
 **Metodologías**: ITIL 4, SOLID, ISO/IEC 27001, ISO/IEC 25010
 
 ---
@@ -16,11 +16,11 @@ Ser la primera solución de seguridad cognitiva a nivel kernel para proteger sis
 
 | ID | Objetivo | Métrica | Deadline |
 |----|----------|---------|----------|
-| O1 | Desplegar MVP funcional en CubePath | Demo operativa | 28/03/2026 |
-| O2 | Documentar arquitectura completa | 100% cobertura ISO | 29/03/2026 |
-| O3 | Implementar 3 endpoints API core | Tests passing | 27/03/2026 |
-| O4 | Dashboard con WebSocket streaming | Latencia < 100ms | 28/03/2026 |
-| O5 | Crear repo público con README completo | Issue creada | 30/03/2026 |
+| O1 | Desplegar MVP funcional en CubePath | Demo operativa | 28/03/ |
+| O2 | Documentar arquitectura completa | 100% cobertura ISO | 29/03/ |
+| O3 | Implementar 3 endpoints API core | Tests passing | 27/03/ |
+| O4 | Dashboard con WebSocket streaming | Latencia < 100ms | 28/03/ |
+| O5 | Crear repo público con README completo | Issue creada | 30/03/ |
 
 ---
 
@@ -302,4 +302,4 @@ H4 (31/03): Entrega final
 ---
 
 **Documento preparado siguiendo**: ITIL 4, ISO/IEC 27001, ISO/IEC 25010, SOLID Principles  
-**Última actualización**: 25 de Marzo 2026
+**Última actualización**: 25 de Marzo 

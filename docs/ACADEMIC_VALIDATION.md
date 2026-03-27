@@ -2,14 +2,14 @@
 
 ## Intercambio con el Dr. Daniel Mansfield (UNSW)
 
-> **Dr. Daniel Mansfield** es el matemático de la Universidad de New South Wales (Australia) que decodificó la tablilla **Plimpton 322** en 2017, demostrando que los babilonios desarrollaron trigonometría sexagesimal exacta 1.800 años antes que los griegos.  
+> **Dr. Daniel Mansfield** es el matemático de la Universidad de New South Wales (Australia) que decodificó la tablilla **Plimpton 322** en 2017, demostrando que los babilonios desollaron trigonometría sexagesimal exacta 1.800 años antes que los griegos.  
 > Referencia: *Mansfield & Wildberger (2017), Babylonian trigonometry and the exact calculation of regular triangle geometry, Historia Mathematica.*
 
 ---
 
 ### Contexto
 
-En diciembre de 2025, el investigador independiente **Jaime Novoa** (Chile) contactó al Dr. Mansfield para compartir su hipótesis: que el sistema de razones exactas de Base-60 de la tablilla Plimpton 322 podría aplicarse a sistemas computacionales distribuidos para eliminar el ruido de redondeo de coma flotante — la misma "fricción aritmética" que afecta a los interceptores de IA modernos.
+En diciembre de , el investigador independiente **Jaime Novoa** (Chile) contactó al Dr. Mansfield para compartir su hipótesis: que el sistema de razones exactas de Base-60 de la tablilla Plimpton 322 podría aplicarse a sistemas computacionales distribuidos para eliminar el ruido de redondeo de coma flotante — la misma "fricción aritmética" que afecta a los interceptores de IA modernos.
 
 Esta hipótesis es el fundamento matemático de la arquitectura **Sentinel Ring-0**: el campo S60 (aritmética sexagesimal de punto fijo) que reemplaza IEEE 754 en todos los cálculos de inferencia cognitiva.
 
@@ -18,7 +18,7 @@ Esta hipótesis es el fundamento matemático de la arquitectura **Sentinel Ring-
 ### Respuesta del Dr. Mansfield
 
 **Daniel Mansfield** `<daniel.mansfield@unsw.edu.au>`  
-*23 de diciembre de 2025*
+* de *
 
 > *"Dear Jamie,*
 >

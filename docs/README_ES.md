@@ -1,7 +1,7 @@
 # 🏔 Sentinel Cortex™: El Sistema Inmune para tu Kernel (v1.0.0)
 
 [![Release: v1.0.0](https://img.shields.io/badge/Release-v1.0.0--INITIAL__LAUNCH-blue.svg)](docs/es/HACKATHON_LAUNCH_STATUS.md)
-[![Valuation: $1.335B](https://img.shields.io/badge/IP%20Valuation-%241.335B-success.svg)](docs/es/EXECUTIVE_SUMMARY.md)
+[![Valuation: ](https://img.shields.io/badge/IP%20Valuation-%241.335B-success.svg)](docs/es/EXECUTIVE_SUMMARY.md)
 [![Status: Immutable](https://img.shields.io/badge/Status-IMMUTABLE__TRUTH-purple.svg)](proven/EVIDENCE_LSM_ACTIVATION.md)
 [![License: Proprietary](https://img.shields.io/badge/License-Sentinel__Core-black.svg)](LICENSE)
 > [🇺🇸 **Read in English**](README.md)
@@ -40,12 +40,12 @@ Todas las métricas están validadas y firmadas por nuestra **Raíz de Confianza
 Hemos elevado este proyecto de una herramienta a un **Estándar de Investigación**. Explora nuestros whitepapers:
 
 ### 🇪🇸 Documentación en Español
-- [**Resumen Ejecutivo (Serie A)**](docs/es/EXECUTIVE_SUMMARY.md): El Caso de Inversión de $1.335B.
+- [**Resumen Ejecutivo (Serie A)**](docs/es/EXECUTIVE_SUMMARY.md): El Caso de Inversión de .
 - [**Whitepaper de Investigación**](docs/es/RESEARCH_WHITEPAPER.md): La matemática detrás de la "Inmunidad Computacional".
 - [**Reporte de Benchmarks**](docs/es/BENCHMARK_REPORT.md): Métricas de rendimiento validadas.
 
 ### 🇬🇧 English Documentation
-- [**Executive Summary**](docs/en/EXECUTIVE_SUMMARY.md): The $1.335B Investment Case.
+- [**Executive Summary**](docs/en/EXECUTIVE_SUMMARY.md): The  Investment Case.
 - [**Research Whitepaper**](docs/en/RESEARCH_WHITEPAPER.md): Technical architecture.
 - [**Benchmark Report**](docs/en/BENCHMARK_REPORT.md): Validated metrics.
 
@@ -69,12 +69,12 @@ docker-compose up -d --build
 
 ---
 
-##  Desafío Hackathon: $1,000,000 Bounty
+##  Desafío Hackathon:  Bounty
 
 Confiamos tanto en nuestra capa de **Integridad de la Verdad** que hemos invitado al mundo a romperla.
 
 - **Objetivo**: Falsificar un paquete de telemetría que evada la verificación de firma TPM 2.0.
-- **Recompensa**: $1,000,000 USD (en BTC/ETH).
+- **Recompensa**:   (en BTC/ETH).
 - **Estado**: ABIERTO.
 
 [**Ver Detalles del Desafío**](docs/es/HACKATHON_LAUNCH_STATUS.md)
@@ -89,5 +89,5 @@ Confiamos tanto en nuestra capa de **Integridad de la Verdad** que hemos invitad
 📧 `jaime.novoase@gmail.com`
 
 ---
-**© 2025 Sentinel Core. Reservados todos los derechos.**  
+**©  Sentinel Core. Reservados todos los derechos.**  
 *Inmutable. Inquebrantable. verificado.*

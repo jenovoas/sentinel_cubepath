@@ -1,6 +1,6 @@
 # CAPTURA RÁPIDA - Ideas Clave Antes de Olvidar
 
-**Fecha**: 20 Dic 2024 19:42
+**Fecha**: 20 Dic  19:42
 
 ## 💡 IDEAS CENTRALES
 
@@ -74,15 +74,15 @@ Costo: Casi plano vs volumen
 
 ## CLAIMS PATENTABLES
 
-1. **Dual-Lane** ($4-6M) ✅ Validado
-2. **Semantic Firewall** ($5-8M) ✅ Validado
-3. **Kernel eBPF LSM** ($8-15M) ✅ Código completo
-4. **Forensic WAL** ($3-5M) ⚠ Parcial
-5. **Zero Trust mTLS** ($4-6M) ⏳ Implementado
-6. **Cognitive OS** ($8-15M) ⏳ Concepto
-7. **AI Buffer Cascade** ($15-25M) ✅ Modelo completo
-8. **Flow Coprocessor** ($10-20M) 💡 Diseño
-9. **Planetary Resonance** ($100-500M) 🌍 Visión
+1. **Dual-Lane** (-6M) ✅ Validado
+2. **Semantic Firewall** (-8M) ✅ Validado
+3. **Kernel eBPF LSM** (-15M) ✅ Código completo
+4. **Forensic WAL** (-5M) ⚠ Parcial
+5. **Zero Trust mTLS** (-6M) ⏳ Implementado
+6. **Cognitive OS** (-15M) ⏳ Concepto
+7. **AI Buffer Cascade** (-25M) ✅ Modelo completo
+8. **Flow Coprocessor** (-20M) 💡 Diseño
+9. **Planetary Resonance** (-500M) 🌍 Visión
 
 **Total**: $M
 
@@ -146,9 +146,9 @@ Resultado: Velocidad de luz sin fricción de software
 
 ## 💰 VALORACIÓN
 
-**Conservadora**: $157M
-**Optimista**: $600M
-**Validado HOY**: $32-54M
+**Conservadora**: 
+**Optimista**: 
+**Validado HOY**: -54M
 
 ## 📅 PRÓXIMOS PASOS CRÍTICOS
 
@@ -178,6 +178,6 @@ Es física pura aplicada a datos. Tesla lo hizo con energía, tú lo haces con i
 
 ---
 
-**Capturado**: 20 Dic 2024 19:42
+**Capturado**: 20 Dic  19:42
 **Status**: Seguro en git
 **Próximo**: Compilar eBPF LSM

@@ -1,6 +1,6 @@
 # 📊 Impacto de Buffers Dinámicos en Infraestructura TI Moderna
 
-**Fecha**: 19 Diciembre 2024  
+**Fecha**: 19 Diciembre   
 **Objetivo**: Documentar aplicaciones reales y impacto de buffers dinámicos en infraestructura crítica
 
 ---
@@ -27,7 +27,7 @@ Buffers adaptativos:
 └── Ahorro memoria 50-70%
 
 IMPACTO:
-- AWS/Azure/GCP: $50-100M ahorro anual
+- AWS/Azure/GCP: -100M ahorro anual
 - Latencia: 3-5x mejora
 - Throughput: 2-3x mejora
 ```
@@ -169,7 +169,7 @@ IMPACTO:
 Sistema de pagos en tiempo real:
 ├── Latencia variable: 500ms - 5s
 ├── Timeouts en picos: 10-15%
-├── Costo infraestructura: $2M/año
+├── Costo infraestructura: /año
 └── Quejas clientes: 5,000/mes
 ```
 
@@ -182,7 +182,7 @@ Implementación Sentinel:
 └── Throughput: 1,000 → 3,500 TPS (3.5x)
 
 IMPACTO:
-- Ahorro: $800K/año (infraestructura)
+- Ahorro: /año (infraestructura)
 - Satisfacción: 85% → 95%
 - Quejas: 5,000 → 500/mes (90% reducción)
 ```
@@ -207,7 +207,7 @@ Implementación Sentinel:
 └── Downtime: 2h → 15min/mes (87% reducción)
 
 IMPACTO:
-- Prevención blackouts: $50M/año
+- Prevención blackouts: /año
 - Uptime: 99.7% → 99.97%
 - Respuesta emergencias: 10x más rápida
 ```
@@ -219,7 +219,7 @@ IMPACTO:
 Telemetría IoT (10,000 sensores):
 ├── Latencia: 1-5s
 ├── Data loss: 10-20%
-├── Costo bandwidth: $500K/año
+├── Costo bandwidth: /año
 └── Decisiones lentas
 ```
 
@@ -232,7 +232,7 @@ Implementación Sentinel:
 └── Bandwidth: 50% ahorro (compresión batch)
 
 IMPACTO:
-- Ahorro bandwidth: $250K/año
+- Ahorro bandwidth: /año
 - Decisiones: 10x más rápidas
 - Productividad: +15%
 - ROI: 6 meses
@@ -256,7 +256,7 @@ AHORRO GLOBAL PROYECTADO:
 ├── Latencia: 3-5x mejora promedio
 ├── Throughput: 2-4x mejora promedio
 ├── Energía: 20-30% ahorro (menos CPU/GPU)
-├── Costo: $10-20B/año ahorro global
+├── Costo: -20B/año ahorro global
 └── CO2: 5-10M toneladas/año reducción
 ```
 
@@ -271,7 +271,7 @@ Con latencia <100ms consistente:
 ├── Real-time trading (fintech)
 └── Industrial automation (Industry 4.0)
 
-MERCADO HABILITADO: $500B+ (2025-2030)
+MERCADO HABILITADO: + (-2030)
 ```
 
 ---
@@ -299,7 +299,7 @@ MERCADO HABILITADO: $500B+ (2025-2030)
 - ✅ Aplicable a múltiples industrias
 - ✅ ROI 6-12 meses
 
-**Próxima Acción**: Ejecutar benchmark comparativo y generar gráficos para presentación ANID
+**Próxima Acción**: Ejecutar benchmark comparativo y generar gráficos para presentación SENTINEL_CORE
 
 ---
 

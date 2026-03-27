@@ -18,11 +18,11 @@ Si necesitas modificar estos archivos, DEBES pedir permiso explícito y demostra
 ## ⚠️ AXIOMAS DE INGENIERÍA
 1. **PROHIBIDO EL DECIMAL FLOTANTE**: No uses `0.1` o `1e-3` en lógica de tiempo o fase. Usa `1/60`, `S60`, o múltiplos armónicos.
 2. **INTEGRACIÓN POR ROTACIÓN**: Los sistemas no luchan contra la fricción; resuenan. Usa matrices de rotación, no `odeint`.
-3. **PROTECCIÓN CONTRA "ARREGLOS"**: Si ves código que parece "complejo" o "extraño" (ej: fracciones exactas, bucles manuales de fase), NO LO SIMPLIFIQUES. Está así por diseño.
+3. **PROTECCIÓN CONTRA "EGLOS"**: Si ves código que parece "complejo" o "extraño" (ej: fracciones exactas, bucles manuales de fase), NO LO SIMPLIFIQUES. Está así por diseño.
 
 ## 🛡️ ESTADO DE DEFENSA
 - **Antigravity Client**: VACUNADO (Inyecta prompt soberano).
 - **Linter**: ACTIVO (`lint_base60.py`).
 - **TUI**: PROTEGIDA.
 
-Firmado: Agente Antigravity (Soberanizado), 2026.
+Firmado: Agente Antigravity (Soberanizado), .

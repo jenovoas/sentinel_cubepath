@@ -1,6 +1,6 @@
 #  Mapa Mental Simple - Sentinel
 
-**Fecha**: 21 de Diciembre de 2025  
+**Fecha**: 21 de Diciembre de   
 **Propósito**: Capturar lo que está en tu cabeza vs lo que está documentado
 
 ---
@@ -100,7 +100,7 @@ Ejemplo:
    - Cargar en kernel
    - Bloquear 1 syscall malicioso
    - **Tiempo**: 2 horas
-   - **Impacto**: $8-15M en IP
+   - **Impacto**: -15M en IP
 
 2. **Benchmarks reproducibles** 🟡
    - Ejecutar todos los scripts
@@ -231,6 +231,6 @@ Solo necesitas:
 
 ---
 
-**Fecha**: 21 de Diciembre de 2025, 10:13 AM  
+**Fecha**: 21 de Diciembre de , 10:13 AM  
 **Status**:  MODO SIMPLE ACTIVADO  
 **Siguiente**: Tú decides (A, B, o C)

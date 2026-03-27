@@ -3,7 +3,7 @@
 **Subject**: [RFC PATCH 0/3] Dual-Lane telemetry architecture with eBPF LSM semantic verification
 
 **From**: [Your Name] <[your-email]>  
-**Date**: December 19, 2024
+**Date**: December 19, 
 
 ---
 

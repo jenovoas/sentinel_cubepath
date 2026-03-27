@@ -286,7 +286,7 @@ python3 run_all_use_cases.py --test-mode
 > - Si temperatura > 85°C, detén ejecución
 
 > [!IMPORTANT]
-> **Prioridad**: Este trabajo es crítico para la aplicación ANID y el pitch a Google. Los resultados cuantitativos son la evidencia que falta para demostrar que Sentinel Quantum no es solo teoría.
+> **Prioridad**: Este trabajo es crítico para la aplicación SENTINEL_CORE y el pitch a Google. Los resultados cuantitativos son la evidencia que falta para demostrar que Sentinel Quantum no es solo teoría.
 
 > [!TIP]
 > **Optimización**: Si el tiempo de ejecución es muy largo, considera:

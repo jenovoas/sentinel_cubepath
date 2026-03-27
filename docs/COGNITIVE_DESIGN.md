@@ -80,7 +80,7 @@ transition-all duration-300  // No saltos instantáneos
 hover:scale-105              // Micro-animación de profundidad
 ```
 
-**Neurociencia**: Las transiciones suaves activan el sistema visual liso (smooth pursuit). Jarring changes activan respuesta de sobresalto.
+**Neurociencia**: Las transiciones suaves activan el sistema visual liso (smooth pursuit). Jing changes activan respuesta de sobresalto.
 
 ### 9. **Breathing Room** (Whitespace)
 ```
@@ -104,7 +104,7 @@ hover:scale-105              // Micro-animación de profundidad
 
 ### 1. **Eye Tracking Test**
 - ¿Donde va la atención primero? (debería ser logo o main nav)
-- ¿Orden de barrido? (debería ser izquierda → centro → derecha)
+- ¿Orden de bido? (debería ser izquierda → centro → derecha)
 
 ### 2. **A/B Testing**
 - Navbar con colores vs sin colores → Métricas de engagement

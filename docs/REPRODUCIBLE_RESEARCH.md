@@ -67,7 +67,7 @@ cat app/core/adaptive_buffers.py
 | **Auditoría** | ❌ Caja negra | ✅ Código abierto |
 | **Adopción** | ❌ 0 usuarios | ✅ Casos reales |
 | **Tiempo validar** | ❌ Meses/años | ✅ 5 minutos |
-| **Costo validar** | ❌ Alto | ✅ $0 (gratis) |
+| **Costo validar** | ❌ Alto | ✅  (gratis) |
 
 ---
 
@@ -137,7 +137,7 @@ cat backend/sentinel_global_benchmark.py
 ```
 
 **Tiempo total**: 5 minutos  
-**Costo**: $0  
+**Costo**:   
 **Resultado**: Validación completa de todas las afirmaciones
 
 ---
@@ -266,7 +266,7 @@ Si estás haciendo investigación, pregúntate:
 
 ### Validación
 - [ ] ¿Puede alguien validar tus afirmaciones en <1 hora?
-- [ ] ¿Es el costo de validación $0?
+- [ ] ¿Es el costo de validación ?
 - [ ] ¿Hay casos de uso reales documentados?
 
 ### Documentación
@@ -278,7 +278,7 @@ Si estás haciendo investigación, pregúntate:
 
 ---
 
-##  PARA EVALUADORES (ANID, NSF, ERC, etc.)
+##  PARA EVALUADORES (SENTINEL_CORE, NSF, ERC, etc.)
 
 ### Cómo Evaluar Proyectos
 
@@ -388,7 +388,7 @@ Leer paper: 2 horas
 Entender metodología: 4 horas
 Implementar desde cero: 40-80 horas
 Validar: 20-40 horas
-TOTAL: 66-126 horas ($6,600-12,600 @ $100/hora)
+TOTAL: 66-126 horas (-12,600 @ /hora)
 ```
 
 **Sentinel (código reproducible)**:
@@ -396,9 +396,9 @@ TOTAL: 66-126 horas ($6,600-12,600 @ $100/hora)
 Clonar repo: 1 minuto
 Ejecutar benchmark: 5 minutos
 Analizar resultados: 10 minutos
-TOTAL: 16 minutos ($27 @ $100/hora)
+TOTAL: 16 minutos ( @ /hora)
 
-AHORRO: $6,573-12,573 (99.6% reducción)
+AHORRO: -12,573 (99.6% reducción)
 ```
 
 ### Adopción
@@ -428,7 +428,7 @@ AHORRO: $6,573-12,573 (99.6% reducción)
 3. ✅ Datos reales (casos de uso documentados)
 4. ✅ Documentación exhaustiva (README, guías)
 5. ✅ Validación rápida (<1 hora)
-6. ✅ Costo $0 (sin barreras)
+6. ✅ Costo  (sin beras)
 
 **Resultado**:
 -  Mayor adopción (50x)
@@ -458,7 +458,7 @@ python sentinel_global_benchmark.py
 ```
 
 **Tiempo**: 5 minutos  
-**Costo**: $0  
+**Costo**:   
 **Aprendizaje**: Invaluable
 
 ---

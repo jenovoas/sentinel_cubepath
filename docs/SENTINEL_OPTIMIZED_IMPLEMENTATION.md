@@ -144,7 +144,7 @@ OPTIMIZACIÓN FUTURA (con mejor HW):
 3. [ ] Mejorar ML predictor
 
 ### Mediano Plazo (1-3 meses)
-1. [ ] Upgrade GPU (RTX 3060 12GB ~$300)
+1. [ ] Upgrade GPU (RTX 3060 12GB ~)
 2. [ ] Migrar a vLLM + SPIRe+MTAD
 3. [ ] Lograr TTFB <150ms real
 

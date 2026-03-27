@@ -1,5 +1,5 @@
 # PLAN MAESTRO INTEGRADO v3.0 — SecurePenguin / Sentinel
-> **Fecha:** 2026-03-07 | **Arquitecto:** Claude (fenix)
+> **Fecha:** -03-07 | **Arquitecto:** Claude (fenix)
 > **Base:** Planificación Antigravity (SESSION-03-04, PLAN_CONSTRUCCION_ENJAMBRE, PHASE2_PLAN)
 > **Mejoras:** Integración hallazgos cuánticos EXP-009→EXP-029-V2, reconciliación planes divergentes, cadena de dependencias corregida
 
@@ -20,10 +20,10 @@
 ### 3. Fase 0 del enjambre incompleta
 - Crystal daemon no está corriendo como servicio
 - Lane A (6380) requiere auth — estado no confirmado
-- Crystal Brain L2 bloqueado por sentinel-cortex no compilado *(actualizado: compilado 2026-03-04)*
+- Crystal Brain L2 bloqueado por sentinel-cortex no compilado *(actualizado: compilado -03-04)*
 
 ### 4. LLM Gateway Tier Fast sin decisión
-- Bloqueado desde 2026-03-03
+- Bloqueado desde -03-03
 - Paraliza tareas que requieren inferencia fast
 
 ---
@@ -33,7 +33,7 @@
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │  NEGOCIO: Sentinel SaaS + QSC Licensing + Marketplace           │
-│  $384K ARR (año 1) → $2.5M ARR (año 3) → Patent pending        │
+│    (año 1) → .5M  (año 3) → Patent pending        │
 └───────────────────────────┬─────────────────────────────────────┘
                             │
 ┌───────────────────────────▼─────────────────────────────────────┐
@@ -73,36 +73,36 @@
 
 #### Semana 1
 
-**[T-F0-R01] ✅ COMPLETADO 2026-03-07** — Crystal Master en sentinel
+**[T-F0-R01] ✅ COMPLETADO -03-07** — Crystal Master en sentinel
 - sentinel-crystal-master.service: enabled + started
 - Coherencia 0.6936, freq 43.14 Hz, coupling 0.3570, tick 191, load 1.9
 
-**[T-F0-R02] ✅ COMPLETADO 2026-03-07** — Crystal Agent en fenix
+**[T-F0-R02] ✅ COMPLETADO -03-07** — Crystal Agent en fenix
 - mmh-crystal-agent.py corriendo desde Mar 06 (PID 1270, uptime 26h, tick 94384)
 - Escribe swarm:crystal:coupling:fenix en Redis sentinel (0.3570)
 - Salto-17 y Quantum Leaps normales
 
-**[T-F0-R03] ✅ COMPLETADO 2026-03-07** — Crystal Agent en centurion
+**[T-F0-R03] ✅ COMPLETADO -03-07** — Crystal Agent en centurion
 - Coherencia 0.8417, freq 47.93 Hz, tick 73652, load 0.02, rings 6, max_nodes 91
 - Nodo más sano del cluster
 
 **Estado Crystal Brain:** 3 nodos activos. vip-crystal-elector en sentinel viendo coherencia real.
 
-**[T-CRITICO-001] ✅ COMPLETADO 2026-03-07** — LLM Gateway Tier Fast
+**[T-CRITICO-001] ✅ COMPLETADO -03-07** — LLM Gateway Tier Fast
 - 4 workers LiteLLM corriendo: ifenix:4000-4003 (PIDs 2514422-2514425, Python 3.14)
 - Config: `~/.qwen-litellm-config.yaml` | Script: `~/start_litellm.sh`
 - `/v1/models` responde correctamente. Verificado con ps aux.
 
-**[T-CRITICO-002] ✅ COMPLETADO 2026-03-07** — sentinel-cortex validado
+**[T-CRITICO-002] ✅ COMPLETADO -03-07** — sentinel-cortex validado
 - `libsentinel_cortex.so` compilado en fenix: **3.0 MB** ✅ (path: target/release/)
 - Lane A (sentinel:6380): NOAUTH confirmado (auth requerida, comportamiento esperado)
 - **Pendiente futuro**: configurar credenciales para que sentinel-cortex escriba en Lane A
 
-**[T-F0-001] ✅ COMPLETADO 2026-03-07** — Crystal Daemon fenix cubierto por T-F0-R02
+**[T-F0-001] ✅ COMPLETADO -03-07** — Crystal Daemon fenix cubierto por T-F0-R02
 - mmh-crystal-agent.py PID 1270, corriendo desde Mar06, uptime 26h+
 - Estado en Redis: ACTIVE, coherence_source=coupling
 
-**[T-F0-002] ✅ COMPLETADO 2026-03-07** — eBPF Bridge Lane A
+**[T-F0-002] ✅ COMPLETADO -03-07** — eBPF Bridge Lane A
 - Script nativo Python: `~/.local/bin/ebpf-bridge-lane-a.py`
 - Lee CPU freq real (/sys/devices/.../scaling_cur_freq + /proc/cpuinfo) y memory pressure (/proc/meminfo)
 - Autenticación Lane A vía credencial de inject_crystal_memories.py
@@ -319,7 +319,7 @@ impl LiquidLattice {
 
 **[T-PATENT-001] Provisional Patent Filing**
 - Claims 1-4 documentados
-- Inversión: $2-5K
+- Inversión: -5K
 - Resultado: IP protegida, investor-ready
 
 ---
@@ -395,7 +395,7 @@ impl LiquidLattice {
 | 3 | Guardian-Alpha 3+ intrusiones detectadas | Claim 3, beta customers |
 | 4 | Guardian-Beta 0 false positives backups | Claim 4 |
 | 5 | PQC implementado | Patent pending |
-| 6 | 10+ clientes activos | $100K ARR |
+| 6 | 10+ clientes activos |   |
 
 ---
 
@@ -422,7 +422,7 @@ impl LiquidLattice {
 | portal_detector.rs | sin_s60 como TODO stub | EXP-030 validación explícita en Bloque 0 |
 | Experimentos pendientes | Mencionados sin timeline | Tabla con prerequisitos y bloqueantes |
 | Semanas 7-8 | No definidas claramente | Crystal Brain v2 + Liquid Lattice |
-| Plan de negocio | Vago en timing | Claims → Patent → ARR con fechas |
+| Plan de negocio | Vago en timing | Claims → Patent →  con fechas |
 
 ---
 

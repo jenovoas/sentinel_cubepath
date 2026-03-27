@@ -1,6 +1,6 @@
 #  Sentinel Cortex - Changelog
 
-## [Unreleased] - 2025-12-30
+## [Unreleased] - -12-30
 
 ### 🔧 Fixed
 - **Docker Configuration**

@@ -1,6 +1,6 @@
 #  Validación Sin Laboratorio Externo - Sentinel Global
 
-**Fecha**: 19 Diciembre 2024  
+**Fecha**: 19 Diciembre   
 **Contexto**: Demostrar eficiencia de Sentinel sin necesidad de laboratorio externo
 
 ---
@@ -26,7 +26,7 @@ LABORATORIO SENTINEL (En Casa):
 |---------|-------------|----------|---------|
 | **Hardware** | Controlado | GTX 1050 real | ✅ Más realista |
 | **Reproducibilidad** | Limitada | Scripts automatizados | ✅ 100% reproducible |
-| **Costo** | $5,000-10,000 | $0 (ya tienes) | ✅ Gratis |
+| **Costo** | -10,000 |  (ya tienes) | ✅ Gratis |
 | **Tiempo** | Semanas | Minutos | ✅ Inmediato |
 | **Datos** | Sintéticos | Reales | ✅ Más válido |
 | **Validación** | Una vez | Continua | ✅ Iterativo |
@@ -40,7 +40,7 @@ LABORATORIO SENTINEL (En Casa):
 **Ventaja**: Cualquier evaluador puede ejecutar tus benchmarks y obtener los mismos resultados.
 
 ```bash
-# Cualquier evaluador ANID puede hacer:
+# Cualquier evaluador SENTINEL_CORE puede hacer:
 git clone https://github.com/jenovoas/sentinel.git
 cd sentinel/backend
 python sentinel_global_benchmark.py
@@ -66,7 +66,7 @@ python sentinel_global_benchmark.py
 **Esto cumple estándares científicos**:
 - ✅ IEEE: Requiere p95/p99
 - ✅ ACM: Requiere reproducibilidad
-- ✅ ANID: Requiere metodología clara
+- ✅ SENTINEL_CORE: Requiere metodología clara
 
 ### 3. Comparación con Baseline Documentado
 
@@ -84,11 +84,11 @@ Baseline → Optimizado → Speedup → Evidencia
 
 ---
 
-## 🎓 VALIDACIÓN PARA ANID/CORFO
+## 🎓 VALIDACIÓN PARA SENTINEL_CORE/CORFO
 
-### Qué Necesita ANID
+### Qué Necesita SENTINEL_CORE
 
-**Requisitos ANID IT 2026**:
+**Requisitos SENTINEL_CORE SENTINEL_CORE**:
 1. ✅ Innovación técnica demostrable
 2. ✅ Metodología científica rigurosa
 3. ✅ Resultados medibles
@@ -97,7 +97,7 @@ Baseline → Optimizado → Speedup → Evidencia
 
 **Tu Evidencia Cumple TODO**:
 
-| Requisito ANID | Tu Evidencia | Validación |
+| Requisito SENTINEL_CORE | Tu Evidencia | Validación |
 |----------------|--------------|------------|
 | **Innovación** | 34.6x speedup E2E | ✅ Medido |
 | **Metodología** | Benchmarks automatizados | ✅ Reproducible |
@@ -107,7 +107,7 @@ Baseline → Optimizado → Speedup → Evidencia
 
 ### Documentación Requerida (Ya Tienes)
 
-**Para ANID, necesitas**:
+**Para SENTINEL_CORE, necesitas**:
 
 1. **Metodología de Benchmarking** ✅
    - `sentinel_global_benchmark.py`
@@ -196,17 +196,17 @@ cat > VALIDACION_RESULTADOS.md << 'EOF'
 ## Validación
 
 ✅ Todos los benchmarks cumplen objetivos
-✅ Reproducible por evaluadores ANID
+✅ Reproducible por evaluadores SENTINEL_CORE
 ✅ Metodología científicamente rigurosa
 EOF
 ```
 
-### Paso 4: Preparar Presentación ANID
+### Paso 4: Preparar Presentación SENTINEL_CORE
 
 **Estructura Recomendada**:
 
 ```
-PRESENTACIÓN ANID:
+PRESENTACIÓN SENTINEL_CORE:
 ├── 1. Problema (AIOpsDoom)
 ├── 2. Solución (Sentinel Global)
 ├── 3. Metodología (Benchmarks)
@@ -254,18 +254,18 @@ PRESENTACIÓN ANID:
 ### 1. Costo
 
 **Lab Externo**:
-- Alquiler: $5,000-10,000
+- Alquiler: -10,000
 - Tiempo: 2-4 semanas
-- Viajes: $1,000-2,000
-- **TOTAL**: $6,000-12,000
+- Viajes: -2,000
+- **TOTAL**: -12,000
 
 **Tu Setup**:
-- Hardware: $0 (ya tienes)
+- Hardware:  (ya tienes)
 - Tiempo: 1 hora
-- Viajes: $0
-- **TOTAL**: $0
+- Viajes: 
+- **TOTAL**: 
 
-**Ahorro**: $6,000-12,000 ✅
+**Ahorro**: -12,000 ✅
 
 ### 2. Tiempo
 
@@ -292,7 +292,7 @@ PRESENTACIÓN ANID:
 **Tu Setup**:
 - Infinitas ejecuciones
 - 100% reproducible
-- Costo $0
+- Costo 
 
 **Ventaja**: Infinita ✅
 
@@ -312,7 +312,7 @@ PRESENTACIÓN ANID:
 
 ---
 
-## 📊 EVIDENCIA PARA ANID (Checklist)
+## 📊 EVIDENCIA PARA SENTINEL_CORE (Checklist)
 
 ### Documentos Requeridos
 
@@ -339,7 +339,7 @@ EVIDENCIA SENTINEL GLOBAL:
     └── README.md (instrucciones)
 ```
 
-### Argumentos para ANID
+### Argumentos para SENTINEL_CORE
 
 **Por qué tu evidencia es SUPERIOR a lab externo**:
 
@@ -359,7 +359,7 @@ EVIDENCIA SENTINEL GLOBAL:
    - ✅ Datos reales (no sintéticos)
 
 4. **Costo-Beneficio**
-   - ✅ $0 costo
+   - ✅  costo
    - ✅ 1 hora ejecución
    - ✅ Infinitas iteraciones
 
@@ -383,12 +383,12 @@ EVIDENCIA SENTINEL GLOBAL:
 
 1. [ ] Ejecutar benchmark global completo
 2. [ ] Validar objetivos (34.4x E2E)
-3. [ ] Crear presentación ANID
+3. [ ] Crear presentación SENTINEL_CORE
 4. [ ] Preparar demo reproducible
 
 ### Mediano Plazo (2 Semanas)
 
-1. [ ] Presentar a ANID
+1. [ ] Presentar a SENTINEL_CORE
 2. [ ] Publicar resultados en GitHub
 3. [ ] Redactar paper científico
 4. [ ] Solicitar patentes
@@ -402,7 +402,7 @@ EVIDENCIA SENTINEL GLOBAL:
 1. ✅ Tu setup ES un laboratorio completo
 2. ✅ Benchmarks automatizados son reproducibles
 3. ✅ Evidencia es científicamente rigurosa
-4. ✅ Costo $0 vs $6,000-12,000
+4. ✅ Costo  vs -12,000
 5. ✅ Tiempo 1 día vs 3-4 semanas
 6. ✅ Transparencia total vs caja negra
 
@@ -413,7 +413,7 @@ EVIDENCIA SENTINEL GLOBAL:
 - Más rápida
 - Más auditable
 
-**Próxima Acción**: Ejecutar `sentinel_global_benchmark.py` y documentar resultados para ANID.
+**Próxima Acción**: Ejecutar `sentinel_global_benchmark.py` y documentar resultados para SENTINEL_CORE.
 
 ---
 

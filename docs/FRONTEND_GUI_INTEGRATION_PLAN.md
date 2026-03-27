@@ -144,7 +144,7 @@ export const typography = { ... }
 <CommandPalette />
 ```
 
-**Beneficio**: Navegación ultrarrápida estilo VS Code
+**Beneficio**: Navegación ultrápida estilo VS Code
 
 ---
 

@@ -6,7 +6,7 @@
 
 ## 🚨 El Problema
 
-**AIOpsDoom** (revelado en la Conferencia RSA 2025) es una vulnerabilidad crítica donde los atacantes inyectan "alucinaciones" maliciosas en los logs para engañar a los agentes de IA y obligarlos a ejecutar comandos destructivos.
+**AIOpsDoom** (revelado en la Conferencia RSA ) es una vulnerabilidad crítica donde los atacantes inyectan "alucinaciones" maliciosas en los logs para engañar a los agentes de IA y obligarlos a ejecutar comandos destructivos.
 
 **Ejemplo de Ataque**:
 
@@ -33,7 +33,7 @@ Resultado: Base de datos de producción eliminada
 
 1. **Validación de Esquema s60** - Rechazo inmediato de logs malformados.
 2. **Sanitización de Contenido Armónica** - Neutralización de patrones peligrosos antes de que lleguen a la IA.
-3. **Clasificación de Amenazas en Ring 0** - Evaluación de riesgo en tiempo real.
+3. **Clasificación de Amenazas en Ring 0** - E de riesgo en tiempo real.
 4. **Ejecución Protegida por eBPF (Guardian)** - La última línea de defensa en el Kernel de Linux.
 
 **Resultado**: Los atacantes no pueden inyectar comandos, incluso si logran evadir las capas de software superiores.
@@ -48,14 +48,14 @@ Resultado: Base de datos de producción eliminada
 - Soporte de la comunidad.
 - Auto-alojado (Self-hosted).
 
-**Enterprise** ($5K-50K/año):
+**Enterprise** (-50K/año):
 
 - Suite AIOpsShield completa (4 capas).
 - Guardian eBPF pre-configurado.
 - Soporte prioritario.
 - Garantías de SLA.
 
-**Servicio Gestionado** ($10K-100K/año):
+**Servicio Gestionado** (-100K/año):
 
 - Despliegue totalmente gestionado en Fenix™ Cloud.
 - Monitoreo 24/7 con respuesta ante incidentes.
@@ -97,7 +97,7 @@ Resultado: Base de datos de producción eliminada
 **De Mercado**:
 
 - ✅ Pioneros (ventaja competitiva de 6-12 meses).
-- ✅ Validación de amenazas en RSA 2025.
+- ✅ Validación de amenazas en RSA .
 - ✅ Diferenciación clara basada en "Matemáticas de Ring 0".
 
 ---
@@ -153,7 +153,7 @@ Resultado: Base de datos de producción eliminada
 
 **Buscando Financiación Semilla** :
 
-- Acelerar el desarrollo del eBPF Guardian.
+- Acelerar el desollo del eBPF Guardian.
 - Contratar equipo especializado en Rust/Seguridad.
 - Escalar la comercialización a nivel global.
 
@@ -161,10 +161,10 @@ Resultado: Base de datos de producción eliminada
 
 ## 🏆 Equipo
 
-**Jaime Novoa** - Fundador y Desarrollador Líder
+**Jaime Novoa** - Fundador y Desollador Líder
 
 - 15 años de investigación en optomecánica cuántica.
-- Desarrollador del Sentinel Cortex™ y Protocolo YATRA.
+- Desollador del Sentinel Cortex™ y Protocolo YATRA.
 - Síntesis de 78 papers académicos en arquitectura de Ring 0.
 - Colaborador activo en Open-Source.
 
@@ -187,4 +187,4 @@ Resultado: Base de datos de producción eliminada
 ---
 
 **Versión**: 1.0.0-S60  
-**Última Actualización**: 2026-03-18
+**Última Actualización**: -03-18

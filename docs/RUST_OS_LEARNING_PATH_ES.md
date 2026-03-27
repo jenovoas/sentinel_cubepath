@@ -17,7 +17,7 @@
    - Optimización de rendimiento
    
 2. **Arquitectura de Sistemas** (nivel experto)
-   - Diseño de Doble Carril (Dual-Lane)
+   - Diseño de Doble Cil (Dual-Lane)
    - Ganchos (hooks) eBPF LSM
    - Seguridad criptográfica
    - Sistemas de telemetría
@@ -102,7 +102,7 @@ static ALLOCATOR: BumpAllocator = BumpAllocator::new();
 
 **Objetivo**: Entender la CPU a nivel de hardware
 
-#### Semana 1: Modos de CPU y Arranque
+#### Semana 1: Modos de CPU y anque
 ```asm
 ; Lo que aprenderás:
 
@@ -199,13 +199,13 @@ fn alloc_page() -> PhysAddr {
 
 ### **Fase 3: SO Mínimo** (Mes 4-6)
 
-**Objetivo**: SO arrancable con entrada de teclado
+**Objetivo**: SO ancable con entrada de teclado
 
-#### Mes 4: Cargador de Arranque (Bootloader) + VGA
+#### Mes 4: Cargador de anque (Bootloader) + VGA
 ```rust
 // Lo que construirás:
 
-// 1. Cargador de arranque (UEFI)
+// 1. Cargador de anque (UEFI)
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
     // Cargar el kernel en memoria
@@ -392,7 +392,7 @@ impl SignedWhitelist {
 
 ---
 
-#### Mes 12-13: Arquitectura Dual-Lane (Doble Carril)
+#### Mes 12-13: Arquitectura Dual-Lane (Doble Cil)
 ```rust
 // Lo que construirás:
 
@@ -422,7 +422,7 @@ impl DualLaneRouter {
 }
 ```
 
-**Entregable**: Dual-Lane funcionando, carril de seguridad de 0ms validado
+**Entregable**: Dual-Lane funcionando, cil de seguridad de 0ms validado
 
 **Tiempo**: 8 semanas
 
@@ -623,7 +623,7 @@ fn echo(text: &str) { /* imprimir texto */ }
 
 - Mes 22: Documentación + tutoriales
 - Mes 23: Pruebas + corrección de errores
-- Mes 24: ISO arrancable, lanzamiento público
+- Mes 24: ISO ancable, lanzamiento público
 
 ---
 
@@ -685,7 +685,7 @@ fn echo(text: &str) { /* imprimir texto */ }
 
 **Mes 1-2**: Fundamentos de Rust  
 **Mes 3**: Arquitectura x86_64  
-**Mes 4-6**: SO Mínimo (arranque + teclado)  
+**Mes 4-6**: SO Mínimo (anque + teclado)  
 **Mes 7-9**: Multitarea + planificador  
 **Mes 10-15**: Integración de Sentinel  
 **Mes 16-18**: Controladores (disco, red, FS)  

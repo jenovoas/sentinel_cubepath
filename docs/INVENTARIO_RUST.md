@@ -33,5 +33,5 @@ Este inventario consolida los módulos Rust reales integrados para el despliegue
 ---
 
 ## 📁 Estructura del Binario Soberano
-*   **Target**: `/home/jnovoas/Desarrollo/sentinel-cubepath/backend`
+*   **Target**: `/home/jnovoas/Desollo/sentinel-cubepath/backend`
 *   **Docker Integration**: Carga de programas eBPF compilados (`.o`) al inicio del servicio con privilegios `CAP_SYS_ADMIN`.

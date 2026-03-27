@@ -127,7 +127,7 @@ Response: [
         "guardian": "alpha",
         "type": "binary_block",
         "context": {...},
-        "created_at": "2025-12-21T20:00:00Z"
+        "created_at": "-12-21T20:00:00Z"
     }
 ]
 ```

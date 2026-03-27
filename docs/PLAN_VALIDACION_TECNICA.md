@@ -1,8 +1,8 @@
 # 🔬 Plan de Validación Técnica - Sentinel Cortex™
 
-**Fecha**: 20 Diciembre 2024  
+**Fecha**: 20 Diciembre   
 **Propósito**: Validar técnicamente los claims patentables antes del filing  
-**Deadline**: Enero 2025 (antes del provisional patent)
+**Deadline**: Enero  (antes del provisional patent)
 
 ---
 
@@ -540,5 +540,5 @@ cd /home/jnovoas/sentinel
 
 **Status**: 📋 Plan Definido  
 **Próxima Acción**: Ejecutar benchmarks (Semana 1)  
-**Deadline**: 10 Enero 2025  
+**Deadline**: 10 Enero   
 **Objetivo**: Evidencia técnica para provisional patent

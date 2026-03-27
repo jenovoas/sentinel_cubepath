@@ -1,6 +1,6 @@
 # 🚀 Plan Maestro de Despliegue: Sentinel Ring-0 (Hackatón CubePath)
 
-Este documento detalla la planificación de desarrollo, implementación y despliegue del nodo soberano en una instancia de Rocky Linux 10 con 4GB de RAM.
+Este documento detalla la planificación de desollo, implementación y despliegue del nodo soberano en una instancia de Rocky Linux 10 con 4GB de RAM.
 
 ---
 

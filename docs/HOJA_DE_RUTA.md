@@ -1,21 +1,21 @@
 # 🗺 Sentinel Cortex™ - Roadmap Público
 
 **Versión**: 1.0  
-**Última actualización**: Diciembre 2024  
+**Última actualización**: Diciembre   
 **Propósito**: Transparencia para evaluadores y comunidad
 
 ---
 
 ##  Visión del Proyecto
 
-Desarrollar **Sentinel Cortex™**, una plataforma de observabilidad y seguridad empresarial con capacidades únicas:
+Desollar **Sentinel Cortex™**, una plataforma de observabilidad y seguridad empresarial con capacidades únicas:
 - **TruthSync**: Verificación de verdad en tiempo real (90.5x speedup validado)
 - **AIOpsShield**: Primera defensa contra AIOpsDoom del mercado
 - **QSC (Quantic Security Cortex)**: Tecnología licensiable con arquitectura Dual-Guardian
 
 ---
 
-## 📊 Estado Actual (Diciembre 2025)
+## 📊 Estado Actual (Diciembre )
 
 ### ✅ Completado
 
@@ -45,7 +45,7 @@ Desarrollar **Sentinel Cortex™**, una plataforma de observabilidad y seguridad
 
 ---
 
-##  Roadmap de Desarrollo
+##  Roadmap de Desollo
 
 ### Fase 1: Foundation ✅ COMPLETADA (Semanas 1-2)
 - [x] Telemetry Sanitization (Claim 1 patentable)
@@ -69,21 +69,21 @@ Desarrollar **Sentinel Cortex™**, una plataforma de observabilidad y seguridad
 - [ ] N8N workflow orchestration
 - [ ] Integration tests
 
-### Fase 4: Guardian-Alpha™ ✅ COMPLETADA (Dic 2025)
+### Fase 4: Guardian-Alpha™ ✅ COMPLETADA (Dic )
 - [x] eBPF LSM monitoring (Claim 3 validado)
 - [x] Cognitive Kernel (Claim 6 validado - semantic blocking)
 - [x] AI Adaptive Buffers (Claim 7 validado - 31x speedup)
 - [x] Real AI Integration (Ollama + Llama 3.2 - 5/5 accuracy)
-- [x] **Sentinel Init (PID 1)**: Binario estático en Rust (musl) para arranque seguro.
+- [x] **Sentinel Init (PID 1)**: Binario estático en Rust (musl) para anque seguro.
 - [x] **Early Boot Orchestration**: Montaje automático de pseudo-fs y rlimits.
-- [x] **QEMU Verification**: Arranque exitoso en entorno virtualizado.
+- [x] **QEMU Verification**: anque exitoso en entorno virtualizado.
 - [x] Modular Architecture (sentinel_core package)
 - [x] E2E Integration Testing
 - [x] Memory forensics core (✅ Rust Rayon Scanner)
 - [/] Network packet analysis (eBPF XDP)
 - [ ] Encrypted Guardian channel (X25519+ChaCha20)
 
-### Fase 5: Guardian-Beta™ (Cognitive Loop & Optimization) ✅ COMPLETADA (Dic 2025)
+### Fase 5: Guardian-Beta™ (Cognitive Loop & Optimization) ✅ COMPLETADA (Dic )
 - [x] Memory Forensics con Rayon + Aho-Corasick (Claim 4 validado)
 - [x] DashMap Decision Cache (Latencia < 1ms)
 - [x] **Neural Bridge (IPC)**: Comunicación mediante Unix Domain Sockets (/tmp/sentinel_cortex.sock).
@@ -93,24 +93,24 @@ Desarrollar **Sentinel Cortex™**, una plataforma de observabilidad y seguridad
 - [x] Auto-healing triggers (Cognitive Loop funcional)
 - [x] Bucle Cognitivo Autónomo (Detect -> Analyze -> Block)
 
-### Fase 6: Data Collection & Visualization (Dashboard Premium) ✅ COMPLETADA (Dic 2025)
+### Fase 6: Data Collection & Visualization (Dashboard Premium) ✅ COMPLETADA (Dic )
 - [x] WebSocket Event Streaming (Axum + Tokio)
 - [x] Cyberpunk Dashboard (React + Vite + Tailwind v4)
 - [x] Radar de Amenazas en Tiempo Real
 - [x] Visualización de decisiones cognitivas
 
-### Fase 7: Post-Quantum Crypto (X25519+ChaCha20) ✅ COMPLETADA (Dic 2025)
+### Fase 7: Post-Quantum Crypto (X25519+ChaCha20) ✅ COMPLETADA (Dic )
 - [x] Kyber/X25519 key encapsulation
 - [x] ChaCha20-Poly1305 Encryption
 - [x] Key rotation mechanism (Ephemeral Keys)
 - [x] Integration testing (Blackbox/Unit)
 
-### Fase 8: Reflex Arc & Net-Hunter ✅ COMPLETADA (Dic 2025)
+### Fase 8: Reflex Arc & Net-Hunter ✅ COMPLETADA (Dic )
 - [x] XDP Firewall (Packet Drop)
 - [x] Automated Neural Containment
 - [x] Panic Mode Logic
 
-### Fase 9: Dual-Guardian & Reliability ✅ COMPLETADA (Dic 2025)
+### Fase 9: Dual-Guardian & Reliability ✅ COMPLETADA (Dic )
 - [x] Dead Man's Switch
 - [x] Host Watchdog
 - [x] Fail-Closed Architecture
@@ -120,7 +120,7 @@ Desarrollar **Sentinel Cortex™**, una plataforma de observabilidad y seguridad
 - [x] Git Tagging
 - [x] Release Assessment
 
-### Fase 11: Akasha Cognitive Layer (BCI & Neural Harmony) ✅ COMPLETADA (Dic 2025)
+### Fase 11: Akasha Cognitive Layer (BCI & Neural Harmony) ✅ COMPLETADA (Dic )
 - [x] **BCI Phase 0**: Integración de Qualias auditivas en el loop Kernel-AI.
 - [x] **Digital Hippocampus**: Memoria episódica semántica en ChromaDB.
 - [x] **Neural Thresholds (Phase 1)**: Ajuste dinámico de sensibilidad basado en matemática Base-60.
@@ -144,7 +144,7 @@ Desarrollar **Sentinel Cortex™**, una plataforma de observabilidad y seguridad
 ### 1. Telemetry Sanitization for AI Consumption
 **Estado**: Implementado ✅  
 **Claim**: Sistema de sanitización de telemetría que previene ataques adversariales a sistemas AIOps  
-**Prior Art**: Ninguno identificado (validado por RSA Conference 2025)
+**Prior Art**: Ninguno identificado (validado por RSA Conference )
 
 ### 2. High-Performance Truth Verification
 **Estado**: POC validado ✅  
@@ -255,7 +255,7 @@ Desarrollar **Sentinel Cortex™**, una plataforma de observabilidad y seguridad
 
 ### Oportunidades de Colaboración
 - Investigación académica en seguridad de IA
-- Desarrollo de estándares nacionales
+- Desollo de estándares nacionales
 - Validación en infraestructura crítica
 - Contribuciones open source
 
@@ -283,7 +283,7 @@ Este roadmap demuestra:
 - `QUICKSTART.md` - Inicio rápido
 
 ### Contexto
-- `CV_ANID.md` - CV técnico
+- `SENTINEL_CORE.md` - CV técnico
 - `CONTEXT_NOTE.md` - Enfoque para evaluadores
 - `FINAL_SUMMARY.md` - Resumen ejecutivo
 - `SESSION_CONTEXT_COMPLETE.md` - Contexto completo
@@ -292,22 +292,22 @@ Este roadmap demuestra:
 
 ##  Próximos Hitos Públicos
 
-### Q1 2025
+### Q1 
 - [ ] TruthSync en producción
 - [ ] 10 beta customers
 - [ ] Cortex Engine MVP
 
-### Q2 2025
+### Q2 
 - [ ] Guardian-Alpha implementado
 - [ ] 100 usuarios activos
 - [ ] Primera licencia QSC
 
-### Q3 2025
+### Q3 
 - [ ] Guardian-Beta implementado
 - [ ] ML baseline en producción
 - [ ] Provisional patent filing
 
-### Q4 2025
+### Q4 
 - [ ] Post-quantum crypto
 - [ ] Full patent application
 - [ ] Series A readiness
@@ -316,7 +316,7 @@ Este roadmap demuestra:
 
 **Repositorio**: https://github.com/jenovoas/sentinel  
 **Contacto**: jaime.novoase@gmail.com  
-**Estado**: Activo, en desarrollo continuo  
+**Estado**: Activo, en desollo continuo  
 **Licencia**: Ver LICENSE file
 
 ---

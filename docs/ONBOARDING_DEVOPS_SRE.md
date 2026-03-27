@@ -220,17 +220,17 @@ Sentinel necesita:
 
 ## 🚨 Prioridades Críticas
 
-### Para ANID (Q1 2025)
+### Para SENTINEL_CORE (Q1 )
 - ✅ Deployment reproducible en cualquier entorno
 - ✅ Alta disponibilidad demostrable
 - ✅ Documentación completa
 
-### Para Clientes Enterprise (Q2 2025)
+### Para Clientes Enterprise (Q2 )
 - ✅ Kubernetes production-ready
 - ✅ 99.9% uptime SLA
 - ✅ Disaster recovery plan
 
-### Para Escalamiento (Q3-Q4 2025)
+### Para Escalamiento (Q3-Q4 )
 - ✅ Auto-scaling a 100k+ eventos/seg
 - ✅ Multi-region deployment
 - ✅ Cost optimization

@@ -6,7 +6,7 @@ Este documento detalla la reconstrucción del motor de física de Ring-0, basado
 
 El sistema utiliza aritmética de punto fijo sexagesimal (Base-60) para evitar la deriva inducida por el redondeo decimal en cálculos resonantes.
 
--   **Escala Maestro (SCALE_0):** $60^4 = 12,960,000$ (Resolución de 12.9M unidades por entero).
+-   **Escala Maestro (SCALE_0):** ^4 = 12,960,000$ (Resolución de 12.9M unidades por entero).
 -   **Unidad Natural (1.0):** Representada como `12,960,000` en crudo.
 
 ## 2. Protocolo G-Zero (Reducción de Masa)
@@ -45,4 +45,4 @@ pub fn calculate_effective_mass(&self, static_mass: SPA, resonance: SPA) -> SPA 
 Los gráficos de "Effective Mass" y "Quantum Load" reflejan la salud física del sistema en tiempo real, sintonizados al pulso de 41Hz del guardian.
 
 ---
-*Documento sellado bajo el protocolo Ring-0 - 2026 CubePath Hackatón*
+*Documento sellado bajo el protocolo Ring-0 -  CubePath Hackatón*

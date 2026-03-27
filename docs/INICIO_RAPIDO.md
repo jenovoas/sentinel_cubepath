@@ -142,7 +142,7 @@ Cognitive: "You're root, but this is SUICIDAL - BLOCKED"
 ### Data Flow
 
 ```
-1. Event arrives → DualLaneRouter
+1. Event ives → DualLaneRouter
 2. Classification (lane=security or lane=ops)
 3. Security lane:
    - Bypass buffers
@@ -257,9 +257,9 @@ docker-compose up -d
 
 **Find a vulnerability? Get rewarded!**
 
-- **CRITICAL** ($10,000): Bypass ECDSA whitelist without private key
-- **HIGH** ($5,000): SSRF with forged headers accepted
-- **MEDIUM** ($1,000): AIOpsDoom payload not detected
+- **CRITICAL** (): Bypass ECDSA whitelist without private key
+- **HIGH** (): SSRF with forged headers accepted
+- **MEDIUM** (): AIOpsDoom payload not detected
 
 **Submit via**: GitHub Issues with "Security" label
 

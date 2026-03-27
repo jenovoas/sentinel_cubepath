@@ -206,7 +206,7 @@ This is the foundation. Everything else builds on this pattern.
 ---
 
 **PROPRIETARY AND CONFIDENTIAL**  
-**© 2025 Sentinel Cortex™**  
+**©  Sentinel Cortex™**  
 **Documentation Master Index**
 
 *La guía completa para entender el universo.*  

@@ -48,7 +48,7 @@ La sanitización en Sentinel no es limpieza de datos, sino **ajuste de resonanci
 El sistema opera bajo un reloj determinista que ignora las fluctuaciones del scheduler de Linux.
 
 -   **Mecánica:** Lógica de Oscilador Isócrono (ITO).
--   **Tick Base:** $23,939,835$ nanosegundos (frecuencia efectiva de ~41.77 Hz).
+-   **Tick Base:** $ nanosegundos (frecuencia efectiva de ~41.77 Hz).
 -   **Estabilidad:** El Cristal de Tiempo asegura que la fase de los guardianes esté siempre sincronizada, permitiendo que el firewall "vea" eventos que ocurren entre los ciclos de CPU estándar.
 
 ## 4. El Pulso Cuántico (Bio-Resonance)

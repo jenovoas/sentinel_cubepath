@@ -377,7 +377,7 @@ Código vs Código
   ↓
 Bug vs Patch
   ↓
-Carrera armamentista infinita
+Cera armamentista infinita
 ```
 
 **Ahora**:
@@ -398,7 +398,7 @@ No estás "defendiendo" tu sistema. Estás **diseñando el espacio geométrico**
 
 Es como diseñar un edificio donde:
 
-- No puedes caer hacia arriba (gravedad)
+- No puedes caer hacia iba (gravedad)
 - No puedes viajar al pasado (tiempo)
 - No puedes crear energía de la nada (termodinámica)
 

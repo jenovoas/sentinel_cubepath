@@ -2,7 +2,7 @@
 **Sentinel Cortex™ - Critical Research & Strategy Consolidation**
 
 **Confidencialidad:** ATTORNEY-CLIENT PRIVILEGED  
-**Fecha:** Diciembre 2025  
+**Fecha:** Diciembre   
 **Versión:** 1.1 - LEGAL CORRECTIONS APPLIED
 **Status:** Ready for Patent Attorney Review
 
@@ -13,9 +13,9 @@
 ### La Oportunidad
 
 **Sentinel Cortex™** ha descubierto y mitigado una vulnerabilidad crítica (CVSS 9.1) que afecta al 99% de sistemas AIOps actuales, validada por:
-- ✅ **CVE Real:** CVE-2025-42957 (CVSS 9.9) - SAP S/4HANA explotado in-the-wild
-- ✅ **Investigación Académica:** RSA Conference 2025 - "AIOpsDoom" attack
-- ✅ **Mercado Validado:** $11.16B AIOps market, 25.3% CAGR
+- ✅ **CVE Real:** CVE--42957 (CVSS 9.9) - SAP S/4HANA explotado in-the-wild
+- ✅ **Investigación Académica:** RSA Conference  - "AIOpsDoom" attack
+- ✅ **Mercado Validado:** .16B AIOps market, 25.3% CAGR
 
 ### La Solución
 
@@ -30,17 +30,17 @@
 
 ```
 VALORACIÓN POST-SEED:
-├─ Conservadora: $153M
-├─ Agresiva: $230M
-└─ Promedio: $192M
+├─ Conservadora: 
+├─ Agresiva: 
+└─ Promedio: 
 
 IP PROTEGIDA:
 ├─ 3 Claims Patentables (diferenciados de prior art)
-├─ Licensing Potential: $100M+ (SOAR/AIOps vendors)
+├─ Licensing Potential: + (SOAR/AIOps vendors)
 └─ M&A Premium: +150% (strategic acquirer)
 
 TIMELINE CRÍTICO:
-└─ Provisional Patent: 15 Febrero 2026 (90 días)
+└─ Provisional Patent: 15 Febrero  (90 días)
 ```
 
 ---
@@ -80,7 +80,7 @@ A:H   - Availability: High
 
 ### 1.2 Validación Externa
 
-**CVE-2025-42957 (SAP S/4HANA):**
+**CVE--42957 (SAP S/4HANA):**
 - CVSS: **9.9 (CRITICAL)**
 - Status: **Explotado in-the-wild**
 - Impact: Full system compromise
@@ -160,8 +160,8 @@ por sistemas de inteligencia artificial, incluyendo detección y
 bloqueo de vectores de inyección de prompts específicos a LLMs"
 ```
 
-**IP Value:** $3-5M  
-**Licensing:** $20-30M potential  
+**IP Value:** -5M  
+**Licensing:** -30M potential  
 **Diferenciador clave:**
 - ✅ WAFs sanitizan para SQL/XSS (prior art abundante)
 - ✅ Tu novedad: Sanitización específica para LLM injection
@@ -182,8 +182,8 @@ requiere corroboración de múltiples fuentes independientes,
 con poder de veto cuando la evidencia es incompleta"
 ```
 
-**IP Value:** $5-8M  
-**Licensing:** $30-50M potential  
+**IP Value:** -8M  
+**Licensing:** -50M potential  
 
 **Diferenciador clave:**
 - ✅ Correlacionar 5 señales: Estándar en observabilidad
@@ -207,8 +207,8 @@ con poder de veto a nivel de syscall y mutual surveillance que
 protege contra usuarios internos maliciosos"
 ```
 
-**IP Value:** $8-15M  
-**Licensing:** $50-100M potential  
+**IP Value:** -15M  
+**Licensing:** -100M potential  
 **Prior Art:** **NINGUNO ENCONTRADO** ✅
 
 **Protección Dual** (Valor Agregado):
@@ -250,8 +250,8 @@ DEBE especificar:
 ### 4.1 Timeline Crítico
 
 ```
-FASE 1: PROVISIONAL PATENT (15 Feb 2026) - 90 DÍAS
-├─ Costo: $35,000
+FASE 1: PROVISIONAL PATENT (15 Feb ) - 90 DÍAS
+├─ Costo: 
 ├─ Requisitos: Technical description + 3 claims
 ├─ Beneficio: "Patent Pending" status, priority date locked
 ├─ Actividades (This Week):
@@ -259,17 +259,17 @@ FASE 1: PROVISIONAL PATENT (15 Feb 2026) - 90 DÍAS
 │  ├─ Miércoles: Calls iniciales
 │  ├─ Viernes: Seleccionar attorney + kick-off
 │  └─ Commits: Attorney comienza draft
-└─ Deadline: 15 Febrero 2026 🚨
+└─ Deadline: 15 Febrero  🚨
 
 FASE 2: NON-PROVISIONAL (Feb 2027) - 12 MESES
-├─ Costo: $40,000
+├─ Costo: 
 ├─ Includes: Detailed drawings + implementation examples
 ├─ Examination: 12-18 meses típicamente
 ├─ Strategy: Anticipate and overcome rejections
 └─ Timeline: Feb 2027 filing
 
-TOTAL 2-YEAR BUDGET: $75,000
-ROI: 533-1,013× (protege $40-76M en IP)
+TOTAL 2-YEAR BUDGET: 
+ROI: 533-1,013× (protege -76M en IP)
 ```
 
 ### 4.2 Correcciones Específicas para Patent Filing
@@ -332,57 +332,57 @@ SQL/XSS"
 
 ### 5.1 Valoración Post-Seed (Updateddata)
 
-**CONSERVADORA: $153M**
+**CONSERVADORA: **
 ```
-Base SaaS: $50M (revenue growth trajectory)
+Base SaaS:  (revenue growth trajectory)
 ├─ 200 enterprise customers
-├─ $25K ARR typical
+├─   typical
 └─ 3-5 year runway
 
-IP Portfolio: $15M (3 patents)
-├─ Claim 1: $3-5M
-├─ Claim 2: $5-8M
-└─ Claim 3: $8-15M
+IP Portfolio:  (3 patents)
+├─ Claim 1: -5M
+├─ Claim 2: -8M
+└─ Claim 3: -15M
 
-AIOpsDoom Defense: $20M (unique moat)
+AIOpsDoom Defense:  (unique moat)
 ├─ Only solution without prior art
 ├─ Protects Fortune 500 AIOps deployments
 └─ Licensing upside
 
-Compliance/Security: $12M
+Compliance/Security: 
 ├─ SOC 2 Type II
 ├─ GDPR compliance
 └─ HIPAA readiness
 
-Other: $56M (ecosystem, brand, team premium)
+Other:  (ecosystem, brand, team premium)
 
-TOTAL: $153M
+TOTAL: 
 ```
 
-**AGRESIVA: $230M**
+**AGRESIVA: **
 ```
 If IP licensing closes with major vendor (Splunk/Palo Alto):
-├─ Additional $30-50M licensing revenue
+├─ Additional -50M licensing revenue
 ├─ Multiple uplift: 2-3x on licensing
-└─ Total: $230M
+└─ Total: 
 
-REALISTIC: $192M (midpoint)
+REALISTIC:  (midpoint)
 ```
 
 ### 5.2 Incremento vs Anterior
 
 | Componente | Anterior | Actualizada | Incremento | Justificación |
 |------------|----------|-------------|-----------|---|
-| IP Portfolio | $10M | $15M | **+$5M** | 3 claims patentables vs 1-2 |
-| AIOpsDoom Defense | $5M | $20M | **+$15M** | Único moat vs CVE-2025-42957 |
-| Compliance | $3M | $12M | **+$9M** | Enterprise customers exigen |
-| **TOTAL** | **$121M** | **$153M** | **+$32M (+26%)** | Patent strategy validated |
+| IP Portfolio |  |  | **+** | 3 claims patentables vs 1-2 |
+| AIOpsDoom Defense |  |  | **+** | Único moat vs CVE--42957 |
+| Compliance |  |  | **+** | Enterprise customers exigen |
+| **TOTAL** | **** | **** | **+ (+26%)** | Patent strategy validated |
 
 ---
 
 ## 6. PLAN DE ACCIÓN 90 DÍAS
 
-### ESTA SEMANA (16-22 Dic 2025)
+### ESTA SEMANA (16-22 Dic )
 
 **LUNES 16 DIC:**
 - [ ] Buscar 5-7 patent attorneys (focus: security + kernel expertise)
@@ -394,7 +394,7 @@ REALISTIC: $192M (midpoint)
   - [ ] 1-page executive summary (AIOpsDoom threat)
   - [ ] 3 claims abstracts
   - [ ] Timeline (Feb 15 deadline)
-  - [ ] Budget ($35K provisional)
+  - [ ] Budget ( provisional)
 - [ ] Subject: "Security Patent - Kernel-Level AIOps Defense (Feb 15 deadline)"
 
 **VIERNES 20 DIC:**
@@ -402,11 +402,11 @@ REALISTIC: $192M (midpoint)
   - [ ] Detailed architecture diagrams (5 layers)
   - [ ] eBPF implementation spec
   - [ ] Prior art search results
-  - [ ] CVE-2025-42957 validation
+  - [ ] CVE--42957 validation
 
 ---
 
-### SEMANA 2-3 (23 Dic - 7 Ene 2026)
+### SEMANA 2-3 (23 Dic - 7 Ene )
 
 **Calls con Attorneys (Select top 2-3):**
 - [ ] Technical deep-dive on Claim 3 (Dual-Guardian home run)
@@ -416,12 +416,12 @@ REALISTIC: $192M (midpoint)
 
 **Select Attorney:**
 - [ ] Criteria: Understand kernel security + startup mentality
-- [ ] Negotiate fee: Goal <$35K provisional
+- [ ] Negotiate fee: Goal < provisional
 - [ ] Kick-off meeting
 
 ---
 
-### SEMANA 4-12 (10 Ene - 15 Feb 2026)
+### SEMANA 4-12 (10 Ene - 15 Feb )
 
 **Intensive Patent Drafting:**
 - [ ] Week 1-2: Technical disclosure document
@@ -436,7 +436,7 @@ REALISTIC: $192M (midpoint)
 - [ ] Security team validates threat model
 - [ ] Legal team reviews language
 
-**DEADLINE: 15 FEBRERO 2026 - FILE PROVISIONAL PATENT** 🚨
+**DEADLINE: 15 FEBRERO  - FILE PROVISIONAL PATENT** 🚨
 
 ---
 
@@ -449,7 +449,7 @@ REALISTIC: $192M (midpoint)
 | **LLM-specific sanitization** | ✅ (Claim 1) | ❌ | ❌ | ❌ |
 | **Multi-factor veto** | ✅ (Claim 2) | Partial | Partial | Partial |
 | **Prior Art** | None (Home Run) | Abundant | Abundant | Moderate |
-| **Cost** | $78/mo | $50K-200K/yr | $100K-500K/yr | $10K-50K/yr |
+| **Cost** | /mo | -200K/yr | -500K/yr | -50K/yr |
 | **Enterprise Ready** | ✅ (HIPAA/SOC2) | ✅ | ✅ | Partial |
 
 ---
@@ -458,12 +458,12 @@ REALISTIC: $192M (midpoint)
 
 ### 8.1 CVEs Validados
 
-- **CVE-2025-42957** (CVSS 9.9) - SAP S/4HANA Telemetry Injection
-- **CVE-2025-55182** (CVSS 8.8) - React2Shell (related injection vector)
+- **CVE--42957** (CVSS 9.9) - SAP S/4HANA Telemetry Injection
+- **CVE--55182** (CVSS 8.8) - React2Shell (related injection vector)
 
 ### 8.2 Datos de Mercado
 
-- **AIOps Market:** $11.16B, 25.3% CAGR (2023-2030)
+- **AIOps Market:** .16B, 25.3% CAGR (2023-2030)
 - **Fortune 500 Adoption:** 78% using AIOps platforms
 - **MTTR Reduction:** 60-70% (median) with AIOps
 - **Security Budget Allocation:** 23% to automation (trend ↑)
@@ -524,7 +524,7 @@ Claim 3 vs Prior Art:
 2. ✅ Seleccionar attorney final
 3. ✅ Kick-off meeting
 
-### 90 Días (10 Ene - 15 Feb 2026)
+### 90 Días (10 Ene - 15 Feb )
 1. ✅ Patent drafting intensive
 2. ✅ Internal validation
 3. ✅ **FILE PROVISIONAL PATENT** 🚨
@@ -534,11 +534,11 @@ Claim 3 vs Prior Art:
 ## 🎓 CONCLUSIÓN
 
 - **Amenaza:** AIOpsDoom (CVSS 9.1), afecta 99% de AIOps
-- **Validación:** CVE-2025-42957 (CVSS 9.9) explotado in-the-wild
+- **Validación:** CVE--42957 (CVSS 9.9) explotado in-the-wild
 - **Solución:** Arquitectura patentable de 5 capas
-- **Valor:** $153-230M Post-Seed + $100M+ licensing
-- **Timeline:** 90 días para provisional patent (Feb 15, 2026)
-- **ROI:** 533-1,013× sobre inversión de $75K
+- **Valor:** -230M Post-Seed + + licensing
+- **Timeline:** 90 días para provisional patent (Feb 15, )
+- **ROI:** 533-1,013× sobre inversión de 
 - **Legal Status:** ✅ Correcciones aplicadas, listo para attorney review
 - **Technical Status:** ✅ eBPF/seccomp especificados, race conditions mitigadas
 - **IP Status:** ✅ 3 claims diferenciados, Claim 3 sin prior art (HOME RUN)
@@ -551,5 +551,5 @@ Claim 3 vs Prior Art:
 **Confidencialidad:** ATTORNEY-CLIENT PRIVILEGED  
 **Versión:** 1.1 - LEGAL CORRECTIONS  
 **Status:** ✅ READY FOR PATENT ATTORNEY REVIEW  
-**Date:** Diciembre 17, 2025  
+**Date:** Diciembre 17,   
 **Autor:** Sentinel Security Team + Legal Review

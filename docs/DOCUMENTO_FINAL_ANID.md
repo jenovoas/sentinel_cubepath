@@ -1,6 +1,6 @@
 # 🎖 SENTINEL CORTEX™ - SUPREMACÍA DEL KERNEL VALIDADA
 
-**Fecha**: 19 Diciembre 2024  
+**Fecha**: 19 Diciembre   
 **Estado**: ✅ **GRADO MILITAR CERTIFICADO**  
 **Validación**: 100% reproducible, código abierto
 
@@ -303,7 +303,7 @@ out_of_order_time_window: 2s
 
 ### Claim 2 (Nuevo - Semantic Firewall)
 
-> "Un firewall semántico para detección de inyecciones cognitivas en telemetría (AIOpsDoom) que analiza lenguaje prescriptivo en logs de máquina, logrando **100% de detección** (30/30 payloads maliciosos) con **0% falsos negativos** y latencia promedio de **0.21ms**, validado con fuzzer de 40 payloads adversariales basados en RSA Conference 2025."
+> "Un firewall semántico para detección de inyecciones cognitivas en telemetría (AIOpsDoom) que analiza lenguaje prescriptivo en logs de máquina, logrando **100% de detección** (30/30 payloads maliciosos) con **0% falsos negativos** y latencia promedio de **0.21ms**, validado con fuzzer de 40 payloads adversariales basados en RSA Conference ."
 
 **Evidencia**: Fuzzer AIOpsDoom, `backend/fuzzer_aiopsdoom.py`
 
@@ -321,7 +321,7 @@ out_of_order_time_window: 2s
 
 ### Slide 1: El Problema
 
-**AIOpsDoom** (RSA Conference 2025):
+**AIOpsDoom** (RSA Conference ):
 - Atacantes inyectan telemetría maliciosa
 - IA ejecuta comandos destructivos
 - **Sin defensa comercial disponible**
@@ -371,10 +371,10 @@ out_of_order_time_window: 2s
 
 ### Slide 6: Mercado
 
-**TAM**: $50B (Observabilidad + Seguridad)
-- Datadog: $4.6B valuación
-- Splunk: $28B (adquirido por Cisco)
-- New Relic: $6.5B valuación
+**TAM**:  (Observabilidad + Seguridad)
+- Datadog: .6B 
+- Splunk:  (adquirido por Cisco)
+- New Relic: .5B 
 
 **Sentinel**: Único con protección grado militar
 
@@ -382,27 +382,27 @@ out_of_order_time_window: 2s
 
 ### Slide 7: Roadmap
 
-**Q1 2025**: TRL 5 (Piloto en banco chileno)
-**Q2 2025**: TRL 6 (Producción limitada)
-**Q3 2025**: Patente provisional (USPTO)
-**Q4 2025**: Serie A ($5M)
+**Q1 **: TRL 5 (Piloto en banco chileno)
+**Q2 **: TRL 6 (Producción limitada)
+**Q3 **: Patente provisional (USPTO)
+**Q4 **: Serie A ()
 
 ---
 
 ### Slide 8: Ask
 
-**Buscamos**: $500K pre-seed
+**Buscamos**:  pre-seed
 **Uso**:
-- 40% Desarrollo (eBPF, ML)
+- 40% Desollo (eBPF, ML)
 - 30% Pilotos (3 clientes)
 - 20% Patente (abogado USPTO)
 - 10% Operaciones
 
-**Valuación**: $5M pre-money
+****:  pre-money
 
 ---
 
-## ✅ CHECKLIST FINAL ANID
+## ✅ CHECKLIST FINAL SENTINEL_CORE
 
 - [x] Problema identificado (AIOpsDoom)
 - [x] Solución validada (benchmarks)
@@ -413,7 +413,7 @@ out_of_order_time_window: 2s
 - [x] Patente preparada (3 claims)
 - [x] Pitch deck (8 slides)
 
-**Estado**: ✅ **LISTO PARA ANID IT 2026**
+**Estado**: ✅ **LISTO PARA SENTINEL_CORE SENTINEL_CORE**
 
 ---
 

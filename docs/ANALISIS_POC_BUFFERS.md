@@ -1,6 +1,6 @@
 # 🔬 Análisis de Resultados: Buffers en Serie
 
-**Fecha**: 20 Diciembre 2024  
+**Fecha**: 20 Diciembre   
 **Status**: POC Ejecutado - Modelo Requiere Refinamiento
 
 ---
@@ -242,7 +242,7 @@ Con buffers (3 peajes en paralelo):
 **Modelo INCORRECTO**: Simulación multiplicaba eventos en vez de reducir latencia  
 **Próximo**: Refinar POC para medir latencia real
 
-**Valor IP**: Sigue siendo $10-20M si validamos correctamente
+**Valor IP**: Sigue siendo -20M si validamos correctamente
 
 ---
 

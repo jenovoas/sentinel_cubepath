@@ -176,7 +176,7 @@ python -m cProfile -o profile.stats sentinel_global_benchmark.py
 
 ### 5. Upgrade Hardware (MÁXIMO IMPACTO, COSTO)
 
-**Acción**: Upgrade a RTX 3060 12GB (~$300)
+**Acción**: Upgrade a RTX 3060 12GB (~)
 
 **Mejora Esperada**: 1,213ms → **100-200ms** (6-12x) ✅
 
@@ -264,7 +264,7 @@ E2E: 7,244ms → 500-800ms (9-14x mejora)
 Speedup total: 10-20x ✅ (cerca del objetivo)
 ```
 
-### Con Upgrade Hardware ($300)
+### Con Upgrade Hardware ()
 
 ```
 TTFB: 1,213ms → 100-200ms (6-12x mejora)
@@ -288,14 +288,14 @@ Speedup total: 20-50x ✅ (supera objetivo)
 1. [ ] Probar `phi3:mini-q4_K_M` (quantizado)
 2. [ ] Optimizar código Python
 3. [ ] Validar 10-20x speedup
-4. [ ] Preparar presentación ANID
+4. [ ] Preparar presentación SENTINEL_CORE
 
 ### Mediano Plazo (1 Mes)
 
 1. [ ] Evaluar upgrade GPU (RTX 3060)
 2. [ ] Implementar Buffer ML
 3. [ ] Validar 30x+ speedup
-4. [ ] Presentar a ANID
+4. [ ] Presentar a SENTINEL_CORE
 
 ---
 

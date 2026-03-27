@@ -1,6 +1,6 @@
 #  Plan de Integración: Gemini como LLM Local de Sentinel
 
-**Fecha**: 22 Diciembre 2024, 22:45  
+**Fecha**: 22 Diciembre , 22:45  
 **Objetivo**: Integrar Gemini como motor de IA para todos los componentes de Sentinel  
 **Fase**: Usar Gemini API hasta que Google preste hardware local
 
@@ -124,7 +124,7 @@ class TruthAlgorithmGemini:
 **Beneficios**:
 - ✅ Síntesis inteligente de múltiples fuentes
 - ✅ Detección de contradicciones sutiles
-- ✅ Evaluación de credibilidad de fuentes
+- ✅ E de credibilidad de fuentes
 
 ---
 
@@ -264,19 +264,19 @@ class LLMCache:
 ### Con Gemini API
 
 **Gemini 1.5 Flash** (más barato):
-- Input: $0.075 / 1M tokens
-- Output: $0.30 / 1M tokens
+- Input:  / 1M tokens
+- Output: .30 / 1M tokens
 
 **Estimación mensual** (10K requests/día):
 - Promedio: 500 tokens input + 200 tokens output por request
 - 10K requests × 30 días = 300K requests/mes
-- Input: 150M tokens × $0.075 = $11.25
-- Output: 60M tokens × $0.30 = $18.00
-- **Total: ~$30/mes** (muy barato con cache)
+- Input: 150M tokens ×  = .25
+- Output: 60M tokens × .30 = .00
+- **Total: ~/mes** (muy barato con cache)
 
 ### Con Gemini Local (cuando Google preste hardware)
 
-- **Costo**: $0 (hardware prestado)
+- **Costo**:  (hardware prestado)
 - **Latencia**: <10ms (local)
 - **Privacy**: 100% (no sale del servidor)
 - **Throughput**: Ilimitado
@@ -338,7 +338,7 @@ class LLMCache:
 - ✅ Uptime >99.9%
 
 ### Negocio
-- ✅ Costo <$100/mes (con API)
+- ✅ Costo </mes (con API)
 - ✅ Reducción 50% en falsos positivos
 - ✅ Reducción 80% en tiempo de triage
 - ✅ Satisfacción usuario >4.5/5

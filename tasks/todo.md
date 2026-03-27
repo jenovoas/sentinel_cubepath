@@ -17,30 +17,30 @@ Lista de tareas para la ejecución del despliegue en CubePath (Rocky Linux 10, 4
 
 ---
 
-## 📅 Hito 1: Infraestructura de Instancia (En Servidor)
+## 📅 Hito 1: Infraestructura de Instancia (Completado)
 
-- [ ] Crear instancia de Rocky Linux 10 en CubePath (4GB RAM).
-- [ ] Clonar el repositorio `sentinel-cubepath`.
-- [ ] Instalar dependencias: `clang`, `llvm`, `libbpf-devel`, `rustup`.
-- [ ] Habilitar el sistema de archivos BPF: `mount -t bpf bpf /sys/fs/bpf/`.
-- [ ] Configurar `/etc/ssh/sshd_config` acorde a las necesidades de la hackatón.
-
----
-
-## 📅 Hito 2: Compilación y Carga (En Servidor)
-
-- [ ] Compilar guardianes: `cd backend/ebpf && make all`.
-- [ ] Cargar módulos LSM: `make load`.
-- [ ] Compilar backend: `cargo build --release -j 2`.
-- [ ] Compilar frontend: `npm run build`.
+- [x] Crear instancia de Rocky Linux 10 en CubePath (4GB RAM).
+- [x] Clonar el repositorio `sentinel-cubepath`.
+- [x] Instalar dependencias: `clang`, `llvm`, `libbpf-devel`, `rustup`.
+- [x] Habilitar el sistema de archivos BPF: `mount -t bpf bpf /sys/fs/bpf/`.
+- [x] Configurar `/etc/ssh/sshd_config` acorde a las necesidades de la hackatón.
 
 ---
 
-## 📅 Hito 3: Validación Final (En Servidor)
+## 📅 Hito 2: Compilación y Carga (Completado)
 
-- [ ] Iniciar el API de Sentinel (`./target/release/sentinel-cortex`).
-- [ ] Iniciar el Dashboard en el puerto 3000.
-- [ ] Probar el **Arco de Reflejo**: Verificar bloqueo de red al llegar la Coherencia Bio a 0.
+- [x] Compilar guardianes: `cd backend/ebpf && make all`.
+- [x] Cargar módulos LSM/XDP: `make load`.
+- [x] Compilar backend: `cargo build --release -j 2`.
+- [x] Compilar frontend: `npm run build`.
+
+---
+
+## 📅 Hito 3: Validación Final (En ejecución)
+
+- [x] Iniciar el API de Sentinel (`./target/release/sentinel-cortex`).
+- [x] Iniciar el Dashboard en el puerto 3000 (Verificado en `vps23309.cubepath.net`).
+- [/] Probar el **Arco de Reflejo**: Verificar bloqueo de red al llegar la Coherencia Bio a 0.
 - [ ] Comprobar el log de RingBuffer del kernel (`bpftool prog list`).
 
 ---

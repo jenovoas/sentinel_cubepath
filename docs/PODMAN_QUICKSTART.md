@@ -15,7 +15,7 @@ chmod +x scripts/pod-manager.sh
 
 ## Uso Diario
 
-### Desarrollo Frío (Solo Base de Datos)
+### Desollo Frío (Solo Base de Datos)
 ```bash
 ./scripts/pod-manager.sh start minimal
 ```
@@ -24,7 +24,7 @@ chmod +x scripts/pod-manager.sh
 
 ---
 
-### Desarrollo Full-Stack
+### Desollo Full-Stack
 ```bash
 ./scripts/pod-manager.sh start backend
 ```

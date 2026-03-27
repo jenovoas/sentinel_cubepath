@@ -1,6 +1,6 @@
 # 🔬 INVESTIGACIÓN PENDIENTE - Guardian Gamma & HITL
 
-**Fecha**: 21 de Diciembre de 2025, 12:05 PM  
+**Fecha**: 21 de Diciembre de , 12:05 PM  
 **Fuente**: Análisis de Perplexity sobre Human-in-the-Loop  
 **Estado**: PENDIENTE DE VALIDACIÓN HUMANA
 
@@ -229,15 +229,15 @@ Guardian Gamma (HUMANO)       → Validación + Intuición
 
 **Mantener confidencial** mientras se valida.
 
-**Deadline**: Provisional patent antes de Feb 15, 2026
+**Deadline**: Provisional patent antes de Feb 15, 
 
 ---
 
-**Fecha de creación**: 21 de Diciembre de 2025, 12:05 PM  
-**Última actualización**: 21 de Diciembre de 2025, 12:05 PM  
+**Fecha de creación**: 21 de Diciembre de , 12:05 PM  
+**Última actualización**: 21 de Diciembre de , 12:05 PM  
 **Estado**: PENDIENTE DE VALIDACIÓN
 
 ---
 
 **CONFIDENCIAL - PROPRIETARY**  
-**Copyright © 2025 Sentinel Cortex™ - All Rights Reserved**
+**Copyright ©  Sentinel Cortex™ - All Rights Reserved**

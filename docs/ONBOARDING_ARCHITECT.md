@@ -126,7 +126,7 @@
 ### Opción B: Diseño de Feature Nueva
 
 **Tu mensaje**:
-> "Necesito tu ayuda para diseñar el sistema de **auto-remediation**. La idea es que Sentinel detecte problemas y los arregle automáticamente. ¿Podrías diseñar la arquitectura completa?"
+> "Necesito tu ayuda para diseñar el sistema de **auto-remediation**. La idea es que Sentinel detecte problemas y los egle automáticamente. ¿Podrías diseñar la arquitectura completa?"
 
 **Pedir**:
 1. Diagrama de arquitectura
@@ -183,7 +183,7 @@
 
 ---
 
-## 🔍 Evaluación Final (Fin Semana 2)
+## 🔍 E Final (Fin Semana 2)
 
 ### Checklist de Decisión
 
@@ -204,9 +204,9 @@
 
 ---
 
-## 📊 Matriz de Evaluación
+## 📊 Matriz de E
 
-| Área | Peso | Evaluación |
+| Área | Peso | E |
 |------|------|------------|
 | **Arquitectura Distribuida** | 25% | 1-10 |
 | **Código Limpio / SOLID** | 20% | 1-10 |
@@ -259,4 +259,4 @@
 
 ---
 
-**Éxito con la evaluación!** 
+**Éxito con la e!** 

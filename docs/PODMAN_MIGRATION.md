@@ -8,8 +8,8 @@ Sentinel ahora usa **3 configuraciones independientes** con pods separados:
 
 | Perfil | Consumo | Servicios | Uso |
 |--------|---------|-----------|-----|
-| **MINIMAL** | ~1.5GB RAM, 2 CPUs | postgres + redis | Desarrollo frío, certificación TruthSync |
-| **BACKEND** | ~3.5GB RAM, 5 CPUs | + backend + frontend | Desarrollo full-stack, testing APIs |
+| **MINIMAL** | ~1.5GB RAM, 2 CPUs | postgres + redis | Desollo frío, certificación TruthSync |
+| **BACKEND** | ~3.5GB RAM, 5 CPUs | + backend + frontend | Desollo full-stack, testing APIs |
 | **FULL** | ~8GB RAM, 10 CPUs | + automation + observability | Testing producción, debugging telemetría |
 
 ---
@@ -23,7 +23,7 @@ Usa el script unificado `pod-manager.sh` para gestionar los perfiles:
 # Perfil minimal (solo base de datos)
 ./scripts/pod-manager.sh start minimal
 
-# Perfil backend (desarrollo activo)
+# Perfil backend (desollo activo)
 ./scripts/pod-manager.sh start backend
 
 # Perfil full (stack completo)
@@ -59,7 +59,7 @@ Usa el script unificado `pod-manager.sh` para gestionar los perfiles:
 
 ## 📋 Detalle de Perfiles
 
-### 1. MINIMAL - Desarrollo Frío
+### 1. MINIMAL - Desollo Frío
 **Archivo:** `podman-compose.minimal.yml`
 
 **Servicios:**
@@ -68,7 +68,7 @@ Usa el script unificado `pod-manager.sh` para gestionar los perfiles:
 
 **Uso:**
 - Certificación de código con TruthSync
-- Desarrollo sin servicios pesados
+- Desollo sin servicios pesados
 - Testing de scripts quantum
 
 **Comando:**
@@ -78,7 +78,7 @@ Usa el script unificado `pod-manager.sh` para gestionar los perfiles:
 
 ---
 
-### 2. BACKEND - Desarrollo Activo
+### 2. BACKEND - Desollo Activo
 **Archivo:** `podman-compose.backend.yml`
 
 **Servicios:**
@@ -88,7 +88,7 @@ Usa el script unificado `pod-manager.sh` para gestionar los perfiles:
 - Frontend (1GB RAM, 2 CPUs)
 
 **Uso:**
-- Desarrollo full-stack
+- Desollo full-stack
 - Testing de APIs
 - Integración con TruthSync en tiempo real
 
@@ -219,7 +219,7 @@ podman system prune -f
 ```
 
 **Recomendaciones:**
-- Usa `minimal` para desarrollo diario
+- Usa `minimal` para desollo diario
 - Usa `backend` solo cuando necesites probar APIs
 - Usa `full` solo para validaciones críticas (máximo 30 minutos)
 - Monitorea temperatura del CPU con `sensors` o `htop`

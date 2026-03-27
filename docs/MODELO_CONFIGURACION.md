@@ -27,7 +27,7 @@
 ## 🧪 Modelos en Testing
 
 ### phi3:mini
-**Estado**: Testing / Desarrollo
+**Estado**: Testing / Desollo
 
 **Especificaciones**:
 - Tamaño: 2.2 GB
@@ -144,6 +144,6 @@ python benchmark_phi_vs_llama.py
 
 ---
 
-**Última actualización**: 19 Diciembre 2024  
+**Última actualización**: 19 Diciembre   
 **Modelo activo**: llama3.2:1b  
 **Próxima revisión**: Después de validar en producción

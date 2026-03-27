@@ -2,7 +2,7 @@
 
 **Firewall Cognitivo a Nivel de Kernel (Ring-0) para Seguridad de Agentes de IA**
 
-**Hackatón CubePath 2026 | Equipo Sentinel**
+**Hackatón CubePath  | Equipo Sentinel**
 
 ---
 
@@ -274,7 +274,7 @@ _Static_assert(sizeof(struct cortex_event) == 32,
     "cortex_event debe ser exactamente 32 bytes");
 ```
 
-Esta aserción **garantiza en tiempo de compilación** que la estructura tiene exactamente 32 bytes. Si un desarrollador agrega un campo sin ajustar el padding, la compilación falla inmediatamente.
+Esta aserción **garantiza en tiempo de compilación** que la estructura tiene exactamente 32 bytes. Si un desollador agrega un campo sin ajustar el padding, la compilación falla inmediatamente.
 
 ---
 
@@ -410,7 +410,7 @@ La lógica binaria tradicional tiene dos estados: `true` o `false`. Sentinel usa
 | **Reference** | 10;5,6,5,0 | Override maestro | Señal de calibración |
 | **Noise** | Cualquier otro | — | Señal no reconocida |
 
-### Evaluación de Intenciones de IA
+### E de Intenciones de IA
 
 Cuando un agente de IA envía una **intención** (truth claim), el procesador:
 
@@ -592,7 +592,7 @@ Permite enviar una **intención de agente IA** y ver el resultado del análisis 
    - **Trust Score** (0-100%)
    - **Harmonic State** (CONSONANT / TENSION / DISSONANT_CRITICAL)
    - **Ring-0 Intercepts** (0 si es seguro, 1+ si fue bloqueado)
-4. La UI muestra una **barra de progreso animada** con gradiente verde/rojo y efecto de sombra luminosa.
+4. La UI muestra una **ba de progreso animada** con gradiente verde/rojo y efecto de sombra luminosa.
 
 ---
 
@@ -738,5 +738,5 @@ Para un análisis exhaustivo de los mecanismos de bloqueo, sanitización de tele
 
 ---
 
-*Documentación generada para la Hackatón CubePath 2026.*  
+*Documentación generada para la Hackatón CubePath .*  
 *Sentinel Team — "AI Safety at Kernel Level"*

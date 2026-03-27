@@ -1,6 +1,6 @@
 #  Plan de Integración - Buffers Dinámicos
 
-**Fecha**: 19 Diciembre 2024  
+**Fecha**: 19 Diciembre   
 **Objetivo**: Integrar buffers dinámicos en toda la arquitectura HA
 
 ---
@@ -79,7 +79,7 @@ python sentinel_global_benchmark.py
 # Crear documentos finales:
 # - RESULTADOS_BUFFERS_DINAMICOS.md
 # - COMPARACION_FINAL_V1_V2.md
-# - PRESENTACION_ANID.md
+# - PRESENTACION_SENTINEL_CORE.md
 ```
 
 ---
@@ -137,9 +137,9 @@ git push
 - [x] Análisis de impacto en infraestructura TI
 - [x] Resumen de buffers dinámicos
 - [ ] Resultados benchmark comparativo
-- [ ] Presentación ANID
+- [ ] Presentación SENTINEL_CORE
 
-### ANID
+### SENTINEL_CORE
 - [ ] Actualizar análisis de impacto global
 - [ ] Actualizar claim 7 (buffers dinámicos)
 - [ ] Preparar presentación final

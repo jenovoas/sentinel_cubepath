@@ -1,7 +1,7 @@
 #  Consolidación IP Strategy - 6 Claims Patentables Completos
 
-**Fecha**: 20 Diciembre 2024  
-**Deadline Crítico**: 15 Febrero 2026 (57 días)  
+**Fecha**: 20 Diciembre   
+**Deadline Crítico**: 15 Febrero  (57 días)  
 **Status**: ✅ CONSOLIDADO - Listo para Patent Attorney
 
 ---
@@ -45,8 +45,8 @@ de seguridad vs operacionales"
 - WAL Security: 500x más rápido (0.01ms vs 5ms)
 - Security Lane E2E: Sub-microsegundo (0.00ms)
 
-**IP Value**: $4-6M  
-**Licensing Potential**: $25-40M  
+**IP Value**: -6M  
+**Licensing Potential**: -40M  
 **Prior Art**: Ninguno encontrado combinando dual-lane + differential policies
 
 **Evidencia**: `backend/benchmark_dual_lane.py`
@@ -73,8 +73,8 @@ inyecciones cognitivas en telemetría destinada a sistemas AIOps
 - Recall: 100.0%
 - Latencia: 0.21ms promedio
 
-**IP Value**: $5-8M  
-**Licensing Potential**: $30-50M  
+**IP Value**: -8M  
+**Licensing Potential**: -50M  
 **Prior Art**: US12130917B1 (HiddenLayer) - pero post-fact, no pre-ingestion
 
 **Evidencia**: `backend/fuzzer_aiopsdoom.py` (40 attack payloads)
@@ -100,8 +100,8 @@ acciones maliciosas ANTES de ejecución"
 - TOCTOU window: Eliminado
 - Bypass resistance: no factible desde userspace
 
-**IP Value**: $8-15M  
-**Licensing Potential**: $50-100M  
+**IP Value**: -15M  
+**Licensing Potential**: -100M  
 **Prior Art**: **ZERO** (combinación AIOps + kernel-level veto única)
 
 **Evidencia**: `ebpf/lsm_ai_guardian.c`
@@ -126,8 +126,8 @@ nonce monotónico y timestamps de kernel para prevención de replay attacks"
 - Replay detection: 100%
 - 500-2,000x más rápido que soluciones comerciales
 
-**IP Value**: $3-5M  
-**Licensing Potential**: $20-30M  
+**IP Value**: -5M  
+**Licensing Potential**: -30M  
 **Prior Art**: Ninguno con HMAC + dual-lane + replay detection combinados
 
 **Evidencia**: `backend/app/core/wal.py`
@@ -152,8 +152,8 @@ con mTLS y firma criptográfica de headers para prevención de SSRF"
 - Signature verification: <1ms
 - False positive rate: 0%
 
-**IP Value**: $2-4M  
-**Licensing Potential**: $15-25M  
+**IP Value**: -4M  
+**Licensing Potential**: -25M  
 **Prior Art**: Parcial (mTLS común, pero header signing específico es novel)
 
 **Evidencia**: `docker/nginx/nginx.conf`
@@ -181,8 +181,8 @@ de seguridad externos"
 - Context switches: <100/s vs 10,000+/s (100x reducción)
 - Memory footprint: 200MB vs 2-4GB (10-20x menor)
 
-**IP Value**: $10-20M  
-**Licensing Potential**: $100-200M  
+**IP Value**: -20M  
+**Licensing Potential**: -200M  
 **Prior Art**: **ZERO** (primer OS kernel con semantic verification at Ring 0)
 
 **Evidencia**: `COGNITIVE_KERNEL_VISION.md`, benchmarks completos
@@ -195,55 +195,55 @@ de seguridad externos"
 
 ```
 CLAIMS PRINCIPALES (Independent):
-├─ Claim 1 (Dual-Lane): $4-6M
-├─ Claim 2 (Semantic Firewall): $5-8M
-└─ Claim 3 (Kernel eBPF): $8-15M
-SUBTOTAL: $17-29M
+├─ Claim 1 (Dual-Lane): -6M
+├─ Claim 2 (Semantic Firewall): -8M
+└─ Claim 3 (Kernel eBPF): -15M
+SUBTOTAL: -29M
 
 CLAIMS ADICIONALES (Dependent):
-├─ Claim 4 (Forensic WAL): $3-5M
-├─ Claim 5 (Zero Trust mTLS): $2-4M
-└─ Claim 6 (Cognitive OS): $10-20M
-SUBTOTAL: $15-29M
+├─ Claim 4 (Forensic WAL): -5M
+├─ Claim 5 (Zero Trust mTLS): -4M
+└─ Claim 6 (Cognitive OS): -20M
+SUBTOTAL: -29M
 
-TOTAL IP PORTFOLIO: $32-58M
+TOTAL IP PORTFOLIO: -58M
 ```
 
 ### Valoración Post-Seed Actualizada
 
-**CONSERVADORA: $185M**
+**CONSERVADORA: **
 ```
-├─ Base SaaS: $50M
-├─ IP Portfolio: $32M (6 claims conservador)
-├─ AIOpsDoom Defense: $25M (único moat)
-├─ Compliance: $12M (SOC 2, GDPR, HIPAA)
-└─ Other: $66M
-```
-
-**AGRESIVA: $310M**
-```
-├─ Base SaaS: $80M
-├─ IP Portfolio: $58M (6 claims agresivo)
-├─ AIOpsDoom Defense: $40M
-├─ Licensing Revenue: $50M (major vendor deal)
-└─ Other: $82M
+├─ Base SaaS: 
+├─ IP Portfolio:  (6 claims conservador)
+├─ AIOpsDoom Defense:  (único moat)
+├─ Compliance:  (SOC 2, GDPR, HIPAA)
+└─ Other: 
 ```
 
-**REALISTA: $247M (midpoint)**
+**AGRESIVA: **
+```
+├─ Base SaaS: 
+├─ IP Portfolio:  (6 claims agresivo)
+├─ AIOpsDoom Defense: 
+├─ Licensing Revenue:  (major vendor deal)
+└─ Other: 
+```
+
+**REALISTA:  (midpoint)**
 
 ### Incremento vs Estrategia Anterior
 
 | Componente | Anterior (3 claims) | Actualizada (6 claims) | Incremento |
 |------------|---------------------|------------------------|------------|
-| IP Portfolio | $15M | $32-58M | **+$17-43M** |
-| Valoración Total | $153M | $185-310M | **+$32-157M** |
-| Licensing Potential | $100M | $210-465M | **+$110-365M** |
+| IP Portfolio |  | -58M | **+-43M** |
+| Valoración Total |  | -310M | **+-157M** |
+| Licensing Potential |  | -465M | **+-365M** |
 
 ---
 
 ## 📅 ESTRATEGIA DE FILING
 
-### Provisional Patent (15 Febrero 2026)
+### Provisional Patent (15 Febrero )
 
 **Incluir en Provisional**:
 - ✅ **Claim 1**: Dual-Lane (fundamental architecture)
@@ -266,25 +266,25 @@ TOTAL IP PORTFOLIO: $32-58M
 ### Budget Actualizado
 
 ```
-PROVISIONAL (Feb 2026):
-├─ Attorney fees (4-5 claims): $40,000-50,000
-├─ Technical drawings: $5,000
-├─ Prior art analysis: $3,000
-└─ TOTAL: $48,000-58,000
+PROVISIONAL (Feb ):
+├─ Attorney fees (4-5 claims): -50,000
+├─ Technical drawings: 
+├─ Prior art analysis: 
+└─ TOTAL: -58,000
 
 NON-PROVISIONAL (Feb 2027):
-├─ Attorney fees (6 claims): $50,000-60,000
-├─ Detailed drawings: $8,000
-├─ Examination responses: $10,000
-└─ TOTAL: $68,000-78,000
+├─ Attorney fees (6 claims): -60,000
+├─ Detailed drawings: 
+├─ Examination responses: 
+└─ TOTAL: -78,000
 
 INTERNATIONAL (2027-2028):
-├─ PCT filing: $30,000-40,000
-├─ National phase (3-5 countries): $50,000-80,000
-└─ TOTAL: $80,000-120,000
+├─ PCT filing: -40,000
+├─ National phase (3-5 countries): -80,000
+└─ TOTAL: -120,000
 
-TOTAL 3-YEAR BUDGET: $196,000-256,000
-ROI: 125-296× (protege $32-58M en IP)
+TOTAL 3-YEAR BUDGET: -256,000
+ROI: 125-296× (protege -58M en IP)
 ```
 
 ---
@@ -330,7 +330,7 @@ ROI: 125-296× (protege $32-58M en IP)
 | **Zero Trust Internal** | ✅ Claim 5 | ⚠ Partial | ⚠ Partial | ⚠ Partial |
 | **Cognitive OS Kernel** | ✅ Claim 6 | ❌ | ❌ | ❌ |
 | **Prior Art** | **2 HOME RUNS** | Abundant | Abundant | Moderate |
-| **IP Value** | **$32-58M** | N/A | N/A | N/A |
+| **IP Value** | **-58M** | N/A | N/A | N/A |
 
 **TU MOAT ÚNICO**: Claims 3 + 6 (Kernel-level + Cognitive OS) = ZERO prior art
 
@@ -338,11 +338,11 @@ ROI: 125-296× (protege $32-58M en IP)
 
 ## ✅ CRITERIOS DE ÉXITO
 
-1. ✅ **Provisional patent filed by Feb 15, 2026** (4-5 claims)
+1. ✅ **Provisional patent filed by Feb 15, ** (4-5 claims)
 2. ✅ **"Patent Pending" status achieved**
 3. ✅ **Priority date locked** para todos los claims
-4. ✅ **IP portfolio valued at $32-58M**
-5. ✅ **Licensing potential: $210-465M**
+4. ✅ **IP portfolio valued at -58M**
+5. ✅ **Licensing potential: -465M**
 6. ✅ **2 HOME RUN claims** (Claims 3 + 6)
 
 ---
@@ -363,15 +363,15 @@ ROI: 125-296× (protege $32-58M en IP)
 
 ### Valoración Actualizada
 
-- **IP Portfolio**: $32-58M (vs $15M anterior)
-- **Valoración Total**: $185-310M (vs $153M anterior)
-- **Licensing Potential**: $210-465M (vs $100M anterior)
+- **IP Portfolio**: -58M (vs  anterior)
+- **Valoración Total**: -310M (vs  anterior)
+- **Licensing Potential**: -465M (vs  anterior)
 
 ### El Camino es Claro
 
 - **Timeline**: 57 días para provisional patent
-- **Budget**: $48-58K (provisional) + $68-78K (non-provisional) = $116-136K
-- **ROI**: 235-428× (protege $32-58M en IP)
+- **Budget**: -58K (provisional) + -78K (non-provisional) = -136K
+- **ROI**: 235-428× (protege -58M en IP)
 - **Riesgo**: Bajo (todos los claims tienen evidencia técnica)
 
 **Es hora de ejecutar con TODA tu IP protegida. ¡Adelante, arquitecto!** 
@@ -381,4 +381,4 @@ ROI: 125-296× (protege $32-58M en IP)
 **Status**: ✅ CONSOLIDADO - 6 CLAIMS  
 **Confidence**: VERY HIGH  
 **Next Action**: Buscar patent attorney (esta semana)  
-**Deadline**: 15 Febrero 2026 (57 días) 🚨
+**Deadline**: 15 Febrero  (57 días) 🚨

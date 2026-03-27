@@ -89,10 +89,10 @@ Sentinel is a **complete observability and security platform** that provides:
 
 **Enterprise observability is expensive and fragmented**:
 
-- **Datadog**: $15-31/host/month + $5/million logs
-- **New Relic**: $25-100/host/month
-- **Security tools**: Additional $10-50/host/month
-- **Total**: $50-180/host/month for 100 hosts = **$60K-216K/year**
+- **Datadog**: -31/host/month + /million logs
+- **New Relic**: -100/host/month
+- **Security tools**: Additional -50/host/month
+- **Total**: -180/host/month for 100 hosts = **-216K/year**
 
 **Plus**:
 - ❌ Data privacy concerns (all data sent to cloud)
@@ -103,15 +103,15 @@ Sentinel is a **complete observability and security platform** that provides:
 ### The Sentinel Solution
 
 **All-in-one platform**:
-- ✅ **$0/month** for self-hosted (infrastructure costs only)
+- ✅ **/month** for self-hosted (infrastructure costs only)
 - ✅ **Privacy-first**: All data stays on your servers
 - ✅ **Open architecture**: Fully customizable
 - ✅ **Integrated security**: No separate tools needed
 
 **ROI Example** (100 hosts):
-- Datadog cost: $180K/year
-- Sentinel cost: $12K/year (infrastructure only)
-- **Savings: $168K/year (93% reduction)**
+- Datadog cost: /year
+- Sentinel cost: /year (infrastructure only)
+- **Savings: /year (93% reduction)**
 
 ---
 
@@ -254,9 +254,9 @@ Sentinel is a **complete observability and security platform** that provides:
 | **Kernel-Level Monitoring** | ✅ Native | ⚠ Agent-based | ⚠ Agent-based | ✅ EDR |
 | **AI Threat Analysis** | ✅ Local | ✅ Cloud | ✅ Cloud | ✅ Cloud |
 | **Privacy** | ✅ On-prem | ❌ Cloud | ❌ Cloud | ❌ Cloud |
-| **Cost** | **Included** | +$15/host/mo | $20-40/host/mo | $8-15/host/mo |
+| **Cost** | **Included** | +/host/mo | -40/host/mo | -15/host/mo |
 
-**Value Proposition**: Get enterprise-grade security monitoring **included** with your observability platform, not as a separate $20K/year tool.
+**Value Proposition**: Get enterprise-grade security monitoring **included** with your observability platform, not as a separate /year tool.
 
 ---
 
@@ -307,11 +307,11 @@ Sentinel is a **complete observability and security platform** that provides:
 | **First Query** | 7-10s | 15-20s |
 | **Subsequent** | 1-2s | 3-5s |
 | **Throughput** | 30 queries/min | 10 queries/min |
-| **Cost** | $0 | $0 |
+| **Cost** |  |  |
 
 **vs Cloud AI**:
-- OpenAI GPT-4: $0.03/1K tokens = **$30-100/month** for typical usage
-- Sentinel: **$0/month** (one-time GPU cost: $200-500)
+- OpenAI GPT-4: .03/1K tokens = **-100/month** for typical usage
+- Sentinel: **/month** (one-time GPU cost: -500)
 
 ---
 
@@ -432,13 +432,13 @@ Sentinel is a **complete observability and security platform** that provides:
 5. **RPO**: < 5 seconds (async replication lag)
 
 **Cost**:
-- On-premise: $3,500 (one-time hardware)
-- Cloud: $278/month (AWS/GCP)
-- **Total Year 1**: $6,836
+- On-premise:  (one-time hardware)
+- Cloud: /month (AWS/GCP)
+- **Total Year 1**: 
 
 **vs Managed HA**:
-- Datadog Enterprise HA: +$5,000/month = $60K/year
-- **Savings**: $53K/year (89% reduction)
+- Datadog Enterprise HA: +/month = /year
+- **Savings**: /year (89% reduction)
 
 ---
 
@@ -508,33 +508,33 @@ Sentinel is a **complete observability and security platform** that provides:
 
 **Self-Hosted (Open Core)**:
 - **Free**: Community edition (current features)
-- **Pro**: $99/month (SSO, RBAC, priority support)
+- **Pro**: /month (SSO, RBAC, priority support)
 - **Enterprise**: Custom pricing (multi-site HA, compliance, SLA)
 
 **Managed Cloud** (Future):
-- **Starter**: $49/month (5 hosts)
-- **Growth**: $199/month (25 hosts)
-- **Business**: $499/month (100 hosts)
+- **Starter**: /month (5 hosts)
+- **Growth**: /month (25 hosts)
+- **Business**: /month (100 hosts)
 - **Enterprise**: Custom (500+ hosts)
 
 ### Revenue Projections
 
 **Year 1** (Conservative):
-- 50 Pro customers × $99/mo = $59,400/year
-- 10 Enterprise deals × $5K/year = $50,000/year
-- **Total**: $109,400
+- 50 Pro customers × /mo = /year
+- 10 Enterprise deals × /year = /year
+- **Total**: 
 
 **Year 2** (Growth):
-- 200 Pro customers × $99/mo = $237,600/year
-- 30 Enterprise deals × $10K/year = $300,000/year
-- 20 Managed Cloud × $199/mo = $47,760/year
-- **Total**: $585,360
+- 200 Pro customers × /mo = /year
+- 30 Enterprise deals × /year = /year
+- 20 Managed Cloud × /mo = /year
+- **Total**: 
 
 **Year 3** (Scale):
-- 500 Pro customers × $99/mo = $594,000/year
-- 100 Enterprise deals × $15K/year = $1,500,000/year
-- 100 Managed Cloud × $499/mo = $598,800/year
-- **Total**: $2,692,800
+- 500 Pro customers × /mo = /year
+- 100 Enterprise deals × /year = /year
+- 100 Managed Cloud × /mo = /year
+- **Total**: 
 
 ### Market Validation
 
@@ -552,9 +552,9 @@ Sentinel is a **complete observability and security platform** that provides:
    - Need: All-in-one platform
 
 **Competitive Landscape**:
-- **Datadog**: $50B market cap, $2.1B revenue (2023)
-- **New Relic**: $6B market cap, $900M revenue (2023)
-- **Splunk**: Acquired by Cisco for $28B (2024)
+- **Datadog**:  market cap, .1B revenue (2023)
+- **New Relic**:  market cap,  revenue (2023)
+- **Splunk**: Acquired by Cisco for  ()
 - **Opportunity**: Underserved mid-market segment
 
 ---
@@ -597,7 +597,7 @@ Sentinel is a **complete observability and security platform** that provides:
    - ROI documentation
    - Video testimonials
 
-**Goal**: $100K ARR, 50 paying customers
+**Goal**:  , 50 paying customers
 
 ### Phase 3: Scale (Year 2+)
 
@@ -615,7 +615,7 @@ Sentinel is a **complete observability and security platform** that provides:
    - EU market (GDPR focus)
    - APAC expansion
 
-**Goal**: $500K+ ARR, 200+ customers
+**Goal**: + , 200+ customers
 
 ---
 
@@ -638,25 +638,25 @@ Sentinel is a **complete observability and security platform** that provides:
 
 ### Current Status
 
-**Bootstrapped**: $0 raised, profitable from day 1 (self-hosted model)
+**Bootstrapped**:  raised, profitable from day 1 (self-hosted model)
 
-### Seed Round (Target: $500K)
+### Seed Round (Target: )
 
 **Use of Funds**:
-- **Engineering** (50%): 2 engineers × $120K = $240K
-- **Sales & Marketing** (30%): 1 sales + marketing = $150K
-- **Operations** (10%): Infrastructure, tools = $50K
-- **Runway** (10%): Buffer = $50K
+- **Engineering** (50%): 2 engineers ×  = 
+- **Sales & Marketing** (30%): 1 sales + marketing = 
+- **Operations** (10%): Infrastructure, tools = 
+- **Runway** (10%): Buffer = 
 
 **Milestones**:
-- Month 6: $50K ARR
-- Month 12: $200K ARR
-- Month 18: $500K ARR (break-even)
+- Month 6:  
+- Month 12:  
+- Month 18:   (break-even)
 
 **Exit Strategy**:
 - **Acquisition**: Target by Datadog, New Relic, Cisco
 - **IPO**: Long-term (5-7 years)
-- **Comparable**: Grafana Labs ($3B valuation), Sentry ($3B valuation)
+- **Comparable**: Grafana Labs ( valuation), Sentry ( valuation)
 
 ---
 
@@ -689,7 +689,7 @@ Sentinel is a **complete observability and security platform** that provides:
 
 **Built with ❤ for DevOps teams who deserve better tools**
 
-*Last Updated: December 2025*
+*Last Updated: December *
 
 ---
 

@@ -1,6 +1,6 @@
 #  Arquitectura Dual-Lane - Resumen Ejecutivo
 
-**Fecha**: 19 Diciembre 2024  
+**Fecha**: 19 Diciembre   
 **Estado**: ✅ Fundamentos implementados  
 **Próximo paso**: Integración y validación
 
@@ -21,13 +21,13 @@ El análisis forense identificó **4 riesgos existenciales** en la implementaci�
 
 ### Arquitectura Dual-Lane
 
-**Carril 1: Security & Audit Lane**
+**Cil 1: Security & Audit Lane**
 - ❌ Sin buffering (latencia <10ms)
 - ✅ WAL obligatorio (durabilidad)
 - ✅ Bypass de colas (prioridad absoluta)
 - ✅ Alerta si pérdida (nunca imputa)
 
-**Carril 2: Observability & Trends Lane**
+**Cil 2: Observability & Trends Lane**
 - ✅ Buffering dinámico (throughput optimizado)
 - ✅ Imputación permitida (continuidad dashboards)
 - ✅ Backpressure (límites duros)
@@ -177,9 +177,9 @@ print(should_bypass)  # False
 
 ---
 
-## 💰 Impacto en Pitch ANID
+## 💰 Impacto en Pitch SENTINEL_CORE
 
-### Narrativa Actualizada
+### Nativa Actualizada
 
 **Antes** (Riesgoso):
 > "Buffers dinámicos aumentan velocidad 50%"
@@ -249,7 +249,7 @@ print(should_bypass)  # False
 ##  Conclusión
 
 **Fundamentos sólidos implementados**:
-- ✅ Separación de carriles (Security vs Observability)
+- ✅ Separación de ciles (Security vs Observability)
 - ✅ WAL con durabilidad garantizada
 - ✅ Routing automático inteligente
 - ✅ Backpressure y límites duros

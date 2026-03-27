@@ -1,6 +1,6 @@
 # 🔬 SENTINEL CORTEX — Innovaciones Científicas
 
-**Documento Complementario para Jueces | Hackatón CubePath 2026**
+**Documento Complementario para Jueces | Hackatón CubePath **
 
 > Este documento explica las **4 innovaciones** implementadas en Sentinel Cortex, por qué son necesarias y cómo se verifican en el sistema en tiempo real.
 
@@ -10,7 +10,7 @@
 
 La base matemática de Sentinel utiliza aritmética sexagesimal inspirada en la tablilla babilónica **Plimpton 322**, cuyo significado trigonom étrico fue descubierto por el **Dr. Daniel Mansfield** (University of New South Wales, Australia) en su paper _"Plimpton 322 is Babylonian exact sexagesimal trigonometry"_ (Historia Mathematica, 2017).
 
-Jaime Novoa contactó directamente al Dr. Mansfield presentándole la aplicación de sus descubrimientos a sistemas distribuidos modernos. La respuesta del Dr. Mansfield (diciembre 2025):
+Jaime Novoa contactó directamente al Dr. Mansfield presentándole la aplicación de sus descubrimientos a sistemas distribuidos modernos. La respuesta del Dr. Mansfield (diciembre ):
 
 > _"I can see that you've understood what I wrote about Plimpton 322. It is not often that I get contacted by people who have actually read what I wrote. Your direction of research sounds promising."_
 >
@@ -56,7 +56,7 @@ Además de la aritmética y la arquitectura de kernel, Sentinel incorpora un con
 | **Cristales Virtuales S60**   | Estructuras de datos que **vibran** — almacenan información como patrones de oscilación activa en lugar de bits estáticos. Análogo a un `EventEmitter` que nunca para de emitir mientras reciba energía.                                 | Almacenamiento resonante de estado del firewall               |
 | **Oscilador Piezoeléctrico**  | Un generador de clock basado en la constante de Plimpton 322 (`1.534s`). En lugar de un `setInterval(fn, 1000)` arbitrario, el período del reloj tiene propiedades matemáticas que producen _cero drift_ en operaciones trigonométricas. | Reloj maestro del sistema — todos los ciclos derivan de él    |
 | **Simulación Cuántica (DTC)** | Implementación software de un _Discrete Time Crystal_ — un sistema que oscila indefinidamente sin consumir energía neta, similar a un `while(true)` que no acumula deuda técnica porque se auto-regenera cada ciclo.                     | Mantiene el estado del firewall estable por tiempo indefinido |
-| **Matriz S60**                | Grid de cálculo donde cada celda opera en aritmética Base-60. Equivalente a un `ndarray` pero con operaciones que nunca pierden precisión.                                                                                               | Evaluación paralela de múltiples señales de amenaza           |
+| **Matriz S60**                | Grid de cálculo donde cada celda opera en aritmética Base-60. Equivalente a un `nday` pero con operaciones que nunca pierden precisión.                                                                                               | E paralela de múltiples señales de amenaza           |
 | **Lattice Líquida**           | Red dinámica que se reconfigura según la carga del sistema. Similar a un _consistent hash ring_ que añade/quita nodos adaptativamente.                                                                                                   | Distribución de trabajo del planificador adaptativo           |
 
 > **Ninguna de estas tecnologías existe como concepto en la literatura de ciencias de la computación.** Son modelos originales que combinan principios de física del estado sólido, cristalografía y computación cuántica, traducidos a implementaciones deterministas en aritmética entera.
@@ -84,7 +84,7 @@ En un sistema de seguridad que toma decisiones automáticas, **un error de redon
 
 ### Para Programadores: ¿Por qué no usar simplemente `int`?
 
-Los programadores familiarizados con sistemas financieros ya conocen este patrón: los bancos no almacenan `$1.50` como `float 1.5`, sino como `int 150` (centavos). Sentinel lleva este concepto al extremo:
+Los programadores familiarizados con sistemas financieros ya conocen este patrón: los bancos no almacenan `.50` como `float 1.5`, sino como `int 150` (centavos). Sentinel lleva este concepto al extremo:
 
 - **Bancos:** Base-10 escalada por 10² (100 centavos por dólar). Precisión: 2 decimales.
 - **Sentinel:** Base-60 escalada por 60⁴ (12,960,000 unidades por entero). Precisión: equivalente a 7 decimales.
@@ -174,7 +174,7 @@ Sentinel usa estas proporciones como **ratios S60** para evaluar señales:
 
 ### Tolerancia Ultra-Precisa
 
-La evaluación usa una tolerancia de **9 segundos de arco** (32,400 unidades raw):
+La e usa una tolerancia de **9 segundos de arco** (32,400 unidades raw):
 
 ```
 Tolerancia = 32,400 / 12,960,000 = 0.25% de error permitido
@@ -188,7 +188,7 @@ instrumentos de medición industrial.
 
 La **Truth Claim Console** muestra:
 
-- El **Trust Score** como porcentaje (barra de progreso animada).
+- El **Trust Score** como porcentaje (ba de progreso animada).
 - El **Harmonic State** como texto: `CONSONANT`, `TENSION`, o `DISSONANT_CRITICAL`.
 - El número de **Ring-0 Intercepts** (bloqueos a nivel de kernel).
 
@@ -365,7 +365,7 @@ Esto previene la **acumulación de deuda técnica** en procesos de larga duraci�
 
 ---
 
-## Nota para Desarrolladores
+## Nota para Desolladores
 
 Toda la matemática descrita aquí está implementada en **Rust puro**, sin dependencias externas para el cálculo. El código fuente completo está en:
 
@@ -380,5 +380,5 @@ Cada módulo está diseñado para ser **auditable línea por línea**. No hay "m
 
 ---
 
-_Sentinel Team — Hackatón CubePath 2026_  
+_Sentinel Team — Hackatón CubePath _  
 _Validación matemática: Dr. Daniel Mansfield (UNSW, Australia)_

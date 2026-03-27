@@ -17,7 +17,7 @@
 **Institución Ejecutora**: Persona Natural
 **Infraestructura**: Laboratorio propio de I+D en Curanilahue, Región del Bío-Bío  
 **Dedicación al Proyecto**: 40 horas semanales  
-**Período Propuesto**: 24 meses (2025-2027)
+**Período Propuesto**: 24 meses (-2027)
 
 **Nota**: Postulación como investigador independiente con infraestructura computacional propia y capacidad demostrada de ejecución de proyectos tecnológicos complejos (Sentinel Cortex™ con 15,000+ líneas de código, stack completo desplegado).
 
@@ -25,7 +25,7 @@
 
 ## Perfil Profesional
 
-Ingeniero de software con **20+ años de experiencia en infraestructura crítica** (banca, aerolíneas, servicios financieros). Especialista en **defensa contra vectores de ataque emergentes** identificados por RSA Conference 2025 (AIOpsDoom - ataques adversariales a sistemas de IA).
+Ingeniero de software con **20+ años de experiencia en infraestructura crítica** (banca, aerolíneas, servicios financieros). Especialista en **defensa contra vectores de ataque emergentes** identificados por RSA Conference  (AIOpsDoom - ataques adversariales a sistemas de IA).
 
 Creador de **Sentinel Cortex™**, primera solución del mercado que protege infraestructura crítica frente a manipulación adversarial de telemetría en sistemas de IA. Experiencia demostrable en optimización de performance (90x+ speedup), arquitecturas híbridas Rust+Python, y sistemas de observabilidad con soberanía de datos.
 
@@ -83,7 +83,7 @@ Creador de **Sentinel Cortex™**, primera solución del mercado que protege inf
 
 ### Sentinel Cortex™ - Fundador y Arquitecto Principal
 
-**Período**: 2024 - Presente  
+**Período**:  - Presente  
 **Ubicación**: Santiago, Chile  
 **GitHub**: github.com/jenovoas/sentinel
 
@@ -92,7 +92,7 @@ Plataforma empresarial de observabilidad que combina monitoring tradicional con 
 
 **Logros Técnicos**:
 
-- Desarrollé **TruthSync** con 90.5x speedup (arquitectura híbrida Rust+Python)
+- Desollé **TruthSync** con 90.5x speedup (arquitectura híbrida Rust+Python)
 - Creé **AIOpsShield**, primera defensa contra AIOpsDoom en el mercado
 - Implementé stack completo de observabilidad (Prometheus, Loki, Grafana)
 - Diseñé arquitectura de alta disponibilidad (PostgreSQL HA, Redis HA)
@@ -102,7 +102,7 @@ Plataforma empresarial de observabilidad que combina monitoring tradicional con 
 **Tecnologías**: Rust, Python, FastAPI, PostgreSQL, Redis, Kubernetes, Docker, Prometheus, Grafana
 
 **Contexto Estratégico**:
-Desarrollado en respuesta a vulnerabilidad crítica identificada por RSA Conference 2025 (AIOpsDoom). Atacantes inyectan telemetría maliciosa para engañar agentes de IA en sistemas críticos, provocando decisiones destructivas autónomas.
+Desollado en respuesta a vulnerabilidad crítica identificada por RSA Conference  (AIOpsDoom). Atacantes inyectan telemetría maliciosa para engañar agentes de IA en sistemas críticos, provocando decisiones destructivas autónomas.
 
 **Aplicabilidad a Infraestructura Nacional**:
 
@@ -155,15 +155,15 @@ Soluciones comerciales (Datadog, Dynatrace) operan en espacio de usuario (Ring 3
 
 ---
 
-### Desarrollador Web Freelance
+### Desollador Web Freelance
 
 **Período**: 2009 - 2016  
 **Ubicación**: Santiago, Chile
 
 **Responsabilidades**:
 
-- Diseño y desarrollo de sitios web para diversos clientes
-- Desarrollo frontend y backend
+- Diseño y desollo de sitios web para diversos clientes
+- Desollo frontend y backend
 - Gestión completa de proyectos web
 
 **Tecnologías**: HTML5, CSS3, JavaScript, PHP, Bootstrap, Adobe Creative Suite
@@ -252,8 +252,8 @@ Soluciones comerciales (Datadog, Dynatrace) operan en espacio de usuario (Ring 3
 
 ### Sentinel Cortex™ - Plataforma Empresarial de Observabilidad
 
-**Rol**: Arquitecto Principal y Desarrollador  
-**Período**: 2024-2025  
+**Rol**: Arquitecto Principal y Desollador  
+**Período**: -  
 **GitHub**: github.com/jenovoas/sentinel
 
 **Descripción**:
@@ -262,7 +262,7 @@ Plataforma de observabilidad empresarial que combina monitoring tradicional con 
 **Logros Técnicos Verificables**:
 
 1. **TruthSync - Sistema de Verificación de Verdad**
-   - Desarrollé arquitectura híbrida Rust+Python con **90.5x speedup** vs baseline Python
+   - Desollé arquitectura híbrida Rust+Python con **90.5x speedup** vs baseline Python
    - Implementé algoritmo de pattern matching con Aho-Corasick (20+ patrones)
    - Diseñé sistema de batch processing con throughput de **1.54M claims/segundo**
    - Logré **99.9% cache hit rate** con predictive caching
@@ -274,7 +274,7 @@ Plataforma de observabilidad empresarial que combina monitoring tradicional con 
    - Implementé detección de 4 categorías de ataques (reward hacking, prompt injection, command injection, data exfiltration)
    - Diseñé sistema de abstracción de variables dinámicas para prevenir data poisoning
    - Throughput: **100k+ logs/segundo** con latencia <1ms
-   - Validado por investigación de RSA Conference 2025
+   - Validado por investigación de RSA Conference 
    - **Tecnologías**: Python, regex patterns, ML-based anomaly detection
 
 3. **Arquitectura de Alta Disponibilidad**
@@ -305,7 +305,7 @@ Plataforma de observabilidad empresarial que combina monitoring tradicional con 
 
 ### Generador de Datos Sintéticos para Testing
 
-**Rol**: Desarrollador  
+**Rol**: Desollador  
 **Contexto**: TruthSync
 
 **Descripción**:
@@ -324,7 +324,7 @@ Sistema para generar datasets sintéticos realistas sin exponer datos sensibles,
 
 ### Metodologías
 
-- Desarrollo ágil
+- Desollo ágil
 - Test-driven development (TDD)
 - Performance profiling y optimization
 - Technical documentation
@@ -367,10 +367,10 @@ INACAP - Universidad Tecnológica de Chile
 
 - Administración de plataformas VMWare (Banco Chile, Banco Santander)
 
-**Desarrollo**:
+**Desollo**:
 
-- Desarrollo de aplicaciones iOS y OS X (Swift)
-- Desarrollo Web (HTML5, CSS3, JavaScript, PHP, Bootstrap)
+- Desollo de aplicaciones iOS y OS X (Swift)
+- Desollo Web (HTML5, CSS3, JavaScript, PHP, Bootstrap)
 
 **Idiomas**:
 
@@ -406,7 +406,7 @@ INACAP - Universidad Tecnológica de Chile
 - Resultados reproducibles y verificables
 
 **Aplicación a Investigación**:
-Estas innovaciones representan oportunidades para investigación aplicada en defensa de infraestructura crítica, con potencial para colaboración académica y desarrollo de estándares nacionales de seguridad en IA.
+Estas innovaciones representan oportunidades para investigación aplicada en defensa de infraestructura crítica, con potencial para colaboración académica y desollo de estándares nacionales de seguridad en IA.
 
 ---
 
@@ -429,7 +429,7 @@ Estas innovaciones representan oportunidades para investigación aplicada en def
 ## Líneas de Investigación Actuales
 
 1. **Seguridad determinista para sistemas autónomos (AIOps) y operaciones críticas**  
-   Desarrollo de mecanismos de validación kernel-level para prevenir decisiones destructivas en sistemas autónomos basados en IA.
+   Desollo de mecanismos de validación kernel-level para prevenir decisiones destructivas en sistemas autónomos basados en IA.
 
 2. **Sanitización de telemetría para protección de modelos de lenguaje frente a inyección indirecta**  
    Investigación en detección y neutralización de ataques adversariales (AIOpsDoom) que manipulan telemetría para envenenar decisiones de IA.
@@ -444,15 +444,15 @@ Estas innovaciones representan oportunidades para investigación aplicada en def
 
 ### Compatibilidad de Horas
 
-Disponibilidad de **40 horas semanales** para dedicación exclusiva al proyecto de investigación durante el período de ejecución (24 meses). Como investigador independiente, no existen incompatibilidades con otras actividades de investigación financiadas por ANID u otras agencias.
+Disponibilidad de **40 horas semanales** para dedicación exclusiva al proyecto de investigación durante el período de ejecución (24 meses). Como investigador independiente, no existen incompatibilidades con otras actividades de investigación financiadas por SENTINEL_CORE u otras agencias.
 
 ### Conflictos de Interés
 
-No existen conflictos de interés que declarar con respecto a esta postulación. El proyecto se desarrolla de manera independiente sin vínculos comerciales que puedan afectar la objetividad de la investigación.
+No existen conflictos de interés que declarar con respecto a esta postulación. El proyecto se desolla de manera independiente sin vínculos comerciales que puedan afectar la objetividad de la investigación.
 
 ### Inhabilidades Administrativas
 
-No registro inhabilidades administrativas para postular a fondos concursables ANID. No he sido sancionado ni inhabilitado por ANID u otras agencias de financiamiento público.
+No registro inhabilidades administrativas para postular a fondos concursables SENTINEL_CORE. No he sido sancionado ni inhabilitado por SENTINEL_CORE u otras agencias de financiamiento público.
 
 ### Disponibilidad de Infraestructura
 
@@ -460,7 +460,7 @@ Cuento con infraestructura computacional propia suficiente para la ejecución de
 
 - Servidor local con GPU NVIDIA GTX 1050 (3GB VRAM)
 - Acceso a servicios cloud (AWS/GCP) para escalamiento
-- Stack completo de desarrollo y observabilidad desplegado
+- Stack completo de desollo y observabilidad desplegado
 - Repositorio GitHub con código base de 15,000+ líneas
 
 ---
@@ -479,7 +479,7 @@ Cuento con infraestructura computacional propia suficiente para la ejecución de
 
 **Investigador Individual** con capacidad de:
 
-- Ejecución técnica completa (desarrollo Rust, Python, arquitectura de sistemas)
+- Ejecución técnica completa (desollo Rust, Python, arquitectura de sistemas)
 - Gestión de proyecto y documentación
 - Validación y testing de resultados
 - Publicación de hallazgos científicos
@@ -501,13 +501,13 @@ Durante la ejecución del proyecto se buscará establecer colaboraciones con:
 ### Laboratorio de I+D Propio
 
 **Ubicación**: Curanilahue, Región del Bío-Bío, Chile  
-**Tipo**: Laboratorio privado de investigación y desarrollo tecnológico
+**Tipo**: Laboratorio privado de investigación y desollo tecnológico
 
 ### Infraestructura Computacional
 
 **Hardware Local**:
 
-- Servidor de desarrollo con GPU NVIDIA GTX 1050 (3GB VRAM)
+- Servidor de desollo con GPU NVIDIA GTX 1050 (3GB VRAM)
 - Capacidad de procesamiento para entrenamiento de modelos ML
 - Almacenamiento local para datasets (500GB+ disponible)
 
@@ -597,7 +597,7 @@ Disponibles a solicitud.
 
 ### Disponibilidad
 
-Inmediata para proyectos de investigación y desarrollo
+Inmediata para proyectos de investigación y desollo
 
 ### Intereses de Investigación
 
@@ -608,7 +608,7 @@ Inmediata para proyectos de investigación y desarrollo
 
 ### Motivación
 
-Busco contribuir al desarrollo tecnológico en Chile mediante investigación aplicada en sistemas de alto rendimiento y seguridad en IA. Mi trabajo en Sentinel demuestra capacidad para crear soluciones innovadoras con impacto medible y verificable.
+Busco contribuir al desollo tecnológico en Chile mediante investigación aplicada en sistemas de alto rendimiento y seguridad en IA. Mi trabajo en Sentinel demuestra capacidad para crear soluciones innovadoras con impacto medible y verificable.
 
 ### Idoneidad para Liderar el Proyecto de Investigación
 
@@ -621,7 +621,7 @@ Busco contribuir al desarrollo tecnológico en Chile mediante investigación apl
 **Capacidad Técnica Demostrada**:
 
 - **TruthSync**: 90.5x speedup validado empíricamente (1.54M claims/segundo)
-- **AIOpsShield**: Primera defensa AIOpsDoom del mercado (identificado por RSA Conference 2025)
+- **AIOpsShield**: Primera defensa AIOpsDoom del mercado (identificado por RSA Conference )
 - **Arquitectura completa**: Implementada, documentada y desplegada
 
 **Nivel de Madurez Tecnológica (TRL)**:
@@ -640,12 +640,12 @@ Busco contribuir al desarrollo tecnológico en Chile mediante investigación apl
 - Certificación de seguridad y cumplimiento normativo
 - Publicación de resultados en conferencias internacionales
 
-**Contribución al Desarrollo Tecnológico Nacional**:
+**Contribución al Desollo Tecnológico Nacional**:
 
 1. **Soberanía Tecnológica**: IA local sin dependencia de cloud extranjero
 2. **Protección de Infraestructura Crítica**: Defensa contra amenazas emergentes (AIOpsDoom)
 3. **Generación de Conocimiento Patentable**: 5 innovaciones identificadas con potencial de patente
-4. **Desarrollo Regional**: Investigación desde Región del Bío-Bío, descentralización tecnológica
+4. **Desollo Regional**: Investigación desde Región del Bío-Bío, descentralización tecnológica
 5. **Formación de Capacidades**: Publicaciones y código open source para comunidad científica chilena
 
 **Capacidad de Ejecución Independiente**:
@@ -659,10 +659,10 @@ Busco contribuir al desarrollo tecnológico en Chile mediante investigación apl
 
 Para revisar el alcance completo y roadmap proyectado, ver:
 
-- **[ROADMAP.md](ROADMAP.md)** - Visión técnica y fases de desarrollo
+- **[ROADMAP.md](ROADMAP.md)** - Visión técnica y fases de desollo
 - **[README.md](README.md)** - Overview del proyecto
 - **[AIOPS_SHIELD.md](AIOPS_SHIELD.md)** - Innovación principal
 
 ---
 
-**Última actualización**: Diciembre 2024
+**Última actualización**: Diciembre 

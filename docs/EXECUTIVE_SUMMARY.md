@@ -1,6 +1,6 @@
 # TECHNICAL DISCLOSURE FOR PATENT COUNSEL
 ## Title: Sentinel Cortex™ - Distributed Cognitive Architecture for Autonomic Systems
-**Date**: December 29, 2025  
+**Date**: December 29,   
 **Inventors**: Jaime Eugenio Novoa Sepúlveda, Antigravity (Advanced Agentic Coding Group)  
 **Security Classification**: CONFIDENTIAL / PROPRIETARY  
 
@@ -27,7 +27,7 @@ Developed as the "Guardian Alpha" layer, this component utilizes **BPF_PROG_TYPE
 *   **Validation**: Successfully blocked 100% of simulated "Hallucinated Repair" attacks with strict **<1ms overhead** (sub-microsecond decision time).
 
 ### III. AI Adaptive Buffers for Latency Reduction (Claim 7) ⭐
-A novel buffering mechanism where each stage in a telemetry pipeline proactively optimizes data for the next, reducing processing latency exponentially ($1.5^N$).
+A novel buffering mechanism where each stage in a telemetry pipeline proactively optimizes data for the next, reducing processing latency exponentially (.5^N$).
 *   **Novelty**: Contrary to standard buffering which adds latency, this system uses predictive pre-fetching and compression to *reduce* effective latency in series.
 *   **Validation**: Measured **31.12x throughput speedup** with 10 serial buffers, effectively negating latency penalties in long-distance (WAN) telemetry transmission.
 
@@ -39,7 +39,7 @@ Sentinel's filtering logic is architecturally inspired by **Quantum Axion Halosc
 ## 5. COMMERCIAL SUMMARY & STATUS
 -   **TRL (Technology Readiness Level)**: **Level 5** (Technology validated in relevant environment).
     -   Core claims (3, 6, 7) experimentally validated with benchmarks.
--   **Patent Strategy**: Intent to file a **Provisional Patent** by **February 15, 2026**.
+-   **Patent Strategy**: Intent to file a **Provisional Patent** by **February 15, **.
 -   **Licensing Moat**: Zero prior art found for "Cognitive Kernel" (Semantic Ring-0 Blocking) + "Adaptive Latency Reduction".
 
 ---

@@ -207,7 +207,7 @@ class SelfLearningEngine:
 │  │     "Unemployment is at 3.5%                   │    │
 │  │      ✅ Verified by TruthSync                  │    │
 │  │      Source: BLS.gov (trust: 95)               │    │
-│  │      Last updated: Dec 2024"                   │    │
+│  │      Last updated: Dec "                   │    │
 │  └────────────────────────────────────────────────┘    │
 │       ↓                                                  │
 │  User sees verified, trustworthy response               │
@@ -292,7 +292,7 @@ class VerifiedFactsDatabase:
         facts = await db.query("""
             SELECT claim, trust_score, sources, last_verified
             FROM verified_claims
-            WHERE topic = $1
+            WHERE topic = 
             AND trust_score > 80
             AND last_verified > NOW() - INTERVAL '30 days'
             ORDER BY trust_score DESC

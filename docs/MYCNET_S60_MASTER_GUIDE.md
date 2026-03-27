@@ -24,5 +24,5 @@ Este ritmo asegura que un atacante no pueda predecir la ventana de escritura Rin
 Integrado con **eBPF (LSM)**, MyCNet puede bloquear intentos de socket no autorizados antes de que lleguen al stack TCP del kernel si no cumplen con el patrón rítmico activo.
 
 ---
-*Documento preparado para la Hackatón CubePath 2026.*
+*Documento preparado para la Hackatón CubePath .*
 *"La red es un organismo, la seguridad es su sistema inmunológico."*

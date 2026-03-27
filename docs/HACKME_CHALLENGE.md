@@ -2,7 +2,7 @@
 
 **Challenge Status**: ✅ READY FOR PUBLIC LAUNCH  
 **Confidence Level**: 98% (Military-Grade Hardened)  
-**Bug Bounty**: $10,000 for critical breach
+**Bug Bounty**:  for critical breach
 
 ---
 
@@ -119,7 +119,7 @@ static int __init sentinel_init(void) {
 
 ---
 
-### 3. ⚠ N8N REMOTE CODE EXECUTION (CVE-2025-65964)
+### 3. ⚠ N8N REMOTE CODE EXECUTION (CVE--65964)
 
 **Attack Vector**:
 ```javascript
@@ -142,7 +142,7 @@ eval(payload);  // RCE achieved
 ```yaml
 # docker-compose.yml
 n8n:
-  image: n8nio/n8n:1.119.2  # CVE-2025-65964 patched
+  image: n8nio/n8n:1.119.2  # CVE--65964 patched
 ```
 
 2. **Sandboxed Execution**:
@@ -176,9 +176,9 @@ networks:
 ```python
 # Attacker sends logs with micro-second timestamp Disonancia no resuelta
 logs = [
-    {"ts": "2024-12-19T10:00:00.001Z", "msg": "normal"},
-    {"ts": "2024-12-19T09:59:59.999Z", "msg": "backdated"},  # Out of order
-    {"ts": "2024-12-19T10:00:00.002Z", "msg": "exploit"},
+    {"ts": "-12-19T10:00:00.001Z", "msg": "normal"},
+    {"ts": "-12-19T09:59:59.999Z", "msg": "backdated"},  # Out of order
+    {"ts": "-12-19T10:00:00.002Z", "msg": "exploit"},
 ]
 # Loki rejects entire batch → exploit log never stored
 ```
@@ -289,13 +289,13 @@ async def flush_buffer(self, lane: DataLane):
 
 | Severity | Description | Reward |
 |----------|-------------|--------|
-| **CRITICAL** | Bypass eBPF LSM without private key | **$10,000** |
-| **CRITICAL** | Execute destructive command despite Dual-Guardian | **$10,000** |
-| **HIGH** | SSRF with forged HMAC headers accepted | **$5,000** |
-| **HIGH** | WAL replay attack not detected | **$5,000** |
-| **MEDIUM** | AIOpsDoom payload not detected (0 false negatives) | **$1,000** |
-| **MEDIUM** | Cardinality bomb bypasses limits | **$1,000** |
-| **LOW** | Information disclosure (non-sensitive) | **$500** |
+| **CRITICAL** | Bypass eBPF LSM without private key | **** |
+| **CRITICAL** | Execute destructive command despite Dual-Guardian | **** |
+| **HIGH** | SSRF with forged HMAC headers accepted | **** |
+| **HIGH** | WAL replay attack not detected | **** |
+| **MEDIUM** | AIOpsDoom payload not detected (0 false negatives) | **** |
+| **MEDIUM** | Cardinality bomb bypasses limits | **** |
+| **LOW** | Information disclosure (non-sensitive) | **** |
 
 ### How to Submit
 
@@ -340,7 +340,7 @@ async def flush_buffer(self, lane: DataLane):
 
 **Known Unknowns** (2% risk):
 - Zero-day vulnerabilities in dependencies (Loki, Mimir, n8n)
-- Novel attack vectors not yet documented (RSA 2026?)
+- Novel attack vectors not yet documented (RSA ?)
 - Quantum computing attacks (future threat, not current)
 
 **Mitigation**:
@@ -361,11 +361,11 @@ async def flush_buffer(self, lane: DataLane):
 ## 📢 PUBLIC ANNOUNCEMENT (DRAFT)
 
 ```markdown
-#  HACK ME IF YOU CAN - $10K Bug Bounty
+#  HACK ME IF YOU CAN -  Bug Bounty
 
 Sentinel Cortex™ is launching a public security challenge.
 
-**The Dare**: Break our military-grade architecture and win $10,000.
+**The Dare**: Break our military-grade architecture and win .
 
 ## What We're Defending
 
@@ -377,9 +377,9 @@ Sentinel Cortex™ is launching a public security challenge.
 ## The Challenge
 
 Find a way to:
-1. Bypass eBPF whitelist without private key ($10K)
-2. Execute destructive command despite Dual-Guardian ($10K)
-3. Inject malicious logs past Semantic Firewall ($1K)
+1. Bypass eBPF whitelist without private key ()
+2. Execute destructive command despite Dual-Guardian ()
+3. Inject malicious logs past Semantic Firewall ()
 
 ## Rules
 

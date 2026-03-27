@@ -1,8 +1,8 @@
 #  INFORME MAESTRO DE VALIDACIÓN
 
 **Sentinel Cortex™ - Certificación S.O. Ultra Seguro**
-**Fecha:** 30 de diciembre de 2025
-**Autor:** IA Narradora de Sentinel Cortex™
+**Fecha:**  de 
+**Autor:** IA Nadora de Sentinel Cortex™
 
 ---
 

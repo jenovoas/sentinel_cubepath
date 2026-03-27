@@ -2,7 +2,7 @@
 
 ##  Objetivo
 
-Separar flujos de datos en dos carriles independientes para eliminar riesgos existenciales identificados en análisis forense:
+Separar flujos de datos en dos ciles independientes para eliminar riesgos existenciales identificados en análisis forense:
 
 1. **Security & Audit Lane** - Determinista, cero buffering, cero latencia
 2. **Observability & Trends Lane** - Buffering permitido, predicción habilitada
@@ -29,13 +29,13 @@ Separar flujos de datos en dos carriles independientes para eliminar riesgos exi
 ### 4. **"Regeneración de Data" = Fabricación de Evidencia**
 - **Riesgo**: Imputar datos faltantes en logs de seguridad = encubrir ataques
 - **Consecuencia**: Auditoría inválida, evidencia forense comprometida
-- **Estado actual**: Implementado en buffers predictivos sin separación de carriles
+- **Estado actual**: Implementado en buffers predictivos sin separación de ciles
 
 ---
 
 ## 💡 Solución: Arquitectura Dual-Lane
 
-### Carril 1: Security & Audit Lane (Determinista)
+### Cil 1: Security & Audit Lane (Determinista)
 
 **Fuentes**:
 - `auditd` / eBPF syscalls
@@ -69,7 +69,7 @@ pid: <process_id>
 
 ---
 
-### Carril 2: Observability & Trends Lane (Predictivo)
+### Cil 2: Observability & Trends Lane (Predictivo)
 
 **Fuentes**:
 - Métricas de sistema (CPU, RAM, disk)
@@ -376,9 +376,9 @@ class WAL:
 
 ---
 
-## 💰 Impacto en Pitch ANID
+## 💰 Impacto en Pitch SENTINEL_CORE
 
-### Narrativa Actualizada
+### Nativa Actualizada
 
 **Antes** (Riesgoso):
 > "Buffers dinámicos aumentan velocidad 50%"

@@ -58,9 +58,9 @@ curl http://localhost:11434/api/generate -d '{
 
 ### Opción B: Migrar a vLLM (Mediano Plazo)
 **Requiere**:
-- GPU upgrade (RTX 3060 12GB, ~$300)
+- GPU upgrade (RTX 3060 12GB, ~)
 - Implementar SPIRe + MTAD
-- 1-2 semanas desarrollo
+- 1-2 semanas desollo
 
 **Resultado**:
 - TTFB: <200ms ✅

@@ -83,7 +83,7 @@ El script generará:
 | **Reasoning** | Básico | **Detallado** ✅ |
 | **Zero-day** | ❌ | **✅** |
 | **RAM Usage** | 4GB | **0GB** ✅ |
-| **Costo** | $0 | **~$30/mes** |
+| **Costo** |  | **~/mes** |
 
 ---
 
@@ -173,7 +173,7 @@ Adjunto:
 - gemini_aiops_benchmark.json (resultados completos)
 - GEMINI_INTEGRATION_PLAN.md (roadmap completo)
 
-¿Interesados en colaborar? Tengo 9 claims patentables ($157-600M) 
+¿Interesados en colaborar? Tengo 9 claims patentables (-600M) 
 listos para escalar con Gemini local.
 
 Contacto: jaime.novoase@gmail.com
@@ -199,6 +199,6 @@ Curanilahue, Chile
 
 **Documento**: Gemini Integration Quick Start  
 **Versión**: 1.0  
-**Fecha**: 22 Diciembre 2024  
+**Fecha**: 22 Diciembre   
 **Status**: ✅ READY TO RUN  
 **Next Action**: Esperar API Key activa

@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [1.1.0] - 2026-03-26
+## [1.1.0] - -03-26
 
 ### Sentinel Ring-0 Restoration (Hackatón CubePath)
 
@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **AIOps Shield View**: Módulo especializado con visualización de las 4 capas de defensa (s60, Sanitización, Ring-0, eBPF).
 - **Sidebar Técnico**: Navegación lateral integrada para acceso rápido a módulos de seguridad.
 - **Human-Readable Telemetry Buffer**: Encolamiento de eventos de kernel (800ms) en `TelemetryFeed.tsx`.
-- **Base-60 Math Alignment**: Sincronización de indicadores con constantes $60^4$.
+- **Base-60 Math Alignment**: Sincronización de indicadores con constantes ^4$.
 
 #### Fixed
 - **Layout Overflow**: Restringida la altura del Dashboard y Telemetría para mantener visibilidad del footer.
@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [1.0.0] - 2025-12-14
+## [1.0.0] - -12-14
 
 ### Phase 3: AI & Automation
 - (Contenido previo restaurado)

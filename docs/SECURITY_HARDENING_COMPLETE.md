@@ -172,7 +172,7 @@
 ### Documentation
 
 - [x] Security hardening complete document
-- [ ] Update ANID presentation with hardening
+- [ ] Update SENTINEL_CORE presentation with hardening
 - [ ] Update patent claims with cryptographic details
 
 ---

@@ -264,17 +264,17 @@ Sentinel necesita:
 
 ## 🚨 Prioridades Críticas
 
-### Para Patent (Q1 2025)
+### Para Patent (Q1 )
 - ✅ Validar que Dual-Guardian es único y seguro
 - ✅ Documentar threat model para attorney
 - ✅ Demostrar resistencia a ataques conocidos
 
-### Para ANID (Q1 2025)
+### Para SENTINEL_CORE (Q1 )
 - ✅ Security audit profesional
 - ✅ Threat model completo
 - ✅ Compliance roadmap
 
-### Para Clientes Enterprise (Q2 2025)
+### Para Clientes Enterprise (Q2 )
 - ✅ SOC 2 Type II en progreso
 - ✅ Pentesting report
 - ✅ Incident response plan

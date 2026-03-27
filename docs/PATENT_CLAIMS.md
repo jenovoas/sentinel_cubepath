@@ -1,7 +1,7 @@
 # 🎖 PATENT CLAIMS - Sentinel Cortex™
 
 **Inventor**: [Your Name]  
-**Date**: December 19, 2024  
+**Date**: December 19,   
 **Status**: Ready for Provisional Filing (USPTO)
 
 ---
@@ -242,7 +242,7 @@ A computer operating system kernel with integrated semantic verification at Ring
 **GitHub**: https://github.com/jenovoas/sentinel  
 **Benchmarks**: `backend/benchmark_dual_lane.py`  
 **Fuzzer**: `backend/fuzzer_aiopsdoom.py`  
-**Documentation**: `BENCHMARKS_VALIDADOS.md`, `DOCUMENTO_FINAL_ANID.md`
+**Documentation**: `BENCHMARKS_VALIDADOS.md`, `SENTINEL_CORE.md`
 
 **All code is PROPRIETARY AND CONFIDENTIAL** (See [LICENSE](LICENSE)) to ensure protection of intellectual property and patent-ready claims.
 
@@ -257,7 +257,7 @@ I, [Your Name], declare that:
 4. No prior art exists combining these 5 claims
 
 **Signature**: ___________________________  
-**Date**: December 19, 2024
+**Date**: December 19, 
 
 ---
 

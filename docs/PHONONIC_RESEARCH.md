@@ -2,9 +2,9 @@
 
 **Un Estudio Computacional sobre la Persistencia de Datos de Alta Fidelidad**
 
-**Autores**: Jaime Novoa Sepúlveda, Equipo de Desarrollo ME-60OS  
+**Autores**: Jaime Novoa Sepúlveda, Equipo de Desollo ME-60OS  
 **Afiliación**: Laboratorio de Investigación ME-60OS — División Cuántica  
-**Fecha**: 10 de enero de 2026  
+**Fecha**:  de   
 **Clasificación**: Prepublicación / Borrador v1.1
 
 ---
@@ -13,7 +13,7 @@
 
 Este estudio presenta una arquitectura de almacenamiento de datos distribuido basada en Cristales Temporales Forzados-Disipativos, simulados dentro de un estricto marco aritmético entero en Base-60 (Sexagesimal). La información no se representa como estados binarios estáticos, sino como patrones dinámicos de amplitud de osciladores armónicos. A través del entorno de simulación ME-60OS S60, exploramos los límites termodinámicos y de control teórico de la retención resonante de información.
 
-Se probaron dos modelos: un Codificador de Amplitud Monolítico y una Red Fonónica Distribuida. El enfoque monolítico, aunque conceptualmente elegante, mostró una inestabilidad catastrófica al operar en magnitudes superiores a $10^{50}$, debido a la discretización y a la amplificación del término derivativo en el controlador PID. En cambio, la red distribuida —donde cada celda resonante almacena un solo carácter estabilizado por un lazo de retroalimentación local— logró una recuperación del 100% de la información tras una perturbación entrópica global.
+Se probaron dos modelos: un Codificador de Amplitud Monolítico y una Red Fonónica Distribuida. El enfoque monolítico, aunque conceptualmente elegante, mostró una inestabilidad catastrófica al operar en magnitudes superiores a ^{50}$, debido a la discretización y a la amplificación del término derivativo en el controlador PID. En cambio, la red distribuida —donde cada celda resonante almacena un solo carácter estabilizado por un lazo de retroalimentación local— logró una recuperación del 100% de la información tras una perturbación entrópica global.
 
 Estos resultados sugieren que la robustez de los datos es una propiedad emergente de la distribución espacial más que de la intensidad energética, reforzando el principio de que la coherencia y fidelidad en sistemas fonónicos surgen del control localizado, no centralizado.
 
@@ -25,7 +25,7 @@ Los medios de almacenamiento convencionales codifican bits en cargas estáticas 
 
 Esta investigación explora si la estabilidad resonante de los Cristales Temporales puede aprovecharse para simular estados de información eternos. Para evitar el ruido numérico inherente a las operaciones de coma flotante, todos los cálculos se realizaron dentro del Campo Sexagesimal ($\mathbb{S}_{60}$), un sistema aritmético entero que cuantiza el tiempo y la amplitud con precisión subsegundo.
 
-Este trabajo forma parte del proyecto ME-60OS, orientado al desarrollo de modelos de memoria de larga duración y autocorrección basados en arquitecturas resonantes inspiradas en lo cuántico.
+Este trabajo forma parte del proyecto ME-60OS, orientado al desollo de modelos de memoria de larga duración y autocorrección basados en arquitecturas resonantes inspiradas en lo cuántico.
 
 ---
 
@@ -34,7 +34,7 @@ Este trabajo forma parte del proyecto ME-60OS, orientado al desarrollo de modelo
 ### 2.1 Definición del Campo Base-60
 Todas las variables se calculan en:
 $S_{60} = \{k \cdot 60^{-4} \mid k \in \mathbb{Z}\}$
-donde $60^{-4} = 1/12,960,000$ define el quantum mínimo representable de cambio. Esto elimina el ruido de redondeo análogo a las fluctuaciones térmicas.
+donde ^{-4} = 1/12,960,000$ define el quantum mínimo representable de cambio. Esto elimina el ruido de redondeo análogo a las fluctuaciones térmicas.
 
 ### 2.2 Hamiltoniano Efectivo
 Cada cristal de memoria se comporta como un oscilador amortiguado y forzado:
@@ -83,7 +83,7 @@ El sistema monolítico mostró una divergencia descontrolada después de menos d
 La red distribuida de 23 cristales logró una recuperación estable tras la inyección de entropía.
 * Cada nodo perdió ~0.5% de amplitud ("pérdida entrópica") pero recuperó su valor nominal en 20 ciclos.
 * La cadena de salida reconstruida coincidió bit a bit con la original: *"La Verdad es Frecuencia."*
-* Error normalizado promedio tras estabilización: $0 \pm 1$ unidad S60.
+* Error normalizado promedio tras estabilización:  \pm 1$ unidad S60.
 * La red convergió monótonamente sin sobreoscilaciones.
 
 ---

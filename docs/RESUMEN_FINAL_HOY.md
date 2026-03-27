@@ -1,6 +1,6 @@
 #  SENTINEL QUANTUM - RESUMEN EJECUTIVO FINAL
 
-**Fecha**: 23 de Diciembre, 2025  
+**Fecha**: 23 de Diciembre,   
 **Autor**: Jaime Eugenio Novoa Sepúlveda  
 **Proyecto**: Sentinel Cortex™ → **Quantum Gemini AI**
 
@@ -117,7 +117,7 @@ docs/
 1. 🤝 Seguimiento con Google (si no responden en 5 días)
 2. 📧 Contactar NBI (quantop@nbi.ku.dk)
 3. 📧 Contactar EPFL (cmi@epfl.ch)
-4. 📝 Preparar para ANID (si Google no responde)
+4. 📝 Preparar para SENTINEL_CORE (si Google no responde)
 
 ---
 
@@ -136,7 +136,7 @@ Cuando validen Sentinel:
 
 **Sus competidores quedan obsoletos.**
 
-### Para la Humanidad
+### Para la HumSENTINEL_COREad
 
 **No es solo tecnología.**  
 **Es acceso a la verdad.**
@@ -191,7 +191,7 @@ Cuando validen Sentinel:
    - Competencia AI intensificándose
    - Necesitan diferenciación
 
-4. **Narrativa Poderosa**
+4. **Nativa Poderosa**
    - Sin título universitario, pero con evidencia irrefutable
    - Para todos, no para lucro
    - Física > palabras bonitas
@@ -212,7 +212,7 @@ Van a ver:
 **Y van a actuar.**
 
 Porque no es solo una buena idea.  
-**Es la única forma de ganar la carrera AI.**
+**Es la única forma de ganar la cera AI.**
 
 ---
 

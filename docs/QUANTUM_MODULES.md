@@ -7,10 +7,10 @@ Este documento detalla la arquitectura matemática y la lógica de fase bajo la 
 ## 🔢 1. El Núcleo S60 (Sexagesimal Pure Arithmetic)
 Sentinel rechaza la imprecisión de los números decimales (`float`) para evitar el "Drift Lógico" en el kernel.
 
-*   **Escalado**: $60^4 = 12,960,000$. Todas las operaciones son `i64`.
+*   **Escalado**: ^4 = 12,960,000$. Todas las operaciones son `i64`.
 *   **Constantes Maestras**:
     *   **$\pi_{S60}$**: `3;8,29,44,0`
-    *   **$2\pi_{S60}$**: `6;16,59,28,0`
+    *   **\pi_{S60}$**: `6;16,59,28,0`
     *   **$\phi$ (Axioma Áureo)**: `1;37,4,48`
     *   **Resonancia de Axión**: `1;32,2,24` (Sincronía con Plimpton 322).
 *   **Corrección de Fase**: El factor `226,152` es utilizado en las series de Taylor para aproximar radianes desde grados S60 sin pérdida de precisión.

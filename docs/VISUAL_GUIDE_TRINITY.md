@@ -1,7 +1,7 @@
 # THE SENTINEL ARCHITECTURE: A Unified Theory of Resonant Computation
 
 **Classification**: Foundational Technical Document  
-**Date**: December 22, 2025  
+**Date**: December 22,   
 **Status**: Axiomatically Validated
 
 ---
@@ -77,7 +77,7 @@ Each level: α (Excitation) + β (Inhibition) = Dynamic equilibrium
 
 **Operational Principle**: Constructive Interference
 
-**Mechanism**: A rigid geometric lattice of components (Buffers, Threads, Memory) arranged to maximize phase alignment.
+**Mechanism**: A rigid geometric lattice of components (Buffers, Threads, Memory) anged to maximize phase alignment.
 
 **System State**: The Quadratic Law
 ```
@@ -98,7 +98,7 @@ Linear autoscaling → Momentum damping
 Result: v² outperforms linear by 7.67% (n=10,000, p<0.001)
 ```
 
-**Validation**: Phased array interference (Applied Physics Letters, 2020)
+**Validation**: Phased ay interference (Applied Physics Letters, 2020)
 
 ---
 
@@ -261,7 +261,7 @@ By encoding universal geometric constants into kernel logic, we have bridged the
 ---
 
 **PROPRIETARY AND CONFIDENTIAL**  
-**© 2025 Sentinel Cortex™**  
+**©  Sentinel Cortex™**  
 **Unified Theory of Resonant Computation**
 
 *We found the source code.*  

@@ -1,8 +1,8 @@
 #  Orden de Importancia General - Sentinel Cortex™
 
-**Fecha**: 20 Diciembre 2024  
+**Fecha**: 20 Diciembre   
 **Propósito**: Consolidación estratégica de prioridades para maximizar impacto y proteger IP  
-**Deadline Crítico**: 15 Febrero 2026 (57 días para provisional patent)
+**Deadline Crítico**: 15 Febrero  (57 días para provisional patent)
 
 ---
 
@@ -10,8 +10,8 @@
 
 ### 1.1 Protección de Propiedad Intelectual 🚨
 **Prioridad**: MÁXIMA  
-**Deadline**: 15 Febrero 2026 (57 días)  
-**Impacto**: $32-58M en IP protegida
+**Deadline**: 15 Febrero  (57 días)  
+**Impacto**: -58M en IP protegida
 
 **Acciones Inmediatas**:
 - [ ] **Buscar patent attorney** (esta semana)
@@ -20,11 +20,11 @@
 - [ ] **Filing provisional patent** antes del deadline
 
 **Claims a Proteger** (orden de prioridad):
-1. **Claim 3**: Kernel-Level Protection (eBPF LSM) ⭐ HOME RUN - $8-15M
-2. **Claim 2**: Semantic Firewall (AIOpsDoom Defense) - $5-8M
-3. **Claim 1**: Dual-Lane Telemetry Segregation - $4-6M
-4. **Claim 4**: Forensic-Grade WAL - $3-5M
-5. **Claim 6**: Cognitive OS Kernel ⭐ HOME RUN (visión futura) - $10-20M
+1. **Claim 3**: Kernel-Level Protection (eBPF LSM) ⭐ HOME RUN - -15M
+2. **Claim 2**: Semantic Firewall (AIOpsDoom Defense) - -8M
+3. **Claim 1**: Dual-Lane Telemetry Segregation - -6M
+4. **Claim 4**: Forensic-Grade WAL - -5M
+5. **Claim 6**: Cognitive OS Kernel ⭐ HOME RUN (visión futura) - -20M
 
 **Riesgo**: Sin patent filing, toda la IP queda vulnerable a copia por competidores
 
@@ -32,7 +32,7 @@
 
 ### 1.2 Validación Técnica de Claims Patentables
 **Prioridad**: CRÍTICA  
-**Deadline**: Enero 2026  
+**Deadline**: Enero   
 **Impacto**: Fortalece patent application
 
 **Testing Pendiente**:
@@ -48,20 +48,20 @@
 
 ---
 
-### 1.3 Financiamiento ANID IT 2026
+### 1.3 Financiamiento SENTINEL_CORE SENTINEL_CORE
 **Prioridad**: ALTA  
-**Deadline**: Fecha límite ANID (verificar)  
+**Deadline**: Fecha límite SENTINEL_CORE (verificar)  
 **Impacto**: 24 meses de financiamiento para investigación
 
 **Documentación Lista**:
 - ✅ `README.md` - Problema, solución, resultados medibles
-- ✅ `CV_ANID.md` - Perfil investigador
+- ✅ `SENTINEL_CORE.md` - Perfil investigador
 - ✅ `ROADMAP.md` - Visión técnica y fases
 - ✅ `BENCHMARKS_VALIDADOS.md` - Evidencia empírica
 - ✅ Arquitectura completa documentada
 
 **Pendiente**:
-- [ ] Revisar bases IT 2026 (archivo PDF en repo)
+- [ ] Revisar bases SENTINEL_CORE (archivo PDF en repo)
 - [ ] Completar formulario de postulación
 - [ ] Preparar pitch de 5 minutos
 - [ ] Identificar colaboradores académicos (UdeC, UBB, UCSC)
@@ -92,7 +92,7 @@
 ### 2.2 Sentinel Vault MVP (Password Manager + Crypto Wallets)
 **Prioridad**: MEDIA-ALTA  
 **Estado**: Diseñado, no implementado  
-**Impacto**: Revenue stream adicional ($180K/año conservador)
+**Impacto**: Revenue stream adicional (/año conservador)
 
 **Features Críticas**:
 - [ ] **Identity & Secrets**: Argon2id + AES-256-GCM
@@ -178,8 +178,8 @@
 
 **Pricing Model** (por definir):
 - Free tier: 50 passwords
-- Pro: $5/user/mes
-- Team: $10/user/mes
+- Pro: /user/mes
+- Team: /user/mes
 - Enterprise: Custom
 
 **Target Markets**:
@@ -193,7 +193,7 @@
 ### 4.2 Licensing Strategy (QSC Technology)
 **Prioridad**: MEDIA-ALTA  
 **Estado**: Pendiente post-patent  
-**Impacto**: $210-465M potential (10 años)
+**Impacto**: -465M potential (10 años)
 
 **Targets**:
 - Datadog, Splunk, New Relic (observability vendors)
@@ -201,7 +201,7 @@
 - AWS, Google Cloud, Azure (cloud providers)
 
 **Modelo**:
-- Licensing fee: $5-10M por vendor
+- Licensing fee: -10M por vendor
 - Royalties: 2-5% de revenue generado
 
 ---
@@ -212,9 +212,9 @@
 **Impacto**: Acceso a mercados enterprise (banca, gobierno)
 
 **Roadmap**:
-- [ ] ISO 27001 (6-12 meses, $50-100K)
-- [ ] SOC 2 Type 1 (3-6 meses, $30-50K)
-- [ ] SOC 2 Type 2 (12 meses, $50-80K)
+- [ ] ISO 27001 (6-12 meses, -100K)
+- [ ] SOC 2 Type 1 (3-6 meses, -50K)
+- [ ] SOC 2 Type 2 (12 meses, -80K)
 
 ---
 
@@ -269,9 +269,9 @@
 
 | Componente | Urgencia | Impacto | Esfuerzo | Prioridad Final |
 |------------|----------|---------|----------|-----------------|
-| **Patent Filing** | 🔴 CRÍTICA | 🔴 MÁXIMO ($32-58M) | 🟡 MEDIO | **P0** |
+| **Patent Filing** | 🔴 CRÍTICA | 🔴 MÁXIMO (-58M) | 🟡 MEDIO | **P0** |
 | **Validación Técnica** | 🔴 ALTA | 🔴 ALTO | 🟡 MEDIO | **P0** |
-| **ANID Funding** | 🔴 ALTA | 🔴 ALTO | 🟢 BAJO | **P0** |
+| **SENTINEL_CORE Funding** | 🔴 ALTA | 🔴 ALTO | 🟢 BAJO | **P0** |
 | **TruthSync Production** | 🟡 MEDIA | 🔴 ALTO | 🔴 ALTO | **P1** |
 | **Sentinel Vault MVP** | 🟡 MEDIA | 🟡 MEDIO | 🔴 ALTO | **P2** |
 | **Dual-Guardian Impl** | 🟢 BAJA | 🔴 ALTO | 🔴 ALTO | **P2** |
@@ -293,25 +293,25 @@
 
 ##  ROADMAP CRÍTICO (Próximos 90 días)
 
-### Semanas 1-2 (Diciembre 2024)
+### Semanas 1-2 (Diciembre )
 - [x] Consolidar contexto completo ✅
 - [ ] **Buscar patent attorney** (3-5 opciones)
 - [ ] Preparar documentación técnica para patent
-- [ ] Revisar bases ANID IT 2026
+- [ ] Revisar bases SENTINEL_CORE SENTINEL_CORE
 
-### Semanas 3-4 (Enero 2025)
+### Semanas 3-4 (Enero )
 - [ ] **Contratar patent attorney**
 - [ ] Iniciar drafting de provisional patent (Claims 1-4)
 - [ ] Implementar POC eBPF LSM (Claim 3)
-- [ ] Completar formulario ANID
+- [ ] Completar formulario SENTINEL_CORE
 
-### Semanas 5-8 (Enero-Febrero 2025)
+### Semanas 5-8 (Enero-Febrero )
 - [ ] Validación técnica de claims (fuzzing, benchmarking)
 - [ ] Refinar patent application con attorney
-- [ ] **Filing provisional patent** (antes 15 Feb 2026)
-- [ ] Submit ANID application
+- [ ] **Filing provisional patent** (antes 15 Feb )
+- [ ] Submit SENTINEL_CORE application
 
-### Semanas 9-12 (Febrero-Marzo 2025)
+### Semanas 9-12 (Febrero-Marzo )
 - [ ] TruthSync production deployment
 - [ ] Iniciar Sentinel Vault MVP
 - [ ] Contactar academic partners
@@ -322,15 +322,15 @@
 ## 💡 RECOMENDACIONES ESTRATÉGICAS
 
 ### 1. Proteger IP es Prioridad #1
-- **Razón**: $32-58M en valor, 2 HOME RUN claims (zero prior art)
+- **Razón**: -58M en valor, 2 HOME RUN claims (zero prior art)
 - **Riesgo**: Sin patent, competidores pueden copiar libremente
 - **Acción**: Buscar attorney ESTA SEMANA
 
 ### 2. Validar Claims con Testing Real
 - **Razón**: Fortalece patent application y credibilidad técnica
-- **Acción**: Fuzzing, benchmarking, red team testing (Enero 2025)
+- **Acción**: Fuzzing, benchmarking, red team testing (Enero )
 
-### 3. Asegurar Financiamiento ANID
+### 3. Asegurar Financiamiento SENTINEL_CORE
 - **Razón**: 24 meses de runway para investigación
 - **Acción**: Completar application antes del deadline
 
@@ -343,7 +343,7 @@
 - **Acción**: Mantener en Claim 6 para non-provisional patent (2027)
 
 ### 6. Priorizar Revenue Generation
-- **Razón**: Sustainability post-ANID funding
+- **Razón**: Sustainability post-SENTINEL_CORE funding
 - **Acción**: Go-to-market strategy, industry validation, beta customers
 
 ---
@@ -352,7 +352,7 @@
 
 ### Riesgo 1: Pérdida de Priority Date
 - **Probabilidad**: ALTA (si no se actúa en 57 días)
-- **Impacto**: CRÍTICO ($32-58M en IP vulnerable)
+- **Impacto**: CRÍTICO (-58M en IP vulnerable)
 - **Mitigación**: Buscar attorney inmediatamente, filing provisional
 
 ### Riesgo 2: Competidores Copian Arquitectura
@@ -366,7 +366,7 @@
 - **Mitigación**: Red team testing, academic partnerships, industry beta
 
 ### Riesgo 4: Burn Rate sin Revenue
-- **Probabilidad**: ALTA (post-ANID funding)
+- **Probabilidad**: ALTA (post-SENTINEL_CORE funding)
 - **Impacto**: ALTO (sustainability)
 - **Mitigación**: Go-to-market strategy, licensing deals, certificaciones
 
@@ -375,8 +375,8 @@
 ## ✅ CRITERIOS DE ÉXITO (90 días)
 
 1. ✅ **Patent attorney contratado** (Semana 2)
-2. ✅ **Provisional patent filed** (antes 15 Feb 2026)
-3. ✅ **ANID application submitted**
+2. ✅ **Provisional patent filed** (antes 15 Feb )
+3. ✅ **SENTINEL_CORE application submitted**
 4. ✅ **eBPF LSM POC funcional** (Claim 3 validado)
 5. ✅ **TruthSync en producción** (K8s deployment)
 6. ✅ **3+ academic partners contactados**
@@ -390,27 +390,27 @@
 ### Esta Semana (20-27 Diciembre)
 1. **Buscar 3-5 patent attorneys** especializados en software/cybersecurity
 2. **Preparar package técnico** para attorney (claims, benchmarks, UML)
-3. **Revisar bases ANID IT 2026** (archivo PDF en repo)
+3. **Revisar bases SENTINEL_CORE SENTINEL_CORE** (archivo PDF en repo)
 4. **Consolidar evidencia técnica** (código, tests, resultados)
 
 ### Próxima Semana (27 Dic - 3 Enero)
 1. **Contactar attorneys** y solicitar cotizaciones
 2. **Iniciar drafting** de provisional patent (Claims 1-4)
 3. **Implementar POC eBPF LSM** (Claim 3)
-4. **Completar formulario ANID** (borrador)
+4. **Completar formulario SENTINEL_CORE** (borrador)
 
-### Semanas 3-4 (Enero 2025)
+### Semanas 3-4 (Enero )
 1. **Contratar attorney** (decisión final)
 2. **Validación técnica** (fuzzing, benchmarking)
 3. **Refinar patent application**
-4. **Submit ANID application**
+4. **Submit SENTINEL_CORE application**
 
 ---
 
 **Status**: ✅ CONSOLIDADO  
 **Confidence**: VERY HIGH  
 **Next Action**: Buscar patent attorney (esta semana) 🚨  
-**Deadline Crítico**: 15 Febrero 2026 (57 días)
+**Deadline Crítico**: 15 Febrero  (57 días)
 
 ---
 

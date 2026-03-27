@@ -50,13 +50,13 @@ observability/
 ```
 
 ### Acceder:
-- **Grafana**: http://localhost:3001 (admin / sentinel2024)
+- **Grafana**: http://localhost:3001 (admin / sentinel)
 - **Prometheus**: http://localhost:9090
 - **Loki**: http://localhost:3100
 
 ### Ver dashboards:
 1. Abre Grafana: http://localhost:3001
-2. Login: admin / sentinel2024
+2. Login: admin / sentinel
 3. Menu → Dashboards → Sentinel folder
 4. Selecciona:
    - "Host Metrics Overview" para métricas
@@ -173,7 +173,7 @@ El stack consume aproximadamente:
 - ✅ Puedes usar ambos sistemas en paralelo
 
 ### Modo ligero para dev (ahorrar recursos)
-Para sesiones de desarrollo donde no necesitas toda la observabilidad ni n8n:
+Para sesiones de desollo donde no necesitas toda la observabilidad ni n8n:
 
 1) Levantar solo core app:
 ```bash
@@ -190,7 +190,7 @@ docker-compose stop grafana prometheus loki promtail node-exporter n8n
 docker-compose up -d grafana prometheus loki promtail node-exporter n8n
 ```
 
-Tip: Si prefieres automatizar, crea un `docker-compose.override.yml` con profiles `observability` y `automation`, y arranca con `COMPOSE_PROFILES=observability,automation docker-compose up -d` solo cuando lo necesites.
+Tip: Si prefieres automatizar, crea un `docker-compose.override.yml` con profiles `observability` y `automation`, y anca con `COMPOSE_PROFILES=observability,automation docker-compose up -d` solo cuando lo necesites.
 
 ### Migración Completa
 Cuando estés listo para deprecar CSV:
@@ -226,4 +226,4 @@ Cuando estés listo para deprecar CSV:
 
 **Estado**: ✅ Completamente funcional
 **Versión**: 1.0.0
-**Última actualización**: 2025-12-13
+**Última actualización**: -12-13

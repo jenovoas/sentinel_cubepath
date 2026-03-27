@@ -1,6 +1,6 @@
 #  PRÓXIMOS PASOS CONCRETOS - Sentinel Cortex™
 
-**Fecha**: 21 de Diciembre de 2025, 19:00  
+**Fecha**: 21 de Diciembre de , 19:00  
 **Propósito**: Roadmap claro y accionable para no perderte
 
 ---
@@ -10,7 +10,7 @@
 ### Lo Que Tienes (REAL)
 - ✅ 913,087 líneas de código funcionando
 - ✅ 11/11 tests pasando (100%)
-- ✅ 9 claims patentables ($157-603M)
+- ✅ 9 claims patentables (-603M)
 - ✅ eBPF LSM activo en kernel
 - ✅ TruthSync con 90.5x speedup
 - ✅ Documentación completa
@@ -57,7 +57,7 @@ Página 1:
 Página 2:
 - Benchmarks clave (3-4 gráficos)
 - Evidencia técnica
-- Valoración IP ($48-96M)
+- Valoración IP (-96M)
 ```
 
 **Entregable**: `EXECUTIVE_SUMMARY_ATTORNEY.md` (ya existe, revisar)
@@ -70,7 +70,7 @@ Página 2:
 ```bash
 cd /home/jnovoas/sentinel
 chmod +x validar_proyecto.sh
-./validar_proyecto.sh > VALIDACION_COMPLETA_20251221.txt
+./validar_proyecto.sh > VALIDACION_COMPLETA_1221.txt
 ```
 
 **Entregable**: Evidencia numérica para attorney
@@ -92,7 +92,7 @@ MAESTROS (mantener):
 1. README.md
 2. PATENT_MASTER_DOCUMENT.md
 3. SEGURIDAD_COMO_LEY_FISICA.md
-4. CONTEXTO_COMPLETO_20251221.md
+4. CONTEXTO_COMPLETO_1221.md
 5. BENCHMARKS_VALIDADOS.md
 6. EVIDENCE_LSM_ACTIVATION.md
 7. TRUTHSYNC_ARCHITECTURE.md
@@ -313,6 +313,6 @@ Todo lo demás puede esperar.
 
 ---
 
-**Fecha**: 21 de Diciembre de 2025, 19:00  
+**Fecha**: 21 de Diciembre de , 19:00  
 **Status**: Listo para siguiente acción  
 **Deadline**: 56 días restantes

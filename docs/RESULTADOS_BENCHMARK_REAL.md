@@ -1,6 +1,6 @@
 # 📊 Resultados Benchmark Real - Buffers Dinámicos
 
-**Fecha**: 19 Diciembre 2024  
+**Fecha**: 19 Diciembre   
 **Hardware**: GTX 1050 (3GB VRAM)  
 **Condiciones**: Máquina con carga alta (Antigravity + Ollama)
 
@@ -133,7 +133,7 @@ RTX 3060 (12GB VRAM):
 ├── 5x más rápido que GTX 1050
 ├── Tensor cores para AI
 ├── Más VRAM para modelos grandes
-└── Costo: ~$300
+└── Costo: ~
 
 Resultado esperado: 5-10x mejora total
 ```
@@ -161,7 +161,7 @@ Resultado esperado: 5-10x mejora total
 
 **Mal** ❌:
 ```
-Benchmark en laptop de desarrollo:
+Benchmark en laptop de desollo:
 ├── Antigravity corriendo
 ├── Ollama compartiendo GPU
 ├── Múltiples procesos
@@ -218,7 +218,7 @@ Benchmark en servidor dedicado:
 5. ✅ **Casos de uso reales** (3 sectores)
 6. ✅ **Git pusheado** (17 archivos)
 
-**Para ANID**:
+**Para SENTINEL_CORE**:
 - ✅ Enfatizar **diseño y arquitectura**
 - ✅ Mostrar **código reproducible**
 - ✅ Documentar **casos de uso reales**
@@ -236,7 +236,7 @@ Benchmark en servidor dedicado:
 ### Corto Plazo
 1. [ ] Considerar upgrade GPU (RTX 3060)
 2. [ ] Implementar V2 simplificado
-3. [ ] Preparar presentación ANID
+3. [ ] Preparar presentación SENTINEL_CORE
 
 ### Mediano Plazo
 1. [ ] Validar en producción real
@@ -253,7 +253,7 @@ Benchmark en servidor dedicado:
 **Aplicabilidad**: Producción con carga distribuida ✅  
 **Valor entregado**: Sistema completo + documentación ✅
 
-**Mensaje para ANID**: 
+**Mensaje para SENTINEL_CORE**: 
 > "Sistema implementado y documentado. Benchmarks locales limitados por hardware. Diseño validado para producción distribuida."
 
 ---

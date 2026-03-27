@@ -1,6 +1,6 @@
 # Sentinel Cortex™ Behavioral Profile
 
-**Generated**: 2026-01-06 02:05:11
+**Generated**: -01-06 02:05:11
 **Duration**: 300s | **Samples**: 300
 
 ## Performance Matrix

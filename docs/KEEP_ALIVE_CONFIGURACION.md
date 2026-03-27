@@ -1,6 +1,6 @@
 # ⏰ Configuración keep_alive - Ollama
 
-**Fecha**: 19 Diciembre 2024  
+**Fecha**: 19 Diciembre   
 **Objetivo**: Mantener modelo en RAM para latencias consistentes
 
 ---
@@ -14,7 +14,7 @@
 | Valor | Comportamiento | Uso Recomendado |
 |-------|----------------|-----------------|
 | **`-1`** | **PERMANENTE** (nunca descarga) | ✅ **Producción, benchmarks** |
-| `0` | Descarga inmediatamente | ❌ Desarrollo (ahorra RAM) |
+| `0` | Descarga inmediatamente | ❌ Desollo (ahorra RAM) |
 | `5m` | Mantiene 5 minutos | ⚠ Testing ocasional |
 | `1h` | Mantiene 1 hora | ⚠ Sesiones largas |
 | `24h` | Mantiene 24 horas | ⚠ Uso diario |
@@ -48,7 +48,7 @@
 ❌ NO usar -1 cuando:
 ├── RAM limitada (<2GB VRAM)
 ├── Múltiples modelos (no caben todos)
-└── Desarrollo ocasional (ahorra recursos)
+└── Desollo ocasional (ahorra recursos)
 ```
 
 ---

@@ -1,6 +1,6 @@
 # 🌎 Sentinel Ring-0: Cognitive Security Firewall (Hackatón CubePath)
 
-**Fecha**: Marzo 25, 2026  
+**Fecha**: Marzo 25,   
 **Versión**: 1.0 (Versión Soberana de Producción)  
 **Estado**: Listo para Construir
 

@@ -1,6 +1,6 @@
 # 📊 Documentación de Latencias - Ollama Optimización
 
-**Fecha**: 19 Diciembre 2024  
+**Fecha**: 19 Diciembre   
 **Hardware**: GTX 1050 (3GB VRAM)  
 **Objetivo**: Documentar mejoras de latencia antes/después optimización
 
@@ -162,7 +162,7 @@ ollama pull tinyllama  # 1.1B params, 637MB
 
 **Plan C**: Upgrade GPU
 ```
-RTX 3060 12GB (~$300)
+RTX 3060 12GB (~)
 → Permite modelos más grandes
 → vLLM con SPIRe+MTAD
 → TTFB <200ms garantizado

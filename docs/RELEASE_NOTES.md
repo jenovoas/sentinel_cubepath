@@ -1,7 +1,7 @@
 # Release Notes - Sentinel Cortex v1.0.0 "Antigravity"
 
 **Codename**: Antigravity  
-**Date**: December 30, 2025  
+**Date**: December 30,   
 **Type**: Major Release  
 
 ##  Overview
@@ -25,22 +25,22 @@ Version 1.0.0 marks the initial release of the Sentinel Cortex platform as a **Q
 ## 🛠 Components Updated
 - **Sentinel Init (Rust)**: v1.0.0 - Added `crypto` module, `x25519-dalek` integration, and full-duplex UART IO.
 - **Cortex Bridge (Python)**: v1.0.0 - Added PQC Handshake logic and `tiny_crypto` library.
-- **Documentation**: Updated `ARCHITECTURE.md` to# v1.0.0-OPERATIONAL_GLOBAL (2025-12-30)
+- **Documentation**: Updated `ARCHITECTURE.md` to# v1.0.0-OPERATIONAL_GLOBAL (-12-30)
 - **Phase 11: Global OPERATIONAL Deployment**
 - Deployed **Global Swarm Stack** (`docker-compose.OPERATIONAL.yml`).
 - Certified **Resilience Level 6 (ULTIMATE)** via long-duration Disonancia no resuelta drills.
 - Multi-region scaling with 3x Loki replicas and Overlay networking.
 - Series A "OPERATIONAL" Portfolio packaged and ready for handover.
 
-# v1.0.0-HA_ENTERPRISE (2025-12-30)
+# v1.0.0-HA_ENTERPRISE (-12-30)
 - **Phase 10: Enterprise High Availability**
 - Implemented **Loki Enterprise Cluster** (Gossip memberlist + Replication 2).
 - Native **Prometheus Deduplication** configured via horizontal replica labeling.
 - Added `docker-compose.ha.yml` for multi-instance production deployment.
 - Zero Single Points of Failure (SPOF) achieved in observability stack.
-- Claim 71-72: $2.585B Datadog replacement certified.
+- Claim 71-72:  Datadog replacement certified.
 
-# v1.0.0-AIOPS_SHIELD (2025-12-30)
+# v1.0.0-AIOPS_SHIELD (-12-30)
 - **Phase 9: Cognitive Hardening**
 - Implemented **AIOpsShield** (LLM Immunity Middleware).
 - Neutralized **AIOpsDoom** (Telemetry injection attacks).
@@ -48,7 +48,7 @@ Version 1.0.0 marks the initial release of the Sentinel Cortex platform as a **Q
 - Prepared Debian 13 "Trixie" transition script.
 - Standardized project version for first official release.
 
-# v1.0.0-GOLDEN_MASTER (2025-12-30).
+# v1.0.0-GOLDEN_MASTER (-12-30).
 
 ## ⚠ Notes
 - **QEMU Compatibility**: Due to `virtio-serial` buffer limitations in the test environment, some initial handshake packets may require manual re-triggering during boot. This does not affect the cryptographic validity of the channel.

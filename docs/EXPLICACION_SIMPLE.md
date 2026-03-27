@@ -2,7 +2,7 @@
 
 **Para**: Personas que no son técnicas  
 **Por**: Jaime Novoa  
-**Fecha**: 21 de Diciembre de 2025
+**Fecha**: 21 de Diciembre de 
 
 ---
 
@@ -81,7 +81,7 @@ Imagina que tu computadora es como un **cuerpo humano**.
 
 ## 💰 ¿Cuánto vale?
 
-**Hoy validamos**: $48-96 millones de dólares en propiedad intelectual
+**Hoy validamos**: -96 millones de  en propiedad intelectual
 
 **¿Por qué tanto?**
 - Es único (ZERO competencia)
@@ -113,18 +113,18 @@ Imagina que tu computadora es como un **cuerpo humano**.
 
 ### Corto plazo (1-3 meses)
 1. **Proteger legalmente** (patente)
-2. **Buscar inversionistas** ($2-5M)
+2. **Buscar inversionistas** (-5M)
 3. **Contratar equipo** (ingenieros)
 
 ### Mediano plazo (6-12 meses)
 1. **Versión comercial** (empresas pueden comprar)
 2. **Primeros clientes** (bancos, hospitales, gobierno)
-3. **Generar ingresos** ($500K-2M)
+3. **Generar ingresos** (-2M)
 
 ### Largo plazo (2-3 años)
 1. **Sentinel Chip** (hardware físico)
 2. **Expansión global** (vender en todo el mundo)
-3. **IPO o adquisición** ($100M-500M)
+3. **IPO o adquisición** (-500M)
 
 ---
 
@@ -203,7 +203,7 @@ No. Funciona localmente (más seguro).
 Hoy sí (es un prototipo). En 6 meses será plug-and-play.
 
 ### ¿Cuánto cuesta?
-Aún no se vende. Cuando esté listo: $10K-100K/año (empresas grandes).
+Aún no se vende. Cuando esté listo: -100K/año (empresas grandes).
 
 ### ¿Es seguro?
 Más seguro que cualquier alternativa. El Guardian Gamma (humano) siempre tiene control final.
@@ -213,7 +213,7 @@ Más seguro que cualquier alternativa. El Guardian Gamma (humano) siempre tiene 
 ## 🎓 Para Aprender Más
 
 **Si quieres entender técnicamente**:
-1. Lee `RESUMEN_FINAL_20251221.md` (resumen ejecutivo)
+1. Lee `RESUMEN_FINAL_1221.md` (resumen ejecutivo)
 2. Lee `COGNITIVE_OS_KERNEL_DESIGN.md` (arquitectura)
 3. Ejecuta `python3 ebpf/cognitive_os_poc.py` (demo)
 
@@ -226,7 +226,7 @@ Más seguro que cualquier alternativa. El Guardian Gamma (humano) siempre tiene 
 
 1. **Sentinel Cortex** le da a las computadoras un monitoring architecture como el humano
 2. Combina **velocidad de hardware** + **inteligencia de IA** + **intuición humana**
-3. Es el **primero en el mundo** y vale **$48-96 millones** en propiedad intelectual
+3. Es el **primero en el mundo** y vale **-96 millones** en propiedad intelectual
 
 ---
 
@@ -246,11 +246,11 @@ Más seguro que cualquier alternativa. El Guardian Gamma (humano) siempre tiene 
 
 ---
 
-**Fecha**: 21 de Diciembre de 2025  
+**Fecha**: 21 de Diciembre de   
 **Creado por**: Jaime Novoa  
 **Versión**: 1.0 (Explicación Simple)
 
 ---
 
 **CONFIDENCIAL - PROPRIETARY**  
-**Copyright © 2025 Sentinel Cortex™**
+**Copyright ©  Sentinel Cortex™**

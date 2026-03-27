@@ -332,7 +332,7 @@ Ver sección "Módulos Independientes"
 ### 3. Leer Interfaz
 Ver `frontend/src/lib/` para interfaces definidas
 
-### 4. Desarrollar
+### 4. Desollar
 Trabajar en tu módulo aisladamente
 
 ### 5. Integrar

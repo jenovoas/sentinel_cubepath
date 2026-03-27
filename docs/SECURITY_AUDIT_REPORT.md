@@ -18,10 +18,10 @@ Found **7 critical** and **12 high-severity** security vulnerabilities that must
 
 **File:** [`docker-compose.n8n.yml:14`](file:///home/jnovoas/sentinel/docker-compose.n8n.yml#L14)  
 **Severity:** 🔴 CRITICAL  
-**Issue:** Hardcoded password `sentinel_n8n_2024` committed to git repository
+**Issue:** Hardcoded password `sentinel_n8n_` committed to git repository
 
 ```yaml
-N8N_BASIC_AUTH_PASSWORD=sentinel_n8n_2024
+N8N_BASIC_AUTH_PASSWORD=sentinel_n8n_
 ```
 
 **Impact:** Anyone with repository access has admin credentials  

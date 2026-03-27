@@ -12,7 +12,7 @@
 - Historial de conversación con contexto
 
 ### 🧠 **SemShell Terminal Mode**
-- Ejecución segura de comandos con evaluación de riesgo por IA
+- Ejecución segura de comandos con e de riesgo por IA
 - Perfiles de seguridad configurables (Lab, Prod, Lockdown)
 - Bloqueo determinista de comandos peligrosos
 - Salida en tiempo real de comandos
@@ -126,7 +126,7 @@ mode prod       # Enforcing (threshold: 0.7)
 mode lockdown   # Restrictivo (threshold: 0.1)
 ```
 
-### Evaluación de Riesgo
+### E de Riesgo
 
 Cada comando es evaluado por IA antes de ejecutarse:
 
@@ -335,10 +335,10 @@ chmod +x sem_shell.py
 
 ## 📄 Licencia
 
-Propietario - Sentinel Project © 2026
+Propietario - Sentinel Project © 
 
 ---
 
-**Desarrollado con 🛡️ por el equipo Sentinel**
+**Desollado con 🛡️ por el equipo Sentinel**
 
 Para más información: `sentinel-cli --help` o `Ctrl+H` en el TUI

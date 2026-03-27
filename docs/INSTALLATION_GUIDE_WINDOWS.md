@@ -467,7 +467,7 @@ docker-compose up -d ollama-init
 # En WSL2
 cd ~/sentinel
 
-# Arreglar permisos
+# eglar permisos
 sudo chown -R $USER:$USER .
 
 # Dar permisos a scripts

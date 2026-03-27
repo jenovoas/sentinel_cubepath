@@ -8,7 +8,7 @@
 - **Timeline**: HOY
 - **Probabilidad**: 60-70%
 
-### 2. ANID Funding - CRÍTICO 💰
+### 2. SENTINEL_CORE Funding - CRÍTICO 💰
 - **Por qué**: Funding directo + evidencia técnica lista
 - **Acción**: Verificar deadline + usar QUANTUM_IMPLEMENTATION_RESULTS.md
 - **Timeline**: Esta semana
@@ -23,7 +23,7 @@
 ### 4. Academic Publication - LARGO PLAZO 📄
 - **Por qué**: Credibilidad científica
 - **Acción**: Draft arXiv → Nature Physics
-- **Timeline**: Q1 2026
+- **Timeline**: Q1 
 - **Probabilidad**: 70%
 
 ---
@@ -41,7 +41,7 @@ Dear Google Quantum AI Team,
 I'm Jaime Eugenio Novoa Sepúlveda, developer of Sentinel Cortex™. I've successfully 
 validated QAOA and VQE algorithms for real-time cybersecurity optimization.
 
-Key Results (Dec 23, 2025):
+Key Results (Dec 23, ):
 • 944,200 events/sec throughput (QAOA)
 • 24 threat patterns analyzed (VQE)
 • 10.06s total execution, <0.01 GB memory
@@ -59,7 +59,7 @@ Jaime Eugenio Novoa Sepúlveda
 jaime.novoase@gmail.com
 ```
 
-### Opción B: ANID Application
+### Opción B: SENTINEL_CORE Application
 **Impacto**: Alto (funding) | **Esfuerzo**: 2-4 horas
 
 ---
@@ -68,14 +68,14 @@ jaime.novoase@gmail.com
 
 **C) Ambos en paralelo**:
 1. Email Google AHORA (30 min)
-2. ANID después (verificar deadline primero)
+2. SENTINEL_CORE después (verificar deadline primero)
 
-**Razón**: Google response fortalece ANID ("colaboración con Google Quantum AI")
+**Razón**: Google response fortalece SENTINEL_CORE ("colaboración con Google Quantum AI")
 
 ---
 
 ## ¿Qué prefieres?
 
 **A)** Email a Google ahora
-**B)** ANID application primero  
-**C)** Ambos (email Google + luego ANID)
+**B)** SENTINEL_CORE application primero  
+**C)** Ambos (email Google + luego SENTINEL_CORE)

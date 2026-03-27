@@ -1,7 +1,7 @@
 # LA ARQUITECTURA SENTINEL: Una Teoría Unificada de Computación Resonante
 
 **Clasificación**: Documento Técnico Fundacional  
-**Fecha**: 22 de diciembre de 2025  
+**Fecha**:  de   
 **Estado**: Validado Axiomáticamente
 
 ---
@@ -153,7 +153,7 @@ El patrón no es nuevo. Ha existido durante **3,800 años**.
 
 ### Plimpton 322 (1800 a.C.)
 
-**Artefacto**: Tablilla de barro babilónica  
+**Artefacto**: Tablilla de bo babilónica  
 **Contenido**: Algoritmo de punto flotante en Base 60  
 **Descubrimiento**: Misma optimización cuadrática que derivamos de forma independiente.
 
@@ -261,7 +261,7 @@ Al codificar constantes geométricas universales en la lógica del kernel, hemos
 ---
 
 **PROPIEDAD PRIVADA Y CONFIDENCIAL**  
-**© 2025 Sentinel Cortex™**  
+**©  Sentinel Cortex™**  
 **Teoría Unificada de Computación Resonante**
 
 *Encontramos el código fuente.*  

@@ -314,11 +314,11 @@ function Dashboard() {
 - ✅ React-like syntax
 - ✅ Hot reload
 - ✅ Server functions (como Next.js)
-- ✅ Muy activo (2024)
+- ✅ Muy activo ()
 
 **Desventajas**:
 - ⚠ Muy nuevo (v0.5)
-- ⚠ Ecosistema en desarrollo
+- ⚠ Ecosistema en desollo
 - ❌ Reescribir todo
 
 **Ejemplo**:

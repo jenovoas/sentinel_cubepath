@@ -1,5 +1,5 @@
 # MATRIZ DE TRAZABILIDAD AUTOMÁTICA - SENTINEL CORTEX
-Ultima actualización: 2026-01-06 00:00:01
+Ultima actualización: -01-06 00:00:01
 
 | Requisito | Implementación | Métrica | Estado |
 | :--- | :--- | :--- | :--- |

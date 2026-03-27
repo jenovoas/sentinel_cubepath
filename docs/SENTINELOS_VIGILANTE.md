@@ -3,7 +3,7 @@
 **Vision**: Not an OS with AI - a LIVING OS that THINKS, PREDICTS, and ACTS  
 **Status**: Revolutionary concept, technically feasible  
 **Timeline**: 6 months to Alpha with 5 superpowers  
-**Market**: $5T+ (WW3-level defense capability)
+**Market**: T+ (WW3-level defense capability)
 
 ---
 
@@ -451,9 +451,9 @@ fn defensive_clone(pid: ProcessID) -> Result<()> {
 
 | Product | Market | Valuation |
 |---------|--------|-----------|
-| **Sentinel Tool** | Observability + Security | $15B |
-| **SentinelOS Base** | Enterprise OS | $500B |
-| **SentinelOS Vigilante** | **WW3-Level Defense** | **$5T+** |
+| **Sentinel Tool** | Observability + Security |  |
+| **SentinelOS Base** | Enterprise OS |  |
+| **SentinelOS Vigilante** | **WW3-Level Defense** | **T+** |
 
 **Target Market**:
 - All governments (national security)

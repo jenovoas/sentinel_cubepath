@@ -1,6 +1,6 @@
 # 🔥 Diagnóstico: Bloqueos del Sistema al Usar Navegador
 
-**Fecha:** 2025-12-23  
+**Fecha:** -12-23  
 **Problema:** El computador se bloquea completamente cuando se usa un navegador web
 
 ---
@@ -18,7 +18,7 @@
 - **PCH (Chipset):** 72°C 🟡
 
 ### ⚠ Problema Crítico CONFIRMADO:
-**Inspección física realizada (2025-12-23):**
+**Inspección física realizada (-12-23):**
 - ✅ Interior de la laptop limpio
 - 🔴 **UN VENTILADOR NO FUNCIONA CORRECTAMENTE**
 - Los sensores muestran **0 RPM** (confirmado)
@@ -49,7 +49,7 @@
 - ✅ Verificación completa del sistema
 
 **Costo estimado:**
-- Ventilador + instalación: $40-100 USD
+- Ventilador + instalación: -100 
 - Tiempo: 1-3 días
 
 #### Opción B: Reemplazo DIY (Si tienes experiencia)
@@ -61,10 +61,10 @@
 5. Aplica pasta térmica nueva
 
 **Costo estimado:**
-- Ventilador compatible: $15-40 USD
-- Pasta térmica: $5-15 USD
-- Herramientas (si no las tienes): $10-20 USD
-- **Total:** $30-75 USD
+- Ventilador compatible: -40 
+- Pasta térmica: -15 
+- Herramientas (si no las tienes): -20 
+- **Total:** -75 
 
 **⚠ Riesgos del DIY:**
 - Pérdida de garantía (si aún la tienes)
@@ -185,7 +185,7 @@ Prepara el sistema antes de usar el navegador:
    - Si supera 90°C, apaga la laptop
 
 ### 💰 Inversión Recomendada (Mientras esperas el servicio):
-1. **Base refrigerante USB** ($15-30 USD) - ALTAMENTE RECOMENDADO
+1. **Base refrigerante USB** (-30 ) - ALTAMENTE RECOMENDADO
    - Puede reducir 5-10°C la temperatura
    - Te permitirá usar la laptop con más seguridad
    - Seguirá siendo útil después del reemplazo del ventilador
@@ -267,5 +267,5 @@ Antes de usar el navegador:
 
 ---
 
-**Última actualización:** 2025-12-23 15:52:52 -03:00  
+**Última actualización:** -12-23 15:52:52 -03:00  
 **Estado:** ✅ Inspección física completada - Ventilador defectuoso confirmado

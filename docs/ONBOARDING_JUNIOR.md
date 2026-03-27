@@ -1,4 +1,4 @@
-# 👋 Bienvenido a Sentinel - Guía para Nuevos Desarrolladores
+# 👋 Bienvenido a Sentinel - Guía para Nuevos Desolladores
 
 **¡Hola! No te asustes.** 😊
 
@@ -221,6 +221,6 @@ Enfócate en UNA cosa a la vez. Pregunta cuando te pierdas.
 
 ---
 
-**Creado**: 21 de Diciembre de 2025  
-**Para**: Nuevos desarrolladores que no quieren salir corriendo 😂  
+**Creado**: 21 de Diciembre de   
+**Para**: Nuevos desolladores que no quieren salir corriendo 😂  
 **Actualizado**: Cuando sea necesario
