@@ -71,9 +71,39 @@ impl SemanticRouter {
         }
     }
 
+    /// Local keyword-based classification — fallback when GOOGLE_API_KEY is absent.
+    fn classify_local(query: &str) -> (Intent, String) {
+        let q = query.to_lowercase();
+
+        let destructive = [
+            "rm -rf", "rm -r /", "rm /", "rmdir /",
+            "drop database", "drop table", "truncate table",
+            "mkfs", "dd if=/dev/zero", "dd if=/dev/random",
+            ":(){:|:&};:", "> /dev/sda", "> /dev/hda",
+            "chmod -r 777 /", "chown -r root /",
+            "shutdown -h", "halt", "poweroff",
+            "kill -9 -1", "pkill -9",
+        ];
+        if destructive.iter().any(|p| q.contains(p)) {
+            return (Intent::Unknown, "Destructive pattern (local classifier)".to_string());
+        }
+
+        let safety = ["can i delete", "puedo borrar", "is it safe", "es seguro", "should i remove", "debo eliminar"];
+        if safety.iter().any(|p| q.contains(p)) {
+            return (Intent::SafetyCheck, "Safety inquiry (local classifier)".to_string());
+        }
+
+        let actions = ["scan", "research", "inicia", "deploy", "check status", "ejecuta", "run test"];
+        if actions.iter().any(|p| q.contains(p)) {
+            return (Intent::SystemAction, "System action (local classifier)".to_string());
+        }
+
+        (Intent::Oracle, "General query (local classifier)".to_string())
+    }
+
     pub async fn classify(&self, query: &str) -> (Intent, String) {
         if self.api_key.is_empty() {
-             return (Intent::Unknown, "Missing GOOGLE_API_KEY".to_string());
+            return Self::classify_local(query);
         }
 
         let system_prompt = r#"

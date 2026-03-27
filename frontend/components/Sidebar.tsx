@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import { 
-  LayoutDashboard, 
-  ShieldAlert, 
-  Grid3X3, 
-  Network, 
-  Terminal, 
+import {
+  LayoutDashboard,
+  ShieldAlert,
+  Hexagon,
+  Network,
+  Terminal,
   Settings,
   Lock,
   BarChart3,
@@ -26,7 +26,7 @@ const EXTERNAL_SERVICES = [
     id: "grafana",
     label: "Grafana",
     icon: BarChart3,
-    href: "http://vps23309.cubepath.net:3001",
+    href: "https://vps23309.cubepath.net/grafana/",
     color: "text-orange-400",
     dot: "bg-orange-500",
   },
@@ -34,7 +34,7 @@ const EXTERNAL_SERVICES = [
     id: "prometheus",
     label: "Prometheus",
     icon: Activity,
-    href: "http://vps23309.cubepath.net:9090",
+    href: "https://vps23309.cubepath.net/prometheus/",
     color: "text-red-400",
     dot: "bg-red-500",
   },
@@ -42,7 +42,7 @@ const EXTERNAL_SERVICES = [
     id: "n8n",
     label: "n8n Reflex",
     icon: Workflow,
-    href: "http://vps23309.cubepath.net:5678",
+    href: "https://vps23309.cubepath.net/n8n/",
     color: "text-violet-400",
     dot: "bg-violet-500",
   },
@@ -52,7 +52,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "aiops_shield", label: "AIOps Shield", icon: ShieldAlert },
-    { id: "matrix", label: "Matrix", icon: Grid3X3 },
+    { id: "matrix", label: "Crystal Matrix", icon: Hexagon },
     { id: "mycnet", label: "MyCNet", icon: Network },
     { id: "vault", label: "Vault", icon: Terminal },
   ];

@@ -18,6 +18,7 @@ pub mod ebpf;
 pub mod scheduler;
 pub mod truthsync;
 pub mod neural;
+pub mod crystal;
 pub mod resonant;
 pub mod physics;
 pub mod encryption;
@@ -76,6 +77,15 @@ pub struct TruthClaimResponse {
     pub ring0_intercepts: u32,
     pub harmonic_state: String,
     pub certification_seal: String, // Plimpton 322 proof
+}
+
+#[derive(Serialize)]
+pub struct LatticeStateResponse {
+    pub nodes: Vec<crystal::CrystalState>,
+    pub global_coherence_raw: i64,
+    pub total_energy_raw: i64,
+    pub active_count: usize,
+    pub global_tick: u64,
 }
 
 #[derive(Deserialize)]
@@ -333,13 +343,15 @@ async fn main() {
         .route("/api/v1/telemetry", get(telemetry_ws_handler))
         .route("/api/v1/mycnet/sync", get(mycnet::mycnet_sync_handler))
         .route("/api/v1/simulate_telemetry", post(simulate_telemetry_handler))
+        .route("/api/v1/lattice/state", get(lattice_state_handler))
         .route("/api/v1/docs", get(list_docs_handler))
+        .route("/api/v1/docs/search", get(search_docs_handler))
         .route("/api/v1/docs/:filename", get(get_doc_handler))
         .route("/metrics", get(metrics_handler))
         .with_state(state);
 
     // Start server
-    let addr = std::net::SocketAddr::from(([0, 0, 0, 0], 8000));
+    let addr = std::net::SocketAddr::from(([127, 0, 0, 1], 8000));
     tracing::info!("🚀 Listening on {}", addr);
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     axum::serve(listener, app).await.unwrap();
@@ -362,32 +374,30 @@ async fn sentinel_status_handler(
 ) -> Json<SentinelStatusResponse> {
     let bio = state.bio_resonator.lock().unwrap();
     let portal = state.portal_detector.lock().unwrap();
-    
-    let current_time = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap()
-        .as_secs();
 
-    let current_time_u64 = current_time;
+    // Use global_tick (oscillator ticks from boot) — avoids i64 overflow from Unix timestamp
+    let tick = state.global_tick.load(std::sync::atomic::Ordering::SeqCst);
 
-    let is_sealed = std::path::Path::new("/sys/fs/bpf/tc_firewall_config").exists(); // Simple existence check for now
-    
+    let is_sealed = std::path::Path::new("/sys/fs/bpf/tc_firewall_config").exists();
+
+    let portal_intensity = portal.get_intensity(tick).to_raw().max(0);
+
     Json(SentinelStatusResponse {
         ring_status: if is_sealed { "SEALED".to_string() } else { "OPEN".to_string() },
         xdp_firewall: if is_sealed { "ACTIVE_XDP".to_string() } else { "BYPASS".to_string() },
         lsm_cognitive: if is_sealed { "ENFORCING".to_string() } else { "MONITORING".to_string() },
         s60_resonance: bio.get_coherence_raw(),
         bio_coherence: bio.get_coherence_raw(),
-        portal_intensity: portal.get_intensity(current_time_u64).to_raw(),
+        portal_intensity,
         crystal_oscillator_active: true,
-        harmonic_sync: if portal.is_portal_open(current_time_u64) { "RESONANCE_MAX".to_string() } else { "STABLE".to_string() },
+        harmonic_sync: if portal.is_portal_open(tick) { "RESONANCE_MAX".to_string() } else { "STABLE".to_string() },
         effective_mass: state.physics_engine.calculate_effective_mass(
-            crate::math::S60::one(), 
-            portal.get_intensity(current_time_u64)
+            crate::math::S60::one(),
+            portal.get_intensity(tick)
         ).to_raw(),
         quantum_load: state.physics_engine.calculate_effective_load(
-            crate::math::S60::from_raw(500000), // Base task mass
-            crate::math::S60::from_raw(800000), // Priority
+            crate::math::S60::from_raw(500000),
+            crate::math::S60::from_raw(800000),
             bio.coherence
         ).to_raw(),
     })
@@ -474,23 +484,26 @@ async fn truth_claim_handler(
     // --- 2. AI SEMANTIC ANALYSIS (GEMINI 2.0 PORT) ---
     let (intent, ai_reason) = state.semantic_router.classify(&payload.claim_payload).await;
     
-    let mut score = 0.985 + (rand::random::<f64>() * 0.01);
-    let mut harmonic_state = match intent {
-        crate::quantum::semantic_router::Intent::Oracle => "RESONANT",
-        crate::quantum::semantic_router::Intent::SystemAction => "CONSONANT",
-        crate::quantum::semantic_router::Intent::SafetyCheck => "GUARD_ACTIVE",
-        crate::quantum::semantic_router::Intent::Unknown => "DISSONANT",
-    };
-    
-    let mut intercepts = 0;
-    let mut claim_valid = true;
+    // Score determinista: basado en longitud del payload y verificación Plimpton 322
+    let plimpton_valid = state.truthsync.verify_ratio(row, claimed_ratio);
+    let entropy_factor = ((payload.claim_payload.len() as f64) / 256.0).min(1.0);
 
-    if intent == crate::quantum::semantic_router::Intent::Unknown {
-        score = 0.05 + (rand::random::<f64>() * 0.1);
-        intercepts = 4 + (rand::random::<u32>() % 3);
-        claim_valid = false;
-        harmonic_state = "CRITICAL_DISSONANCE";
-    }
+    let (mut score, mut harmonic_state, mut intercepts, mut claim_valid) = match intent {
+        crate::quantum::semantic_router::Intent::Oracle => {
+            (0.97 - entropy_factor * 0.02, "RESONANT", 0u32, true)
+        }
+        crate::quantum::semantic_router::Intent::SystemAction => {
+            let s = if plimpton_valid { 0.92 } else { 0.78 - entropy_factor * 0.05 };
+            (s, "CONSONANT", 0u32, true)
+        }
+        crate::quantum::semantic_router::Intent::SafetyCheck => {
+            (0.88, "GUARD_ACTIVE", 1u32, true)
+        }
+        crate::quantum::semantic_router::Intent::Unknown => {
+            let s = (0.15 - entropy_factor * 0.10).max(0.01);
+            (s, "CRITICAL_DISSONANCE", 4u32 + (payload.claim_payload.len() as u32 % 3), false)
+        }
+    };
 
     // --- 3. SENTINEL SANITIZATION PIPELINE ---
     // Pass the payload's intent through the actual S60 Resonance and Cognitive memory
@@ -503,27 +516,14 @@ async fn truth_claim_handler(
     };
 
     if sanitized_severity >= 3 {
-        score = 0.05 + (rand::random::<f64>() * 0.1);
+        score = (score * 0.1).max(0.01);
         harmonic_state = "ATTACK_SANITIZED_BY_SENTINEL";
         intercepts += sanitized_severity as u32;
         claim_valid = false;
-        
+
         let bridge = ebpf::EbpfBridge::new(vec!["/sys/fs/bpf/cortex_events".to_string()]);
         let _ = bridge.set_quarantine_mode(true);
     }
-
-    // The original logic for Plimpton 322 and AIOpsDoom detection is removed
-    // as per the provided new logic, which focuses on keyword detection.
-    // However, to maintain some semblance of the original structure and
-    // avoid breaking the `certification_seal` field, we'll adapt it.
-
-    // Placeholder for row and claimed_ratio, as they are no longer parsed
-    let row = 12; // Default, as in original code
-    let claimed_ratio = crate::math::S60::zero(); // Placeholder
-
-    // If the claim is not valid based on new keyword logic,
-    // we can simulate the old AIOpsDoom detection or just mark it as dissonant.
-    // For now, we'll use the new `claim_valid` directly.
 
     Json(TruthClaimResponse {
         claim_valid,
@@ -611,35 +611,111 @@ async fn handle_socket(mut socket: WebSocket, state: Arc<AppState>) {
 }
 
 // ============================================================================
+// LATTICE STATE HANDLER
+// ============================================================================
+
+async fn lattice_state_handler(
+    State(state): State<Arc<AppState>>,
+) -> Json<LatticeStateResponse> {
+    let resonant = state.resonant_memory.lock().unwrap();
+    let lattice = &resonant.lattice;
+    let nodes = lattice.get_states();
+    let active_count = nodes.iter().filter(|n| n.is_active).count();
+    let global_coherence_raw = lattice.global_coherence().to_raw();
+    let total_energy_raw = lattice.total_energy().to_raw();
+    let tick = state.global_tick.load(std::sync::atomic::Ordering::SeqCst);
+
+    Json(LatticeStateResponse {
+        nodes,
+        global_coherence_raw,
+        total_energy_raw,
+        active_count,
+        global_tick: tick,
+    })
+}
+
+// ============================================================================
 // DOCUMENTATION HANDLERS
 // ============================================================================
 
 async fn list_docs_handler() -> Json<Vec<String>> {
     let mut docs = Vec::new();
-    if let Ok(entries) = fs::read_dir("../docs") {
-        for entry in entries.flatten() {
-            if let Some(name) = entry.file_name().to_str() {
-                if name.ends_with(".md") {
-                    docs.push(name.to_string());
+    let docs_root = std::path::Path::new("../docs");
+    
+    // Recursive search
+    let mut stack = vec![docs_root.to_path_buf()];
+    while let Some(dir) = stack.pop() {
+        if let Ok(entries) = fs::read_dir(&dir) {
+            for entry in entries.flatten() {
+                let path = entry.path();
+                if path.is_dir() {
+                    stack.push(path);
+                } else if path.extension().map_or(false, |ext| ext == "md") {
+                    if let Ok(rel_path) = path.strip_prefix(docs_root) {
+                        if let Some(path_str) = rel_path.to_str() {
+                            docs.push(path_str.to_string());
+                        }
+                    }
                 }
             }
         }
     }
+    
     docs.sort();
     Json(docs)
+}
+
+async fn search_docs_handler(
+    axum::extract::Query(params): axum::extract::Query<std::collections::HashMap<String, String>>,
+) -> Json<Vec<String>> {
+    let q = params.get("q").cloned().unwrap_or_default().to_lowercase();
+    let mut matches = Vec::new();
+    let docs_root = std::path::Path::new("../docs");
+
+    if q.is_empty() {
+        return Json(matches);
+    }
+
+    // Reuse recursive walk for search
+    let mut stack = vec![docs_root.to_path_buf()];
+    while let Some(dir) = stack.pop() {
+        if let Ok(entries) = fs::read_dir(&dir) {
+            for entry in entries.flatten() {
+                let path = entry.path();
+                if path.is_dir() {
+                    stack.push(path);
+                } else if path.extension().map_or(false, |ext| ext == "md") {
+                    if let Ok(content) = fs::read_to_string(&path) {
+                        if content.to_lowercase().contains(&q) {
+                            if let Ok(rel_path) = path.strip_prefix(docs_root) {
+                                if let Some(path_str) = rel_path.to_str() {
+                                    matches.push(path_str.to_string());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    matches.sort();
+    Json(matches)
 }
 
 async fn get_doc_handler(
     Path(filename): Path<String>,
 ) -> Result<String, (axum::http::StatusCode, String)> {
-    // Basic security check to prevent path traversal
-    if filename.contains("..") || filename.contains('/') || filename.contains('\\') {
-        return Err((axum::http::StatusCode::BAD_REQUEST, "Invalid filename".to_string()));
+    // Basic security check to prevent path traversal (no ".." or absolute paths)
+    if filename.contains("..") || filename.starts_with('/') {
+        return Err((axum::http::StatusCode::BAD_REQUEST, "Invalid filename pattern".to_string()));
     }
 
-    let path = format!("../docs/{}", filename);
+    let docs_root = std::path::Path::new("../docs");
+    let path = docs_root.join(&filename);
+    
     fs::read_to_string(path).map_err(|e| {
-        (axum::http::StatusCode::NOT_FOUND, format!("Doc not found: {}", e))
+        (axum::http::StatusCode::NOT_FOUND, format!("Doc not found in vault: {}", e))
     })
 }
 

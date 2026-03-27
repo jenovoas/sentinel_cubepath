@@ -4,7 +4,7 @@ import React from "react";
 import { Activity, Layout, Terminal } from "lucide-react";
 
 export function MonitoringView() {
-  const grafanaUrl = "http://vps23309.cubepath.net:3001";
+  const grafanaUrl = "https://vps23309.cubepath.net/grafana";
   
   return (
     <div className="flex flex-col space-y-6 h-full animate-in fade-in duration-700">

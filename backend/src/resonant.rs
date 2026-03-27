@@ -1,76 +1,47 @@
-//! Resonant Memory - Resonant Memory Matrix (RMM)
-//! Correlación de eventos basada en la métrica Plimpton 322 (Base-60).
+//! # 🌐 Resonant Memory — Crystal Lattice Matrix (RMM)
+//!
+//! Memoria distribuida basada en cristales resonantes acoplados.
+//! Cada slot es un SovereignCrystal con su propio estado de fase y amplitud.
+//! Reemplaza el stub Vec<Vec<u64>> por una red de cristales con dinámica real.
 
+use crate::crystal::CrystalLattice;
 use crate::math::S60;
 
-/// Matriz de Resonancia: Nodos x Nodos de la red Sentinel.
-pub struct ResonantMatrix {
-    matrix: Vec<Vec<u64>>, // Valores S60 raw (Base-60)
-    size: usize,
-}
-
-impl ResonantMatrix {
-    pub fn new(size: usize) -> Self {
-        Self {
-            matrix: vec![vec![0; size]; size],
-            size,
-        }
-    }
-
-    /// Inyecta una resonancia entre dos nodos.
-    /// Si los nodos vibran en ratios de Plimpton 322, la resonancia se amplifica.
-    pub fn inject_resonance(&mut self, node_a: usize, node_b: usize, value: u64) {
-        if node_a < self.size && node_b < self.size {
-            // Actualización por interferencia constructiva (S60 Addition)
-            self.matrix[node_a][node_b] = self.matrix[node_a][node_b].wrapping_add(value);
-            self.matrix[node_b][node_a] = self.matrix[node_a][node_b]; // Simetría
-        }
-    }
-
-    /// Obtiene la "Coherencia Global" de la matriz.
-    /// Retorna un valor S60 que representa el alineamiento de fase del sistema.
-    pub fn get_global_coherence(&self) -> u64 {
-        let mut sum = 0u64;
-        let mut count = 0u64;
-        for row in &self.matrix {
-            for &val in row {
-                if val > 0 {
-                    sum = sum.wrapping_add(val);
-                    count += 1;
-                }
-            }
-        }
-        if count == 0 { return 0; }
-        sum / count
-    }
-
-    /// Verifica si un par de nodos están en "Resonancia Plimpton".
-    pub fn is_resonant(&self, node_a: usize, node_b: usize) -> bool {
-        if node_a >= self.size || node_b >= self.size { return false; }
-        
-        let val = self.matrix[node_a][node_b];
-        // Ejemplo: Si el valor es múltiplo de la constante maestra 1.0 (en S60)
-        // O si cumple con los ratios de la tabla Plimpton 322.
-        S60::is_harmonic_ratio(S60::from_raw(val as i64))
-    }
-}
-
+/// Wrapper de alto nivel: expone la misma API pública que antes
+/// pero internamente usa CrystalLattice con transferencia real de energía.
 pub struct ResonantMemory {
-    rmm: ResonantMatrix,
+    pub lattice: CrystalLattice,
 }
 
 impl ResonantMemory {
     pub fn new(size: usize) -> Self {
         Self {
-            rmm: ResonantMatrix::new(size),
+            lattice: CrystalLattice::new(size),
         }
     }
 
+    /// Inyecta una señal entre dos nodos (interferencia constructiva).
     pub fn resonate(&mut self, source: usize, target: usize, signal: u64) {
-        self.rmm.inject_resonance(source, target, signal);
+        let pressure = (signal as i64).min(S60::SCALE_0);
+        self.lattice.inject(source, pressure);
+        if target != source {
+            self.lattice.inject(target, pressure / 4);
+        }
+        self.lattice.step();
     }
 
+    /// Coherencia global del lattice (promedio de amplitudes activas).
     pub fn get_coherence(&self) -> u64 {
-        self.rmm.get_global_coherence()
+        self.lattice.global_coherence().to_raw().max(0) as u64
+    }
+
+    /// Ejecuta un tick de evolución del lattice.
+    pub fn tick(&mut self) {
+        self.lattice.step();
+    }
+
+    /// Energía total del sistema en S60.
+    pub fn total_energy(&self) -> S60 {
+        self.lattice.total_energy()
     }
 }

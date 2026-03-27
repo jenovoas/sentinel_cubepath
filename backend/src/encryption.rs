@@ -26,12 +26,12 @@ impl DynamicEncryption {
             .unwrap()
             .as_nanos() as u64;
             
-        let spike_rate = neural.firing_rate(); 
+        let spike_rate = neural.firing_rate();
         let coherence = resonant.get_coherence();
-        
+
         // Simple Plimpton-inspired Hash (Base-60 Math)
         // Combina timestamp, actividad neuronal (spikes) y coherencia resonante
-        let spike_factor = (spike_rate * 1000.0) as u64;
+        let spike_factor = spike_rate.to_raw().max(0) as u64;
         let mixed_seed = timestamp.wrapping_add(spike_factor).wrapping_add(coherence);
         
         // Inyectamos el valor en nuestra aritmética S60 (Base-60)

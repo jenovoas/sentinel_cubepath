@@ -10,6 +10,7 @@ import { TruthSyncReport } from "./TruthSyncReport";
 import { MyCNetNodeGraph } from "./MyCNetNodeGraph";
 import { Sidebar } from "./Sidebar";
 import { AIOpsShieldView } from "./AIOpsShieldView";
+import { CrystalLatticeView } from "./CrystalLatticeView";
 import { MonitoringView } from "./MonitoringView";
 import { clsx } from "clsx";
 import { ShieldAlert as ShieldAlertIcon } from "lucide-react"; // Alias if needed, but we'll stick to ShieldAlert
@@ -221,7 +222,7 @@ export function Dashboard() {
             </div>
           </div>
         ) : activeTab === "matrix" ? (
-          <MonitoringView />
+          <CrystalLatticeView />
         ) : activeTab === "matrix_old" ? (
           <MonitoringView />
         ) : activeTab === "null" ? (

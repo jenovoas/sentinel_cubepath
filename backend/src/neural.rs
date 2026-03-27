@@ -1,36 +1,38 @@
 //! Neural Memory - Spiking Neural Network (SNN) Ring-0 Processor
 //! Proporciona detección de patrones bio-inspirada para señales eBPF.
+//! Migrado a S60 puro — sin floats (Protocolo Yatra).
 
 use std::collections::VecDeque;
+use crate::math::S60;
 
-/// Umbral de disparo (V_threshold) para la neurona Leaky Integrate-and-Fire (LIF)
-const LIF_THRESHOLD: f64 = 1.0;
-/// Constante de tiempo de decaimiento (Tau)
-const LIF_DECAY: f64 = 0.9;
+/// Umbral de disparo (V_threshold): 1.0 en S60
+const LIF_THRESHOLD: S60 = S60::new(1, 0, 0, 0, 0);
+/// Constante de decaimiento (Tau): 54/60 ≈ 0.9 en S60
+const LIF_DECAY: S60 = S60::new(0, 54, 0, 0, 0);
 
 pub struct NeuralMembrane {
-    potential: f64,
-    spike_history: VecDeque<u64>, // Timestamps de disparos
+    potential: S60,
+    spike_history: VecDeque<u64>, // Ticks de disparo (global_tick)
     capacity: usize,
 }
 
 impl NeuralMembrane {
     pub fn new(capacity: usize) -> Self {
         Self {
-            potential: 0.0,
+            potential: S60::zero(),
             spike_history: VecDeque::with_capacity(capacity),
             capacity,
         }
     }
 
-    /// Procesa una señal de entropía (amplitud) y retorna si hubo un "spike" (alerta)
-    pub fn process_signal(&mut self, amplitude: f64, timestamp: u64) -> bool {
-        // 1. Integración (Leaky Integrate)
-        self.potential = (self.potential * LIF_DECAY) + amplitude;
+    /// Procesa una señal de entropía (amplitud S60) y retorna si hubo un spike.
+    pub fn process_signal(&mut self, amplitude: S60, timestamp: u64) -> bool {
+        // Leaky Integrate: V = V * decay + amplitude
+        self.potential = self.potential * LIF_DECAY + amplitude;
 
-        // 2. Disparo (Fire)
-        if self.potential >= LIF_THRESHOLD {
-            self.potential = 0.0; // Reset refractario
+        // Fire: si V >= threshold, disparar y resetear
+        if self.potential.to_raw() >= LIF_THRESHOLD.to_raw() {
+            self.potential = S60::zero();
             self.spike_history.push_back(timestamp);
             if self.spike_history.len() > self.capacity {
                 self.spike_history.pop_front();
@@ -41,14 +43,15 @@ impl NeuralMembrane {
         false
     }
 
-    /// Retorna la "Tasa de Disparo" (Firing Rate) actual
-    pub fn firing_rate(&self) -> f64 {
-        if self.spike_history.len() < 2 { return 0.0; }
+    /// Tasa de disparo: spikes / duración_en_ticks, expresada como fracción S60.
+    pub fn firing_rate(&self) -> S60 {
+        if self.spike_history.len() < 2 { return S60::zero(); }
         let first = *self.spike_history.front().unwrap();
         let last = *self.spike_history.back().unwrap();
-        let duration = (last - first) as f64 / 1_000_000_000.0; // Segundos
-        if duration == 0.0 { return 0.0; }
-        self.spike_history.len() as f64 / duration
+        let duration = last.saturating_sub(first);
+        if duration == 0 { return S60::zero(); }
+        let count = self.spike_history.len() as i64;
+        S60::from_raw(count * S60::SCALE_0 / duration as i64)
     }
 }
 
@@ -58,21 +61,19 @@ pub struct NeuralMemory {
 
 impl NeuralMemory {
     pub fn new(nodes: usize) -> Self {
-        let mut membranes = Vec::new();
-        for _ in 0..nodes {
-            membranes.push(NeuralMembrane::new(100));
+        Self {
+            membranes: (0..nodes).map(|_| NeuralMembrane::new(100)).collect(),
         }
-        Self { membranes }
     }
 
-    pub fn firing_rate(&self) -> f64 {
-        if self.membranes.is_empty() { return 0.0; }
-        // Retorna el promedio de la tasa de disparo de toda la red
-        let sum: f64 = self.membranes.iter().map(|m| m.firing_rate()).sum();
-        sum / (self.membranes.len() as f64)
+    /// Promedio de la tasa de disparo de toda la red (S60).
+    pub fn firing_rate(&self) -> S60 {
+        if self.membranes.is_empty() { return S60::zero(); }
+        let sum = self.membranes.iter().fold(S60::zero(), |acc, m| acc + m.firing_rate());
+        S60::from_raw(sum.to_raw() / self.membranes.len() as i64)
     }
 
-    pub fn observe(&mut self, node_idx: usize, signal: f64, ts: u64) -> bool {
+    pub fn observe(&mut self, node_idx: usize, signal: S60, ts: u64) -> bool {
         if let Some(m) = self.membranes.get_mut(node_idx) {
             return m.process_signal(signal, ts);
         }

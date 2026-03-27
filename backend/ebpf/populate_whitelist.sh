@@ -59,21 +59,55 @@ add_if_exists() {
     fi
 }
 
-# Críticos de sistema
+# === ACCESO REMOTO — nunca bloquear SSH ===
+add_if_exists "/usr/sbin/sshd"
+add_if_exists "/usr/bin/ssh"
+add_if_exists "/usr/bin/scp"
+add_if_exists "/usr/bin/sftp"
+for s in /usr/lib/openssh/*; do add_if_exists "$s"; done
+for s in /usr/libexec/openssh/*; do add_if_exists "$s"; done
+
+# === SHELLS Y SISTEMA BASE ===
 add_if_exists "/usr/bin/bash"
 add_if_exists "/usr/bin/sh"
+add_if_exists "/usr/bin/dash"
 add_if_exists "/usr/bin/sudo"
+add_if_exists "/usr/bin/su"
 add_if_exists "/usr/bin/env"
-add_if_exists "/usr/sbin/sshd"
-add_if_exists "/usr/bin/node"
-add_if_exists "/usr/bin/npm"
-add_if_exists "/usr/bin/python3"
-add_if_exists "/usr/sbin/bpftool"
+add_if_exists "/usr/bin/login"
 
-# Binarios de desarrollo (Hackathon context)
+# === SERVICIOS WEB ===
+for w in /usr/sbin/nginx /usr/bin/nginx /usr/local/sbin/nginx; do add_if_exists "$w"; done
+
+# === RUNTIME NODE / FRONTEND ===
+add_if_exists "/usr/bin/node"
+add_if_exists "/usr/local/bin/node"
+add_if_exists "/usr/bin/npm"
+add_if_exists "/usr/local/bin/npm"
+
+# === DOCKER / CONTENEDORES ===
+add_if_exists "/usr/bin/docker"
+add_if_exists "/usr/bin/dockerd"
+add_if_exists "/usr/bin/containerd"
+add_if_exists "/usr/bin/containerd-shim-runc-v2"
+add_if_exists "/usr/sbin/runc"
+
+# === RUNTIME RUST / BACKEND ===
 add_if_exists "/usr/bin/cargo"
 add_if_exists "/usr/bin/rustc"
+add_if_exists "/root/sentinel-cubepath/backend/target/release/sentinel-backend"
+add_if_exists "/app/sentinel-backend"
+
+# === HERRAMIENTAS DEL SISTEMA ===
+add_if_exists "/usr/bin/python3"
+add_if_exists "/usr/sbin/bpftool"
 add_if_exists "/usr/bin/make"
 add_if_exists "/usr/bin/git"
+add_if_exists "/usr/bin/curl"
+add_if_exists "/usr/bin/wget"
+add_if_exists "/usr/bin/systemctl"
+add_if_exists "/usr/bin/ps"
+add_if_exists "/usr/bin/openssl"
+add_if_exists "/usr/bin/certbot"
 
-log "Población completada."
+log "Población completada. SSH, nginx, Docker y runtime protegidos."
