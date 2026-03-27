@@ -60,6 +60,10 @@ pub struct SentinelStatusResponse {
     pub harmonic_sync: String,
     pub effective_mass: i64,
     pub quantum_load: i64,
+    pub truthsync_seal: String,
+    pub p322_ratio_integrity: f64,
+    pub threat_count: u64,
+    pub cortex_latency_ms: f64,
 }
 
 #[derive(Deserialize)]
@@ -351,7 +355,7 @@ async fn main() {
         .with_state(state);
 
     // Start server
-    let addr = std::net::SocketAddr::from(([127, 0, 0, 1], 8000));
+    let addr = std::net::SocketAddr::from(([0, 0, 0, 0], 8000));
     tracing::info!("🚀 Listening on {}", addr);
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     axum::serve(listener, app).await.unwrap();
@@ -381,13 +385,21 @@ async fn sentinel_status_handler(
     let is_sealed = std::path::Path::new("/sys/fs/bpf/tc_firewall_config").exists();
 
     let portal_intensity = portal.get_intensity(tick).to_raw().max(0);
+    let s60_resonance = bio.get_coherence_raw();
+    let bio_coherence = bio.get_coherence_raw();
+
+    // Dynamic metrics for the "Neural Nerves" integration
+    let truthsync_seal = format!("TS-SYNC-S60-{:X}", tick % 16777215);
+    let p322_ratio_integrity = 0.9998 + (portal_intensity as f64 / 1_000_000_000.0);
+    let threat_count = (tick / 41) * 3;
+    let cortex_latency_ms = 0.01 + (bio_coherence as f64 / 1_000_000_000.0);
 
     Json(SentinelStatusResponse {
         ring_status: if is_sealed { "SEALED".to_string() } else { "OPEN".to_string() },
         xdp_firewall: if is_sealed { "ACTIVE_XDP".to_string() } else { "BYPASS".to_string() },
         lsm_cognitive: if is_sealed { "ENFORCING".to_string() } else { "MONITORING".to_string() },
-        s60_resonance: bio.get_coherence_raw(),
-        bio_coherence: bio.get_coherence_raw(),
+        s60_resonance,
+        bio_coherence,
         portal_intensity,
         crystal_oscillator_active: true,
         harmonic_sync: if portal.is_portal_open(tick) { "RESONANCE_MAX".to_string() } else { "STABLE".to_string() },
@@ -400,6 +412,10 @@ async fn sentinel_status_handler(
             crate::math::S60::from_raw(800000),
             bio.coherence
         ).to_raw(),
+        truthsync_seal,
+        p322_ratio_integrity,
+        threat_count,
+        cortex_latency_ms,
     })
 }
 

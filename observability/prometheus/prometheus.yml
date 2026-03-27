@@ -32,7 +32,7 @@ scrape_configs:
   - job_name: 'sentinel-api'
     scrape_interval: 5s
     static_configs:
-      - targets: ['api:8000']
+      - targets: ['172.17.0.1:8000']
         labels:
           service: 'sentinel-cortex'
           layer: 'ring0'

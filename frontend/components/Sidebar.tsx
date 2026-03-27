@@ -12,7 +12,8 @@ import {
   BarChart3,
   Activity,
   Workflow,
-  ExternalLink
+  ExternalLink,
+  Info,
 } from "lucide-react";
 import { clsx } from "clsx";
 
@@ -50,6 +51,7 @@ const EXTERNAL_SERVICES = [
 
 export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
   const menuItems = [
+    { id: "about", label: "Proyecto", icon: Info },
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "aiops_shield", label: "AIOps Shield", icon: ShieldAlert },
     { id: "matrix", label: "Crystal Matrix", icon: Hexagon },

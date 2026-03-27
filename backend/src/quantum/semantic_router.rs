@@ -66,7 +66,10 @@ impl SemanticRouter {
         let api_key = env::var("GOOGLE_API_KEY").unwrap_or_default();
 
         Self {
-            client: Client::new(),
+            client: Client::builder()
+                .timeout(std::time::Duration::from_secs(5))
+                .build()
+                .unwrap_or_else(|_| Client::new()),
             api_key,
         }
     }

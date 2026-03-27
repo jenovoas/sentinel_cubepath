@@ -28,38 +28,38 @@ export default function Home() {
             </h1>
           </div>
           <div className="flex items-center gap-2 text-slate-500 text-[10px] font-bold uppercase tracking-[0.3em] md:pl-14">
-            <span className="text-emerald-500">Cognitive Firewall</span> 
-            <span className="opacity-30">|</span> 
-            <span>Hackatón CubePath 2026</span>
+            <span className="text-emerald-500">Firewall Cognitivo Ring-0</span>
+            <span className="opacity-30">|</span>
+            <span>Hackatón CubePath 2026 · MiduDev</span>
           </div>
         </div>
         
         <div className="flex items-center gap-6 glass-card px-6 py-3 border-emerald-500/10">
-          <Link 
-            href="/docs" 
+          <Link
+            href="/docs"
             className="hidden sm:flex items-center gap-3 pr-6 border-r border-white/5 hover:text-emerald-400 transition-colors group"
           >
             <div className="p-1.5 bg-emerald-500/5 rounded-lg border border-emerald-500/10 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-all">
               <Terminal className="w-4 h-4 text-emerald-500" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Knowledge</span>
+              <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Documentación</span>
               <span className="text-[10px] font-bold uppercase tracking-tighter">/docs</span>
             </div>
           </Link>
 
           <div className="hidden sm:flex flex-col items-end">
-            <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Node Sovereign Identity</span>
+            <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Nodo Soberano</span>
             <span className="text-xs font-bold text-emerald-400 mono">SCL-CUBEPATH-01</span>
           </div>
           
           <div className="flex items-center gap-4 pl-6 border-l border-white/5">
             <div className="flex flex-col items-end">
               <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest flex items-center gap-1">
-                <Clock className="w-2.5 h-2.5" /> S60 Sync
+                <Clock className="w-2.5 h-2.5" /> Reloj S60
               </span>
               <span className="text-sm font-bold text-white mono tabular-nums">
-                {time ? time.toLocaleTimeString() : "--:--:--"}
+                {time ? time.toLocaleTimeString("es-CL", { hour12: false }) : "--:--:--"}
               </span>
             </div>
           </div>
@@ -75,16 +75,16 @@ export default function Home() {
       <footer className="shrink-0 p-2 border-t border-white/5 flex justify-between items-center text-[9px] text-slate-600 font-extrabold uppercase tracking-widest bg-slate-950/80 backdrop-blur-sm z-50">
          <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
-               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-               <span>Kernel Link: Solid</span>
+               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+               <span>Kernel Link: Activo</span>
             </div>
             <div className="flex items-center gap-1.5">
-               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-               <span>Ring-Buffer: Synchronized</span>
+               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+               <span>Ring-Buffer: Sincronizado</span>
             </div>
          </div>
          <div className="flex items-center gap-2 italic opacity-50">
-            Powered by S60 Sexagesimal Core
+            Hackatón CubePath 2026 · Jaime Novoa · Motor S60 Base-60
          </div>
       </footer>
     </div>

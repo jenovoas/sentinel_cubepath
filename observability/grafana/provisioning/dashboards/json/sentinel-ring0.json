@@ -110,14 +110,76 @@
       ]
     },
     {
+      "id": 7,
+      "type": "gauge",
+      "title": "S60 Resonance Score",
+      "gridPos": { "x": 0, "y": 12, "w": 8, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "sentinel_resonance_score",
+          "legendFormat": "Resonance"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 0 },
+              { "color": "green", "value": 1000000 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "type": "stat",
+      "title": "System Bio-Coherence",
+      "gridPos": { "x": 8, "y": 12, "w": 8, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "sentinel_bio_coherence",
+          "legendFormat": "Coherence"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "type": "value", "options": { "0": { "text": "OFFLINE", "color": "red" }, "1": { "text": "STABLE", "color": "green" } } }
+          ]
+        }
+      }
+    },
+    {
+      "id": 9,
+      "type": "stat",
+      "title": "Ring-0 Intercepts",
+      "gridPos": { "x": 16, "y": 12, "w": 8, "h": 6 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "sentinel_ring0_intercepts_total",
+          "legendFormat": "eBPF Blocked"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "fixed", "fixedColor": "orange" } }
+      }
+    },
+    {
       "id": 6,
       "type": "logs",
-      "title": "Ring-0 Kernel Audit Log (Live Watchdog)",
-      "gridPos": { "x": 0, "y": 12, "w": 24, "h": 12 },
+      "title": "Sentinel Audit & Event Stream",
+      "gridPos": { "x": 0, "y": 18, "w": 24, "h": 12 },
       "datasource": { "type": "loki", "uid": "loki" },
       "targets": [
         {
-          "expr": "{job=\"auditd\"}",
+          "expr": "{unit=~\"sentinel-.*\"} | json",
           "legendFormat": ""
         }
       ],
@@ -125,9 +187,9 @@
         "showTime": true,
         "showLabels": true,
         "wrapLogMessage": true,
-        "prettifyLogMessage": false
+        "prettifyLogMessage": true
       }
     }
   ],
-  "time": { "from": "now-1h", "to": "now" }
+  "time": { "from": "now-30m", "to": "now" }
 }
