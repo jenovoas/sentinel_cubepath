@@ -1,10 +1,10 @@
-# DOSSIER TÉCNICO EXHAUSTIVO: Arquitectura Profunda de eBPF (Extended Berkeley Packet Filter)
+# Arquitectura Profunda de eBPF (Extended Berkeley Packet Filter)
 
 ## 1. Introducción: eBPF como Máquina Virtual en el Kernel
 
-eBPF (Extended Berkeley Packet Filter) representa una evolución radical en la capacidad de instrumentar, observar y controlar el kernel de Linux de manera segura y eficiente. Lejos de set simplemente un mecanismo de filtrado de paquetes, eBPF es una **máquina virtual (VM) de propósito general** integrada directamente en el kernel. Esta arquitectura permite a los usuarios inyectar programas personalizados en el kernel sin necesidad de modificar el código fuente o cargar módulos del kernel. Esto proporciona una flexibilidad sin precedentes para una variedad de casos de uso, desde la observabilidad y el rendimiento hasta la seguridad y el networking.
+eBPF (Extended Berkeley Packet Filter) representa una evolución radical en la capacidad de instrumentar, observar y controlar el kernel de Linux de manera segura y eficiente. Lejos de ser simplemente un mecanismo de filtrado de paquetes, eBPF es una **máquina virtual (VM) de propósito general** integrada directamente en el kernel. Esta arquitectura permite a los usuarios inyectar programas personalizados en el kernel sin necesidad de modificar el código fuente o cargar módulos del kernel. Esto proporciona una flexibilidad sin precedentes para una variedad de casos de uso, desde la observabilidad y el rendimiento hasta la seguridad y el networking.
 
-La clave del éxito de eBPF reside en su diseño cuidadoso, que prioriza la seguridad y el rendimiento. El código eBPF es verificado rigurosamente antes de set ejecutado para evitar comportamientos maliciosos o inestables. Además, se compila Just-In-Time (JIT) a código máquina nativo, lo que garantiza una ejecución rápida y eficiente.
+La clave del éxito de eBPF reside en su diseño cuidadoso, que prioriza la seguridad y el rendimiento. El código eBPF es verificado rigurosamente antes de ser ejecutado para evitar comportamientos maliciosos o inestables. Además, se compila Just-In-Time (JIT) a código máquina nativo, lo que garantiza una ejecución rápida y eficiente.
 
 ## 2. La Máquina Virtual eBPF en Profundidad
 
@@ -24,7 +24,7 @@ La VM eBPF proporciona un conjunto de registros para almacenar y manipular datos
 | Registro | Uso                                      | Preservado por |
 | :------- | :--------------------------------------- | :------------- |
 | R0       | Valor de retorno de la función           | N/A            |
-| R1 - R5  | Arguments de la función                 | N/A            |
+| R1 - R5  | Arguments de la función                  | N/A            |
 | R6 - R9  | Propósito general, preservado por callee | Callee         |
 | R10      | Puntero al stack (solo lectura)          | N/A            |
 

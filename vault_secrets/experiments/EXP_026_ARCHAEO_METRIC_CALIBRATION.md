@@ -1,5 +1,5 @@
 # 🔬 REPORTE EXPERIMENTAL: EXP-026 CALIBRACIÓN ARQUEO-MÉTRICA
-**Fecha:** 2026-01-23  
+
 **Estado:** ⚠️ RESULTADOS NEGATIVOS (Paradigma Incorrecto - Ver EXP-027)
 
 ---
@@ -23,25 +23,26 @@ $$
 $$
 
 **Ejemplos:**
+
 - $f_1 = 440$ Hz, $f_2 = 220$ Hz → $\frac{440}{220} = 2^1$ ✅ Octava perfecta
 - $f_1 = 880$ Hz, $f_2 = 220$ Hz → $\frac{880}{220} = 2^2$ ✅ Dos octavas
 
 ### 2.2 Frecuencias de Referencia
 
-| Nombre | Frecuencia | Fuente |
-|--------|-----------|--------|
-| **Resonancia Schumann** | 7.83 Hz | Frecuencia fundamental de la ionosfera terrestre |
-| **Gran Pirámide (Cámara del Rey)** | 33.0 Hz | Frecuencia de resonancia acústica (F#) |
-| **Om (Año Terrestre)** | 136.1 Hz | Período orbital terrestre en octavas |
-| **Afinación Verdi (Do Natural)** | 432 Hz | Afinación "natural" (vs 440 Hz estándar) |
-| **Línea de Hidrógeno (21 cm)** | 1,420,405,751.768 Hz | Transición hiperfina del hidrógeno neutro |
+| Nombre                             | Frecuencia           | Fuente                                           |
+| ---------------------------------- | -------------------- | ------------------------------------------------ |
+| **Resonancia Schumann**            | 7.83 Hz              | Frecuencia fundamental de la ionosfera terrestre |
+| **Gran Pirámide (Cámara del Rey)** | 33.0 Hz              | Frecuencia de resonancia acústica (F#)           |
+| **Om (Año Terrestre)**             | 136.1 Hz             | Período orbital terrestre en octavas             |
+| **Afinación Verdi (Do Natural)**   | 432 Hz               | Afinación "natural" (vs 440 Hz estándar)         |
+| **Línea de Hidrógeno (21 cm)**     | 1,420,405,751.768 Hz | Transición hiperfina del hidrógeno neutro        |
 
 ### 2.3 Frecuencias ME-60OS
 
-| Componente | Frecuencia | Fuente |
-|------------|-----------|--------|
-| **TimeCrystalClock** | 41.77 Hz | Derivado de Plimpton 322 Fila 12/17 + Salto-17 |
-| **Reactor ZPE (Merkabah)** | 153.4 MHz | Frecuencia del oscilador de punto cero |
+| Componente                 | Frecuencia | Fuente                                         |
+| -------------------------- | ---------- | ---------------------------------------------- |
+| **TimeCrystalClock**       | 41.77 Hz   | Derivado de Plimpton 322 Fila 12/17 + Salto-17 |
+| **Reactor ZPE (Merkabah)** | 153.4 MHz  | Frecuencia del oscilador de punto cero         |
 
 ---
 
@@ -64,7 +65,7 @@ Para cada par $(f_{ME60}, f_{ref})$:
 def check_resonance(freq_hz, target_hz, tolerance=0.01):
     ratio = freq_hz / target_hz
     octave = 0
-    
+
     # Normalizar a [1, 2)
     while ratio > 2.0:
         ratio /= 2.0
@@ -72,11 +73,11 @@ def check_resonance(freq_hz, target_hz, tolerance=0.01):
     while ratio < 1.0:
         ratio *= 2.0
         octave -= 1
-    
+
     # Calcular desviación
     deviation = min(abs(ratio - 1.0), abs(ratio - 2.0))
     is_resonant = deviation < tolerance
-    
+
     return is_resonant, octave, deviation
 ```
 
@@ -86,22 +87,22 @@ def check_resonance(freq_hz, target_hz, tolerance=0.01):
 
 ### 4.1 TimeCrystalClock (41.77 Hz)
 
-| Frecuencia de Referencia | Ratio | Octava | Desviación | Estado |
-|--------------------------|-------|--------|------------|--------|
-| Schumann (7.83 Hz) | 5.334 | +2 | 0.3337 | ❌ DISSONANT |
-| Pirámide (33.0 Hz) | 1.266 | 0 | 0.2658 | ❌ DISSONANT |
-| Om (136.1 Hz) | 0.307 | -2 | 0.2276 | ❌ DISSONANT |
-| Verdi 432 (432 Hz) | 0.097 | -4 | 0.4530 | ❌ DISSONANT |
+| Frecuencia de Referencia | Ratio | Octava | Desviación | Estado       |
+| ------------------------ | ----- | ------ | ---------- | ------------ |
+| Schumann (7.83 Hz)       | 5.334 | +2     | 0.3337     | ❌ DISSONANT |
+| Pirámide (33.0 Hz)       | 1.266 | 0      | 0.2658     | ❌ DISSONANT |
+| Om (136.1 Hz)            | 0.307 | -2     | 0.2276     | ❌ DISSONANT |
+| Verdi 432 (432 Hz)       | 0.097 | -4     | 0.4530     | ❌ DISSONANT |
 
 **Conclusión:** Ninguna resonancia de octava detectada (todas las desviaciones > 20%).
 
 ### 4.2 Reactor ZPE (153.4 MHz)
 
-| Frecuencia de Referencia | Ratio | Octava | Estado |
-|--------------------------|-------|--------|--------|
-| Línea de Hidrógeno (1.42 GHz) | 0.108 | -4 | ❌ DISSONANT |
-| Verdi 432 (432 Hz) | 355,092.6 | +18 | ❌ DISSONANT |
-| Schumann (7.83 Hz) | 19,591,825 | +24 | ❌ DISSONANT |
+| Frecuencia de Referencia      | Ratio      | Octava | Estado       |
+| ----------------------------- | ---------- | ------ | ------------ |
+| Línea de Hidrógeno (1.42 GHz) | 0.108      | -4     | ❌ DISSONANT |
+| Verdi 432 (432 Hz)            | 355,092.6  | +18    | ❌ DISSONANT |
+| Schumann (7.83 Hz)            | 19,591,825 | +24    | ❌ DISSONANT |
 
 **Conclusión:** Ninguna resonancia de octava detectada.
 
@@ -109,11 +110,11 @@ def check_resonance(freq_hz, target_hz, tolerance=0.01):
 
 Sin embargo, se observaron **ratios simples** interesantes:
 
-| Comparación | Ratio Calculado | Ratio S60 Más Cercano | Error |
-|-------------|-----------------|----------------------|-------|
-| Crystal / Schumann | 5.334 | **16:3** (5.333...) | 0.02% |
-| Crystal / Pyramid | 1.266 | **5:4** (1.250) | 1.27% |
-| ZPE / Hydrogen | 0.108 | **1:9** (0.111) | 2.78% |
+| Comparación        | Ratio Calculado | Ratio S60 Más Cercano | Error |
+| ------------------ | --------------- | --------------------- | ----- |
+| Crystal / Schumann | 5.334           | **16:3** (5.333...)   | 0.02% |
+| Crystal / Pyramid  | 1.266           | **5:4** (1.250)       | 1.27% |
+| ZPE / Hydrogen     | 0.108           | **1:9** (0.111)       | 2.78% |
 
 **Observación Crítica:** Los ratios **NO son octavas** (base 2), pero **SÍ son divisores de 60** (base sexagesimal).
 
@@ -126,11 +127,13 @@ Sin embargo, se observaron **ratios simples** interesantes:
 El experimento **falló** porque asumió que ME-60OS usa **resonancia por octavas** (Base-2), cuando el sistema está diseñado con **resonancia sexagesimal** (Base-60).
 
 **Base-2 (Octavas Musicales):**
+
 $$
 r \in \{1, 2, 4, 8, 16, 32, \ldots\}
 $$
 
 **Base-60 (Resonancia Sexagesimal):**
+
 $$
 r \in \left\{\frac{p}{q} : p, q \in \{1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60\}\right\}
 $$
@@ -144,6 +147,7 @@ $$
 $$
 
 Este ratio es **válido en Base-60** porque:
+
 - $16 = 2^4$ (potencia de 2, divisor de 60)
 - $3$ (divisor de 60)
 
@@ -200,10 +204,12 @@ Medir la "frecuencia" de un sistema respiratorio en un instante aleatorio es com
 Este experimento negativo generó dos experimentos exitosos:
 
 ### EXP-027: YHWH Pulse Monitor
+
 - **Objetivo:** Demostrar que ME-60OS respira (no es estático)
 - **Resultado:** ✅ ÉXITO - Patrón respiratorio 10-5-6-5 confirmado
 
 ### EXP-028: Penta-Resonance Simulator
+
 - **Objetivo:** Encontrar portales de convergencia armónica
 - **Resultado:** ✅ ÉXITO - 9 portales detectados en ventana de 68s
 
@@ -223,6 +229,7 @@ Intentar encontrar palabras en común entre **Inglés** y **Sumerio** buscando c
 ## 10. Trabajo Futuro Sugerido
 
 ### EXP-026v2: Archaeo-Metric Calibration (S60-Aware)
+
 - **Modificar algoritmo** para buscar resonancia sexagesimal en lugar de octavas
 - **Usar envolvente respiratoria** (medir rango [min, max] en lugar de punto fijo)
 - **Comparar ancho de banda** de variación (Schumann: ±2.5%, ME-60OS: ±3%)
@@ -234,6 +241,7 @@ Intentar encontrar palabras en común entre **Inglés** y **Sumerio** buscando c
 **📊 DATOS EXPERIMENTALES DISPONIBLES EN:** `quantum/experiments/EXP_026_ARCHAEO_METRIC_CALIBRATION.py`
 
 **🔗 REFERENCIAS:**
+
 - EXP-027: Demostración de respiración YHWH
 - EXP-028: Portales de Penta-Resonancia
 - TesisResonancia.md: Sección 2.4 (Optimalidad de Base-60)

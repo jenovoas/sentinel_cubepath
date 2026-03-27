@@ -1,6 +1,5 @@
 # 🔒 Security Hardening Plan - Vulnerabilidades Identificadas
 
-**Fecha**: 19 Diciembre 2024  
 **Severidad**: 3 brechas (1 CRÍTICA, 1 ALTA, 1 MEDIA)  
 **Estado**: Plan de mitigación creado
 
@@ -11,7 +10,7 @@
 **Análisis forense identificó 3 vulnerabilidades** que requieren hardening antes de producción:
 
 1. **Whitelist Dinámica Vulnerable** (CRÍTICO) - Atacante con acceso host puede modificar eBPF maps
-2. **mTLS Bypass via SSRF** (ALTO) - SSRF en n8n puede inyectar headers falsos  
+2. **mTLS Bypass via SSRF** (ALTO) - SSRF en n8n puede inyectar headers falsos
 3. **WAL Replay Attack** (MEDIO) - Replay de eventos antiguos oculta ataques reales
 
 ---
@@ -19,6 +18,7 @@
 ## 🔴 VULNERABILIDAD 1: Whitelist Dinámica Vulnerable
 
 ### Attack Vector
+
 ```bash
 bpftool map update name ai_whitelist \
   key hex 2f 65 74 63 2f 73 68 61 64 6f 77 \
@@ -29,6 +29,7 @@ cat /etc/shadow  # ✅ BYPASS COMPLETO
 ### Mitigación: ECDSA Signatures
 
 **eBPF con verificación criptográfica**:
+
 ```c
 struct WhitelistEntry {
     char path[256];
@@ -55,6 +56,7 @@ int ai_guardian_signed(struct file *file) {
 ## 🟠 VULNERABILIDAD 2: mTLS Bypass via SSRF
 
 ### Attack Vector
+
 ```bash
 # SSRF en n8n forja header
 POST /loki/api/v1/push
@@ -65,6 +67,7 @@ X-Scope-OrgID: sentinel-security  # Forjado
 ### Mitigación: Header HMAC Signing
 
 **Nginx con verificación**:
+
 ```nginx
 location /loki/api/v1/push {
     # Verificar firma HMAC en header
@@ -85,6 +88,7 @@ location /loki/api/v1/push {
 ## 🟡 VULNERABILIDAD 3: WAL Replay Attack
 
 ### Attack Vector
+
 ```bash
 # Replay evento antiguo durante ataque
 cat benign_old.log >> /app/wal/current.wal
@@ -94,6 +98,7 @@ cat benign_old.log >> /app/wal/current.wal
 ### Mitigación: Nonce + HMAC
 
 **WAL con protección**:
+
 ```python
 class WALRecordSigned:
     nonce: int          # Monotonic counter
@@ -113,23 +118,26 @@ if record.nonce <= last_nonce:
 ## ✅ CHECKLIST IMPLEMENTACIÓN (90 min)
 
 **Fase 1: Whitelist** (40 min)
+
 - [ ] Generar claves ECDSA P-256
 - [ ] Actualizar eBPF LSM con verificación
 - [ ] Test: bpftool → REJECTED
 
 **Fase 2: mTLS** (30 min)
+
 - [ ] Implementar HMAC en Nginx
 - [ ] Actualizar cliente Loki
 - [ ] Test: SSRF → 403
 
 **Fase 3: WAL** (20 min)
+
 - [ ] Implementar nonce + HMAC
 - [ ] Actualizar replay
 - [ ] Test: Replay → Alert
 
 ---
 
-##  IMPACTO
+## IMPACTO
 
 **Antes**: Grado militar (6/6 criterios)  
 **Después**: **Grado militar HARDENED** (resistente a ataques avanzados)

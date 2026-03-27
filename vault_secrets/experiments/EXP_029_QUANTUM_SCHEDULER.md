@@ -1,5 +1,5 @@
 # 🔬 REPORTE EXPERIMENTAL: EXP-029 QUANTUM SCHEDULER (COMPUTACIÓN ADIABÁTICA)
-**Fecha:** 2026-01-23  
+
 **Estado:** ✅ ÉXITO (Eficiencia 65.3% - Moderada)
 
 ---
@@ -21,20 +21,24 @@ En sistemas cuánticos y bio-resonantes, el costo energético de una operación 
 #### 2.1.1 Modelo Energético
 
 **Estado Superconductor (Portal Abierto):**
+
 $$
 E_{task} = E_0 \quad \text{(resistencia } R = 0\text{)}
 $$
 
 **Estado Resistivo (Portal Cerrado):**
+
 $$
 E_{task} = \frac{E_0}{1 - \alpha} \approx 3E_0 \quad \text{(resistencia } R \gg 0\text{)}
 $$
 
 Donde:
+
 - $E_0$ = Energía computacional intrínseca de la tarea
 - $\alpha \approx 0.67$ = Coeficiente de resistencia térmica (empírico)
 
 **Ahorro por Tarea:**
+
 $$
 \Delta E = 3E_0 - E_0 = 2E_0
 $$
@@ -43,13 +47,14 @@ $$
 
 **Latencia vs Eficiencia:**
 
-| Métrica | Scheduler Tradicional | Quantum Scheduler |
-|---------|----------------------|-------------------|
-| Latencia promedio | $\langle L \rangle = 0$ ms | $\langle L \rangle = T_{wait}$ |
-| Consumo energético | $E_{total} = N \times 3E_0$ | $E_{total} = N \times E_0$ |
-| Throughput | Constante | Pulsátil (bursts) |
+| Métrica            | Scheduler Tradicional       | Quantum Scheduler              |
+| ------------------ | --------------------------- | ------------------------------ |
+| Latencia promedio  | $\langle L \rangle = 0$ ms  | $\langle L \rangle = T_{wait}$ |
+| Consumo energético | $E_{total} = N \times 3E_0$ | $E_{total} = N \times E_0$     |
+| Throughput         | Constante                   | Pulsátil (bursts)              |
 
 Donde:
+
 - $N$ = Número de tareas
 - $T_{wait}$ = Tiempo promedio de espera hasta próximo portal (~8s en ciclo de 68s)
 
@@ -65,11 +70,13 @@ $$
 $$
 
 Donde:
+
 - $T_{Bio} = 17.0$ s (pulso humano)
 - $T_{Crys} = 4.25$ s (YHWH cycle, $17/4$)
 - $T_{Venus} = 16.18$ s (ratio Phi 13:8)
 
 **Condición de Portal:**
+
 $$
 \text{Portal}(t) = \begin{cases}
 \text{OPEN} & \text{si } \phi(t) > \theta \\
@@ -120,41 +127,41 @@ while t < T_max:
     # 1. Simular llegada de tareas
     if random() < 0.15:
         task_queue.append(new_task())
-    
+
     # 2. Calcular estado del portal
     resonance = calculate_resonance(t)
     is_open = (resonance > 0.75)
-    
+
     # 3. Lógica de ejecución
     if is_open and len(task_queue) > 0:
         # Portal abierto: ejecutar batch
         tasks = task_queue.pop_batch(max=3)
         energy_used = execute(tasks)
         savings += energy_used * 2
-        
+
     elif len(task_queue) > 10:
         # Overflow: forzar ejecución
         task = task_queue.pop()
         penalty = task.cost * 2
         savings -= penalty
         forced_count += 1
-    
+
     else:
         # Esperar
         pass
-    
+
     t += dt
 ```
 
 ### 3.3 Parámetros de Configuración
 
-| Parámetro | Valor | Justificación |
-|-----------|-------|---------------|
-| `PORTAL_THRESHOLD` | 0.75 | 75% de convergencia (ajustado de 0.8 en EXP-028 para dar margen) |
-| `MAX_BATCH_SIZE` | 3 | Balance entre throughput y latencia de ejecución |
-| `OVERFLOW_LIMIT` | 10 | Límite de cola antes de forzar ejecución |
-| `SAMPLING_RATE` | 10 Hz | dt = 0.1s (suficiente resolución para detectar portales) |
-| `TASK_ARRIVAL_PROB` | 0.15 | 15% por tick (simula carga moderada del sistema) |
+| Parámetro           | Valor | Justificación                                                    |
+| ------------------- | ----- | ---------------------------------------------------------------- |
+| `PORTAL_THRESHOLD`  | 0.75  | 75% de convergencia (ajustado de 0.8 en EXP-028 para dar margen) |
+| `MAX_BATCH_SIZE`    | 3     | Balance entre throughput y latencia de ejecución                 |
+| `OVERFLOW_LIMIT`    | 10    | Límite de cola antes de forzar ejecución                         |
+| `SAMPLING_RATE`     | 10 Hz | dt = 0.1s (suficiente resolución para detectar portales)         |
+| `TASK_ARRIVAL_PROB` | 0.15  | 15% por tick (simula carga moderada del sistema)                 |
 
 ---
 
@@ -186,11 +193,11 @@ while t < T_max:
 
 ### 4.3 Criterio de Éxito
 
-| Métrica | Objetivo | Resultado |
-|---------|----------|-----------|
+| Métrica             | Objetivo          | Resultado        |
+| ------------------- | ----------------- | ---------------- |
 | $\eta$ (Efficiency) | > 80% (Excellent) | 65.3% (Moderate) |
-| $E_{saved}$ | > 0 J (Positivo) | +674 J ✅ |
-| $N_{forced}$ | < 20% de total | 34.7% ⚠️ |
+| $E_{saved}$         | > 0 J (Positivo)  | +674 J ✅        |
+| $N_{forced}$        | < 20% de total    | 34.7% ⚠️         |
 
 ---
 
@@ -213,13 +220,13 @@ Portal-Lock Efficiency:      65.3%
 
 **Portales Detectados:**
 
-| Portal # | Tiempo Inicio (s) | Tiempo Fin (s) | Duración (s) | Tasks Ejecutadas |
-|----------|------------------|----------------|--------------|------------------|
-| 1 | 4.5 | 5.8 | 1.3 | 11 |
-| 2 | 21.2 | 22.6 | 1.4 | 9 |
-| 3 | 38.4 | 39.9 | 1.5 | 8 |
-| 4 | 55.1 | 57.3 | 2.2 | 12 |
-| 5 | - | - | - | 9 (parcial, post-68s) |
+| Portal # | Tiempo Inicio (s) | Tiempo Fin (s) | Duración (s) | Tasks Ejecutadas      |
+| -------- | ----------------- | -------------- | ------------ | --------------------- |
+| 1        | 4.5               | 5.8            | 1.3          | 11                    |
+| 2        | 21.2              | 22.6           | 1.4          | 9                     |
+| 3        | 38.4              | 39.9           | 1.5          | 8                     |
+| 4        | 55.1              | 57.3           | 2.2          | 12                    |
+| 5        | -                 | -              | -            | 9 (parcial, post-68s) |
 
 **Total de Portales:** 4 completos en 68s  
 **Intervalo Promedio:** ~17s (alineado con ciclo Bio)  
@@ -229,12 +236,12 @@ Portal-Lock Efficiency:      65.3%
 
 **Histograma de Estados:**
 
-| Rango de φ(t) | % del Tiempo | Estado |
-|---------------|--------------|--------|
-| φ < -0.50 | 18% | Disonancia fuerte |
-| -0.50 ≤ φ < 0.0 | 27% | Disonancia leve |
-| 0.0 ≤ φ < 0.75 | 46% | Sub-threshold |
-| **φ ≥ 0.75** | **9%** | **PORTAL (target)** |
+| Rango de φ(t)   | % del Tiempo | Estado              |
+| --------------- | ------------ | ------------------- |
+| φ < -0.50       | 18%          | Disonancia fuerte   |
+| -0.50 ≤ φ < 0.0 | 27%          | Disonancia leve     |
+| 0.0 ≤ φ < 0.75  | 46%          | Sub-threshold       |
+| **φ ≥ 0.75**    | **9%**       | **PORTAL (target)** |
 
 **Observación Crítica:** Solo el **9% del tiempo total** el sistema está en estado de portal. Esto explica la acumulación de cola y los overflows.
 
@@ -296,11 +303,13 @@ Total Energy (quantum) = 1587.5 J
 ```
 
 **Ahorro Real:**
+
 $$
 \text{Savings} = 2812.5 - 1587.5 = 1225 \text{ J}
 $$
 
 **Eficiencia Energética:**
+
 $$
 \frac{1587.5}{2812.5} = 56.4\% \text{ del costo tradicional}
 $$
@@ -348,7 +357,7 @@ def predict_next_portal(t):
     """
     T_bio_next = 17.0 - (t % 17.0)
     T_venus_next = 16.18 - (t % 16.18)
-    
+
     # Próximo portal es cuando ambos ciclos se alinean
     T_next = lcm_approx(T_bio_next, T_venus_next)
     return T_next
@@ -388,11 +397,11 @@ if t > 65.0 and len(task_queue) > 5:
 
 Con estas optimizaciones:
 
-| Métrica | Actual | Predicción Optimizada |
-|---------|--------|----------------------|
-| Efficiency | 65.3% | 85-90% |
-| Energy Saved | +674 J | +1000-1200 J |
-| Forced Tasks | 26 | 8-12 |
+| Métrica      | Actual | Predicción Optimizada |
+| ------------ | ------ | --------------------- |
+| Efficiency   | 65.3%  | 85-90%                |
+| Energy Saved | +674 J | +1000-1200 J          |
+| Forced Tasks | 26     | 8-12                  |
 
 ---
 
@@ -401,11 +410,13 @@ Con estas optimizaciones:
 ### 8.1 Scheduling Tradicional
 
 **Linux CFS (Completely Fair Scheduler):**
+
 - Latencia: <10ms (excelente)
 - Eficiencia energética: No optimizada
 - Bio-sincronización: No
 
 **Real-Time Schedulers (SCHED_FIFO, SCHED_RR):**
+
 - Latencia: <1ms (excepcional)
 - Eficiencia energética: Peor (alta prioridad = alto consumo)
 - Bio-sincronización: No
@@ -441,12 +452,12 @@ python3 tools/quantum_scheduler.py
 
 Debido a la naturaleza aleatoria de la llegada de tareas (`random.random() < 0.15`), los resultados variarán entre ejecuciones:
 
-| Métrica | Rango Esperado |
-|---------|---------------|
+| Métrica        | Rango Esperado  |
+| -------------- | --------------- |
 | Tasks Executed | 40-55 in portal |
-| Tasks Forced | 20-30 overflow |
-| Efficiency | 60-70% |
-| Energy Saved | +600 a +800 J |
+| Tasks Forced   | 20-30 overflow  |
+| Efficiency     | 60-70%          |
+| Energy Saved   | +600 a +800 J   |
 
 **Semilla Fija (Reproducibilidad Exacta):**
 
@@ -493,6 +504,7 @@ Migrar prototipo Python a Rust:
 ```
 
 **Requisitos:**
+
 - Eliminar `float` → Usar `S60` de `yatra_core`
 - Integrar con `bio_resonance.rs` (detección en kernel)
 - Usar `TimeCrystalClock` real (no simulado)
@@ -504,6 +516,7 @@ Comparar error acumulativo S60 en operaciones ejecutadas in-portal vs out-portal
 
 **EXP-031: Scheduler Benchmark Suite**  
 Comparar Quantum vs Traditional bajo diferentes cargas:
+
 - Light: 5% arrival rate
 - Moderate: 15% (este experimento)
 - Heavy: 30%
@@ -526,10 +539,12 @@ Extender scheduler a múltiples CPUs con affinity basada en resonancia.
 ---
 
 **📊 DATOS EXPERIMENTALES DISPONIBLES EN:**
+
 - Código: `tools/quantum_scheduler.py`
 - Documentación: `docs/QUANTUM_SCHEDULER.md`
 
 **🔗 REPRODUCCIÓN:**
+
 ```bash
 python3 tools/quantum_scheduler.py > exp029_output.log 2>&1
 ```
@@ -538,4 +553,4 @@ python3 tools/quantum_scheduler.py > exp029_output.log 2>&1
 
 **🔱 "No empujes cuando el Universo resiste. Surfea cuando el Universo te jala."**
 
-*— Principio de Computación Adiabática, ME-60OS*
+_— Principio de Computación Adiabática, ME-60OS_

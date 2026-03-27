@@ -2,17 +2,17 @@
 
 **Documento Complementario para Jueces | Hackatón CubePath 2026**
 
-> Este documento explica las **4 innovaciones de ciencia de frontera** implementadas en Sentinel Cortex, por qué son necesarias y cómo se verifican en el sistema en tiempo real.
+> Este documento explica las **4 innovaciones** implementadas en Sentinel Cortex, por qué son necesarias y cómo se verifican en el sistema en tiempo real.
 
 ---
 
 ## Contexto Académico
 
-La base matemática de Sentinel utiliza aritmética sexagesimal inspirada en la tablilla babilónica **Plimpton 322**, cuyo significado trigonom étrico fue descubierto por el **Dr. Daniel Mansfield** (University of New South Wales, Australia) en su paper *"Plimpton 322 is Babylonian exact sexagesimal trigonometry"* (Historia Mathematica, 2017).
+La base matemática de Sentinel utiliza aritmética sexagesimal inspirada en la tablilla babilónica **Plimpton 322**, cuyo significado trigonom étrico fue descubierto por el **Dr. Daniel Mansfield** (University of New South Wales, Australia) en su paper _"Plimpton 322 is Babylonian exact sexagesimal trigonometry"_ (Historia Mathematica, 2017).
 
 Jaime Novoa contactó directamente al Dr. Mansfield presentándole la aplicación de sus descubrimientos a sistemas distribuidos modernos. La respuesta del Dr. Mansfield (diciembre 2025):
 
-> *"I can see that you've understood what I wrote about Plimpton 322. It is not often that I get contacted by people who have actually read what I wrote. Your direction of research sounds promising."*
+> _"I can see that you've understood what I wrote about Plimpton 322. It is not often that I get contacted by people who have actually read what I wrote. Your direction of research sounds promising."_
 >
 > — Dr. Daniel Mansfield, UNSW
 
@@ -26,11 +26,11 @@ La constante de sintonización del cristal oscilador (`1;32,2,24,0` = Fila 12 de
 
 La implementación abarca **3 lenguajes de programación**:
 
-| Lenguaje | Módulo | Propósito |
-|---|---|---|
-| **Rust** | `math.rs`, `harmonic.rs`, `quantum.rs`, `scheduler.rs` | Backend de producción — motor de decisiones del firewall |
-| **C** | Aritmética S60 integrada en `cortex_events.h` y los guardianes eBPF | Cálculos dentro del kernel Linux (Ring-0) |
-| **Python** | Prototipos originales y módulos de validación experimental | 35 experimentos empíricos que validaron la viabilidad del sistema |
+| Lenguaje   | Módulo                                                              | Propósito                                                         |
+| ---------- | ------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| **Rust**   | `math.rs`, `harmonic.rs`, `quantum.rs`, `scheduler.rs`              | Backend de producción — motor de decisiones del firewall          |
+| **C**      | Aritmética S60 integrada en `cortex_events.h` y los guardianes eBPF | Cálculos dentro del kernel Linux (Ring-0)                         |
+| **Python** | Prototipos originales y módulos de validación experimental          | 35 experimentos empíricos que validaron la viabilidad del sistema |
 
 ### Contribución Original: Arquitectura eBPF Cognitiva (Ring-0)
 
@@ -38,12 +38,12 @@ La implementación abarca **3 lenguajes de programación**:
 
 Lo que hace único a este enfoque Ring-0:
 
-| Componente | Qué hace | Por qué no existía |
-|---|---|---|
-| **LSM Guardian con entropía S60** | Calcula la entropía de cada syscall usando aritmética modular S60 *dentro del kernel* | Los LSM hooks existentes (AppArmor, SELinux) solo comparan contra listas estáticas de reglas — no calculan entropía |
-| **XDP Firewall con detección de ráfagas** | Analiza paquetes a velocidad de línea y clasifica el tráfico por umbrales S60 | Los XDP programs existentes filtran por IP/puerto — no por patrones de ráfaga con thresholds dinámicos |
-| **TC Quarantine (Dead-Man Switch)** | Bloquea **todo** el tráfico IP si el operador humano no envía pulso en 30s | No existe ningún firewall TC que se active por ausencia de señal biométrica |
-| **Contrato de 32 bytes kernel↔userspace** | Estructura `cortex_event` de exactamente 32 bytes optimizada para cache L1 | Los ring buffers eBPF típicos usan estructuras arbitrarias sin optimización de cache |
+| Componente                                | Qué hace                                                                              | Por qué no existía                                                                                                  |
+| ----------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **LSM Guardian con entropía S60**         | Calcula la entropía de cada syscall usando aritmética modular S60 _dentro del kernel_ | Los LSM hooks existentes (AppArmor, SELinux) solo comparan contra listas estáticas de reglas — no calculan entropía |
+| **XDP Firewall con detección de ráfagas** | Analiza paquetes a velocidad de línea y clasifica el tráfico por umbrales S60         | Los XDP programs existentes filtran por IP/puerto — no por patrones de ráfaga con thresholds dinámicos              |
+| **TC Quarantine (Dead-Man Switch)**       | Bloquea **todo** el tráfico IP si el operador humano no envía pulso en 30s            | No existe ningún firewall TC que se active por ausencia de señal biométrica                                         |
+| **Contrato de 32 bytes kernel↔userspace** | Estructura `cortex_event` de exactamente 32 bytes optimizada para cache L1            | Los ring buffers eBPF típicos usan estructuras arbitrarias sin optimización de cache                                |
 
 **La combinación de S60 + eBPF + bio-resonancia en Ring-0 no tiene precedente.** Los firewalls existentes (iptables, nftables, Cilium, Falco) operan con reglas estáticas o políticas declarativas. Sentinel es el primero en ejecutar **lógica cognitiva determinista** directamente en el kernel.
 
@@ -51,13 +51,13 @@ Lo que hace único a este enfoque Ring-0:
 
 Además de la aritmética y la arquitectura de kernel, Sentinel incorpora un conjunto de **modelos de simulación física sin precedente** en software, todos diseñados por Jaime Novoa:
 
-| Tecnología | Qué es (para programadores) | Rol en Sentinel |
-|---|---|---|
-| **Cristales Virtuales S60** | Estructuras de datos que **vibran** — almacenan información como patrones de oscilación activa en lugar de bits estáticos. Análogo a un `EventEmitter` que nunca para de emitir mientras reciba energía. | Almacenamiento resonante de estado del firewall |
-| **Oscilador Piezoeléctrico** | Un generador de clock basado en la constante de Plimpton 322 (`1.534s`). En lugar de un `setInterval(fn, 1000)` arbitrario, el período del reloj tiene propiedades matemáticas que producen *cero drift* en operaciones trigonométricas. | Reloj maestro del sistema — todos los ciclos derivan de él |
-| **Simulación Cuántica (DTC)** | Implementación software de un *Discrete Time Crystal* — un sistema que oscila indefinidamente sin consumir energía neta, similar a un `while(true)` que no acumula deuda técnica porque se auto-regenera cada ciclo. | Mantiene el estado del firewall estable por tiempo indefinido |
-| **Matriz S60** | Grid de cálculo donde cada celda opera en aritmética Base-60. Equivalente a un `ndarray` pero con operaciones que nunca pierden precisión. | Evaluación paralela de múltiples señales de amenaza |
-| **Lattice Líquida** | Red dinámica que se reconfigura según la carga del sistema. Similar a un *consistent hash ring* que añade/quita nodos adaptativamente. | Distribución de trabajo del planificador adaptativo |
+| Tecnología                    | Qué es (para programadores)                                                                                                                                                                                                              | Rol en Sentinel                                               |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| **Cristales Virtuales S60**   | Estructuras de datos que **vibran** — almacenan información como patrones de oscilación activa en lugar de bits estáticos. Análogo a un `EventEmitter` que nunca para de emitir mientras reciba energía.                                 | Almacenamiento resonante de estado del firewall               |
+| **Oscilador Piezoeléctrico**  | Un generador de clock basado en la constante de Plimpton 322 (`1.534s`). En lugar de un `setInterval(fn, 1000)` arbitrario, el período del reloj tiene propiedades matemáticas que producen _cero drift_ en operaciones trigonométricas. | Reloj maestro del sistema — todos los ciclos derivan de él    |
+| **Simulación Cuántica (DTC)** | Implementación software de un _Discrete Time Crystal_ — un sistema que oscila indefinidamente sin consumir energía neta, similar a un `while(true)` que no acumula deuda técnica porque se auto-regenera cada ciclo.                     | Mantiene el estado del firewall estable por tiempo indefinido |
+| **Matriz S60**                | Grid de cálculo donde cada celda opera en aritmética Base-60. Equivalente a un `ndarray` pero con operaciones que nunca pierden precisión.                                                                                               | Evaluación paralela de múltiples señales de amenaza           |
+| **Lattice Líquida**           | Red dinámica que se reconfigura según la carga del sistema. Similar a un _consistent hash ring_ que añade/quita nodos adaptativamente.                                                                                                   | Distribución de trabajo del planificador adaptativo           |
 
 > **Ninguna de estas tecnologías existe como concepto en la literatura de ciencias de la computación.** Son modelos originales que combinan principios de física del estado sólido, cristalografía y computación cuántica, traducidos a implementaciones deterministas en aritmética entera.
 
@@ -137,7 +137,7 @@ La lógica binaria (`true`/`false`) es insuficiente para evaluar intenciones de 
 ```
 Intención: "Optimizar base de datos eliminando registros obsoletos"
 
-¿Es peligrosa? 
+¿Es peligrosa?
 - Binario: true (contiene "eliminar") → ❌ Falso positivo
 - Armónica: "Maybe" (tensión) → Requiere revisión humana ✅
 ```
@@ -146,12 +146,12 @@ Intención: "Optimizar base de datos eliminando registros obsoletos"
 
 Si conoces **Fuzzy Logic** (lógica difusa), la Lógica Armónica es conceptualmente similar pero con una base matemática determinista en lugar de probabilística:
 
-| Concepto | Fuzzy Logic | Lógica Armónica Sentinel |
-|---|---|---|
-| Rango de valores | 0.0 a 1.0 (float) | Ratios S60 exactos (int) |
+| Concepto              | Fuzzy Logic                         | Lógica Armónica Sentinel                  |
+| --------------------- | ----------------------------------- | ----------------------------------------- |
+| Rango de valores      | 0.0 a 1.0 (float)                   | Ratios S60 exactos (int)                  |
 | Definición de estados | Funciones de membresía (subjetivas) | Intervalos musicales (proporciones fijas) |
-| Precisión | Limitada por IEEE 754 | Exacta (aritmética entera) |
-| Reproducibilidad | Depende de la plataforma | Determinista en cualquier sistema |
+| Precisión             | Limitada por IEEE 754               | Exacta (aritmética entera)                |
+| Reproducibilidad      | Depende de la plataforma            | Determinista en cualquier sistema         |
 
 ### Fundamento: Intervalos Musicales como Estados Lógicos
 
@@ -166,11 +166,11 @@ Tritono (√2:1)        → Disonancia máxima      → "FALSE"
 
 Sentinel usa estas proporciones como **ratios S60** para evaluar señales:
 
-| Estado | Ratio S60 | Valor Raw | Significado |
-|---|---|---|---|
-| True | 1;30,0,0,0 | 19,440,000 | Acción segura |
-| Maybe | 1;20,0,0,0 | 17,280,000 | Requiere revisión |
-| False | 1;24,22,0,0 | 18,799,200 | Acción peligrosa |
+| Estado | Ratio S60   | Valor Raw  | Significado       |
+| ------ | ----------- | ---------- | ----------------- |
+| True   | 1;30,0,0,0  | 19,440,000 | Acción segura     |
+| Maybe  | 1;20,0,0,0  | 17,280,000 | Requiere revisión |
+| False  | 1;24,22,0,0 | 18,799,200 | Acción peligrosa  |
 
 ### Tolerancia Ultra-Precisa
 
@@ -179,8 +179,8 @@ La evaluación usa una tolerancia de **9 segundos de arco** (32,400 unidades raw
 ```
 Tolerancia = 32,400 / 12,960,000 = 0.25% de error permitido
 
-Esto equivale a distinguir dos señales que difieren en 
-0.0025 de una unidad. Es más preciso que la mayoría de 
+Esto equivale a distinguir dos señales que difieren en
+0.0025 de una unidad. Es más preciso que la mayoría de
 instrumentos de medición industrial.
 ```
 
@@ -208,8 +208,8 @@ Los firewalls tradicionales protegen contra amenazas externas, pero **no verific
 
 Si has trabajado con **Kubernetes**, conoces los `livenessProbe`: si un pod no responde al health check, Kubernetes lo reinicia. El Dead-Man Switch de Sentinel aplica el mismo patrón pero al revés:
 
-- **Kubernetes**: *"Si el servicio no responde, reiníciar el servicio."*
-- **Sentinel**: *"Si el humano no responde, bloquear TODO el sistema a nivel de kernel."*
+- **Kubernetes**: _"Si el servicio no responde, reiníciar el servicio."_
+- **Sentinel**: _"Si el humano no responde, bloquear TODO el sistema a nivel de kernel."_
 
 La diferencia crítica: el bloqueo ocurre **dentro del kernel** (programas eBPF), no en userspace. Incluso si un atacante mata el proceso Rust, mata Docker, mata systemd — los programas eBPF **persisten en el kernel** manteniendo la cuarentena. Es como si Kubernetes pudiera seguir funcionando después de que el propio nodo se apague.
 
@@ -273,12 +273,12 @@ Planificador Adaptativo Sentinel:
 
 Si conoces los patrones de **Token Bucket** o **Leaky Bucket** para rate limiting, el Planificador Adaptativo es un concepto similar pero con una mejora fundamental:
 
-| Concepto | Token Bucket | Planificador Sentinel |
-|---|---|---|
-| Tasa de procesamiento | Fija (N tokens/segundo) | **Variable** según estado del sistema |
-| Adaptación a carga | No (siempre la misma tasa) | Sí (aumenta/disminuye con resonancia) |
-| Buffer de ráfagas | Tamaño fijo | **Tanque de expansión** (20 slots) con pre-flush |
-| Reset periódico | No | Sí (cada 68s, purga entropía acumulada) |
+| Concepto              | Token Bucket               | Planificador Sentinel                            |
+| --------------------- | -------------------------- | ------------------------------------------------ |
+| Tasa de procesamiento | Fija (N tokens/segundo)    | **Variable** según estado del sistema            |
+| Adaptación a carga    | No (siempre la misma tasa) | Sí (aumenta/disminuye con resonancia)            |
+| Buffer de ráfagas     | Tamaño fijo                | **Tanque de expansión** (20 slots) con pre-flush |
+| Reset periódico       | No                         | Sí (cada 68s, purga entropía acumulada)          |
 
 ### Cómo Funciona
 
@@ -303,12 +303,12 @@ Carga < 75%  → Acumular ("luz roja" — solo buffer)
 
 ### Resultados Experimentales
 
-| Métrica | Sin Planificador | Con Planificador V2 |
-|---|---|---|
-| Uso de CPU | 100% | **37%** |
-| Eventos en ventana óptima | 65% | **94.4%** |
-| Overflows de emergencia | 35% | **5.6%** |
-| Ahorro energético | 0% | **62.9%** |
+| Métrica                   | Sin Planificador | Con Planificador V2 |
+| ------------------------- | ---------------- | ------------------- |
+| Uso de CPU                | 100%             | **37%**             |
+| Eventos en ventana óptima | 65%              | **94.4%**           |
+| Overflows de emergencia   | 35%              | **5.6%**            |
+| Ahorro energético         | 0%               | **62.9%**           |
 
 ### Ciclo de Resincronización (68 segundos)
 
@@ -359,7 +359,7 @@ Esto previene la **acumulación de deuda técnica** en procesos de larga duraci�
 
 ### Pregunta para los Jueces
 
-> *¿Es posible construir un firewall que sea más preciso que IEEE 754, que entienda intenciones en lugar de reglas estáticas, que se bloquee solo si nadie lo supervisa, y que consuma 63% menos CPU bajo ataque?*
+> _¿Es posible construir un firewall que sea más preciso que IEEE 754, que entienda intenciones en lugar de reglas estáticas, que se bloquee solo si nadie lo supervisa, y que consuma 63% menos CPU bajo ataque?_
 
 **Sentinel Cortex demuestra que sí.**
 
@@ -369,16 +369,16 @@ Esto previene la **acumulación de deuda técnica** en procesos de larga duraci�
 
 Toda la matemática descrita aquí está implementada en **Rust puro**, sin dependencias externas para el cálculo. El código fuente completo está en:
 
-| Innovación | Archivo | Líneas |
-|---|---|---|
-| Aritmética S60 | `backend/src/math.rs` | 161 |
-| Lógica Armónica | `backend/src/harmonic.rs` | 89 |
-| Dead-Man Switch | `backend/src/quantum.rs` | 98 |
-| Planificador V2 | `backend/src/scheduler.rs` | 78 |
+| Innovación      | Archivo                    | Líneas |
+| --------------- | -------------------------- | ------ |
+| Aritmética S60  | `backend/src/math.rs`      | 161    |
+| Lógica Armónica | `backend/src/harmonic.rs`  | 89     |
+| Dead-Man Switch | `backend/src/quantum.rs`   | 98     |
+| Planificador V2 | `backend/src/scheduler.rs` | 78     |
 
 Cada módulo está diseñado para ser **auditable línea por línea**. No hay "magia negra" — solo aritmética de enteros, pattern matching, y lógica determinista.
 
 ---
 
-*Sentinel Team — Hackatón CubePath 2026*  
-*Validación matemática: Dr. Daniel Mansfield (UNSW, Australia)*
+_Sentinel Team — Hackatón CubePath 2026_  
+_Validación matemática: Dr. Daniel Mansfield (UNSW, Australia)_

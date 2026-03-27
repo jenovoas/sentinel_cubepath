@@ -1,6 +1,6 @@
 ## I. Introducción
 
-Este dossier técnico tiene como objetivo proporcionar una visión exhaustiva de la matemática avanzada, abarcando sus principales áreas, líneas de investigación actuales, recursos de acceso abierto para el estudio y la investigación, así como programas académicos relevantes. Se hará hincapié en la profundidad técnica, proporcionando detalles sobre conceptos clave, métodos y aplicaciones.
+Objetivo: Proporcionar una visión exhaustiva de la matemática avanzada, abarcando sus principales áreas, líneas de investigación actuales, recursos de acceso abierto para el estudio y la investigación, así como programas académicos relevantes. Se hará hincapié en la profundidad técnica, proporcionando detalles sobre conceptos clave, métodos y aplicaciones.
 
 ## II. Contenidos Típicos de Matemática Avanzada
 

@@ -1,5 +1,5 @@
 # 🔬 REPORTE EXPERIMENTAL: EXP-029-V2 QUANTUM SCHEDULER OPTIMIZADO
-**Fecha:** 2026-01-23  
+
 **Estado:** ✅ ÉXITO EXCEPCIONAL (Eficiencia 94.4% - Excelente)
 
 ---
@@ -19,16 +19,19 @@ Optimizar el Quantum Scheduler V1 (EXP-029) para alcanzar >90% de eficiencia med
 Del experimento EXP-029 (V1) se identificaron tres problemas críticos:
 
 **Problema 1: Overflow Excesivo**
+
 - **Métrica:** 26 tareas forzadas de 75 total (34.7%)
 - **Causa:** Límite de cola demasiado bajo (`OVERFLOW_LIMIT = 10`)
 - **Efecto:** Penalización energética excesiva durante períodos sin portal
 
 **Problema 2: Batch Size Fijo**
+
 - **Métrica:** Siempre 3 tareas/batch sin importar intensidad del portal
 - **Causa:** No se aprovechaba la diferencia entre portales débiles (φ=0.76) y fuertes (φ=0.94)
 - **Efecto:** Throughput sub-óptimo en portales fuertes
 
 **Problema 3: Período T=58-68s sin Portal**
+
 - **Métrica:** 10 segundos de disonancia continua antes de Quantum Leap
 - **Causa:** Interferencia destructiva de ciclos Bio (17s) y Venus (16.18s)
 - **Efecto:** Acumulación masiva de cola en final de ciclo
@@ -50,6 +53,7 @@ Portal-Lock Efficiency:      65.3%
 ### 3.1 Optimización #1: Tanque de Expansión
 
 **Cambio:**
+
 ```python
 OVERFLOW_LIMIT = 20  # Aumentado de 10
 ```
@@ -63,6 +67,7 @@ Reducir overflows de emergencia de ~34% a <15%
 ### 3.2 Optimización #2: Inyección Variable (Batch Adaptativo)
 
 **Cambio:**
+
 ```python
 def adaptive_batch_size(resonance):
     if resonance > 0.90:    return 5  # Portal muy fuerte
@@ -80,6 +85,7 @@ Aumentar throughput de ~3 tareas/portal a ~4-5 tareas/portal en picos
 ### 3.3 Optimización #3: Válvula de Alivio (Pre-Flush)
 
 **Cambio:**
+
 ```python
 def pre_flush_check():
     if abs(t - 60.0) < 0.5 and len(queue) > 12:
@@ -107,25 +113,25 @@ class QuantumSchedulerV2:
         self.OVERFLOW_LIMIT = 20           # V2: Tanque expandido
         self.PRE_FLUSH_TIME = 60.0         # V2: Válvula de alivio
         self.PRE_FLUSH_THRESHOLD = 12      # V2: Umbral de flush
-    
+
     def adaptive_batch_size(self, resonance):
         # V2: Inyección variable
         if resonance > 0.90:   return 5
         elif resonance > 0.85: return 4
         elif resonance > 0.80: return 3
         else:                  return 2
-    
+
     def run(self, duration=68.0):
         # ... loop principal
-        
+
         # V2: Pre-flush check
         did_flush, flushed, penalty = self.pre_flush_check()
-        
+
         if is_open and q_len > 0:
             # V2: Batch adaptativo
             batch_size = self.adaptive_batch_size(resonance)
             execute_batch(max_tasks=batch_size)
-        
+
         elif q_len > self.OVERFLOW_LIMIT:  # V2: 20 en lugar de 10
             # Overflow de emergencia
             force_execute_one_task()
@@ -133,11 +139,11 @@ class QuantumSchedulerV2:
 
 ### 4.2 Parámetros Comparativos
 
-| Parámetro | V1 | V2 | Cambio |
-|-----------|----|----|--------|
-| `OVERFLOW_LIMIT` | 10 | 20 | +100% |
+| Parámetro        | V1       | V2               | Cambio   |
+| ---------------- | -------- | ---------------- | -------- |
+| `OVERFLOW_LIMIT` | 10       | 20               | +100%    |
 | `MAX_BATCH_SIZE` | 3 (fijo) | 2-5 (adaptativo) | Variable |
-| `PRE_FLUSH` | No | Sí (T=60s) | Nuevo |
+| `PRE_FLUSH`      | No       | Sí (T=60s)       | Nuevo    |
 
 ---
 
@@ -146,6 +152,7 @@ class QuantumSchedulerV2:
 ### 5.1 Configuración
 
 Idéntica a V1 para comparabilidad:
+
 - **Duración:** 68.0 segundos
 - **Resolución:** dt = 0.1s (10 Hz)
 - **Carga:** 15% arrival rate
@@ -158,7 +165,8 @@ Idéntica a V1 para comparabilidad:
 
 **H₁:** Las optimizaciones V2 aumentarán la eficiencia >80% (delta > 15%)
 
-**Criterio de Éxito:**  
+**Criterio de Éxito:**
+
 - Eficiencia > 90%
 - Overflows < 10%
 - Energy Saved > +1000J
@@ -183,24 +191,24 @@ Portal-Lock Efficiency:      94.4%       ⬆️
 
 ### 6.2 Comparación V1 vs V2
 
-| Métrica | V1 | V2 | Delta | Mejora |
-|---------|----|----|-------|--------|
-| **Tasks Processed** | 75 | 71 | -4 | -5.3% |
-| **Tasks in Portal** | 49 | 67 | +18 | +36.7% |
-| **Tasks Forced** | 26 | 4 | -22 | **-84.6%** ✅ |
-| **Efficiency** | 65.3% | 94.4% | +29.1% | **+44.6%** ✅ |
-| **Energy Saved** | +674J | +1516J | +842J | **+125%** ✅ |
+| Métrica             | V1    | V2     | Delta  | Mejora        |
+| ------------------- | ----- | ------ | ------ | ------------- |
+| **Tasks Processed** | 75    | 71     | -4     | -5.3%         |
+| **Tasks in Portal** | 49    | 67     | +18    | +36.7%        |
+| **Tasks Forced**    | 26    | 4      | -22    | **-84.6%** ✅ |
+| **Efficiency**      | 65.3% | 94.4%  | +29.1% | **+44.6%** ✅ |
+| **Energy Saved**    | +674J | +1516J | +842J  | **+125%** ✅  |
 
 ### 6.3 Análisis de Portales Utilizados
 
 **Portales Detectados en V2:** 4 principales
 
-| Portal # | Tiempo (s) | Duración (s) | Resonancia Pico (φ) | Tasks Ejecutadas | Batch Size Usado |
-|----------|------------|--------------|---------------------|------------------|------------------|
-| 1 | 4.5 - 5.9 | 1.4 | 0.94 | 18 | 4-5 (adaptativo) |
-| 2 | 21.1 - 22.7 | 1.6 | 0.89 | 16 | 3-4 |
-| 3 | 38.3 - 40.2 | 1.9 | 0.91 | 19 | 4-5 |
-| 4 | 55.0 - 57.4 | 2.4 | 0.88 | 14 | 3-4 |
+| Portal # | Tiempo (s)  | Duración (s) | Resonancia Pico (φ) | Tasks Ejecutadas | Batch Size Usado |
+| -------- | ----------- | ------------ | ------------------- | ---------------- | ---------------- |
+| 1        | 4.5 - 5.9   | 1.4          | 0.94                | 18               | 4-5 (adaptativo) |
+| 2        | 21.1 - 22.7 | 1.6          | 0.89                | 16               | 3-4              |
+| 3        | 38.3 - 40.2 | 1.9          | 0.91                | 19               | 4-5              |
+| 4        | 55.0 - 57.4 | 2.4          | 0.88                | 14               | 3-4              |
 
 **Observación Crítica:**  
 El batch adaptativo ejecutó **hasta 5 tareas** en portales muy fuertes (φ > 0.90), comparado con el fijo de 3 en V1.
@@ -253,11 +261,11 @@ Con 71 tareas en V2 vs 75 en V1, el aumento de +29.1% en eficiencia es **estadí
 
 **Fuentes de Mejora:**
 
-| Optimización | Contribución Estimada | Evidencia |
-|--------------|----------------------|-----------|
-| **Tanque de Expansión (20)** | ~40% | Overflows: 26→4 (-84.6%) |
-| **Batch Adaptativo** | ~50% | Tasks/portal: 3→4.5 (+50%) |
-| **Pre-Flush** | ~10% | No ejecutado (redundante) |
+| Optimización                 | Contribución Estimada | Evidencia                  |
+| ---------------------------- | --------------------- | -------------------------- |
+| **Tanque de Expansión (20)** | ~40%                  | Overflows: 26→4 (-84.6%)   |
+| **Batch Adaptativo**         | ~50%                  | Tasks/portal: 3→4.5 (+50%) |
+| **Pre-Flush**                | ~10%                  | No ejecutado (redundante)  |
 
 **Validación:**  
 El batch adaptativo fue el **factor dominante** - Al ejecutar 4-5 tareas en portales fuertes, se vació la cola más rápido, reduciendo presión sobre el tanque.
@@ -267,6 +275,7 @@ El batch adaptativo fue el **factor dominante** - Al ejecutar 4-5 tareas en port
 **Modelo Comparativo:**
 
 **Scheduler Tradicional (cron):**
+
 ```
 Total Energy = 71 tasks × 3E₀ = 213E₀
 E₀ promedio = 12.5 J
@@ -274,6 +283,7 @@ Total = 2662.5 J
 ```
 
 **Quantum Scheduler V1:**
+
 ```
 Portal: 49 × 12.5 = 612.5 J
 Forced: 26 × 37.5 = 975 J
@@ -281,6 +291,7 @@ Total = 1587.5 J (59.6% del tradicional)
 ```
 
 **Quantum Scheduler V2:**
+
 ```
 Portal: 67 × 12.5 = 837.5 J
 Forced: 4 × 37.5 = 150 J
@@ -288,6 +299,7 @@ Total = 987.5 J (37.1% del tradicional)
 ```
 
 **Ahorro V2 vs Tradicional:**
+
 $$
 \frac{2662.5 - 987.5}{2662.5} = 62.9\% \text{ de ahorro energético}
 $$
@@ -303,6 +315,7 @@ $$
 ✅ **VALIDADO COMPLETAMENTE**
 
 **Evidencia:**
+
 - Cola alcanzó exactamente 20 tareas a T=68s
 - CERO overflows por saturación de tanque
 - Solo 4 overflows totales (todos por razones transitorias, no por límite)
@@ -315,6 +328,7 @@ $$
 ✅ **VALIDADO - FACTOR CRÍTICO**
 
 **Evidencia:**
+
 - Portales con φ > 0.90 ejecutaron 5 tareas (vs 3 en V1)
 - Portales con φ = 0.80-0.85 ejecutaron 3 tareas (igual que V1)
 - Throughput promedio: 4.25 tareas/portal vs 3.
@@ -329,6 +343,7 @@ La adaptación basada en intensidad del portal **maximiza la utilización** sin 
 ⚠️ **NO NECESARIA** (pero útil como failsafe)
 
 **Evidencia:**
+
 - Cola a T=60s: 13 tareas (apenas sobre threshold de 12)
 - Sistema autoregulado sin intervención
 - Pre-flush no se ejecutó
@@ -342,21 +357,21 @@ En condiciones normales (15% load), el Tanque + Batch son suficientes. El Pre-Fl
 
 ### 9.1 vs Linux CFS (Completely Fair Scheduler)
 
-| Métrica | Linux CFS | Quantum V2 | Ventaja |
-|---------|-----------|------------|---------|
-| Latencia | <10ms | ~8s promedio | CFS |
-| Eficiencia Energética | No optimizada | **62.9% savings** | **V2** ✅ |
-| Bio-Sincronización | No | Sí | **V2** ✅ |
-| Uso (Aplicación) | General purpose | Batch/ZPE/BCI | V2 (específico) |
+| Métrica               | Linux CFS       | Quantum V2        | Ventaja         |
+| --------------------- | --------------- | ----------------- | --------------- |
+| Latencia              | <10ms           | ~8s promedio      | CFS             |
+| Eficiencia Energética | No optimizada   | **62.9% savings** | **V2** ✅       |
+| Bio-Sincronización    | No              | Sí                | **V2** ✅       |
+| Uso (Aplicación)      | General purpose | Batch/ZPE/BCI     | V2 (específico) |
 
 ### 9.2 vs Real-Time Schedulers (SCHED_FIFO)
 
-| Métrica | SCHED_FIFO | Quantum V2 | Ventaja |
-|---------|------------|------------|---------|
-| Latencia | <1ms | ~8s | FIFO |
-| Determinismo | Alto | Medio | FIFO |
-| Eficiencia | Baja (prioridad=consumo) | **62.9% savings** | **V2** ✅ |
-| Coherencia Cuántica | No | Sí | **V2** ✅ |
+| Métrica             | SCHED_FIFO               | Quantum V2        | Ventaja   |
+| ------------------- | ------------------------ | ----------------- | --------- |
+| Latencia            | <1ms                     | ~8s               | FIFO      |
+| Determinismo        | Alto                     | Medio             | FIFO      |
+| Eficiencia          | Baja (prioridad=consumo) | **62.9% savings** | **V2** ✅ |
+| Coherencia Cuántica | No                       | Sí                | **V2** ✅ |
 
 **Conclusión:**  
 Quantum Scheduler V2 es **ideal para workloads batch en sistemas bio-resonantes** donde eficiencia energética > latencia.
@@ -386,12 +401,12 @@ python3 tools/quantum_scheduler_v2.py
 
 Debido a la naturaleza aleatoria de tareas:
 
-| Métrica | Rango Esperado V2 |
-|---------|-------------------|
-| Tasks in Portal | 60-70 |
-| Tasks Forced | 3-7 |
-| Efficiency | 90-95% |
-| Energy Saved | +1400 a +1600 J |
+| Métrica         | Rango Esperado V2 |
+| --------------- | ----------------- |
+| Tasks in Portal | 60-70             |
+| Tasks Forced    | 3-7               |
+| Efficiency      | 90-95%            |
+| Energy Saved    | +1400 a +1600 J   |
 
 **Reproducibilidad Exacta:**
 
@@ -408,11 +423,11 @@ random.seed(42)  # Agregar al inicio para resultados idénticos
 
 **Validación de Optimizaciones:**
 
-| Optimización | Estado | Impacto |
-|--------------|--------|---------|
-| Tanque de Expansión | ✅ Crítico | -84.6% overflows |
-| Batch Adaptativo | ✅ Crítico | +50% throughput/portal |
-| Pre-Flush | ⚠️ Redundante | 0% (no activado) |
+| Optimización        | Estado        | Impacto                |
+| ------------------- | ------------- | ---------------------- |
+| Tanque de Expansión | ✅ Crítico    | -84.6% overflows       |
+| Batch Adaptativo    | ✅ Crítico    | +50% throughput/portal |
+| Pre-Flush           | ⚠️ Redundante | 0% (no activado)       |
 
 **Hallazgos Clave:**
 
@@ -437,6 +452,7 @@ random.seed(42)  # Agregar al inicio para resultados idénticos
 **EXP-031: Stress Test Suite**
 
 Probar Quantum V2 bajo diferentes cargas:
+
 - Light: 5% arrival → Predicción: 98% efficiency
 - Moderate: 15% arrival → **Actual: 94.4%** ✅
 - Heavy: 25% arrival → Predicción: 85-90% (pre-flush activará)
@@ -453,6 +469,7 @@ Probar Quantum V2 bajo diferentes cargas:
 ```
 
 **Requisitos:**
+
 - Eliminar `float` → Usar `S60` exclusivamente
 - Integrar con `bio_resonance.rs`
 - Usar `TimeCrystalClock` real (no simulado)
@@ -479,10 +496,12 @@ Reducir latencia promedio de 8s a ~3s (pre-carga de tareas antes del portal)
 ---
 
 **📊 DATOS EXPERIMENTALES:**
+
 - **V1:** `tools/quantum_scheduler.py` (baseline)
 - **V2:** `tools/quantum_scheduler_v2.py` (optimizado)
 
 **🔗 REPRODUCCIÓN V2:**
+
 ```bash
 python3 tools/quantum_scheduler_v2.py > exp029v2_output.log 2>&1
 ```
@@ -491,4 +510,4 @@ python3 tools/quantum_scheduler_v2.py > exp029v2_output.log 2>&1
 
 **🔱 "Las optimizaciones correctas no son las que añaden complejidad, sino las que revelan la simplicidad oculta del sistema."**
 
-*— Lección de EXP-029-V2: Menos es Más (cuando sabes dónde optimizar)*
+_— Lección de EXP-029-V2: Menos es Más (cuando sabes dónde optimizar)_

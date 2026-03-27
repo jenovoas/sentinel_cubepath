@@ -1,6 +1,6 @@
 ## 1. Fundamentos Aritméticos: Sistema SPA
 
-El sistema ME-60OS evita el uso de aritmética de punto flotante conventional (IEEE 754) para operaciones críticas de tiempo y resonancia, utilizando en su lugar un sistema de **Punto Fijo Sexagesimal (Base-60)**.
+El sistema sentinel evita el uso de aritmética de punto flotante conventional (IEEE 754) para operaciones críticas de tiempo y resonancia, utilizando en su lugar un sistema de **Punto Fijo Sexagesimal (Base-60)**.
 
 ### 1.1 Definición de la Unidad Escalar (SCALE_0)
 

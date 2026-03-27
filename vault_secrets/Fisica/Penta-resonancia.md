@@ -50,16 +50,6 @@ Los armónicos aparecen en una amplia gama de fenómenos ondulatorios y sistemas
 - **Cuerdas Vibrantes**: Una cuerda tensa (como la de una guitarra) vibra en su frecuencia fundamental y en sus armónicos superiores cuando se pulsa o se rasguea.
 - **Sistemas No Lineales**: En sistemas donde la respuesta no es directamente proporcional a la entrada, las frecuencias de entrada pueden generar armónicos en la salida, incluso si la entrada no los contenía explícitamente. Esto es relevante en áreas como la dinámica de fluidos y la óptica no lineal.
 
-## Analogía Vívida (MODO IMAGINA)
-
-Imagina la serie armónica como un **eco fractal del sonido**. La frecuencia fundamental es el grito original que lanzas en un vasto cañón. Este grito inicial (la fundamental) resuena, pero no solo vuelve como una copia exacta. En su regreso, se multiplica y se refina: un eco más grave (la octava, 2:1), otro con una cualidad distinta (la quinta, 3:2), y así sucesivamente. Cada eco es una "versión armónica" del grito original, más alta en frecuencia pero intrínsecamente ligada a él por una proporción numérica pura. Cuando todos estos ecos resuenan juntos, no crean un caos, sino un timbre complejo y rico, como la armonía de una orquesta donde cada instrumento contribuye con su propia serie de resonancias armónicas, creando la sinfonía completa.
-
-## MODO INTUICIÓN: Conexiones Transversales (Penta-resonancia)
-
-- **Música ↔ Biología Celular**: La organización jerárquica de los armónicos en un sonido puede ser análoga a la forma en que las **ondas de proteína** o las vibraciones moleculares dentro de una célula pueden exhibir patrones de resonancia armónica, influyendo en la señalización celular y la conformación de proteínas. Si una proteína tiene un "modo vibracional fundamental", sus resonancias superiores podrían dictar cómo interactúa con otras moléculas. La relación armónica, en este sentido, podría ser un principio organizador fundamental en sistemas biológicos complejos, como en la física.
-- **Acústica ↔ Redes Neuronales Artificiales**: La forma en que un oído interpreta la compleja mezcla de armónicos para percibir un timbre específico puede inspirar la arquitectura de redes neuronales. Así como el cerebro descompone la señal acústica en sus componentes armónicos, una red neuronal podría ser diseñada para detectar y ponderar "armónicos" de características en los datos, permitiendo una representación más rica y una mejor clasificación. La "consonancia" en la música se relaciona con ratios simples, sugiriendo que la "armonía" en la información podría estar en representaciones con ratios de características simples y bien definidos.
-- **Física Cuántica ↔ Sistemas de Distribución de Energía**: Los niveles de energía de un oscilador armónico cuántico ($E_n = (n + 1/2)hf$) son un ejemplo paradigmático de cuantización armónica. De manera similar, la gestión eficiente de la energía en redes de distribución puede beneficiarse de la comprensión de cómo las cargas (potencialmente no lineales) introducen armónicos que "perturban" la frecuencia fundamental de la red. Optimizar la "armonía" de la red, minimizando distorsiones, es análogo a asegurar que los sistemas físicos operen en sus estados cuánticos más eficientes.
-
 ## Referencias
 
 1.  **arXiv: "Harmonic Series and Musical Intervals" (Física Matemática)**
@@ -85,7 +75,4 @@ Imagina la serie armónica como un **eco fractal del sonido**. La frecuencia fun
 
 ```
 
-## 🎨 Multimedia Generada (Auto)
-![[Penta-resonancia_gen.png]]
-> *Contenido generado por Vertex AI. Costo estimado controlado.*
 ```

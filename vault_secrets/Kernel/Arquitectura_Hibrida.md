@@ -1,6 +1,6 @@
 # Arquitectura Híbrida: Kernel, Rust y eBPF (Versión Enriquecida)
 
-Sentinel (ME-60OS) se distingue por su arquitectura híbrida, un diseño que busca la **velocidad extrema** mediante la sinergia de **Rust** y **eBPF**, complementada con la **flexibilidad cognitiva** de **Python**. Esta combinación estratégica evita las limitaciones inherentes a los sistemas monolíticos y las arquitecturas tradicionales de software, permitiendo un rendimiento y adaptabilidad superiores.
+Sentinel se distingue por su arquitectura híbrida, un diseño que busca la **velocidad extrema** mediante la sinergia de **Rust** y **eBPF**, complementada con la **flexibilidad cognitiva** de **Python**. Esta combinación estratégica evita las limitaciones inherentes a los sistemas monolíticos y las arquitecturas tradicionales de software, permitiendo un rendimiento y adaptabilidad superiores.
 
 ## 1. El Concepto de "Memoria Líquida": Zero-Copy Shared Memory
 
