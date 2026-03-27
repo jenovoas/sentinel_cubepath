@@ -10,6 +10,7 @@ import { TruthSyncReport } from "./TruthSyncReport";
 import { MyCNetNodeGraph } from "./MyCNetNodeGraph";
 import { Sidebar } from "./Sidebar";
 import { AIOpsShieldView } from "./AIOpsShieldView";
+import { MonitoringView } from "./MonitoringView";
 import { clsx } from "clsx";
 import { ShieldAlert as ShieldAlertIcon } from "lucide-react"; // Alias if needed, but we'll stick to ShieldAlert
 
@@ -21,6 +22,7 @@ export function Dashboard() {
   const [yhwhPhase, setYhwhPhase] = useState<string>("HE2");
   const [networkOpen, setNetworkOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("dashboard");
+  const [vaultEvents, setVaultEvents] = useState<any[]>([]);
 
   // Telemetry listener for dynamic encryption layer (SNN+RMM acoplado)
   useEffect(() => {
@@ -43,6 +45,7 @@ export function Dashboard() {
           setYhwhPhase(event.event_type.replace("YHWH_PHASE_", ""));
           setNetworkOpen(event.severity === 1);
         }
+        setVaultEvents(prev => [event, ...prev].slice(0, 150));
       } catch (err) {}
     };
     return () => ws.close();
@@ -142,7 +145,7 @@ export function Dashboard() {
                        <span className="text-[8px] font-bold text-emerald-500/80 uppercase tracking-widest">Live Stream</span>
                     </div>
                   </div>
-                  <div className="flex-1 min-h-0">
+                  <div className="flex-1 min-h-0 relative">
                     <TelemetryFeed />
                   </div>
                 </div>
@@ -218,6 +221,10 @@ export function Dashboard() {
             </div>
           </div>
         ) : activeTab === "matrix" ? (
+          <MonitoringView />
+        ) : activeTab === "matrix_old" ? (
+          <MonitoringView />
+        ) : activeTab === "null" ? (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
             <div className="flex items-center justify-between">
               <div>
@@ -290,7 +297,7 @@ export function Dashboard() {
                 <span className="text-[10px] font-black text-emerald-400 tracking-widest uppercase">Guardian Active</span>
               </div>
             </div>
-            <AIOpsShieldView status={status} />
+            <AIOpsShieldView status={status} events={vaultEvents} />
           </div>
         ) : activeTab === "mycnet" ? (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
@@ -345,24 +352,19 @@ export function Dashboard() {
                 <span className="text-slate-500 text-[9px] ml-2">sentinel-cortex / kernel audit log</span>
               </div>
               <div className="p-4 space-y-1.5 overflow-y-auto max-h-[500px] custom-scrollbar bg-slate-950/80">
-                {[
-                  { time: "07:02:38", level: "BOOT", msg: "Sentinel Ring-0 initialized. eBPF programs loaded. S60 core: ACTIVE", color: "emerald" },
-                  { time: "07:02:38", level: "LSM_ENFORCE", msg: "bprm_check_security hook registered. Semantic analysis engine: ONLINE", color: "sky" },
-                  { time: "07:02:38", level: "XDP_GUARD", msg: "XDP firewall attached to eth0. BPF map initialized. 0 rules loaded", color: "sky" },
-                  { time: "07:02:38", level: "S60_PHONON", msg: "Plimpton 322 resonance table loaded. 15 sacred ratios indexed", color: "amber" },
-                  { time: "07:02:39", level: "TRUTHSYNC", msg: "TruthSync cognitive engine ACTIVE. Threshold: 0.80 coherence", color: "emerald" },
-                  { time: "07:02:45", level: "BIO_PULSE", msg: "Biometric link established. Dead-man switch armed (T=30s)", color: "emerald" },
-                  { time: "07:03:12", level: "LSM_ENFORCE", msg: "SYSCALL execve() intercepted. Agent: unknown_pid=4421. Analyzing...", color: "amber" },
-                  { time: "07:03:12", level: "TRUTHSYNC", msg: "Semantic score: 0.05 (DISSONANT_CRITICAL). Payload: rm -rf /", color: "rose" },
-                  { time: "07:03:12", level: "LSM_BLOCK", msg: "ACTION DENIED. -EACCES returned. Ring-0 quarantine initiated.", color: "rose" },
-                  { time: "07:03:12", level: "AUDIT_SEAL", msg: "Block event recorded. Certification: PLIMPTON_322_ROW_12_CERTIFIED_S60", color: "emerald" },
-                ].map((log, i) => (
-                  <div key={i} className="flex items-start gap-3 hover:bg-white/2 px-1 py-0.5 rounded transition-colors">
-                    <span className="text-slate-600 tabular-nums shrink-0">{log.time}</span>
-                    <span className={`shrink-0 font-black w-24 ${log.color === "emerald" ? "text-emerald-500" : log.color === "sky" ? "text-sky-500" : log.color === "amber" ? "text-amber-500" : "text-rose-500"}`}>[{log.level}]</span>
-                    <span className="text-slate-400">{log.msg}</span>
-                  </div>
-                ))}
+                {vaultEvents.length === 0 && <div className="text-slate-600 opacity-50 italic">Awaiting kernel audit log stream...</div>}
+                {vaultEvents.map((ev, i) => {
+                  const isCritical = ev.severity >= 3 || ev.event_type.includes("BLOCK") || ev.event_type.includes("ALERT");
+                  const isSys = ev.event_type.includes("HEALING") || ev.event_type.includes("PULSE");
+                  const color = isCritical ? "text-rose-500" : isSys ? "text-sky-500" : "text-emerald-500";
+                  return (
+                    <div key={i} className="flex items-start gap-3 hover:bg-white/2 px-1 py-0.5 rounded transition-colors break-all">
+                      <span className="text-slate-600 tabular-nums shrink-0">{ev.timestamp_ns ? new Date(ev.timestamp_ns / 1000000).toLocaleTimeString("es-CL", { hour12: false }) : "--:--:--"}</span>
+                      <span className={`shrink-0 font-black w-[130px] truncate ${color}`}>[{ev.event_type}]</span>
+                      <span className="text-slate-400">{ev.message}</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -385,11 +387,11 @@ export function Dashboard() {
                 <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-300 border-b border-white/5 pb-2">Cognitive Thresholds</h3>
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">AI Coherence Score</span><span className="text-[10px] text-white font-mono">0.82 / 1.0</span></div>
-                    <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden"><div className="h-full bg-sky-500 w-[82%]" /></div>
+                    <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">AI Coherence Score</span><span className="text-[10px] text-white font-mono">{(status?.bio_coherence ? Math.min(1.0, status.bio_coherence/12960000) : 0.82).toFixed(2)} / 1.0</span></div>
+                    <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden"><div className="h-full bg-sky-500 transition-all duration-1000" style={{ width: `${(status?.bio_coherence ? Math.min(1.0, status.bio_coherence/12960000) : 0.82)*100}%` }} /></div>
                   </div>
                   <div className="space-y-2">
-                    <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">LSM Interception Depth</span><span className="text-[10px] text-white font-mono">RING-0</span></div>
+                    <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">LSM Interception Depth</span><span className="text-[10px] text-white font-mono">{status?.lsm_cognitive || "RING-0"}</span></div>
                     <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden"><div className="h-full bg-emerald-500 w-[100%]" /></div>
                   </div>
                 </div>

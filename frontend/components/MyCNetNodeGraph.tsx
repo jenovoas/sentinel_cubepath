@@ -50,7 +50,7 @@ export function MyCNetNodeGraph({ phase, isOpen }: { phase: string, isOpen: bool
       <div className="flex-1 min-h-[140px] relative flex flex-col items-center justify-center p-4 z-10">
         
         {/* State Indicator */}
-        <div className="absolute top-4 right-4 flex flex-col items-end">
+        <div className="flex flex-col items-center w-full mb-4">
           <span className="text-[8px] font-black uppercase text-slate-500 tracking-[0.2em]">YHWH Rhythm</span>
           <div className={`mt-1 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest border transition-all duration-500 ${getPhaseBgColor()} ${getPhaseColor()}`}>
             PHASE: {phase || "WAITING"}
@@ -61,7 +61,7 @@ export function MyCNetNodeGraph({ phase, isOpen }: { phase: string, isOpen: bool
         </div>
 
         {/* Visualization of the two nodes connected */}
-        <div className="w-full max-w-md mx-auto relative flex items-center justify-between mt-8">
+        <div className="w-full max-w-md mx-auto relative flex items-center justify-between pb-4">
            
            {/* LOCAL NODE (FENIX) */}
            <div className="relative flex flex-col items-center group">
@@ -76,7 +76,7 @@ export function MyCNetNodeGraph({ phase, isOpen }: { phase: string, isOpen: bool
            </div>
 
            {/* THE MYCNET LINK (HEXAGONAL TUBE) */}
-           <div className="flex-1 h-32 relative mx-4 flex items-center justify-center">
+           <div className="flex-1 h-24 relative mx-4 flex items-center justify-center">
               {/* Central Line */}
               <div className="absolute w-full h-px bg-slate-700 top-1/2 -translate-y-1/2" />
               

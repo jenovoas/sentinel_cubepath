@@ -15,17 +15,11 @@ import { clsx } from "clsx";
 
 interface AIOpsShieldViewProps {
   status: any;
+  events?: any[];
 }
 
-export function AIOpsShieldView({ status }: AIOpsShieldViewProps) {
-  const [events, setEvents] = React.useState<any[]>([]);
-
-  // Simulation of incoming kernel events or mapping from telemetry
-  React.useEffect(() => {
-    if (status?.last_event) {
-      setEvents(prev => [status.last_event, ...prev].slice(0, 5));
-    }
-  }, [status]);
+export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
+  const threatEvents = events.filter(e => e.severity >= 3 || e.event_type.includes("BLOCK") || e.event_type.includes("ALERT")).slice(0, 5);
 
   const layers = [
     {
@@ -170,13 +164,15 @@ export function AIOpsShieldView({ status }: AIOpsShieldViewProps) {
               </div>
 
               <div className="space-y-2 font-mono text-[9px] overflow-hidden">
-                 {events.length > 0 ? events.map((ev, i) => (
+                 {threatEvents.length > 0 ? threatEvents.map((ev: any, i: number) => (
                    <div key={i} className="p-2 rounded bg-slate-950/50 border border-white/5 flex flex-col gap-1 slide-in-from-top-1 animate-in">
                       <div className="flex justify-between">
-                         <span className="text-rose-400 font-black">[{ev.type || "BLOCK"}]</span>
-                         <span className="text-slate-600 italic">{new Date().toLocaleTimeString()}</span>
+                         <span className="text-rose-400 font-black">[{ev.event_type || "BLOCK"}]</span>
+                         <span className="text-slate-600 italic">
+                            {ev.timestamp_ns ? new Date(ev.timestamp_ns / 1000000).toLocaleTimeString("es-CL", { hour12: false }) : new Date().toLocaleTimeString()}
+                         </span>
                       </div>
-                      <span className="text-slate-400 truncate">{ev.msg || "Syscall intercepted and validated."}</span>
+                      <span className="text-slate-400 truncate">{ev.message || "Syscall intercepted and validated."}</span>
                    </div>
                  )) : (
                    <div className="space-y-2 opacity-50">

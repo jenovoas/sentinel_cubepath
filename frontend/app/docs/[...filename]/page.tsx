@@ -6,21 +6,34 @@ import { ArrowLeft, Share2, Printer, Lock, Terminal } from "lucide-react";
 import fs from "fs";
 import path from "path";
 
+function getMarkdownFiles(dir: string, base: string, fileList: string[] = []) {
+  try {
+    const files = fs.readdirSync(dir);
+    for (const file of files) {
+      const filePath = path.join(dir, file);
+      if (fs.statSync(filePath).isDirectory()) {
+        getMarkdownFiles(filePath, base, fileList);
+      } else if (file.endsWith('.md')) {
+        fileList.push(filePath.replace(base + '/', '').replace(/\\/g, '/'));
+      }
+    }
+  } catch (err) {}
+  return fileList;
+}
+
 export async function generateStaticParams() {
   const docsDir = path.join(process.cwd(), "../docs");
   if (!fs.existsSync(docsDir)) return [];
   
-  const files = fs.readdirSync(docsDir);
-  return files
-    .filter(file => file.endsWith(".md"))
-    .map((file) => ({
-      filename: file,
-    }));
+  const files = getMarkdownFiles(docsDir, docsDir);
+  return files.map((file) => ({
+    filename: file.split('/'),
+  }));
 }
 
-export default async function DocViewer({ params }: { params: { filename: string } }) {
+export default async function DocViewer({ params }: { params: { filename: string[] } }) {
   const docsDir = path.join(process.cwd(), "../docs");
-  const filePath = path.join(docsDir, params.filename);
+  const filePath = path.join(docsDir, ...params.filename);
   
   let content = "";
   try {

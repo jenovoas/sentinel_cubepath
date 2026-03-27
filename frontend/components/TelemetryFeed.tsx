@@ -117,7 +117,7 @@ export function TelemetryFeed() {
   const resonancePercent = (raw: number) => ((raw / 12960000) * 100).toFixed(1);
 
   return (
-    <div ref={feedRef} className="flex flex-col h-full w-full font-mono text-[10px] custom-scrollbar overflow-hidden">
+    <div ref={feedRef} className="absolute inset-0 flex flex-col w-full font-mono text-[10px] overflow-hidden">
       {/* Connection status - fixed header */}
       <div className={clsx(
         "flex items-center gap-2 px-4 py-1.5 shrink-0 text-[9px] font-bold uppercase tracking-widest border-b",
@@ -128,7 +128,7 @@ export function TelemetryFeed() {
       </div>
 
       {/* Scrollable area - strictly contained */}
-      <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-1.5">
+      <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar p-4 space-y-1.5 border-t border-white/5">
       {events.length === 0 && (
         <div className="flex flex-col items-center justify-center h-full text-slate-600 gap-4">
           <div className="phase-ring p-6">

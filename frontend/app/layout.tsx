@@ -4,6 +4,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Sentinel Ring-0 | Cognitive Firewall",
   description: "Advanced AI Safety at Kernel Level for Autonomous Agents",
+  icons: {
+    icon: '/favicon.png',
+  },
 };
 
 export default function RootLayout({
