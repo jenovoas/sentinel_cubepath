@@ -1,14 +1,13 @@
 //! state_mod.rs - Global System State Modification
 //! Orquestación de estados 'Sealed' y 'Open' corregidos para el nodo CubePath.
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub enum SystemSovereignty {
+    #[default]
     Sealed,   // Ring-0 protection active
     Open,     // Maintenance mode
     Quarantine, // Cognitive breach detected
 }
-#[derive(Default)]
-
 pub struct StateController {
     current_sovereignty: SystemSovereignty,
     threat_level: u8,

@@ -538,8 +538,6 @@ async fn truth_claim_handler(
         }
     };
 
-    let mut score: f64 = score;
-
     // --- 3. SENTINEL SANITIZATION PIPELINE ---
     // Pass the payload's intent through the actual S60 Resonance and Cognitive memory
     let entropy_estimate = (payload.claim_payload.len() * 100) as i64;
