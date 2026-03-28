@@ -1,15 +1,15 @@
 # 📊 Impacto de Buffers Dinámicos en Infraestructura TI Moderna
 
-**Fecha**: 19 Diciembre   
 **Objetivo**: Documentar aplicaciones reales y impacto de buffers dinámicos en infraestructura crítica
 
 ---
 
-##  APLICACIONES EN INFRAESTRUCTURA TI MODERNA
+## APLICACIONES EN INFRAESTRUCTURA TI MODERNA
 
 ### 1. Data Centers y Cloud Computing
 
 **Problema Actual**:
+
 ```
 Buffers estáticos en data centers:
 ├── Overhead 20-30% en transferencias pequeñas
@@ -19,6 +19,7 @@ Buffers estáticos en data centers:
 ```
 
 **Solución con Buffers Dinámicos**:
+
 ```
 Buffers adaptativos:
 ├── Overhead reducido a 2-5%
@@ -35,6 +36,7 @@ IMPACTO:
 ### 2. Redes 5G y Telecomunicaciones
 
 **Problema Actual**:
+
 ```
 Buffers fijos en redes 5G:
 ├── Latencia variable (10-100ms)
@@ -44,6 +46,7 @@ Buffers fijos en redes 5G:
 ```
 
 **Solución con Buffers Dinámicos**:
+
 ```
 Buffers adaptativos por QoS:
 ├── Ultra-low latency: Buffers mínimos (1-5ms)
@@ -61,6 +64,7 @@ IMPACTO:
 ### 3. Bases de Datos Distribuidas
 
 **Problema Actual**:
+
 ```
 Buffers estáticos en PostgreSQL/MySQL:
 ├── Query pequeño con buffer grande → Overhead
@@ -70,6 +74,7 @@ Buffers estáticos en PostgreSQL/MySQL:
 ```
 
 **Solución con Buffers Dinámicos**:
+
 ```
 Buffers adaptativos por query:
 ├── OLTP (transaccional): Buffers pequeños, pool grande
@@ -87,6 +92,7 @@ IMPACTO:
 ### 4. CDN y Edge Computing
 
 **Problema Actual**:
+
 ```
 Buffers fijos en CDN:
 ├── Contenido pequeño (HTML): Buffer grande → Overhead
@@ -96,6 +102,7 @@ Buffers fijos en CDN:
 ```
 
 **Solución con Buffers Dinámicos**:
+
 ```
 Buffers adaptativos por contenido:
 ├── HTML/CSS: Buffers pequeños (4-8KB)
@@ -113,6 +120,7 @@ IMPACTO:
 ### 5. Sistemas de IA/ML en Producción
 
 **Problema Actual**:
+
 ```
 Buffers fijos en inferencia LLM:
 ├── Query corto con buffer grande → Overhead
@@ -122,6 +130,7 @@ Buffers fijos en inferencia LLM:
 ```
 
 **Solución con Buffers Dinámicos (Sentinel)**:
+
 ```
 Buffers adaptativos por query type:
 ├── Short query: Buffer 4KB, batch 10
@@ -143,16 +152,17 @@ IMPACTO:
 
 ### Buffers Dinámicos vs Tecnologías Actuales
 
-| Tecnología | Tipo Buffer | Latencia | Throughput | Adaptabilidad | Costo |
-|------------|-------------|----------|------------|---------------|-------|
-| **Sentinel (Buffers Dinámicos)** | Adaptativo | **\u003c100ms** | **3-5x** | ✅ Automático | Bajo |
-| TCP/IP Stack (Linux) | Fijo | 100-500ms | 1x | ❌ Manual | Bajo |
-| DPDK (Intel) | Fijo | 10-50ms | 2-3x | ⚠ Configuración | Alto |
-| RDMA (InfiniBand) | Fijo | 1-10ms | 5-10x | ❌ Hardware | Muy Alto |
-| Kafka (Streaming) | Semi-adaptativo | 50-200ms | 2-4x | ⚠ Configuración | Medio |
-| Redis (Cache) | Fijo | 1-5ms | 10x | ❌ Manual | Bajo |
+| Tecnología                       | Tipo Buffer     | Latencia        | Throughput | Adaptabilidad   | Costo    |
+| -------------------------------- | --------------- | --------------- | ---------- | --------------- | -------- |
+| **Sentinel (Buffers Dinámicos)** | Adaptativo      | **\u003c100ms** | **3-5x**   | ✅ Automático   | Bajo     |
+| TCP/IP Stack (Linux)             | Fijo            | 100-500ms       | 1x         | ❌ Manual       | Bajo     |
+| DPDK (Intel)                     | Fijo            | 10-50ms         | 2-3x       | ⚠ Configuración | Alto     |
+| RDMA (InfiniBand)                | Fijo            | 1-10ms          | 5-10x      | ❌ Hardware     | Muy Alto |
+| Kafka (Streaming)                | Semi-adaptativo | 50-200ms        | 2-4x       | ⚠ Configuración | Medio    |
+| Redis (Cache)                    | Fijo            | 1-5ms           | 10x        | ❌ Manual       | Bajo     |
 
 **Ventaja Competitiva de Sentinel**:
+
 - ✅ **Adaptabilidad automática** (sin configuración manual)
 - ✅ **Bajo costo** (software, no hardware)
 - ✅ **Aplicable a múltiples capas** (LLM, DB, Network, Cache)
@@ -165,6 +175,7 @@ IMPACTO:
 ### Caso 1: Banco Nacional (Chile)
 
 **Problema**:
+
 ```
 Sistema de pagos en tiempo real:
 ├── Latencia variable: 500ms - 5s
@@ -174,6 +185,7 @@ Sistema de pagos en tiempo real:
 ```
 
 **Solución con Buffers Dinámicos**:
+
 ```
 Implementación Sentinel:
 ├── Buffers adaptativos por tipo transacción
@@ -190,6 +202,7 @@ IMPACTO:
 ### Caso 2: Compañía Eléctrica (Chile)
 
 **Problema**:
+
 ```
 SCADA en tiempo real:
 ├── Latencia: 200-1,000ms
@@ -199,6 +212,7 @@ SCADA en tiempo real:
 ```
 
 **Solución con Buffers Dinámicos**:
+
 ```
 Implementación Sentinel:
 ├── Buffers ultra-low latency para SCADA
@@ -215,6 +229,7 @@ IMPACTO:
 ### Caso 3: Minera (Chile)
 
 **Problema**:
+
 ```
 Telemetría IoT (10,000 sensores):
 ├── Latencia: 1-5s
@@ -224,6 +239,7 @@ Telemetría IoT (10,000 sensores):
 ```
 
 **Solución con Buffers Dinámicos**:
+
 ```
 Implementación Sentinel:
 ├── Buffers batch para telemetría
@@ -245,6 +261,7 @@ IMPACTO:
 ### Infraestructura TI Mundial
 
 **Estimación de Impacto**:
+
 ```
 Adopción buffers dinámicos en:
 ├── Data centers: 10,000 worldwide
@@ -263,6 +280,7 @@ AHORRO GLOBAL PROYECTADO:
 ### Aplicaciones Emergentes Habilitadas
 
 **Nuevas Posibilidades**:
+
 ```
 Con latencia <100ms consistente:
 ├── AR/VR en tiempo real (gaming, educación)
@@ -276,17 +294,19 @@ MERCADO HABILITADO: + (-2030)
 
 ---
 
-##  CONCLUSIÓN
+## CONCLUSIÓN
 
 **Buffers Dinámicos = Innovación Fundamental**
 
 **Impacto Medible**:
+
 - ✅ Latencia: 3-5x mejora
 - ✅ Throughput: 2-4x mejora
 - ✅ Costo: 30-50% reducción
 - ✅ Energía: 20-30% ahorro
 
 **Aplicaciones Reales**:
+
 - ✅ Banca (pagos tiempo real)
 - ✅ Energía (SCADA crítico)
 - ✅ Minería (telemetría IoT)
@@ -294,6 +314,7 @@ MERCADO HABILITADO: + (-2030)
 - ✅ IA/ML (inferencia LLM)
 
 **Ventaja Competitiva**:
+
 - ✅ Primera implementación global
 - ✅ Patentable (claim 7)
 - ✅ Aplicable a múltiples industrias
@@ -303,4 +324,4 @@ MERCADO HABILITADO: + (-2030)
 
 ---
 
-**¿Ejecutamos el benchmark ahora para generar los datos y gráficos?** 
+**¿Ejecutamos el benchmark ahora para generar los datos y gráficos?**

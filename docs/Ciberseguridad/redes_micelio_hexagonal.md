@@ -1,10 +1,10 @@
 ## 1. Introducción: La Filosofía de Sentinel
 
-El Proyecto Sentinel (ME-60OS) representa una reimaginación radical de la infraestructura de red, inspirándose en sistemas biológicos y aplicando principios de coherencia cuántica para alcanzar niveles sin precedentes de resiliencia y precisión. El corazón de esta arquitectura reside en tres pilares fundamentales:
+El Proyecto Sentinel representa una reimaginación radical de la infraestructura de red, inspirándose en sistemas biológicos y aplicando principios de coherencia cuántica para alcanzar niveles sin precedentes de resiliencia y precisión. El corazón de esta arquitectura reside en tres pilares fundamentales:
 
-*   **ADM (Red de Micelio):** Una red en malla auto-reparable inspirada en la biología del micelio de los hongos.
-*   **QNTP (Quantum Network Time Protocol):** Un protocolo de sincronización temporal basado en "cristales de tiempo" y aritmética entera para operaciones de alta precisión.
-*   **Alta Disponibilidad (HA):** Una arquitectura multi-sitio con failover automático diseñada para resistir fallos catastróficos.
+- **ADM (Red de Micelio):** Una red en malla auto-reparable inspirada en la biología del micelio de los hongos.
+- **QNTP (Quantum Network Time Protocol):** Un protocolo de sincronización temporal basado en "cristales de tiempo" y aritmética entera para operaciones de alta precisión.
+- **Alta Disponibilidad (HA):** Una arquitectura multi-sitio con failover automático diseñada para resistir fallos catastróficos.
 
 Este dossier técnico profundiza en cada uno de estos componentes, explorando sus principios de diseño, implementación y las tecnologías subyacentes.
 
@@ -14,30 +14,30 @@ Este dossier técnico profundiza en cada uno de estos componentes, explorando su
 
 La red ADM se inspira en la estructura y funcionamiento del micelio, la red subterránea de filamentos que conecta a los hongos. El micelio exhibe características notables:
 
-*   **Redundancia extrema:** Múltiples caminos conectan diferentes puntos de la red, permitiendo la comunicación incluso si algunos filamentos se dañan.
-*   **Adaptabilidad dinámica:** El micelio crece y se adapta a su entorno, buscando nutrientes y evitando obstáculos.
-*   **Resiliencia intrínseca:** La red se autorrepara y se regenera tras sufrir daños.
+- **Redundancia extrema:** Múltiples caminos conectan diferentes puntos de la red, permitiendo la comunicación incluso si algunos filamentos se dañan.
+- **Adaptabilidad dinámica:** El micelio crece y se adapta a su entorno, buscando nutrientes y evitando obstáculos.
+- **Resiliencia intrínseca:** La red se autorrepara y se regenera tras sufrir daños.
 
 ADM traduce estos principios biológicos en una arquitectura de red en malla robusta y adaptable.
 
 **Tabla 1: Paralelos entre Micelio Biológico y ADM Técnico**
 
-| Característica del Micelio | Implementación ADM | Descripción Técnica |
-| :------------------------ | :-------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Redundancia nutricional   | Protocolo batman-adv | batman-adv (Better Approach To Mobile Adhoc Networking) es un protocolo de enrutamiento de capa 2 que crea una red en malla descentralizada. Cada nodo en la red actúa como un enrutador, transmitiendo paquetes a través de múltiples caminos posibles. |
-| Crecimiento direccional  | Métrica TQ dinámica   | La métrica TQ (Transmit Quality) evalúa la calidad del enlace entre nodos. A diferencia de las métricas estáticas, TQ se ajusta dinámicamente en función de factores como la latencia, la pérdida de paquetes y la jitter. Esto permite a ADM adaptarse a las condiciones cambiantes de la red. |
-| Regulación del flujo     | Control de congestión fq_codel/cake | fq_codel (Fair Queueing Controlled Delay) y cake son algoritmos de control de congestión que gestionan el flujo de tráfico en la red. fq_codel evita el bufferbloat, un problema común en las redes modernas que puede causar alta latencia y degradación del rendimiento. Cake es un algoritmo más avanzado que ofrece una gestión de la calidad de servicio (QoS) más granular. |
+| Característica del Micelio | Implementación ADM                  | Descripción Técnica                                                                                                                                                                                                                                                                                                                                                               |
+| :------------------------- | :---------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Redundancia nutricional    | Protocolo batman-adv                | batman-adv (Better Approach To Mobile Adhoc Networking) es un protocolo de enrutamiento de capa 2 que crea una red en malla descentralizada. Cada nodo en la red actúa como un enrutador, transmitiendo paquetes a través de múltiples caminos posibles.                                                                                                                          |
+| Crecimiento direccional    | Métrica TQ dinámica                 | La métrica TQ (Transmit Quality) evalúa la calidad del enlace entre nodos. A diferencia de las métricas estáticas, TQ se ajusta dinámicamente en función de factores como la latencia, la pérdida de paquetes y la jitter. Esto permite a ADM adaptarse a las condiciones cambiantes de la red.                                                                                   |
+| Regulación del flujo       | Control de congestión fq_codel/cake | fq_codel (Fair Queueing Controlled Delay) y cake son algoritmos de control de congestión que gestionan el flujo de tráfico en la red. fq_codel evita el bufferbloat, un problema común en las redes modernas que puede causar alta latencia y degradación del rendimiento. Cake es un algoritmo más avanzado que ofrece una gestión de la calidad de servicio (QoS) más granular. |
 
 ### 2.2. batman-adv: El Corazón de ADM
 
-`batman-adv` es el protocolo de enrutamiento de capa 2 que impulsa a ADM.  Funciona creando una matriz de adyacencia distribuida, donde cada nodo conoce la conectividad y la calidad de los enlaces con sus vecinos.
+`batman-adv` es el protocolo de enrutamiento de capa 2 que impulsa a ADM. Funciona creando una matriz de adyacencia distribuida, donde cada nodo conoce la conectividad y la calidad de los enlaces con sus vecinos.
 
 **Características clave de batman-adv:**
 
-*   **Enrutamiento proactivo:** Cada nodo mantiene una tabla de enrutamiento actualizada, permitiendo la transmisión rápida de paquetes.
-*   **Detección automática de vecinos:** Los nodos descubren automáticamente a sus vecinos mediante el intercambio de mensajes beacon.
-*   **Selección del mejor camino:**  `batman-adv` utiliza una métrica de costo basada en la calidad del enlace para seleccionar el camino óptimo para cada destino.
-*   **Auto-reparación:** Si un enlace falla, `batman-adv` recalcula rápidamente la tabla de enrutamiento y selecciona un camino alternativo.
+- **Enrutamiento proactivo:** Cada nodo mantiene una tabla de enrutamiento actualizada, permitiendo la transmisión rápida de paquetes.
+- **Detección automática de vecinos:** Los nodos descubren automáticamente a sus vecinos mediante el intercambio de mensajes beacon.
+- **Selección del mejor camino:** `batman-adv` utiliza una métrica de costo basada en la calidad del enlace para seleccionar el camino óptimo para cada destino.
+- **Auto-reparación:** Si un enlace falla, `batman-adv` recalcula rápidamente la tabla de enrutamiento y selecciona un camino alternativo.
 
 **Ejemplo de configuración básica de `batman-adv` en Linux:**
 
@@ -59,10 +59,10 @@ ip addr add 192.168.1.1/24 dev bat0
 **Análisis del código:**
 
 1.  `ip link add name bat0 type batman_adv`: Crea una nueva interfaz virtual llamada `bat0` de tipo `batman_adv`. Esta interfaz será el punto de entrada y salida del tráfico de la red ADM en este nodo.
-2.  `ip link set INTERFAZ_FISICA master bat0`:  Asigna una interfaz física existente (por ejemplo, `wlan0` o `eth0`) como esclava de la interfaz `bat0`. Esto significa que el tráfico que llega a través de la interfaz física será manejado por el protocolo `batman-adv`.
+2.  `ip link set INTERFAZ_FISICA master bat0`: Asigna una interfaz física existente (por ejemplo, `wlan0` o `eth0`) como esclava de la interfaz `bat0`. Esto significa que el tráfico que llega a través de la interfaz física será manejado por el protocolo `batman-adv`.
 3.  `ip link set bat0 up`: Activa la interfaz `bat0`.
 4.  `ip link set INTERFAZ_FISICA up`: Activa la interfaz física.
-5.  `ip addr add 192.168.1.1/24 dev bat0`: Asigna una dirección IP a la interfaz `bat0`.  Esta dirección IP se utiliza para la comunicación dentro de la red ADM y es opcional dependiendo de la configuración específica.
+5.  `ip addr add 192.168.1.1/24 dev bat0`: Asigna una dirección IP a la interfaz `bat0`. Esta dirección IP se utiliza para la comunicación dentro de la red ADM y es opcional dependiendo de la configuración específica.
 
 ### 2.3. Integración SPA y Protocolo Yatra
 
@@ -76,7 +76,7 @@ Grafana visualiza la "coherencia" del enlace en formato sexagesimal, lo que faci
 
 El protocolo Yatra implementa la modulación temporal del rebalanceo de datos en el almacenamiento distribuido (Ceph/MinIO). El rebalanceo se realiza en fases temporales siguiendo un patrón 10:5:6:5, evitando la saturación de la red en momentos críticos.
 
-Este patrón podría estar relacionado con la gematría, donde números tienen significado simbólico.  Por ejemplo, el nombre tetragrammaton QHC (יהוה) tiene valores numéricos asociados en diferentes sistemas de gematría. La elección de este patrón podría ser una decisión consciente para imbuir significado al proceso de rebalanceo o simplemente una coincidencia.
+Este patrón podría estar relacionado con la gematría, donde números tienen significado simbólico. Por ejemplo, el nombre tetragrammaton QHC (יהוה) tiene valores numéricos asociados en diferentes sistemas de gematría. La elección de este patrón podría ser una decisión consciente para imbuir significado al proceso de rebalanceo o simplemente una coincidencia.
 
 ### 2.4. Análisis Avanzado de la Métrica TQ
 
@@ -84,10 +84,10 @@ La métrica TQ es central para la toma de decisiones de enrutamiento en ADM. Su 
 
 **Factores que influyen en la métrica TQ:**
 
-*   **Pérdida de paquetes:** La tasa de paquetes perdidos entre dos nodos afecta directamente la calidad del enlace.
-*   **Latencia:** La latencia (retardo) en la transmisión de paquetes entre nodos es un indicador de congestión y calidad del enlace.
-*   **Jitter:** La variación en la latencia (jitter) puede degradar la calidad de las aplicaciones en tiempo real, como VoIP y videoconferencia.
-*   **Ancho de banda disponible:** El ancho de banda disponible en el enlace limita la cantidad de datos que se pueden transmitir.
+- **Pérdida de paquetes:** La tasa de paquetes perdidos entre dos nodos afecta directamente la calidad del enlace.
+- **Latencia:** La latencia (retardo) en la transmisión de paquetes entre nodos es un indicador de congestión y calidad del enlace.
+- **Jitter:** La variación en la latencia (jitter) puede degradar la calidad de las aplicaciones en tiempo real, como VoIP y videoconferencia.
+- **Ancho de banda disponible:** El ancho de banda disponible en el enlace limita la cantidad de datos que se pueden transmitir.
 
 **Posibles implementaciones del cálculo de TQ:**
 
@@ -126,17 +126,17 @@ def calcular_tq(perdida_paquetes, latencia, jitter, ancho_banda):
 **Análisis del código:**
 
 1.  `def calcular_tq(perdida_paquetes, latencia, jitter, ancho_banda):`: Define una función llamada `calcular_tq` que toma cuatro argumentos: la pérdida de paquetes, la latencia, el jitter y el ancho de banda.
-2.  `peso_perdida = -0.5`, etc.: Define los pesos para cada factor.  Los pesos negativos indican que un aumento en ese factor disminuye el valor de TQ.
+2.  `peso_perdida = -0.5`, etc.: Define los pesos para cada factor. Los pesos negativos indican que un aumento en ese factor disminuye el valor de TQ.
 3.  `perdida_normalizada = perdida_paquetes / 100`, etc.: Normaliza los valores de entrada para que estén en un rango similar. Esto es importante porque los diferentes factores pueden tener diferentes unidades y escalas.
 4.  `tq = (peso_perdida * perdida_normalizada + ...)`: Calcula la métrica TQ como una suma ponderada de los factores normalizados.
 5.  `tq = max(0, min(255, int(tq * 255)))`: Asegura que el valor de TQ esté dentro del rango válido de 0 a 255.
 
 ### 2.5. Control de Congestión con fq_codel y Cake
 
-El control de congestión es esencial para mantener un rendimiento óptimo en una red en malla como ADM.  `fq_codel` y `cake` son algoritmos de control de congestión que gestionan el flujo de tráfico para evitar el bufferbloat y garantizar la equidad entre los diferentes flujos.
+El control de congestión es esencial para mantener un rendimiento óptimo en una red en malla como ADM. `fq_codel` y `cake` son algoritmos de control de congestión que gestionan el flujo de tráfico para evitar el bufferbloat y garantizar la equidad entre los diferentes flujos.
 
-*   **fq_codel (Fair Queueing Controlled Delay):**  Combina la gestión de colas justa (Fair Queueing) con el control de retardo (Controlled Delay).  FQ divide el tráfico en múltiples colas, una por cada flujo. Codel monitorea el retardo en cada cola y descarta paquetes si el retardo excede un umbral, evitando el bufferbloat.
-*   **Cake:** Un algoritmo de control de congestión más avanzado que ofrece una gestión de la calidad de servicio (QoS) más granular.  Cake utiliza técnicas como la priorización de paquetes y la limitación de velocidad para garantizar que los flujos críticos reciban el ancho de banda que necesitan.
+- **fq_codel (Fair Queueing Controlled Delay):** Combina la gestión de colas justa (Fair Queueing) con el control de retardo (Controlled Delay). FQ divide el tráfico en múltiples colas, una por cada flujo. Codel monitorea el retardo en cada cola y descarta paquetes si el retardo excede un umbral, evitando el bufferbloat.
+- **Cake:** Un algoritmo de control de congestión más avanzado que ofrece una gestión de la calidad de servicio (QoS) más granular. Cake utiliza técnicas como la priorización de paquetes y la limitación de velocidad para garantizar que los flujos críticos reciban el ancho de banda que necesitan.
 
 ## 3. QNTP: Sincronización de Cristales de Tiempo
 
@@ -144,9 +144,9 @@ El control de congestión es esencial para mantener un rendimiento óptimo en un
 
 NTP (Network Time Protocol) es el protocolo estándar para la sincronización de relojes en redes informáticas. Sin embargo, NTP tiene limitaciones que lo hacen inadecuado para aplicaciones que requieren una precisión extrema:
 
-*   **Uso de números de punto flotante:** NTP utiliza números de punto flotante para representar el tiempo, lo que puede introducir errores de redondeo.
-*   **Drift:** Los relojes locales pueden desviarse con el tiempo debido a variaciones en la temperatura y otros factores. NTP compensa esta desviación, pero no puede eliminarla por completo.
-*   **Falta de coherencia:** NTP no garantiza la coherencia perfecta entre los relojes en la red. Esto puede ser problemático para operaciones que requieren una sincronización precisa, como simulaciones cuánticas.
+- **Uso de números de punto flotante:** NTP utiliza números de punto flotante para representar el tiempo, lo que puede introducir errores de redondeo.
+- **Drift:** Los relojes locales pueden desviarse con el tiempo debido a variaciones en la temperatura y otros factores. NTP compensa esta desviación, pero no puede eliminarla por completo.
+- **Falta de coherencia:** NTP no garantiza la coherencia perfecta entre los relojes en la red. Esto puede ser problemático para operaciones que requieren una sincronización precisa, como simulaciones cuánticas.
 
 ### 3.2. El Concepto de "Cristal de Tiempo"
 
@@ -154,9 +154,9 @@ QNTP (Quantum Network Time Protocol) aborda las limitaciones de NTP introduciend
 
 **Características clave de QNTP:**
 
-*   **Tick Interval:** QNTP utiliza un tick interval de 23,939,835 ns (aproximadamente 41.77 Hz). Esta frecuencia se elige por ser armónica y precisa.
-*   **Aritmética entera:** QNTP utiliza aritmética entera de 64 bits en lugar de números de punto flotante. Esto elimina los errores de redondeo y garantiza una mayor precisión.
-*   **Coherencia:** QNTP se centra en mantener la coherencia entre los relojes en la red, en lugar de simplemente promediar los tiempos.
+- **Tick Interval:** QNTP utiliza un tick interval de 23,939,835 ns (aproximadamente 41.77 Hz). Esta frecuencia se elige por ser armónica y precisa.
+- **Aritmética entera:** QNTP utiliza aritmética entera de 64 bits en lugar de números de punto flotante. Esto elimina los errores de redondeo y garantiza una mayor precisión.
+- **Coherencia:** QNTP se centra en mantener la coherencia entre los relojes en la red, en lugar de simplemente promediar los tiempos.
 
 ### 3.3. Algoritmo de Consenso Ponderado por Coherencia
 
@@ -164,13 +164,13 @@ El algoritmo de consenso de QNTP pondera la contribución de cada nodo a la sinc
 
 **Fórmula del Drift de Consenso:**
 
-$$ Drift_{consenso} = \frac{\sum (Drift_i \times Coherencia_i)}{\sum Coherencia_i} $$
+$$ Drift\_{consenso} = \frac{\sum (Drift_i \times Coherencia_i)}{\sum Coherencia_i} $$
 
 Donde:
 
-*   $Drift_{consenso}$ es el drift de consenso para la red.
-*   $Drift_i$ es el drift del nodo i.
-*   $Coherencia_i$ es la coherencia del nodo i.
+- $Drift_{consenso}$ es el drift de consenso para la red.
+- $Drift_i$ es el drift del nodo i.
+- $Coherencia_i$ es la coherencia del nodo i.
 
 **Transporte mediante Redis PubSub:**
 
@@ -260,8 +260,8 @@ if __name__ == "__main__":
 7.  `self.update_coherence()`: Actualiza la coherencia basada en la variación del drift. Penaliza grandes cambios en el drift, reduciendo la coherencia.
 8.  `self.publish_time()`: Publica el tiempo local y la coherencia en Redis PubSub.
 9.  `self.subscribe_to_time_updates()`: Se suscribe al canal Redis PubSub para recibir actualizaciones de tiempo de otros nodos.
-10. `eval(message['data'].decode('utf-8'))`: **¡PELIGRO!** Utiliza `eval()` para deserializar el mensaje de Redis.  Esto es extremadamente inseguro y debería evitarse a toda costa.  Un atacante podría inyectar código malicioso en el mensaje de Redis y ejecutarlo en el nodo QNTP.  Se debe usar un formato de serialización seguro como `json.loads()`.
-11. `self.drift = (self.drift * 0.9 + self.measure_drift(server_time) * 0.1)`: Simplificación del algoritmo de consenso:  promedio ponderado del drift local con el drift del servidor.
+10. `eval(message['data'].decode('utf-8'))`: **¡PELIGRO!** Utiliza `eval()` para deserializar el mensaje de Redis. Esto es extremadamente inseguro y debería evitarse a toda costa. Un atacante podría inyectar código malicioso en el mensaje de Redis y ejecutarlo en el nodo QNTP. Se debe usar un formato de serialización seguro como `json.loads()`.
+11. `self.drift = (self.drift * 0.9 + self.measure_drift(server_time) * 0.1)`: Simplificación del algoritmo de consenso: promedio ponderado del drift local con el drift del servidor.
 
 **Vulnerabilidad Crítica: Uso Inseguro de `eval()`**
 
@@ -280,8 +280,8 @@ data = json.loads(message['data'].decode('utf-8'))
 
 **Consideraciones de Seguridad Adicionales:**
 
-*   **Autenticación y Autorización de Redis:** Asegurar que solo los nodos QNTP autorizados puedan publicar y suscribirse a los canales de Redis.
-*   **Cifrado de los Mensajes de Redis:** Cifrar los mensajes de Redis para proteger la confidencialidad de los datos.
+- **Autenticación y Autorización de Redis:** Asegurar que solo los nodos QNTP autorizados puedan publicar y suscribirse a los canales de Redis.
+- **Cifrado de los Mensajes de Redis:** Cifrar los mensajes de Redis para proteger la confidencialidad de los datos.
 
 ### 3.5. Implicaciones Físicas y Cuánticas del "Cristal de Tiempo"
 
@@ -297,9 +297,9 @@ La arquitectura de Alta Disponibilidad (HA) de Sentinel está diseñada para gar
 
 **Componentes clave de la arquitectura HA:**
 
-*   **Sitio Primario (On-Premise):** El sitio principal donde se ejecuta la carga de trabajo normal.
-*   **Sitio Secundario (Cloud/DR):** Un sitio de respaldo que puede ser activo (procesando una parte de la carga de trabajo) o asíncrono (replicando datos del sitio primario).
-*   **Failover Automático:** Un mecanismo que detecta fallos en el sitio primario y conmuta automáticamente la carga de trabajo al sitio secundario.
+- **Sitio Primario (On-Premise):** El sitio principal donde se ejecuta la carga de trabajo normal.
+- **Sitio Secundario (Cloud/DR):** Un sitio de respaldo que puede ser activo (procesando una parte de la carga de trabajo) o asíncrono (replicando datos del sitio primario).
+- **Failover Automático:** Un mecanismo que detecta fallos en el sitio primario y conmuta automáticamente la carga de trabajo al sitio secundario.
 
 **Condiciones para el Failover:**
 
@@ -311,11 +311,11 @@ Sentinel protege los componentes críticos de su infraestructura mediante redund
 
 **Tabla 2: Componentes Críticos y Estrategias de HA**
 
-| Componente        | Tecnología         | Estrategia HA                                  |
-| :---------------- | :----------------- | :--------------------------------------------- |
-| DNS               | Pi-hole            | Cluster de 3 nodos independientes sincronizados vía Gravity Sync |
-| Base de Datos     | PostgreSQL         | Cluster Patroni con etcd, failover automático (<30s) |
-| Estado de Sesión  | Redis Sentinel   | Cluster Redis en modo Sentinel (3 nodos)      |
+| Componente       | Tecnología     | Estrategia HA                                                    |
+| :--------------- | :------------- | :--------------------------------------------------------------- |
+| DNS              | Pi-hole        | Cluster de 3 nodos independientes sincronizados vía Gravity Sync |
+| Base de Datos    | PostgreSQL     | Cluster Patroni con etcd, failover automático (<30s)             |
+| Estado de Sesión | Redis Sentinel | Cluster Redis en modo Sentinel (3 nodos)                         |
 
 #### 4.2.1. DNS: La Capa de Supervivencia
 
@@ -335,9 +335,9 @@ El archivo `hexagonal_control.py` sugiere un patrón de Puertos y Adaptadores ll
 
 **Principios de la Arquitectura Hexagonal:**
 
-*   **Núcleo:** Lógica de negocio pura (en Sentinel, la matemática SPA).
-*   **Adaptadores:** Interfaces con el mundo exterior (sensores, red, almacenamiento).
-*   **Puertos:** Interfaces que definen cómo el núcleo interactúa con los adaptadores.
+- **Núcleo:** Lógica de negocio pura (en Sentinel, la matemática SPA).
+- **Adaptadores:** Interfaces con el mundo exterior (sensores, red, almacenamiento).
+- **Puertos:** Interfaces que definen cómo el núcleo interactúa con los adaptadores.
 
 **Implementación Física Hexagonal:**
 
@@ -395,16 +395,16 @@ class SentinelController:
 
 **Tabla 3: Resumen de Tecnologías Clave y Mejoras Sentinel**
 
-| Componente | Tecnología Open Source | Mejora Sentinel                                  | Beneficios                                                                                                                                                                                                               |
-| :--------- | :--------------------- | :----------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Mesh       | `batman-adv`         | Métricas SPA + AQM (fq_codel/cake)             | Enrutamiento adaptable y robusto, calidad de enlace mejorada, control de congestión eficiente, priorización de tráfico.                                                                                                |
-| Sync       | NTP                    | **QNTP** (Isochronous Oscillator (ITO)s, No-Floats)           | Sincronización de alta precisión, eliminación de errores de redondeo, coherencia mejorada, idóneo para aplicaciones que requieren alta precisión temporal.                                                                  |
-| DB HA      | PostgreSQL           | **Patroni** + Replicación Asíncrona Cloud        | Failover automático, protección contra la pérdida de datos, recuperación rápida en caso de fallo.                                                                                                                        |
-| DNS        | Pi-hole                | Cluster de 3 nodos independientes               | Alta disponibilidad del servicio DNS, protección contra fallos de un único punto, continuidad del servicio incluso en caso de fallo de Sentinel.                                                                        |
-| Storage    | MinIO/Ceph             | Modulación de rebalanceo **QHC**              | Evita la saturación de la red durante el rebalanceo de datos, optimización del rendimiento, posible armonización con fases temporales basadas en la gematría (QHC).                                                 |
+| Componente | Tecnología Open Source | Mejora Sentinel                                     | Beneficios                                                                                                                                                          |
+| :--------- | :--------------------- | :-------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Mesh       | `batman-adv`           | Métricas SPA + AQM (fq_codel/cake)                  | Enrutamiento adaptable y robusto, calidad de enlace mejorada, control de congestión eficiente, priorización de tráfico.                                             |
+| Sync       | NTP                    | **QNTP** (Isochronous Oscillator (ITO)s, No-Floats) | Sincronización de alta precisión, eliminación de errores de redondeo, coherencia mejorada, idóneo para aplicaciones que requieren alta precisión temporal.          |
+| DB HA      | PostgreSQL             | **Patroni** + Replicación Asíncrona Cloud           | Failover automático, protección contra la pérdida de datos, recuperación rápida en caso de fallo.                                                                   |
+| DNS        | Pi-hole                | Cluster de 3 nodos independientes                   | Alta disponibilidad del servicio DNS, protección contra fallos de un único punto, continuidad del servicio incluso en caso de fallo de Sentinel.                    |
+| Storage    | MinIO/Ceph             | Modulación de rebalanceo **QHC**                    | Evita la saturación de la red durante el rebalanceo de datos, optimización del rendimiento, posible armonización con fases temporales basadas en la gematría (QHC). |
 
 ## 6. Conclusiones
 
 La arquitectura de red Sentinel representa un enfoque innovador para la construcción de infraestructuras resilientes, precisas y adaptables. Al inspirarse en la biología del micelio y en los principios de la física cuántica, Sentinel ofrece ventajas significativas sobre las arquitecturas tradicionales. ADM proporciona una red en malla robusta y auto-reparable, QNTP ofrece una sincronización temporal de alta precisión, y la arquitectura HA garantiza la continuidad del servicio incluso en caso de fallos catastróficos. La arquitectura hexagonal permite aislar fallos y mantener la coherencia de la red. Sentinel es una plataforma ideal para aplicaciones que requieren alta disponibilidad, precisión temporal y resiliencia.
 
-**Advertencia:**  El ejemplo de código QNTP presentado incluye una vulnerabilidad de seguridad crítica (uso de `eval()`).  Se debe corregir esta vulnerabilidad antes de implementar QNTP en un entorno de producción.
+**Advertencia:** El ejemplo de código QNTP presentado incluye una vulnerabilidad de seguridad crítica (uso de `eval()`). Se debe corregir esta vulnerabilidad antes de implementar QNTP en un entorno de producción.

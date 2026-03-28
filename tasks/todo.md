@@ -42,6 +42,9 @@ Lista de tareas para la ejecución del despliegue en CubePath (Rocky Linux 10, 4
 - [x] Iniciar el Dashboard en el puerto 3000 (Verificado en `vps23309.cubepath.net`).
 - [/] Probar el **Arco de Reflejo**: Verificar bloqueo de red al llegar la Coherencia Bio a 0.
 - [ ] Comprobar el log de RingBuffer del kernel (`bpftool prog list`).
+- [ ] cambiar el puerto 22 al 4222
+- [ ] verificar log y reinicios del servidor
+- [ ]
 
 ---
 

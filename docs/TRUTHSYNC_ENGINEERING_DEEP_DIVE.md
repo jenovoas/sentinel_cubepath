@@ -44,12 +44,12 @@ Evaluamos la densidad de información en S60. Si la señal es "demasiado perfect
 Cada decisión de TruthSync es sellada inmutablemente:
 - **Payload**: `[Row_ID | Lyapunov | Entropy | S60_Score]`.
 - **Hashing**: Procesado mediante **SHA3-512** (Keccak).
-- **CertificationSeal**: Una cadena única que permite auditorías forenses posteriores para validar que el firewall actuó bajo principios matemáticos probables.
+- **CertificationSeal**: Una cadena única que permite auditorías técnicas de integridad para validar que el firewall actuó bajo principios matemáticos probables.
 
 ---
 
 > [!IMPORTANT]
-> Esta restauración de ingeniería eleva a Sentinel-Cortex de un prototipo funcional a un sistema de **seguridad de grado judicial**, donde cada bloqueo de syscall es demostrable matemáticamente.
+> Esta restauración de ingeniería eleva a Sentinel-Cortex de un prototipo funcional a un sistema de **seguridad de grado de producción crítica**, donde cada bloqueo de syscall es demostrable matemáticamente.
 
 ---
 *Ingeniería de Verdad - Proyecto Sentinel Ring-0 - CubePath 2026*
