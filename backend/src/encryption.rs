@@ -8,6 +8,7 @@ use crate::resonant::ResonantMemory;
 use crate::math::S60;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+#[derive(Default)]
 pub struct DynamicEncryption {
     pub current_layer_hash: String,
 }

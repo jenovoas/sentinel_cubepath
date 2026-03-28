@@ -7,8 +7,8 @@ use crate::math::S60;
 
 /// Factor de sintonía maestro (1.366... en S60)
 pub const TUNING_CONSTANT: i64 = 63732100000; // Aproximado
-
 pub struct PhysicsEngine {
+#[derive(Default)]
     pub tuning: S60,
 }
 

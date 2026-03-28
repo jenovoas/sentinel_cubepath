@@ -28,6 +28,7 @@ pub struct CrystalState {
 /// Oscilador piezoeléctrico virtual sintonizado a matemáticas Base-60.
 /// Actúa como celda de memoria resonante con dinámica física real.
 #[derive(Clone)]
+#[derive(Default)]
 pub struct SovereignCrystal {
     pub name: String,
     /// Amplitud de vibración (energía almacenada)
@@ -114,6 +115,13 @@ impl SovereignCrystal {
     }
 }
 
+impl Default for SovereignCrystal {
+#[derive(Default)]
+    fn default() -> Self {
+        Self::new("Default-Node")
+    }
+}
+
 /// Red de cristales acoplados: transferencia de energía por simpatía vibratoria.
 /// Portado desde quantum/crystal_lattice.py (CrystalLattice).
 pub struct CrystalLattice {
@@ -197,5 +205,11 @@ impl CrystalLattice {
         if active.is_empty() { return S60::zero(); }
         let sum = active.iter().fold(S60::zero(), |acc, c| acc + c.get_amplitude());
         S60::from_raw(sum.to_raw() / active.len() as i64)
+    }
+}
+
+impl Default for CrystalLattice {
+    fn default() -> Self {
+        Self::new(60)
     }
 }

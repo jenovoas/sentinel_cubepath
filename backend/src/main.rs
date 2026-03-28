@@ -257,28 +257,31 @@ async fn main() {
             let mut bio = bio_task.lock().unwrap();
             bio.tick_entropy();
 
-            // --- AI BUFFER CASCADE (PREDICTIVE TELEMETRY) ---
-            {
-                let mut pk = state_clone.predictive_kernel.lock().unwrap();
-                pk.push(predictive::S60Vector {
-                    amplitude: bio.coherence.to_raw(),
-                    phase: resonance.to_raw(),
-                    entropy: (tick % 100) as i64, 
-                });
-                
-                // --- ACCELERATED RESONANT BUFFER INJECTION ---
-                state_clone.resonant_buffer.push(bio.coherence);
+            // 🛡️ [RING-0] INFRASTRUCTURE INTEGRITY (Anti-AIOpsDoom)
+            let biometric_state = core.truthsync.b_verifier.capture_liveness();
+            
+            // Register liveness in the predictive kernel
+            core.predictive_kernel.push(biometric_state);
+            
+            let is_integral = core.truthsync.verify_infrastructure_integrity(
+                &core.predictive_kernel.internal_buffer, 
+                biometric_state
+            );
 
-                if pk.trigger_preventive_healing() {
-                    let _ = reset_tx.send(CortexEvent {
-                        timestamp_ns: system_now_ns,
-                        pid: 0,
-                        event_type: "PREDICTIVE_HEALING_ACTIVE".to_string(),
-                        message: "AI Buffer Cascade triggered preventive system healing".to_string(),
-                        entropy_s60_raw: pk.measure_coherence(),
-                        severity: 1,
-                    });
-                }
+            if !is_integral {
+                tracing::error!("🔥 [AIOpsDoom] INFRASTRUCTURE BREACH DETECTED! Biometric/Buffer dissonance.");
+                let _ = bridge.set_quarantine_mode(true);
+            }
+
+            if core.predictive_kernel.trigger_preventive_healing() {
+                let _ = reset_tx.send(CortexEvent {
+                    timestamp_ns: system_now_ns,
+                    pid: 0,
+                    event_type: "PREDICTIVE_HEALING_ACTIVE".to_string(),
+                    message: "AI Buffer Cascade triggered preventive system healing".to_string(),
+                    entropy_s60_raw: core.predictive_kernel.measure_coherence().to_raw(),
+                    severity: 1,
+                });
             }
 
             // Check for Bio-Coherence (The soul of the system)

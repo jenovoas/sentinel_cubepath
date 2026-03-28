@@ -7,6 +7,7 @@ pub enum SystemSovereignty {
     Open,     // Maintenance mode
     Quarantine, // Cognitive breach detected
 }
+#[derive(Default)]
 
 pub struct StateController {
     current_sovereignty: SystemSovereignty,

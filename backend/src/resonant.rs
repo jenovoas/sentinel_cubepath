@@ -45,3 +45,9 @@ impl ResonantMemory {
         self.lattice.total_energy()
     }
 }
+
+impl Default for ResonantMemory {
+    fn default() -> Self {
+        Self::new(1024)
+    }
+}

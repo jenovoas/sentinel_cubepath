@@ -6,6 +6,7 @@
 use crate::math::S60;
 use std::collections::VecDeque;
 
+#[derive(Default)]
 pub struct QuantumScheduler {
     queue: VecDeque<u32>, // IDs o PIDs de eventos pendientes
     overflow_limit: usize,

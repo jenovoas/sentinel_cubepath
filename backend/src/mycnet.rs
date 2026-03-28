@@ -15,10 +15,12 @@ use tracing::{info, warn};
 
 /// MyCNet (Red de Micelio) ADM Mesh Hub
 /// Matriz de 91 Nodos (Rings 5) simulando enrutamiento hexagonal ADM/Batman-adv.
+#[derive(Default)]
 pub struct HexagonalLattice {
     pub size: usize,
     pub nodes: Vec<AdmogmPacket>,
     pub plasma_shield_active: bool,
+#[derive(Default)]
 }
 
 impl HexagonalLattice {
@@ -60,24 +62,14 @@ impl HexagonalLattice {
 
 // ==========================================
 // COMPRESIÓN FRACTAL (ADM-OGM PACKET)
+#[derive(Default)]
 // ==========================================
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct AdmogmPacket {
     pub amplitude_chunk: i64,    // Canal A (Energía/Datos)
     pub phase_hash: [u8; 32],    // Canal B (Firma/Fase invisible)
     pub lattice_node_idx: usize, // Coord hexagonal (Estado Difuso)
     pub origin_ts: Option<u64>,  // Registro de tiempo para RTT (Latencia TQ)
-}
-
-impl Default for AdmogmPacket {
-    fn default() -> Self {
-        Self {
-            amplitude_chunk: 0,
-            phase_hash: [0; 32],
-            lattice_node_idx: 0,
-            origin_ts: None,
-        }
-    }
 }
 
 // ==========================================

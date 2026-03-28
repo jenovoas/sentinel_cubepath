@@ -1,10 +1,12 @@
 //! 📚 TruthSync: Mathematical Integrity Protocol (Plimpton 322)
 //! 
 //! Verified against the standard sexagesimal table.
-//! Part of the Sentinel Cognitive Firewall sanitization layer.
+//! Integrated with Quantum Resonant Buffer and Production Biometric Verifier.
 
-use crate::math::{S60, S60Math};
+use crate::math::S60;
 use crate::security::soul_verifier::{calculate_lyapunov_s60, chaos_entropy_s60};
+use crate::security::soul_verifier_production::BiometricVerifier;
+use crate::quantum::buffer_system::ResonantBuffer;
 use std::collections::HashMap;
 use sha3::{Digest, Sha3_512};
 
@@ -12,6 +14,7 @@ use sha3::{Digest, Sha3_512};
 pub struct TruthSync {
     ratios: HashMap<u32, S60>,
     tolerance: i64,
+    pub b_verifier: BiometricVerifier,
 }
 
 #[derive(serde::Serialize)]
@@ -47,6 +50,7 @@ impl TruthSync {
         Self {
             ratios,
             tolerance: 1000, 
+            b_verifier: BiometricVerifier::new(),
         }
     }
 
@@ -83,16 +87,16 @@ impl TruthSync {
     /// AIOpsShield Logic: Detect AIOpsDoom (Malicious Hallucinations)
     pub fn detect_aiops_doom(&self, entropy_raw: i64) -> bool {
         if entropy_raw < 0 || entropy_raw > 1_000_000_000_000 { return true; }
-        if entropy_raw == 3735928559 { return true; } // Hex magic number check
+        if entropy_raw == 3735928559 { return true; } 
 
         let claimed = S60::from_raw(entropy_raw);
         for ratio in self.ratios.values() {
             let diff = (ratio.to_raw() as i128 - claimed.to_raw() as i128).abs();
             if diff < (ratio.to_raw() as i128 / 60) { 
-                return false; // Valid resonance found
+                return false; 
             }
         }
-        true // No harmonic match = potential hallucination
+        true 
     }
 
     pub fn sanitize_telemetry(
@@ -103,9 +107,18 @@ impl TruthSync {
         _timestamp: u64
     ) -> u8 {
         if self.detect_aiops_doom(entropy_raw) {
-            5 // CRITICAL / QUARANTINE
+            5 
         } else {
-            0 // OK
+            0 
         }
+    }
+
+    /// Integrated verification comparing the Resonant Buffer state with the Biometric Liveness
+    pub fn verify_infrastructure_integrity(&self, buffer: &ResonantBuffer, biometric_state: S60) -> bool {
+        let load = buffer.load_factor();
+        if load.to_raw() > (S60::SCALE_0 * 7 / 10) && biometric_state.to_raw() < (S60::SCALE_0 / 2) {
+            return false;
+        }
+        true
     }
 }
