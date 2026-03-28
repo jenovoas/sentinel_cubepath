@@ -96,12 +96,11 @@ export function Dashboard() {
       {/* Sidebar */}
       <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
 
-      {/* Main Content Area - Allowing Global Scroll for accessibility to footer */}
       <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-2 pb-8">
         {activeTab === "about" ? (
           <AboutView />
         ) : activeTab === "dashboard" ? (
-          <div className="flex flex-col space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
+          <div className="animate-in fade-in slide-in-from-right-4 duration-500 flex flex-col space-y-6">
             {/* 1. TOP AREA (Fixed relative to content) */}
             <div className="space-y-4">
               <StatsGrid status={status} />
@@ -146,7 +145,7 @@ export function Dashboard() {
                     </div>
                     <div className="flex items-center gap-2">
                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                       <span className="text-[8px] font-bold text-emerald-500/80 uppercase tracking-widest">Live Stream</span>
+                       <span className="text-[8px] font-bold text-emerald-500/80 uppercase tracking-widest">Señal en Vivo</span>
                     </div>
                   </div>
                   <div className="flex-1 min-h-0 relative">
@@ -181,8 +180,8 @@ export function Dashboard() {
                         <ShieldCheck className="w-8 h-8 text-emerald-400" />
                       </div>
                       <div>
-                        <h2 className="text-sm font-black text-white uppercase tracking-tighter">Sentinel TruthSync Certified</h2>
-                        <p className="text-slate-500 text-[9px] font-medium uppercase tracking-[0.3em] mt-1">Verified Plimpton 322 Phase Alignment</p>
+                        <h2 className="text-sm font-black text-white uppercase tracking-tighter">Sentinel TruthSync Certificado</h2>
+                        <p className="text-slate-500 text-[9px] font-medium uppercase tracking-[0.3em] mt-1">Alineación de Fase Plimpton 322 Verificada</p>
                         <div className="flex gap-2 mt-3">
                            <span className={clsx(
                              "px-2 py-0.5 bg-slate-950 border rounded text-[8px] font-bold mono",
@@ -226,8 +225,8 @@ export function Dashboard() {
                         SNN Cognitive Interface stability threshold: 88.4% required for full Ring-0 lockdown.
                       </p>
                     </div>
-                  </div>
                </div>
+            </div>
             </div>
           </div>
         ) : activeTab === "matrix" ? (
@@ -238,35 +237,35 @@ export function Dashboard() {
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-black uppercase tracking-tighter text-white">Complexity Matrix</h1>
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">S60 Algorithmic Performance — Ring-0 Empirical Data</p>
+                <h1 className="text-3xl font-black uppercase tracking-tighter text-white">Matriz de Complejidad</h1>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Rendimiento Algorítmico S60 — Datos Empíricos Ring-0</p>
               </div>
               <div className="px-4 py-2 bg-sky-500/10 border border-sky-500/20 rounded-xl flex items-center gap-3">
                 <div className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
-                <span className="text-[10px] font-black text-sky-400 tracking-widest uppercase">O(1) Verified</span>
+                <span className="text-[10px] font-black text-sky-400 tracking-widest uppercase">O(1) Verificado</span>
               </div>
             </div>
 
             <div className="glass-card p-6 space-y-4">
-              <h2 className="text-[11px] font-extrabold uppercase tracking-[0.3em] text-slate-300 mb-4">📊 Benchmark Table — Hardware Validated</h2>
+              <h2 className="text-[11px] font-extrabold uppercase tracking-[0.3em] text-slate-300 mb-4">📊 Benchmark — Validado en Hardware</h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-[10px] font-mono">
                   <thead>
                     <tr className="border-b border-white/5 text-slate-500 uppercase tracking-wider">
-                      <th className="text-left py-2 pr-4">Operation</th>
-                      <th className="text-left py-2 pr-4">Algorithm</th>
-                      <th className="text-left py-2 pr-4">Complexity</th>
-                      <th className="text-left py-2 pr-4">Latency (ns)</th>
-                      <th className="text-left py-2">Memory</th>
+                      <th className="text-left py-2 pr-4">Operación</th>
+                      <th className="text-left py-2 pr-4">Algoritmo</th>
+                      <th className="text-left py-2 pr-4">Complejidad</th>
+                      <th className="text-left py-2 pr-4">Latencia (ns)</th>
+                      <th className="text-left py-2">Memoria</th>
                     </tr>
                   </thead>
                   <tbody className="space-y-1">
                     {[
-                      { op: "XDP Filter", algo: "BPF_MAP_LOOKUP_ELEM", complexity: "O(1)", latency: `${(38 + Math.random() * 4).toFixed(1)} ns`, mem: "64 B/entry", color: "emerald" },
-                      { op: "LSM Hook", algo: "Bitmask S60 Analysis", complexity: "O(1)", latency: `${(status?.cortex_latency_ms * 1000 || 80).toFixed(1)} ns`, mem: "32 B/hook", color: "emerald" },
-                      { op: "S60 Arithmetic", algo: "Fixed-Point i64×i64", complexity: "O(1)", latency: `${(8 + Math.random() * 3).toFixed(1)} ns`, mem: "8 B/SPA", color: "sky" },
-                      { op: "TruthSync Scan", algo: "Plimpton 322 Lookup", complexity: "O(1)", latency: `${(142 + Math.random() * 15).toFixed(1)} ns`, mem: "256 B/cache", color: "amber" },
-                      { op: "SNN Hub", algo: "Vector Memory Lookup", complexity: "O(log N)", latency: " < 300 ns", mem: "1 KB/node", color: "slate" },
+                      { op: "Filtro XDP", algo: "BPF_MAP_LOOKUP_ELEM", complexity: "O(1)", latency: `${(38 + Math.random() * 4).toFixed(1)} ns`, mem: "64 B/entrada", color: "emerald" },
+                      { op: "Hook LSM", algo: "Análisis Bitmask S60", complexity: "O(1)", latency: `${(status?.cortex_latency_ms * 1000 || 80).toFixed(1)} ns`, mem: "32 B/hook", color: "emerald" },
+                      { op: "Aritmética S60", algo: "Punto Fijo i64×i64", complexity: "O(1)", latency: `${(8 + Math.random() * 3).toFixed(1)} ns`, mem: "8 B/SPA", color: "sky" },
+                      { op: "Escaneo TruthSync", algo: "Búsqueda Plimpton 322", complexity: "O(1)", latency: `${(142 + Math.random() * 15).toFixed(1)} ns`, mem: "256 B/caché", color: "amber" },
+                      { op: "Hub SNN", algo: "Búsqueda Vector de Memoria", complexity: "O(log N)", latency: " < 300 ns", mem: "1 KB/nodo", color: "slate" },
                     ].map((row) => (
                       <tr key={row.op} className="border-b border-white/5 hover:bg-white/2 transition-colors">
                         <td className="py-2.5 pr-4 font-bold text-white">{row.op}</td>
@@ -283,14 +282,13 @@ export function Dashboard() {
 
             <div className="grid grid-cols-3 gap-4">
               {[
-                { label: "S60 Precision", value: "±0.0077 ppm", sub: "vs IEEE 754 errors", color: "emerald" },
-                { label: "CPU Savings", value: "62.9%", sub: "vs ptrace-interceptors", color: "sky" },
-                { label: "Scheduler Accuracy", value: "94.4%", sub: "Adaptive burst mode", color: "amber" },
+                { label: "Precisión S60", value: "±0.0077 ppm", sub: "vs errores IEEE 754", color: "emerald" },
+                { label: "Ahorro CPU", value: "62.9%", sub: "vs interceptores ptrace", color: "sky" },
+                { label: "Precisión Planificación", value: "94.4%", sub: "Modo ráfaga adaptativo", color: "amber" },
               ].map(m => (
                 <div key={m.label} className="glass-card p-4 text-center">
                   <p className="text-[9px] text-slate-500 uppercase tracking-widest mb-2">{m.label}</p>
                   <p className={`text-2xl font-black ${m.color === "emerald" ? "text-emerald-400" : m.color === "sky" ? "text-sky-400" : "text-amber-400"}`}>{m.value}</p>
-                  <p className="text-[8px] text-slate-600 mt-1">{m.sub}</p>
                 </div>
               ))}
             </div>
@@ -343,7 +341,6 @@ export function Dashboard() {
               </div>
             </div>
           </div>
-
         ) : activeTab === "vault" ? (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
             <div className="flex items-center justify-between">
@@ -353,16 +350,16 @@ export function Dashboard() {
               </div>
               <div className="px-4 py-2 bg-slate-800 border border-white/5 rounded-xl flex items-center gap-3">
                 <div className="w-2 h-2 rounded-full bg-slate-500" />
-                <span className="text-[10px] font-black text-slate-400 tracking-widest uppercase">Immutable Log</span>
+                <span className="text-[10px] font-black text-slate-400 tracking-widest uppercase">Registro Inmutable</span>
               </div>
             </div>
             <div className="glass-card p-0 overflow-hidden font-mono text-[10px]">
               <div className="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border-b border-white/5 shrink-0">
                 <div className="flex gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-rose-500/60" /><div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" /><div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" /></div>
-                <span className="text-slate-500 text-[9px] ml-2">sentinel-cortex / kernel audit log</span>
+                <span className="text-slate-500 text-[9px] ml-2">sentinel-cortex / registro de auditoría del kernel</span>
               </div>
               <div className="p-4 space-y-1.5 overflow-y-auto max-h-[500px] custom-scrollbar bg-slate-950/80">
-                {vaultEvents.length === 0 && <div className="text-slate-600 opacity-50 italic">Awaiting kernel audit log stream...</div>}
+                {vaultEvents.length === 0 && <div className="text-slate-600 opacity-50 italic">Esperando flujo de auditoría del kernel...</div>}
                 {vaultEvents.map((ev, i) => {
                   const isCritical = ev.severity >= 3 || ev.event_type.includes("BLOCK") || ev.event_type.includes("ALERT");
                   const isSys = ev.event_type.includes("HEALING") || ev.event_type.includes("PULSE");
@@ -378,7 +375,6 @@ export function Dashboard() {
               </div>
             </div>
           </div>
-
         ) : activeTab === "settings" ? (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
             <div className="flex items-center justify-between">
@@ -388,7 +384,7 @@ export function Dashboard() {
               </div>
               <div className="px-4 py-2 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-3">
                 <Lock className="w-3 h-3 text-rose-400" />
-                <span className="text-[10px] font-black text-rose-400 tracking-widest uppercase">Admin Mode Required</span>
+                <span className="text-[10px] font-black text-rose-400 tracking-widest uppercase">Modo Administrador Requerido</span>
               </div>
             </div>
 
@@ -411,7 +407,7 @@ export function Dashboard() {
                 <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-300 border-b border-white/5 pb-2">Resonance Clock</h3>
                 <div className="flex items-center gap-6">
                   <div className="flex-1 space-y-1">
-                    <p className="text-[9px] text-slate-500 uppercase font-black">Crystal Frequency</p>
+                    <p className="text-[9px] text-slate-500 uppercase font-black">Puntuación Coherencia IA</p>
                     <p className="text-2xl font-black text-white italic">41.00 <span className="text-xs text-slate-600">Hz</span></p>
                   </div>
                   <div className="w-12 h-12 rounded-full border-2 border-slate-800 flex items-center justify-center">
@@ -419,7 +415,7 @@ export function Dashboard() {
                   </div>
                 </div>
                 <div className="p-3 bg-white/5 rounded-xl border border-white/5 text-[9px] text-slate-500 italic">
-                  * Note: Clock sync is handled automatically by the TruthSync module. Manual override may cause dissonant state.
+                    * Nota: La sincronización del reloj es gestionada automáticamente por el módulo TruthSync. La anulación manual puede causar estado disonante.
                 </div>
               </div>
             </div>
@@ -427,14 +423,14 @@ export function Dashboard() {
             <div className="glass-card p-6">
                <div className="flex items-center gap-2 mb-4">
                   <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                  <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-300">Enforcement Policies</h3>
+                  <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-300">Políticas de Aplicación</h3>
                </div>
                <div className="grid grid-cols-2 gap-4">
                   {[
-                    { label: "Execve Interception", status: "ENFORCE", desc: "Block malformed syscalls" },
-                    { label: "XDP Packet Purge", status: "MONITOR", desc: "Log but don't drop" },
-                    { label: "Bio-Silence Auto-Seal", status: "ACTIVE", desc: "Seal after 30s inactivity" },
-                    { label: "Audit Log Persist", status: "ENABLED", msg: "Writing to /var/log/sentinel" },
+                    { label: "Intercepción Execve", status: "ENFORCE", desc: "Bloquear syscalls malformados" },
+                    { label: "Purga de Paquetes XDP", status: "MONITOR", desc: "Registrar sin descartar" },
+                    { label: "Sellado Auto Bio-Silencio", status: "ACTIVE", desc: "Sellar tras 30s de inactividad" },
+                    { label: "Persistencia Log Auditoría", status: "ENABLED", desc: "Escribiendo en /var/log/sentinel" },
                   ].map((p, i) => (
                     <div key={i} className="p-4 bg-slate-950/50 rounded-2xl border border-white/5 flex justify-between items-center group hover:bg-emerald-500/5 transition-all">
                        <div>
@@ -447,7 +443,6 @@ export function Dashboard() {
                </div>
             </div>
           </div>
-
         ) : (
           <div className="flex flex-col items-center justify-center h-full min-h-[400px] text-slate-600 space-y-4 glass-card border-dashed">
              <ShieldAlert className="w-12 h-12 opacity-20" />

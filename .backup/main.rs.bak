@@ -36,8 +36,6 @@ use std::sync::{Arc, Mutex};
 use tokio::sync::broadcast;
 use std::fs;
 use crate::math::S60 as S60;
-use crate::ebpf::EbpfBridge;
-
 
 // ============================================================================
 // MODELS
@@ -63,23 +61,22 @@ pub struct SentinelStatusResponse {
     pub effective_mass: i64,
     pub quantum_load: i64,
     pub truthsync_seal: String,
-    pub truthsync_seal: String,
-    pub p322_ratio_integrity: S60,
+    pub p322_ratio_integrity: f64,
     pub threat_count: u64,
-    pub cortex_latency: S60,
+    pub cortex_latency_ms: f64,
 }
 
 #[derive(Deserialize)]
 pub struct TruthClaimRequest {
     pub engine: String,
     pub claim_payload: String,
-    pub trust_threshold_raw: i64,
+    pub trust_threshold: f64,
 }
 
 #[derive(Serialize)]
 pub struct TruthClaimResponse {
     pub claim_valid: bool,
-    pub sentinel_score: S60,
+    pub sentinel_score: f64,
     pub truthsync_cache_hit: bool,
     pub ring0_intercepts: u32,
     pub harmonic_state: String,
@@ -95,18 +92,10 @@ pub struct LatticeStateResponse {
     pub global_tick: u64,
 }
 
-
-#[derive(Serialize)]
-pub struct NeuralStateResponse {
-    pub membranes: Vec<neural::NeuralMembraneState>,
-    pub global_firing_rate_raw: i64,
-}
-
-
 #[derive(Deserialize)]
-pub struct TruthPulseRequest {
-    pub pulse_type: String,
-    pub energy_s60_raw: i64,
+pub struct SimulateTelemetryRequest {
+    pub event_type: String,
+    pub entropy_s60_raw: i64,
     pub severity: u8,
 }
 
@@ -194,21 +183,19 @@ async fn main() {
     }
 
     // Real eBPF Bridge (System Monitor - ALL Rings)
-    let ebpf_tx = event_tx.clone();
-    let ebpf_wal = state.wal.clone();
-    tokio::spawn(async move {
-        let bridge = EbpfBridge::new(vec![
-
-            "/sys/fs/bpf/cortex_events".to_string(),
-            "/sys/fs/bpf/cognitive_events".to_string(),
-            "/sys/fs/bpf/burst_events".to_string(),
-        ]);
-        if let Err(e) = bridge.run_monitor(ebpf_tx, ebpf_wal).await {
-            tracing::error!("[BPF_CRITICAL] eBPF Bridge Error: {}. Environment mismatch?", e);
+        let ebpf_tx = event_tx.clone();
+        let ebpf_wal = state.wal.clone();
+        tokio::spawn(async move {
+            let bridge = ebpf::EbpfBridge::new(vec![
+                "/sys/fs/bpf/cortex_events".to_string(),
+                "/sys/fs/bpf/cognitive_events".to_string(),
+                "/sys/fs/bpf/burst_events".to_string(),
+            ]);
+            if let Err(e) = bridge.run_monitor(ebpf_tx, ebpf_wal).await {
+                tracing::error!("[BPF_CRITICAL] eBPF Bridge Error: {}. Environment mismatch?", e);
             tracing::warn!("[SAFETY] System operating in 'Graceful Degraded' mode (Logic-Only)");
         }
     });
-
 
     // Spawn bio-resonance background task (The heartbeat of S60)
     let bio_task = bio_resonator.clone();
@@ -216,8 +203,7 @@ async fn main() {
     let state_clone = state.clone();
     tokio::spawn(async move {
         let mut system_quarantined = false;
-        let bridge = EbpfBridge::new(vec!["/sys/fs/bpf/cortex_events".to_string()]);
-
+        let bridge = ebpf::EbpfBridge::new(vec!["/sys/fs/bpf/cortex_events".to_string()]);
         // Cristal de Tiempo (Oscilador Isócrono): 23,939,835 ns (41.7713 Hz)
         let crystal_tick_ns = 23_939_835;
         let mut next_tick = std::time::Instant::now() + std::time::Duration::from_nanos(crystal_tick_ns);
@@ -269,42 +255,34 @@ async fn main() {
             });
 
             let mut bio = bio_task.lock().unwrap();
-            let system_entropy = get_system_entropy();
-            bio.tick_entropy(system_entropy, tick);
+            bio.tick_entropy();
 
             // 🛡️ [RING-0] INFRASTRUCTURE INTEGRITY (Anti-AIOpsDoom)
-            // Using bio coherence as a surrogate for liveness in the predictive kernel
-            let biometric_state = bio.coherence;
+            let biometric_state = core.truthsync.b_verifier.capture_liveness();
             
             // Register liveness in the predictive kernel
-            state_clone.predictive_kernel.lock().unwrap().push(biometric_state);
+            core.predictive_kernel.push(biometric_state);
             
-            let is_integral = state_clone.truthsync.verify_infrastructure_integrity(
-                &state_clone.predictive_kernel.lock().unwrap().internal_buffer, 
+            let is_integral = core.truthsync.verify_infrastructure_integrity(
+                &core.predictive_kernel.internal_buffer, 
                 biometric_state
             );
 
-
-
             if !is_integral {
                 tracing::error!("🔥 [AIOpsDoom] INFRASTRUCTURE BREACH DETECTED! Biometric/Buffer dissonance.");
-                let mut bridge = EbpfBridge::new(vec!["/sys/fs/bpf/cortex_events".to_string()]);
-
                 let _ = bridge.set_quarantine_mode(true);
             }
 
-
-            if state_clone.predictive_kernel.lock().unwrap().trigger_preventive_healing() {
+            if core.predictive_kernel.trigger_preventive_healing() {
                 let _ = reset_tx.send(CortexEvent {
                     timestamp_ns: system_now_ns,
                     pid: 0,
                     event_type: "PREDICTIVE_HEALING_ACTIVE".to_string(),
                     message: "AI Buffer Cascade triggered preventive system healing".to_string(),
-                    entropy_s60_raw: state_clone.predictive_kernel.lock().unwrap().measure_coherence().to_raw(),
+                    entropy_s60_raw: core.predictive_kernel.measure_coherence().to_raw(),
                     severity: 1,
                 });
             }
-
 
             // Check for Bio-Coherence (The soul of the system)
             let is_doom = state_clone.truthsync.detect_aiops_doom(bio.coherence.to_raw());
@@ -319,10 +297,7 @@ async fn main() {
                 system_quarantined = true;
             } else if bio.coherence.to_raw() > 0 && !is_doom && system_quarantined {
                 tracing::info!("[LSM_ENFORCE] Coherence restored (Val:{:?}): Disengaging Quarantine.", bio.coherence.to_raw());
-                let mut bridge = EbpfBridge::new(vec!["/sys/fs/bpf/cortex_events".to_string()]);
-
                 let _ = bridge.set_quarantine_mode(false);
-
                 system_quarantined = false;
             }
 
@@ -387,11 +362,9 @@ async fn main() {
         .route("/api/v1/truth_claim", post(truth_claim_handler))
         .route("/api/v1/telemetry", get(telemetry_ws_handler))
         .route("/api/v1/mycnet/sync", get(mycnet::mycnet_sync_handler))
-        .route("/api/v1/inject_truth_pulse", post(inject_truth_pulse_handler))
+        .route("/api/v1/simulate_telemetry", post(simulate_telemetry_handler))
         .route("/api/v1/lattice/state", get(lattice_state_handler))
-        .route("/api/v1/neural/state", get(neural_state_handler))
         .route("/api/v1/docs", get(list_docs_handler))
-
         .route("/api/v1/docs/search", get(search_docs_handler))
         .route("/api/v1/docs/:filename", get(get_doc_handler))
         .route("/metrics", get(metrics_handler))
@@ -433,11 +406,9 @@ async fn sentinel_status_handler(
 
     // Dynamic metrics for the "Neural Nerves" integration
     let truthsync_seal = format!("TS-SYNC-S60-{:X}", tick % 16777215);
-    
-    // YATRA COMPLIANT INTEGRITY (No floats)
-    let p322_ratio_integrity = S60::new(0, 59, 59, 51, 0) + S60::from_raw(portal_intensity / 100);
+    let p322_ratio_integrity = 0.9998 + (portal_intensity as f64 / 1_000_000_000.0);
     let threat_count = (tick / 41) * 3;
-    let cortex_latency = S60::from_raw(bio_coherence / 1000);
+    let cortex_latency_ms = 0.01 + (bio_coherence as f64 / 1_000_000_000.0);
 
     Json(SentinelStatusResponse {
         ring_status: if is_sealed { "SEALED".to_string() } else { "OPEN".to_string() },
@@ -460,7 +431,7 @@ async fn sentinel_status_handler(
         truthsync_seal,
         p322_ratio_integrity,
         threat_count,
-        cortex_latency,
+        cortex_latency_ms,
     })
 }
 
@@ -525,10 +496,9 @@ async fn truth_claim_handler(
 
     if let Some(v_idx) = payload.claim_payload.find("Ratio:") {
         if let Some(v_str) = payload.claim_payload[v_idx+6..].split_whitespace().next() {
-            // YATRA SECURE PARSE: Avoid decimal contamination
-            // Expecting "X.Y" or "X" format, scaling manually to S60
-            if let Ok(val) = v_str.replace(".", "").parse::<i64>() {
-                claimed_ratio = S60::from_raw(val * S60::SCALE_0 / 1000); 
+            // Convert float-string to S60 (Base-60)
+            if let Ok(f) = v_str.parse::<f64>() {
+                claimed_ratio = S60::from_raw((f * S60::SCALE_0 as f64) as i64);
             }
         }
     }
@@ -547,22 +517,22 @@ async fn truth_claim_handler(
     let (intent, ai_reason) = state.semantic_router.classify(&payload.claim_payload).await;
     
     // Score determinista: basado en longitud del payload y semántica
-    let plimpton_valid = true;
-    let entropy_factor = S60::from_raw((payload.claim_payload.len() as i64 * S60::SCALE_0) / 256);
+    let plimpton_valid = true; // El certificado se encarga de la validez física
+    let entropy_factor = ((payload.claim_payload.len() as f64) / 256.0).min(1.0);
 
     let (mut score, mut harmonic_state, mut intercepts, mut claim_valid) = match intent {
         crate::quantum::Intent::Oracle => {
-            (S60::new(0, 58, 12, 0, 0) - (entropy_factor / 50), "RESONANT", 0u32, true)
+            (0.97 - entropy_factor * 0.02, "RESONANT", 0u32, true)
         }
         crate::quantum::Intent::SystemAction => {
-            let s = if plimpton_valid { S60::new(0, 55, 12, 0, 0) } else { S60::new(0, 46, 48, 0, 0) - (entropy_factor / 20) };
+            let s = if plimpton_valid { 0.92 } else { 0.78 - entropy_factor * 0.05 };
             (s, "CONSONANT", 0u32, true)
         }
         crate::quantum::Intent::SafetyCheck => {
-            (S60::new(0, 52, 48, 0, 0), "GUARD_ACTIVE", 1u32, true)
+            (0.88, "GUARD_ACTIVE", 1u32, true)
         }
         crate::quantum::Intent::Unknown => {
-            let s = S60::new(0, 9, 0, 0, 0) - (entropy_factor / 10);
+            let s: f64 = (0.15 - entropy_factor * 0.10).max(0.01);
             let i: u32 = 4u32 + (payload.claim_payload.len() as u32 % 3);
             (s, "CRITICAL_DISSONANCE", i, false)
         }
@@ -579,7 +549,7 @@ async fn truth_claim_handler(
     };
 
     if sanitized_severity >= 3 {
-        score = S60::new(0, 0, 36, 0, 0); // Reset to baseline dissonance
+        score = (score * 0.1).max(0.01);
         harmonic_state = "ATTACK_SANITIZED_BY_SENTINEL";
         intercepts += sanitized_severity as u32;
         claim_valid = false;
@@ -617,46 +587,36 @@ async fn truth_claim_handler(
     })
 }
 
-async fn inject_truth_pulse_handler(
+async fn simulate_telemetry_handler(
     State(state): State<Arc<AppState>>,
-    Json(payload): Json<TruthPulseRequest>,
+    Json(payload): Json<SimulateTelemetryRequest>,
 ) -> Json<bool> {
     let timestamp = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap()
         .as_nanos() as u64;
 
-    let energy_s60 = S60::from_raw(payload.energy_s60_raw);
-
     let sanitized_severity = {
         let mut neural = state.neural_memory.lock().unwrap();
         let mut resonant = state.resonant_memory.lock().unwrap();
-        
-        // Inject energy into the lattice and observe spiking behavior
-        let node_idx = (timestamp % 1024) as usize;
-        let signal_raw = energy_s60.to_raw() as u64;
-        resonant.resonate(node_idx, node_idx, signal_raw);
-        neural.observe(node_idx % 100, energy_s60, timestamp);
-        
-        state.truthsync.sanitize_telemetry(payload.energy_s60_raw, &mut neural, &mut resonant, timestamp)
+        state.truthsync.sanitize_telemetry(payload.entropy_s60_raw, &mut neural, &mut resonant, timestamp)
     };
 
     if sanitized_severity >= 4 {
-        let bridge = EbpfBridge::new(vec!["/sys/fs/bpf/cortex_events".to_string()]);
+        let bridge = crate::ebpf::EbpfBridge::new(vec!["/sys/fs/bpf/cortex_events".to_string()]);
         let _ = bridge.set_quarantine_mode(true);
-
     }
     
     let event = CortexEvent {
         timestamp_ns: timestamp,
         pid: 0,
         event_type: if sanitized_severity >= 4 { 
-            format!("{}_SANITIZED", payload.pulse_type) 
+            format!("{}_SANITIZED", payload.event_type) 
         } else { 
-            payload.pulse_type 
+            payload.event_type 
         },
-        message: "Physical Truth Pulse injected into Sentinel Cortex".to_string(),
-        entropy_s60_raw: payload.energy_s60_raw,
+        message: "Manually injected telemetry pulse via TruthSync API".to_string(),
+        entropy_s60_raw: payload.entropy_s60_raw,
         severity: sanitized_severity,
     };
     
@@ -667,21 +627,6 @@ async fn inject_truth_pulse_handler(
 
     let _ = state.event_stream.send(event);
     Json(true)
-}
-
-fn get_system_entropy() -> S60 {
-    // Read CPU temperature as a base entropy source
-    // Fallback to urandom if thermal is not available (e.g. non-LInux/dev env)
-    let temp_path = "/sys/class/thermal/thermal_zone0/temp";
-    let temp_raw = std::fs::read_to_string(temp_path)
-        .unwrap_or_else(|_| "45000".to_string()) // Fallback 45°C
-        .trim()
-        .parse::<i64>()
-        .unwrap_or(45000);
-    
-    // Scale temp to [0, 1] S60 based on 0-100C range
-    let temp_s60 = S60::from_raw(temp_raw * S60::SCALE_0 / 100_000);
-    temp_s60
 }
 
 async fn telemetry_ws_handler(
@@ -745,24 +690,6 @@ async fn lattice_state_handler(
         global_tick: tick,
     })
 }
-
-// ============================================================================
-// NEURAL STATE HANDLER
-// ============================================================================
-
-async fn neural_state_handler(
-    State(state): State<Arc<AppState>>,
-) -> Json<NeuralStateResponse> {
-    let neural = state.neural_memory.lock().unwrap();
-    let membranes = neural.get_states();
-    let global_firing_rate_raw = neural.firing_rate().to_raw();
-
-    Json(NeuralStateResponse {
-        membranes,
-        global_firing_rate_raw,
-    })
-}
-
 
 // ============================================================================
 // DOCUMENTATION HANDLERS
@@ -881,8 +808,7 @@ mod tests {
         report.push_str("Manipulamos el espacio matricial u60 para eliminar errores de redondeo térmico y evitar coma flotante (IEEE 754).\n\n");
         report.push_str(format!("- **Operaciones evaluadas**: {}\n", iterations).as_str());
         report.push_str(format!("- **Tiempo total de ejecución**: {:?}\n", duration).as_str());
-        let ms_per_op_s60 = S60::from_raw((ns_per_op as i128 * S60::SCALE_0 as i128 / 1_000_000) as i64);
-        report.push_str(format!("- **Latencia por operación**: **{} nanosegundos** ({} S60-ms)\n\n", ns_per_op, ms_per_op_s60).as_str());
+        report.push_str(format!("- **Latencia por operación**: **{} nanosegundos** ({} ms)\n\n", ns_per_op, ns_per_op as f64 / 1_000_000.0).as_str());
 
         // 2. TruthSync Cognitive Scan (LSM Simulation)
         let truth = crate::truthsync::TruthSync::new();
@@ -899,12 +825,11 @@ mod tests {
         report.push_str("El análisis semántico para determinar Disonancia Cognitiva (ej: intenciones destructivas como `rm -rf /`) previo a la syscall real.\n\n");
         report.push_str(format!("- **Escaneos evaluados**: {}\n", scans).as_str());
         report.push_str(format!("- **Tiempo total del vector cognitivo**: {:?}\n", duration2).as_str());
-        let ms_per_op2_s60 = S60::from_raw((ns_per_op2 as i128 * S60::SCALE_0 as i128 / 1_000_000) as i64);
-        report.push_str(format!("- **Latencia media de Intercepción LSM**: **{} nanosegundos** ({} S60-ms)\n\n", ns_per_op2, ms_per_op2_s60).as_str());
+        report.push_str(format!("- **Latencia media de Intercepción LSM**: **{} nanosegundos** ({} ms)\n\n", ns_per_op2, ns_per_op2 as f64 / 1_000_000.0).as_str());
 
         report.push_str("--- \n\n## 🏁 Conclusión Científica\n\n");
         report.push_str("Las pruebas empíricas de hardware demuestran concluyentemente la viabilidad del Sentinel Firewall.\n");
-        report.push_str("Se opera sistemáticamente por debajo del límite de **40,000 ns** (S60-Compliant) impuesto en los requisitos del Kernel. ");
+        report.push_str("Se opera sistemáticamente por debajo del límite de **0.04 ms** (40,000 ns) impuesto en los requisitos del Kernel. ");
         report.push_str("El aislamiento de intenciones es O(1) puro, usando matemáticas discretas Base-60 para interceptar sin afectar el rendimiento de los agentes en Ring-3.\n");
 
         fs::write("../docs/BENCHMARKS.md", report).expect("Failed to write BENCHMARKS.md");

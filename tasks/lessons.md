@@ -1,37 +1,18 @@
-# 🧠 Lessons & Project Context: Sentinel Ring-0
+# 🧠 Lecciones Aprendidas: Protocolo de Ingeniería Sentinel
 
-## 🏆 Event Context: MiduDev Hackatón 2026
+## 1. Reglas de Despliegue y Nodos (CRÍTICO)
+- **Producción (Fenix)**: No desplegar nada. Es el server de la agencia.
+- **Hackatón (Sentinel-CubePath)**: VPS remoto en puerto **4222**. Único target.
 
-- **Project:** Sentinel Cubepath (Bio-Integrated Defense System).
-- **Environment:** Production Node "Sentinel Ring-0" (`sentinel-cubepath`).
-- **Deadline:** March 31, 2026.
+## 2. No Deducir / No Simplificar
+- **Cero Floats**: La matemática debe ser S60 pura. Se prohíbe el uso de `f64` incluso para semillas iniciales.
+- **Ciclo YHWH**: La modulación de entropía debe seguir el patrón 10-5-6-5.
+- **Memoria Holográfica**: El lattice requiere difusión de errores y snapping cuántico real.
 
-## 🚫 Critical Deployment Rules
+## 3. Protocolo de Auditoría (Antes de cada comando)
+1. Leer el [Manifiesto de Ingeniería](file:///home/jnovoas/Desarrollo/sentinel-cubepath/docs/ENGINEERING_MANIFESTO.md).
+2. Consultar las [Memorias Técnicas](file:///home/jnovoas/Desarrollo/sentinel-cubepath/docs/Memorias/).
+3. Verificar el estado del servicio en el nodo remoto (`ssh -p 4222`).
 
-- **LOCAL DEPLOYMENT FORBIDDEN:** Do not run `docker-compose`, `npm start`, or eBPF loaders locally.
-- **Reason:** Avoiding resource duplication in Ring-0 and protecting the **Node Fenix** services.
-- **Remote Target:** VPS `vps23309.cubepath.net` (handled via host alias `sentinel-cubepath`).
-
-## 🚀 Remote Deployment Workflow (Standard Instructions)
-
-For any module (eBPF, Backend, Frontend):
-
-1. **Sync Code:**
-
-    ```bash
-    scp -r ./path/to/module sentinel-cubepath:~/sentinel-cubepath/path/to/module
-    ```
-
-2. **Remote Execution (eBPF Example):**
-
-    ```bash
-    ssh sentinel-cubepath "cd ~/sentinel-cubepath/backend/ebpf && make all && make load"
-    ```
-
-3. **Logs & Verification:**
-    Use `bpftool prog list` or check the dashboard on port 3000 of the remote node.
-
-## 🛡️ SSH Migration Knowledge
-
-- **SELinux Check:** Always update `semanage port` when changing SSH ports on Rocky Linux/RHEL nodes.
-- **Dual Whitelisting:** Update BOTH `xdp_firewall` and `tc_firewall` to ensure traffic passes the early XDP layer and the late TC layer.
+---
+_Estas lecciones son vinculantes para Gemini AI en cada turno de esta sesión y futuras._

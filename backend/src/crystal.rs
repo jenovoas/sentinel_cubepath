@@ -28,8 +28,8 @@ pub struct CrystalState {
 /// Oscilador piezoeléctrico virtual sintonizado a matemáticas Base-60.
 /// Actúa como celda de memoria resonante con dinámica física real.
 #[derive(Clone)]
-#[derive(Default)]
 pub struct SovereignCrystal {
+
     pub name: String,
     /// Amplitud de vibración (energía almacenada)
     pub amplitude: S60,
@@ -116,11 +116,11 @@ impl SovereignCrystal {
 }
 
 impl Default for SovereignCrystal {
-#[derive(Default)]
     fn default() -> Self {
         Self::new("Default-Node")
     }
 }
+
 
 /// Red de cristales acoplados: transferencia de energía por simpatía vibratoria.
 /// Portado desde quantum/crystal_lattice.py (CrystalLattice).
@@ -199,12 +199,29 @@ impl CrystalLattice {
         self.crystals.iter().map(|c| c.state()).collect()
     }
 
-    /// Coherencia global: promedio de amplitudes activas.
+    /// Coherencia global: promedio de amplitudes activas utilizando div_safe.
     pub fn global_coherence(&self) -> S60 {
         let active: Vec<_> = self.crystals.iter().filter(|c| c.get_amplitude().to_raw() > 0).collect();
         if active.is_empty() { return S60::zero(); }
         let sum = active.iter().fold(S60::zero(), |acc, c| acc + c.get_amplitude());
-        S60::from_raw(sum.to_raw() / active.len() as i64)
+        
+        // Yatra Secure: No raw division
+        sum.div_safe(S60::from_int(active.len() as i64)).unwrap_or(S60::zero())
+    }
+
+    /// Estabiliza el fluido de la red (Liquid Lattice Stabilization).
+    /// Reduce la entropía reactiva si la coherencia supera el umbral crítico (0;50,0,0).
+    pub fn stabilize_fluid(&mut self) {
+        let coherence = self.global_coherence();
+        let threshold = S60::new(0, 50, 0, 0, 0); // 50/60 threshold
+        
+        if coherence.to_raw() > threshold.to_raw() {
+            // Aplicar amortiguamiento extra (Surfactante Cuántico)
+            for crystal in self.crystals.iter_mut() {
+                let damp = crystal.amplitude * S60::new(0, 0, 10, 0, 0); // Extra 10/3600 decay
+                crystal.amplitude = crystal.amplitude - damp;
+            }
+        }
     }
 }
 

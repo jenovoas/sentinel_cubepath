@@ -76,9 +76,33 @@ impl HarmonicProcessor {
         }
     }
 
-    pub fn process_signal(&mut self, input: HarmonicState) -> LogicState {
-        self.tick += 1;
-        // Simulación de interacción armónica
+    /// Determina la compuerta de fase según el ciclo YHWH (10-5-6-5)
+    /// Retorna S60::one() (Abierto) o S60::zero() (Cerrado/Respiro)
+    pub fn get_phase_gate(&self, tick: u64) -> S60 {
+        let cycle_pos = tick % 26;
+        if cycle_pos < 10 {
+            // Yod: 10 Ticks (Expansión)
+            S60::one()
+        } else if cycle_pos < 15 {
+            // He1: 5 Ticks (Vacío/Respiro)
+            S60::zero()
+        } else if cycle_pos < 21 {
+            // Vav: 6 Ticks (Flujo)
+            S60::one()
+        } else {
+            // He2: 5 Ticks (Vacío/ZPE)
+            S60::zero()
+        }
+    }
+
+    pub fn process_signal(&mut self, input: HarmonicState, tick: u64) -> LogicState {
+        self.tick = tick;
+        
+        let gate = self.get_phase_gate(tick);
+        if gate.to_raw() == 0 {
+            return LogicState::Noise; // Bloqueo por fase de respiro
+        }
+
         let logic = input.evaluate_logic();
         if logic == LogicState::True || logic == LogicState::Unison {
             self.context = input;

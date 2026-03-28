@@ -1,81 +1,42 @@
-# Sentinel Ring-0 — Claude Code Context
+# 🛡️ CLAUDE / AI CONSTITUTION - SENTINEL RING-0
 
-## Proyecto
+This is the **SUPREME DIRECTIVE** for any AI agent interacting with this repository. 
+Violating these rules will result in system instability and project failure.
 
-**Sentinel Ring-0** es un firewall cognitivo que opera a nivel de kernel Linux (Ring-0) via eBPF para proteger servidores contra acciones destructivas de agentes de IA autónomos. Intercepta syscalls antes de ejecutarse y aplica análisis semántico para determinar si la acción es segura.
+## 🚫 ABSOLUTE PROHIBITIONS
+1. **NO DECIMAL MATH (YATRA LOCK)**: 
+   - All Ring-0 code (`backend/src`) **MUST** use `S60` (Sexagesimal) or scaled integers.
+   - Using `f32`, `f64`, or floating-point literals (e.g., `0.01`) is **FORBIDDEN**.
+   - If you find a float, **PURGE IT**. No exceptions.
+2. **NO LOCAL DEPLOYMENT (FENIX)**:
+   - `Fenix` is the personal PROD environment of Jaime Novoa. 
+   - Never run `cargo run` or `npm run dev` in the local workspace unless explicitly asked for debugging.
+   - The deployment target is exclusively the `sentinel-cubepath` node.
+3. **NO HALLUCINATIONS / SIMPLIFICATIONS**:
+   - Do not "deduce" or "simplify" physics or math formulae.
+   - Source of Truth: `docs/Memorias/` and `docs/ENGINEERING_MANIFESTO.md`.
 
-- **Demo en vivo:** https://vps23309.cubepath.net/
-- **Repositorio:** https://github.com/jenovoas/sentinel_cubepath
-- **Infraestructura:** Rocky Linux 10 en CubePath (VPS23309), Docker multi-stage, Nginx proxy
+## 🧬 QUANTUM CORTEX CORE
+- **Aritmética**: Base-60 pura ($60^4$ scaling).
+- **Oscilador**: 10-5-6-5 (YHWH) Harmonic Rhythm.
+- **Protocolo**: Yatra Pure# Sentinel Ring-0 Engineering Constitution
 
-## Hackathon
+> [!CAUTION]
+> **FENIX SANCTUARY PROTOCOL**:
+> NEVER run `cargo check`, `cargo build`, or any binary-generating command in the LOCAL environment (`/home/jnovoas/Desarrollo`).
+> These commands overwrite the functional state of the original Sentinel project.
+> All builds and validations MUST be executed in the REMOTE node `sentinel-cubepath` (Port 4222).
 
-- **Evento:** Hackatón de MiduDev — CubePath 2026
-- **Info:** https://github.com/midudev/hackaton-cubepath-2026
-- **Inscripción:** https://github.com/midudev/hackaton-cubepath-2026/issues/182
-- **Deadline de entrega:** 31 de marzo de 2026 a las 23:59:59 CET
-- **Votación final:** 1 de abril de 2026 a las 18:00 CET
-- **Criterios (prioridad):** UX → Creatividad → Utilidad → Implementación técnica
+## Engineering Mantras
+1. **Yatra Pure (S60)**: Decimal math (f32/f64) is an entropy leak. Use only S60 in Ring-0.
+2. **Zero Assumptions**: If a constant or logic isn't in the Memories, it doesn't exist.
+3. **Remote-First sovereignty**: The truth is in `sentinel-cubepath`. Local is just a text buffer.
 
-## Arquitectura
+## 🌍 ENVIRONMENT ROLES
+- **Local (Production)**: `fenix` (Jaime's personal node).
+- **Remote (Hackathon)**: `sentinel-cubepath` (VPS Remote Node).
+- **Network**: Port **4222** (SSH/Internal), Port **8000** (Backend API), Port **3000** (Dashboard).
 
-```
-RING 0 — Kernel (eBPF/C)
-├── lsm_ai_guardian.c     Hook execve/file_open + RingBuffer
-├── xdp_firewall.c        Filtrado de red (<0.1ms)
-├── tc_firewall.c         Cuarentena total (kill-switch)
-├── burst_sensor.c        Detección DDoS
-└── guardian_cognitive.c  Análisis semántico en kernel
-
-RING 3 — Userspace (Rust + Axum + Tokio)
-├── ebpf.rs               Bridge libbpf-rs (zero-copy)
-├── math/s60.rs           Aritmética S60 Base-60 fixed-point (sin floats)
-├── quantum/              Bio-Resonador + Detector de fase
-├── harmonic.rs           Lógica Armónica (6 estados)
-├── scheduler.rs          Planificador Adaptativo V2 (94.4% eficiencia)
-└── memory.rs             Memoria vectorial con embeddings
-
-UI — React + TypeScript (Next.js)
-└── Dashboard, Telemetría Ring-0, Consola Truth Claim
-```
-
-## Stack
-
-| Capa     | Tecnología                          |
-|----------|-------------------------------------|
-| Kernel   | eBPF (LSM, XDP, TC), libbpf, clang  |
-| Backend  | Rust 1.75+, Axum, Tokio, libbpf-rs  |
-| Frontend | Next.js, React, TypeScript          |
-| Infra    | CubePath, Docker, Rocky Linux 10    |
-| Matemática | S60 Base-60 fixed-point (i64)     |
-
-## API principal
-
-| Endpoint                   | Método | Descripción                              |
-|----------------------------|--------|------------------------------------------|
-| `/health`                  | GET    | Health check                             |
-| `/api/v1/sentinel_status`  | GET    | Estado completo (ring, bio, XDP, LSM)    |
-| `/api/v1/truth_claim`      | POST   | Verificar intención de agente IA         |
-| `/api/v1/telemetry`        | WS     | Stream de eventos Ring-0 en tiempo real  |
-
-## Despliegue (CubePath)
-
-```bash
-# cubepath.yaml define dos servicios:
-# - api (puerto 8000): Backend Rust
-# - dashboard (puerto 3000): Frontend Next.js
-docker compose up --build
-```
-
-## Métricas clave
-
-| Métrica              | Valor     |
-|----------------------|-----------|
-| Latencia XDP         | < 0.04 ms |
-| Precisión S60        | ±0.0077 ppm |
-| Eficiencia scheduler | 94.4%     |
-| Ahorro CPU           | 62.9% vs ptrace |
-
-## Desarrollador
-
-**Jaime Novoa** — janovoas / jaime.novoase@gmail.com
+---
+_By reading this, you are bound to the Sentinel Ring-0 Engineering Manifesto._
+_Last Integrity Check: S60-ACTIVE_

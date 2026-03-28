@@ -14,7 +14,9 @@ import {
   Workflow,
   ExternalLink,
   Info,
+  Microscope,
 } from "lucide-react";
+
 import { clsx } from "clsx";
 
 interface SidebarProps {
@@ -54,8 +56,9 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
     { id: "about", label: "Proyecto", icon: Info },
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "aiops_shield", label: "AIOps Shield", icon: ShieldAlert },
-    { id: "matrix", label: "Crystal Matrix", icon: Hexagon },
+    { id: "matrix", label: "S60 Laboratory", icon: Microscope },
     { id: "mycnet", label: "MyCNet", icon: Network },
+
     { id: "vault", label: "Vault", icon: Terminal },
   ];
 
@@ -69,30 +72,36 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
             onClick={() => onTabChange(item.id)}
             className={clsx(
               "w-full flex items-center gap-3 px-4 py-3 transition-all group relative",
-              activeTab === item.id 
-                ? "text-emerald-400 bg-emerald-500/5" 
+              activeTab === item.id
+                ? "text-emerald-400 bg-emerald-500/5"
                 : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
             )}
           >
             {activeTab === item.id && (
               <div className="absolute left-0 top-1/4 bottom-1/4 w-0.5 bg-emerald-500 rounded-r-full" />
             )}
-            
-            <item.icon className={clsx(
-              "w-5 h-5 shrink-0",
-              activeTab === item.id ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-300"
-            )} />
-            
-            <span className={clsx(
-              "hidden md:block text-[10px] uppercase tracking-widest transition-all",
-              activeTab === item.id 
-                ? "opacity-100 font-black text-emerald-400" 
-                : "opacity-40 font-bold group-hover:opacity-100"
-            )}>
+
+            <item.icon
+              className={clsx(
+                "w-5 h-5 shrink-0",
+                activeTab === item.id
+                  ? "text-emerald-400"
+                  : "text-slate-500 group-hover:text-slate-300"
+              )}
+            />
+
+            <span
+              className={clsx(
+                "hidden md:block text-[10px] uppercase tracking-widest transition-all",
+                activeTab === item.id
+                  ? "opacity-100 font-black text-emerald-400"
+                  : "opacity-40 font-bold group-hover:opacity-100"
+              )}
+            >
               {item.label}
             </span>
 
-            {(activeTab === item.id) && (
+            {activeTab === item.id && (
               <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-rose-500 rounded-full border border-slate-950 animate-pulse" />
             )}
           </button>
@@ -135,8 +144,8 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
             <div className="bg-emerald-500 h-full w-full" />
           </div>
         </div>
-        
-        <button 
+
+        <button
           onClick={() => onTabChange("settings")}
           className={clsx(
             "w-full flex items-center justify-center lg:justify-start gap-3 p-2 transition-colors",

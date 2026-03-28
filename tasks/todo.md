@@ -40,11 +40,11 @@ Lista de tareas para la ejecución del despliegue en CubePath (Rocky Linux 10, 4
 
 - [x] Iniciar el API de Sentinel (`./target/release/sentinel-cortex`).
 - [x] Iniciar el Dashboard en el puerto 3000 (Verificado en `vps23309.cubepath.net`).
-- [/] Probar el **Arco de Reflejo**: Verificar bloqueo de red al llegar la Coherencia Bio a 0.
-- [ ] Comprobar el log de RingBuffer del kernel (`bpftool prog list`).
+- [x] Probar el **Arco de Reflejo**: Verificar bloqueo de red al llegar la Coherencia Bio a 0.
+- [x] Comprobar el log de RingBuffer del kernel (`bpftool prog list`).
 - [x] cambiar el puerto 22 al 4222 (Verificado en el nodo, dual-stack activo)
 - [ ] mañana eliminar el puerto 22 (Seguridad durante transición)
-- [ ] verificar log y reinicios del servidor
+- [x] verificar log y reinicios del servidor
 - [ ]
 
 ---

@@ -17,29 +17,7 @@ pub enum Intent {
     Unknown,
 }
 
-#[derive(Serialize)]
-struct GeminiRequest {
-    contents: Vec<Content>,
-    #[serde(rename = "generationConfig")]
-    generation_config: GenerationConfig,
-}
-
-#[derive(Serialize)]
-struct Content {
-    role: String,
-    parts: Vec<Part>,
-}
-
-#[derive(Serialize, Deserialize)]
-struct Part {
-    text: String,
-}
-
-#[derive(Serialize)]
-struct GenerationConfig {
-    temperature: f32,
-}
-
+/// Deserialization structs for Gemini API
 #[derive(Deserialize)]
 struct GeminiResponse {
     candidates: Option<Vec<Candidate>>,
@@ -53,6 +31,11 @@ struct Candidate {
 #[derive(Deserialize)]
 struct CandidateContent {
     parts: Option<Vec<Part>>,
+}
+
+#[derive(Serialize, Deserialize)]
+struct Part {
+    text: String,
 }
 
 pub struct SemanticRouter {
@@ -148,7 +131,7 @@ impl SemanticRouter {
                 "parts": [{ "text": format!("{}\n\n{}", system_prompt, prompt) }]
             }],
             "generationConfig": {
-                "temperature": 0.0
+                "temperature": 0
             }
         });
 

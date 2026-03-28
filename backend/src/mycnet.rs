@@ -13,15 +13,15 @@ use tracing::{info, warn};
 // PILAR 2: HEXAGONAL GEOMETRY BASE-60 (ADM-BATMAN)
 // ==========================================
 
-/// MyCNet (Red de Micelio) ADM Mesh Hub
-/// Matriz de 91 Nodos (Rings 5) simulando enrutamiento hexagonal ADM/Batman-adv.
 #[derive(Default)]
 pub struct HexagonalLattice {
     pub size: usize,
     pub nodes: Vec<AdmogmPacket>,
     pub plasma_shield_active: bool,
-#[derive(Default)]
 }
+
+
+
 
 impl HexagonalLattice {
     pub fn new() -> Self {
@@ -62,9 +62,9 @@ impl HexagonalLattice {
 
 // ==========================================
 // COMPRESIÓN FRACTAL (ADM-OGM PACKET)
-#[derive(Default)]
 // ==========================================
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
+
 pub struct AdmogmPacket {
     pub amplitude_chunk: i64,    // Canal A (Energía/Datos)
     pub phase_hash: [u8; 32],    // Canal B (Firma/Fase invisible)
@@ -210,8 +210,10 @@ async fn apply_sync(state: &Arc<crate::AppState>, packet: AdmogmPacket) {
     if let Some(ots) = packet.origin_ts {
         let now = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos() as u64;
         if now > ots {
-            let rtt_ms = (now - ots) as f64 / 1_000_000.0;
-            info!("⚡ ADM TQ (Latency): {:.3} ms", rtt_ms);
+            let diff_ns = now - ots;
+            // S60 Latency: ns / 1,000,000,000 to get seconds in S60
+            let rtt_s60 = S60::from_raw((diff_ns as i128 * S60::SCALE_0 as i128 / 1_000_000_000) as i64);
+            info!("⚡ ADM TQ (Latency S60): {}", rtt_s60);
         }
     }
 

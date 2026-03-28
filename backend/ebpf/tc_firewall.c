@@ -22,7 +22,7 @@ struct {
     __uint(max_entries, 1);
     __type(key, u32);
     __type(value, u32);  // 0=Normal, 1=Panic/Quarantine
-} config_map SEC(".maps");
+} tc_firewall_config SEC(".maps");
 
 /* Event Map for Userspace Communication */
 struct {
@@ -37,11 +37,11 @@ struct dropped_packet {
 };
 
 // TC BPF program
-SEC("classifier")
+SEC("tc")
 int tc_firewall_prog(struct __sk_buff *ctx) {
     // 0. Reflex Arc: Check Panic Mode first
     u32 key = 0;
-    u32 *mode = bpf_map_lookup_elem(&config_map, &key);
+    u32 *mode = bpf_map_lookup_elem(&tc_firewall_config, &key);
     if (mode && *mode == 1) {
         return TC_ACT_SHOT;  // SYSTEM SEALED: Total Quarantine
     }

@@ -34,9 +34,12 @@ load: all
 		echo "🚀 Deploying $$mod guardian..."; \
 		TYPE="lsm"; \
 		if [[ "$$mod" == *"xdp"* ]] || [[ "$$mod" == *"burst"* ]]; then TYPE="xdp"; fi; \
-		if [[ "$$mod" == *"tc_firewall"* ]]; then TYPE="sched_cls"; fi; \
-		\
-		$(BPFTOOL) prog load $$mod.bpf.o /sys/fs/bpf/$$mod type $$TYPE || echo "⚠️ Load Fail: $$mod as $$TYPE"; \
+		if [[ "$$mod" == *"tc_firewall"* ]]; then \
+			TYPE="tc"; \
+			$(BPFTOOL) prog load $$mod.bpf.o /sys/fs/bpf/$$mod type $$TYPE pinmaps /sys/fs/bpf/ || echo "⚠️ Load Fail: $$mod as $$TYPE"; \
+		else \
+			$(BPFTOOL) prog load $$mod.bpf.o /sys/fs/bpf/$$mod type $$TYPE || echo "⚠️ Load Fail: $$mod as $$TYPE"; \
+		fi; \
 	done
 	@echo "✅ All guardians deployed to Ring-0."
 
