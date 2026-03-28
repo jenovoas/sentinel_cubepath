@@ -1,10 +1,16 @@
-//! # 🛡️ S60 MATH CONSOLIDATION - SENTINEL CORTEX 🛡️
+//! # 🛡️ RING-0 MATHEMATICAL SOVEREIGNTY 🛡️
 //!
-//! Unified math bridge for Sentinel-Cortex.
-//! Base-60 Arithmetic (60^4 accuracy).
+//! Consolidated module for Base-60 SPA arithmetic.
+//! Purged of all floating-point simplification.
 
-pub mod s60;
+pub mod spa;
 pub mod spa_math;
+pub mod complex;
+pub mod core;
+pub mod isochronous_oscillator;
 
-pub use s60::S60;
-pub use spa_math::S60Math;
+pub use spa::SPA;
+pub use spa_math::SPAMath;
+pub use complex::ComplexSPA;
+pub use core::{S60PID, IsochronousClock, ResonantBuffer, LiquidLattice};
+pub use isochronous_oscillator::IsochronousOscillator;

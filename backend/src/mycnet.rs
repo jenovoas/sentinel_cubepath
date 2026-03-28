@@ -210,10 +210,10 @@ async fn apply_sync(state: &Arc<crate::AppState>, packet: AdmogmPacket) {
     if let Some(ots) = packet.origin_ts {
         let now = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos() as u64;
         if now > ots {
-            let diff_ns = now - ots;
-            // S60 Latency: ns / 1,000,000,000 to get seconds in S60
-            let rtt_s60 = S60::from_raw((diff_ns as i128 * S60::SCALE_0 as i128 / 1_000_000_000) as i64);
-            info!("⚡ ADM TQ (Latency S60): {}", rtt_s60);
+            let rtt_raw = (now - ots) as i128;
+            let rtt_s60 = S60::from_raw(rtt_raw);
+            let rtt_ms = rtt_s60.div_safe(S60::from_int(1_000_000)).unwrap_or(S60::zero());
+            info!("⚡ ADM TQ (Latency): {} ms (S60)", rtt_ms);
         }
     }
 
