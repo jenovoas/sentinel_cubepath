@@ -41,8 +41,9 @@ La sanitización en Sentinel no es limpieza de datos, sino **ajuste de resonanci
 -   **Proceso:** Se descarta el ruido térmico del CPU y se normalizan los nanosegundos del kernel al formato **SPA (Sexagesimal Point Arithmetic)** para evitar errores de coma flotante.
 
 ### 2.2 Motor TruthSync
--   **Validación:** Cada "reclamo de verdad" de la IA se verifica contra la matriz **Plimpton 322**.
--   **Sacred Ratios:** Se sintoniza a ratios armónicos (3:2 - Perfect Fifth, 4:3 - Perfect Fourth). Si un dato rompe la armonía, es sanitizado (descartado) del Cortex.
+-   **Certificación `SoulVerifier`**: Cada "reclamo de verdad" de la IA se somete a un análisis de **Exponente de Lyapunov** (`λ`) y entropía de Shannon.
+-   **Harmonic Sealing (SHA3-512)**: Solo los eventos que resuenan con la matriz Plimpton 322 y la firma biométrica actual reciben un sello criptográfico Keccak-512, garantizando integridad forense total.
+-   **Aritmética S60**: Eliminación de contaminación decimal (`f64`) para sincronización perfecta entre kernel y userspace.
 
 ## 3. El Cristal de Tiempo (ITO Logic)
 
@@ -101,7 +102,7 @@ La arquitectura **Dual Lane** es el pilar de la integridad de Sentinel, separand
     *   **Garantía**: Cero pérdida de datos ante fallos de energía o memoria. Loki configura `unordered_writes: false` para este carril para preservar la línea de tiempo forense.
 -   **Lane 2: Ops Beta (Userspace & Predictive)**:
     *   **Propósito**: Monitoreo de salud y métricas del sistema.
-    *   **Estrategia**: Buffering predictivo de 2 segundos para minimizar el impacto en la latencia del carril de seguridad.
+    *   **Estrategia**: Utiliza el **ResonantBuffer (Lock-Free)** para inyectar telemetría sin latencia inducida por Mutex o bloqueos del scheduler.
     *   **Aislamiento**: Protegido por límites de recursos (cgroups) de 512MB-1GB para asegurar que el stack de observabilidad nunca comprometa la ejecución de la IA en Ring-0.
 -   **Inter-Lane Bridge**: El bridge eBPF garantiza que Lane Beta sea puramente observacional, permitiendo que Lane Alpha actúe como el 'Watchdog' inexpugnable.
 
