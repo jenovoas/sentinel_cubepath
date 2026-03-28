@@ -34,6 +34,11 @@ rustyline-derive = "0.10"
 reqwest = { version = "0.11", features = ["json"] }
 chrono = { version = "0.4", features = ["serde"] }
 
-[[bin]]
-name = "sentinel-cortex"
-path = "src/main.rs"
+
+# Release Profile: Optimized for size/memory on 4GB node
+[profile.release]
+opt-level = 'z'     # Optimize for size
+lto = true          # Link Time Optimization
+codegen-units = 1   # Maximize optimization
+panic = 'abort'     # Reduce binary overhead
+strip = true        # Remove debug symbols

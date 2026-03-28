@@ -22,8 +22,8 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 WORKDIR /app
 COPY . .
 
-# IMPORTANT: Limited to 2 cores for 4GB RAM safety to avoid OOM
-RUN cargo build --release -j 2
+# IMPORTANT: Limited to 1 core for 4GB RAM safety to avoid OOM
+RUN cargo build --release -j 1
 
 # Stage 2: Final (Rocky Linux Minimal)
 FROM rockylinux:9-minimal

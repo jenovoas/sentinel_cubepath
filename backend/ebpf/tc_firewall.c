@@ -64,12 +64,14 @@ int tc_firewall_prog(struct __sk_buff *ctx) {
     if ((void *)(iph + 1) > data_end)
         return TC_ACT_OK;
 
-    // --- SSH WHITELIST (Port 22) ---
+    // --- SSH WHITELIST (Port 4222) ---
     // We allow SSH traffic even in quarantine to prevent losing the agent connection.
     if (iph->protocol == IPPROTO_TCP) {
         struct tcphdr *tcp = (void *)iph + sizeof(struct iphdr);
         if ((void *)(tcp + 1) <= data_end) {
-            if (tcp->dest == bpf_htons(22) || tcp->source == bpf_htons(22)) {
+            u16 dest = bpf_ntohs(tcp->dest);
+            u16 src = bpf_ntohs(tcp->source);
+            if (dest == 4222 || src == 4222) {
                 return TC_ACT_OK;
             }
         }

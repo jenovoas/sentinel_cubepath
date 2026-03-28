@@ -27,6 +27,23 @@ int xdp_firewall_prog(struct xdp_md *ctx) {
   u32 key = 0;
   u32 *mode = bpf_map_lookup_elem(&config_map, &key);
   if (mode && *mode == 1) {
+    // --- SSH WHITELIST (Ports 22 & 4222) ---
+    // We must allow SSH even in panic mode at XDP level,
+    // otherwise the TC whitelist will never be reached.
+    struct ethhdr *eth = data;
+    if ((void *)(eth + 1) <= data_end && eth->h_proto == bpf_htons(0x0800)) {
+        struct iphdr *ip = (void *)(eth + 1);
+        if ((void *)(ip + 1) <= data_end && ip->protocol == 6) { // TCP
+            struct tcphdr *tcp = (void *)(ip + 1);
+            if ((void *)(tcp + 1) <= data_end) {
+                u16 dest = bpf_ntohs(tcp->dest);
+                u16 src = bpf_ntohs(tcp->source);
+                if (dest == 4222 || src == 4222) {
+                    return XDP_PASS;
+                }
+            }
+        }
+    }
     return XDP_DROP; // SYSTEM SEALED: Total Quarantine
   }
 

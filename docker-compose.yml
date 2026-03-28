@@ -5,37 +5,47 @@ services:
   # CORE — Backend API (Rust Cortex) + Frontend Dashboard
   # ============================================================
 
-#  api:
-#    build:
-#      context: ./backend
-#      dockerfile: Dockerfile
-#    ports:
-#      - "8000:8000"
-#    environment:
-#      - RUST_LOG=info
-#      - CORS_ORIGIN=${CORS_ORIGIN:-https://vps23309.cubepath.net}
-#    restart: unless-stopped
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 3
-#    networks:
-#      - sentinel-network
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - RUST_LOG=info
+      - CORS_ORIGIN=${CORS_ORIGIN:-https://vps23309.cubepath.net}
+    restart: unless-stopped
+    mem_limit: 512mb
+    deploy:
+      resources:
+        limits:
+          memory: 512mb
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - sentinel-network
 
-#  dashboard:
-#    build:
-#      context: ./frontend
-#      dockerfile: Dockerfile
-#    ports:
-#      - "3000:3000"
-#    environment:
-#      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000}
-#    depends_on:
-#      - api
-#    restart: unless-stopped
-#    networks:
-#      - sentinel-network
+  dashboard:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    depends_on:
+      - api
+    restart: unless-stopped
+    mem_limit: 512mb
+    deploy:
+      resources:
+        limits:
+          memory: 512mb
+    networks:
+      - sentinel-network
 
   # ============================================================
   # OBSERVABILITY STACK — Prometheus + Loki + Grafana
@@ -63,11 +73,11 @@ services:
   prometheus:
     image: prom/prometheus:latest
     container_name: sentinel-prometheus
-    mem_limit: 512mb
+    mem_limit: 128mb
     deploy:
       resources:
         limits:
-          memory: 512mb
+          memory: 128mb
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
@@ -91,11 +101,11 @@ services:
   loki:
     image: grafana/loki:latest
     container_name: sentinel-loki
-    mem_limit: 512mb
+    mem_limit: 128mb
     deploy:
       resources:
         limits:
-          memory: 512mb
+          memory: 128mb
     command: -config.file=/etc/loki/loki-config.yml
     volumes:
       - ./observability/loki/loki-config.yml:/etc/loki/loki-config.yml:ro
@@ -125,6 +135,11 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: sentinel-grafana
+    mem_limit: 256mb
+    deploy:
+      resources:
+        limits:
+          memory: 256mb
     environment:
       GF_SECURITY_ADMIN_USER: ${GF_ADMIN_USER:-admin}
       GF_SECURITY_ADMIN_PASSWORD: ${GF_ADMIN_PASSWORD:-sentinel2026}
@@ -133,7 +148,6 @@ services:
       GF_SERVER_SERVE_FROM_SUB_PATH: "true"
       GF_SERVER_PROTOCOL: http
       GF_PATHS_PROVISIONING: /etc/grafana/provisioning
-      # Embeddable in the dashboard
       GF_SECURITY_ALLOW_EMBEDDING: "true"
       GF_SECURITY_COOKIE_SAMESITE: "none"
       GF_AUTH_ANONYMOUS_ENABLED: "true"
@@ -151,11 +165,6 @@ services:
     restart: unless-stopped
     networks:
       - sentinel-network
-    mem_limit: 1gb
-    deploy:
-      resources:
-        limits:
-          memory: 1gb
 
   # ============================================================
   # AUTOMATION — n8n Defense Workflows (Reflex Arc)
@@ -164,6 +173,11 @@ services:
   n8n:
     image: n8nio/n8n:latest
     container_name: sentinel-n8n
+    mem_limit: 512mb
+    deploy:
+      resources:
+        limits:
+          memory: 512mb
     environment:
       GENERIC_TIMEZONE: America/Santiago
       N8N_BASIC_AUTH_ACTIVE: ${N8N_BASIC_AUTH_ACTIVE:-true}
@@ -176,10 +190,6 @@ services:
       N8N_PATH: /n8n/
       EXECUTIONS_DATA_PRUNE: "true"
       EXECUTIONS_DATA_MAX_AGE: "168"
-    deploy:
-      resources:
-        limits:
-          memory: 1gb
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
