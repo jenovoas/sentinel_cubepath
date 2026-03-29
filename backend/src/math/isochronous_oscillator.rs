@@ -5,8 +5,8 @@
 //!
 //! Uses existing SPAMath functions (sin, cos, exp) for oscillation and damping.
 
-use crate::spa::SPA;
-use crate::spa_math::SPAMath;
+use super::spa::SPA;
+use super::spa_math::SPAMath;
 #[cfg(feature = "extension-module")]
 use pyo3::prelude::*;
 

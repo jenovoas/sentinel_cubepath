@@ -1,8 +1,8 @@
 //! # 💎 CORE CUÁNTICO ME-60OS 💎
 //! Logic Pura Rust con soporte condicional para PyO3
 
-use crate::isochronous_oscillator::IsochronousOscillator;
-use crate::spa::SPA;
+use super::isochronous_oscillator::IsochronousOscillator;
+use super::spa::SPA;
 use serde::{Deserialize, Serialize};
 use std::thread;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
@@ -205,7 +205,7 @@ impl ResonantBuffer {
     pub fn save_snapshot(&self, filename: String) -> std::io::Result<bool> {
         let mut cell_data = Vec::new();
         for (i, xtal) in self.lattice.iter().enumerate() {
-            let amp_raw = xtal.get_amplitude().to_raw();
+            let amp_raw: i64 = xtal.get_amplitude().to_raw();
             if amp_raw > 0 {
                 cell_data.push(CellSnapshot {
                     index: i,

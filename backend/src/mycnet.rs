@@ -4,6 +4,7 @@ use axum::{
 };
 use futures::{SinkExt, StreamExt};
 use serde::{Deserialize, Serialize};
+use crate::math::S60;
 use sha2::{Digest, Sha256};
 use std::sync::Arc;
 use tokio::sync::Mutex;
@@ -144,7 +145,7 @@ async fn handle_socket(mut socket: WebSocket, state: Arc<crate::AppState>) {
                 }
             }
             Ok(event) = rx.recv() => {
-                if event.event_type.starts_with("YHWH_PHASE_") && event.severity == 1 {
+                if event.event_type == 8 && event.severity == 1 {
                     if let Some(msg) = generate_pulse(&state) {
                         if socket.send(Message::Text(msg)).await.is_err() { break; }
                     }
@@ -178,7 +179,7 @@ pub fn spawn_client(state: Arc<crate::AppState>, partner_url: String) {
                                 } else { break; }
                             }
                             Ok(event) = rx.recv() => {
-                                if event.event_type.starts_with("YHWH_PHASE_") && event.severity == 1 {
+                                if event.event_type == 8 && event.severity == 1 {
                                     if let Some(msg) = generate_pulse(&state) {
                                         if write.send(tokio_tungstenite::tungstenite::Message::Text(msg)).await.is_err() { break; }
                                     }
@@ -211,7 +212,7 @@ async fn apply_sync(state: &Arc<crate::AppState>, packet: AdmogmPacket) {
         let now = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos() as u64;
         if now > ots {
             let rtt_raw = (now - ots) as i128;
-            let rtt_s60 = S60::from_raw(rtt_raw);
+            let rtt_s60 = S60::from_raw(rtt_raw as i64);
             let rtt_ms = rtt_s60.div_safe(S60::from_int(1_000_000)).unwrap_or(S60::zero());
             info!("⚡ ADM TQ (Latency): {} ms (S60)", rtt_ms);
         }

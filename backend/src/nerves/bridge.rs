@@ -13,11 +13,12 @@
 //! - Lock-free ring buffer
 //! - Sub-millisecond latency
 
-use crate::buffer_system::ResonantBuffer;
-use crate::spa::SPA;
+use crate::quantum::buffer_system::ResonantBuffer;
+use crate::math::SPA;
 use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
+use serde::{Serialize, Deserialize};
 
 // Event type constants (must match cortex_events.h)
 #[allow(dead_code)]
@@ -43,6 +44,7 @@ const SEVERITY_HIGH: u8 = 2;
 #[allow(dead_code)]
 const SEVERITY_CRITICAL: u8 = 3;
 
+#[cfg(feature = "extension-module")]
 use pyo3::prelude::*;
 
 /// Raw Cortex Event (Packed, matching C layout)
@@ -58,24 +60,24 @@ pub struct RawCortexEvent {
 }
 
 /// Cortex Event (Python-friendly, unpacked)
-#[pyclass] // Exposed to Python
-#[derive(Debug, Clone, Default)]
+#[cfg_attr(feature = "extension-module", pyclass)] // Exposed to Python
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct CortexEvent {
-    #[pyo3(get, set)]
+    #[cfg_attr(feature = "extension-module", pyo3(get, set))]
     pub timestamp_ns: u64,
-    #[pyo3(get, set)]
+    #[cfg_attr(feature = "extension-module", pyo3(get, set))]
     pub event_type: u32,
-    #[pyo3(get, set)]
+    #[cfg_attr(feature = "extension-module", pyo3(get, set))]
     pub pid: u32,
-    #[pyo3(get, set)]
+    #[cfg_attr(feature = "extension-module", pyo3(get, set))]
     pub entropy_signal: u64,
-    #[pyo3(get, set)]
+    #[cfg_attr(feature = "extension-module", pyo3(get, set))]
     pub severity: u8,
 }
 
-#[pymethods]
+#[cfg_attr(feature = "extension-module", pymethods)]
 impl CortexEvent {
-    #[new]
+    #[cfg_attr(feature = "extension-module", new)]
     pub fn new(
         timestamp_ns: u64,
         event_type: u32,

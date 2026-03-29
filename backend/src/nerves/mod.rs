@@ -4,6 +4,8 @@ use std::sync::Arc;
 use tokio::sync::Mutex;
 use std::time::Duration;
 
+pub mod bridge;
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum Severity {
     Low,

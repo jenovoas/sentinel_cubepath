@@ -1,7 +1,7 @@
 // src/quantum/portal_detector.rs
 //! Portal Detector - Penta-Resonance Convergence
 
-use crate::math::{S60, S60Math};
+use crate::math::{S60, SPAMath};
 
 /// Portal Detector - Detects harmonic convergence
 pub struct PortalDetector {
@@ -21,11 +21,11 @@ impl PortalDetector {
 
     pub fn calculate_resonance(&self, t: u64) -> S60 {
         let t_s60 = S60::from_int(t as i64);
-        let two_pi = S60Math::TWO_PI;
+        let two_pi = SPAMath::TWO_PI;
         
         // Harmonic sin waves for bio and crystal cycles
-        let phase_bio = S60Math::sin((two_pi * t_s60).div_safe(self.period_bio).unwrap_or(S60::zero()));
-        let phase_crystal = S60Math::sin((two_pi * t_s60).div_safe(self.period_crystal).unwrap_or(S60::zero()));
+        let phase_bio = SPAMath::sin((two_pi * t_s60).div_safe(self.period_bio).unwrap_or(S60::zero()));
+        let phase_crystal = SPAMath::sin((two_pi * t_s60).div_safe(self.period_crystal).unwrap_or(S60::zero()));
 
         let sum = phase_bio + phase_crystal;
         let two = S60::from_int(2);

@@ -5,7 +5,7 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
 
-use crate::math::{S60, S60Math};
+use crate::math::{S60, SPAMath};
 
 // Entry with vector (S60 components for Yatra-compliant similarity)
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -35,28 +35,19 @@ impl VectorStore {
             dot = dot + (*x * *y);
         }
         
-        // Pure S60 norms
         let mut sum_sq_a = S60::zero();
         let mut sum_sq_b = S60::zero();
         for x in a { sum_sq_a = sum_sq_a + (*x * *x); }
         for y in b { sum_sq_b = sum_sq_b + (*y * *y); }
         
-        let norm_a = S60Math::sqrt(sum_sq_a);
-        let norm_b = S60Math::sqrt(sum_sq_b);
+        let norm_a = SPAMath::sqrt(sum_sq_a);
+        let norm_b = SPAMath::sqrt(sum_sq_b);
         
         if norm_a.to_raw() == 0 || norm_b.to_raw() == 0 {
             S60::zero()
         } else {
-            // dot / (norm_a * norm_b)
-            // dot / (norm_a * norm_b)
-            if let Ok(_den) = norm_a.div_safe(norm_b) {
-                // This logic needs to be: dot / (norm_a * norm_b)
-                // Using S60 div_safe: (dot / norm_a) / norm_b
-                if let Ok(step1) = dot.div_safe(norm_a) {
-                    step1.div_safe(norm_b).unwrap_or(S60::zero())
-                } else {
-                    S60::zero()
-                }
+            if let Ok(step1) = dot.div_safe(norm_a) {
+                step1.div_safe(norm_b).unwrap_or(S60::zero())
             } else {
                 S60::zero()
             }

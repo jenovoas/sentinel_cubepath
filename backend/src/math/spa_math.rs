@@ -3,7 +3,7 @@
 //! Power series implementation for ME-60OS.
 //! Guaranteed zero-decimal contamination.
 
-use crate::spa::SPA;
+use super::spa::SPA;
 
 #[cfg(feature = "extension-module")]
 use pyo3::prelude::*;

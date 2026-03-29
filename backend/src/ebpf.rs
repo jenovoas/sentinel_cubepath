@@ -3,7 +3,7 @@
 //! Consumes real kernel events from BPF RingBuffer (256KB) 
 //! and forwards them to the Cortex Engine.
 
-use crate::CortexEvent;
+use crate::nerves::bridge::CortexEvent;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 use tokio::sync::broadcast;
@@ -69,42 +69,13 @@ impl EbpfBridge {
                         std::ptr::read_unaligned(data.as_ptr() as *const CortexEventRaw) 
                     };
 
-                    let event_type = match raw.event_type {
-                        1 => "FILE_BLOCKED".to_string(),
-                        2 => "EXEC_BLOCKED".to_string(),
-                        3 => "FILE_ALLOWED".to_string(),
-                        4 => "EXEC_ALLOWED".to_string(),
-                        5 => "NETWORK_BURST".to_string(),
-                        6 => "NETWORK_NORMAL".to_string(),
-                        7 => "SYSTEM_METRIC".to_string(),
-                        8 => "BIO_PULSE".to_string(),
-                        9 => "QHC_RESET".to_string(),
-                        10 => "PTRACE_CHECK".to_string(),
-                        11 => "CHMOD_CHECK".to_string(),
-                        _ => "UNKNOWN".to_string(),
-                    };
 
-                    let message = match raw.event_type {
-                        1 => "LSM: Unauthorized file access blocked (Ring-0)".to_string(),
-                        2 => "LSM: Unauthorized execution attempt blocked (Ring-0)".to_string(),
-                        3 => "LSM: File access allowed by AI Guardian".to_string(),
-                        4 => "LSM: Execution allowed by AI Guardian".to_string(),
-                        5 => "XDP: Network burst detected (DDoS Protection active)".to_string(),
-                        6 => "XDP: Network traffic within normal parameters".to_string(),
-                        7 => "System metric updated in kernel space".to_string(),
-                        8 => "Bio-pulse detected: Operator presence verified".to_string(),
-                        9 => "Quantum Harmonic Controller cache reset".to_string(),
-                        10 => "Watchdog: Suspicious PTRACE access check intercepted".to_string(),
-                        11 => "Watchdog: Unauthorized chmod attempt detected".to_string(),
-                        _ => "Unknown kernel-level event detected".to_string(),
-                    };
 
                     let event = CortexEvent {
                         timestamp_ns: raw.timestamp_ns,
                         pid: raw.pid,
-                        event_type,
-                        message,
-                        entropy_s60_raw: raw.entropy_signal as i64,
+                        event_type: raw.event_type,
+                        entropy_signal: raw.entropy_signal,
                         severity: raw.severity,
                     };
 

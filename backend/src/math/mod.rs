@@ -14,3 +14,6 @@ pub use spa_math::SPAMath;
 pub use complex::ComplexSPA;
 pub use core::{S60PID, IsochronousClock, ResonantBuffer, LiquidLattice};
 pub use isochronous_oscillator::IsochronousOscillator;
+
+// S60 is a semantic alias for SPA to align with external Quantum/eBPF modules
+pub type S60 = SPA;

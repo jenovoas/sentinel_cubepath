@@ -5,8 +5,3 @@
 
 pub mod wal;
 pub mod soul_verifier;
-pub mod soul_verifier_production;
-
-pub use soul_verifier_production::{
-    BiometricError, BiometricProof, BiometricVerifier, LivenessChallenge,
-};

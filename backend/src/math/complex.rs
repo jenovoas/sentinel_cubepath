@@ -3,8 +3,8 @@
 //! Complex numbers using SPA fixed-point arithmetic.
 //! Compliant with AI Prime Directives.
 
-use crate::spa::SPA;
-use crate::spa_math::SPAMath;
+use super::spa::SPA;
+use super::spa_math::SPAMath;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Default)]

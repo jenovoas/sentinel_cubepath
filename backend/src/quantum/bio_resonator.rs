@@ -3,8 +3,7 @@
 //!
 //! Translates biological events (keyboard/mouse) into quantum coherence states.
 
-use crate::math::{S60, spa_math::S60Math};
-use crate::neural::NeuralMemory;
+use crate::math::{S60, SPAMath};
 use std::time::Instant;
 
 /// Bio-Quantum Resonator
@@ -43,7 +42,7 @@ impl BioResonator {
 
     pub fn tick_entropy(&mut self, entropy_factor: S60, tick: u64) {
         // YHWH Breathing Modulation (10-5-6-5) using Taylor Sin
-        let breathing = S60Math::sin(S60::from_int(tick as i64 % 26) * S60Math::TWO_PI / 26);
+        let breathing = SPAMath::sin(S60::from_int(tick as i64 % 26) * SPAMath::TWO_PI / 26);
         let modulation = (S60::one() + breathing) / 2; // Normalize to [0, 1]
         
         // Final decay is a product of base factor, hardware entropy, and breathing
