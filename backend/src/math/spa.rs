@@ -72,7 +72,7 @@ impl SPA {
             + (self.components[2] as i128 * Self::SCALE_2 as i128)
             + (self.components[3] as i128 * Self::SCALE_3 as i128)
             + (self.components[4] as i128 * Self::SCALE_4 as i128);
-        raw_128.clamp(i64::MIN as i128, i64::MAX as i128) as i64
+        i64::try_from(raw_128.clamp(i64::MIN as i128, i64::MAX as i128)).unwrap_or(i64::MAX)
     }
 
     pub fn to_degrees(&self) -> i64 { self.components[0] }
@@ -102,7 +102,8 @@ impl Mul for SPA {
     fn mul(self, other: Self) -> Self {
         let v1 = self.to_raw() as i128;
         let v2 = other.to_raw() as i128;
-        Self::from_raw(((v1 * v2) / Self::SCALE_0 as i128) as i64)
+        let r = (v1 * v2) / Self::SCALE_0 as i128;
+        Self::from_raw(i64::try_from(r.clamp(i64::MIN as i128, i64::MAX as i128)).unwrap_or(i64::MAX))
     }
 }
 
@@ -120,7 +121,8 @@ impl Div for SPA {
         let v2 = other.to_raw();
         if v2 == 0 { panic!("SPA Division by zero"); }
         let v1 = self.to_raw() as i128;
-        Self::from_raw(((v1 * Self::SCALE_0 as i128) / v2 as i128) as i64)
+        let r = (v1 * Self::SCALE_0 as i128) / v2 as i128;
+        Self::from_raw(i64::try_from(r.clamp(i64::MIN as i128, i64::MAX as i128)).unwrap_or(i64::MAX))
     }
 }
 
@@ -129,7 +131,8 @@ impl SPA {
         let v2 = other.to_raw();
         if v2 == 0 { return Err(SPAError::DivisionByZero); }
         let v1 = self.to_raw() as i128;
-        Ok(Self::from_raw(((v1 * Self::SCALE_0 as i128) / v2 as i128) as i64))
+        let r = (v1 * Self::SCALE_0 as i128) / v2 as i128;
+        Ok(Self::from_raw(i64::try_from(r.clamp(i64::MIN as i128, i64::MAX as i128)).unwrap_or(i64::MAX)))
     }
 }
 

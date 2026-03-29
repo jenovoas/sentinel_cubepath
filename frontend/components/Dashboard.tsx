@@ -108,7 +108,7 @@ export function Dashboard() {
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2 shrink-0">
                     <Timer className="w-3.5 h-3.5 text-sky-400" />
-                    <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-500">Phase Cycle</span>
+                    <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-500">Ciclo de Fase</span>
                   </div>
                   <div className="flex-1 bg-slate-950 rounded-full h-1.5 overflow-hidden">
                     <div
@@ -140,7 +140,7 @@ export function Dashboard() {
                     <div className="flex items-center gap-2">
                       <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                       <h2 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">
-                        Ring-0 Telemetry Feed
+                        Telemetría Ring-0
                       </h2>
                     </div>
                     <div className="flex items-center gap-2">
@@ -159,7 +159,7 @@ export function Dashboard() {
                   <div className="flex items-center gap-2 mb-4 shrink-0">
                     <Zap className="w-3.5 h-3.5 text-amber-400" />
                     <h2 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">
-                      Truth Claim Console
+                      Consola de Verificación
                     </h2>
                   </div>
                   <div className="flex-1 min-h-0">
@@ -204,9 +204,9 @@ export function Dashboard() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <Heart className="w-4 h-4 text-rose-500 animate-[pulse_2s_infinite]" />
-                        <h3 className="font-bold text-[10px] uppercase tracking-[0.2em] text-slate-200">Bio-Resonance Core</h3>
+                        <h3 className="font-bold text-[10px] uppercase tracking-[0.2em] text-slate-200">Núcleo Bio-Resonancia</h3>
                       </div>
-                      <span className="text-[9px] font-bold text-rose-500/80 mono uppercase">Live Link</span>
+                      <span className="text-[9px] font-bold text-rose-500/80 mono uppercase">Enlace Vivo</span>
                     </div>
                     
                     <div className="space-y-4">
@@ -222,7 +222,7 @@ export function Dashboard() {
                         </span>
                       </div>
                       <p className="text-[8px] font-medium text-slate-600 uppercase tracking-widest leading-relaxed">
-                        SNN Cognitive Interface stability threshold: 88.4% required for full Ring-0 lockdown.
+                        Umbral de estabilidad SNN: 88.4% requerido para bloqueo Ring-0 total.
                       </p>
                     </div>
                </div>
@@ -298,11 +298,11 @@ export function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-black uppercase tracking-tighter text-white">IA Ops Shield</h1>
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">S60 Cognitive Defense Matrix — Ring-0 Realtime</p>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Matriz Defensa Cognitiva S60 — Ring-0 Tiempo Real</p>
               </div>
               <div className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3">
                 <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[10px] font-black text-emerald-400 tracking-widest uppercase">Guardian Active</span>
+                <span className="text-[10px] font-black text-emerald-400 tracking-widest uppercase">Guardián Activo</span>
               </div>
             </div>
             <AIOpsShieldView status={status} events={vaultEvents} />
@@ -311,32 +311,32 @@ export function Dashboard() {
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-black uppercase tracking-tighter text-white">MyCNet P2P Mesh</h1>
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Holographic Node Synchronization Network</p>
+                <h1 className="text-3xl font-black uppercase tracking-tighter text-white">MyCNet Malla P2P</h1>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Red de Sincronización de Nodos Holográficos</p>
               </div>
               <div className={`px-4 py-2 border rounded-xl flex items-center gap-3 ${networkOpen ? "bg-emerald-500/10 border-emerald-500/20" : "bg-rose-500/10 border-rose-500/20"}`}>
                 <div className={`w-2 h-2 rounded-full animate-pulse ${networkOpen ? "bg-emerald-500" : "bg-rose-500"}`} />
-                <span className={`text-[10px] font-black tracking-widest uppercase ${networkOpen ? "text-emerald-400" : "text-rose-400"}`}>{networkOpen ? "Link Open" : "Link Sealed"}</span>
+                <span className={`text-[10px] font-black tracking-widest uppercase ${networkOpen ? "text-emerald-400" : "text-rose-400"}`}>{networkOpen ? "Enlace Abierto" : "Enlace Sellado"}</span>
               </div>
             </div>
             <MyCNetNodeGraph phase={yhwhPhase} isOpen={networkOpen} />
             <div className="grid grid-cols-2 gap-4">
               <div className="glass-card p-5 space-y-3">
-                <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">Local Node — FENIX</h3>
+                <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">Nodo Local — FENIX</h3>
                 <div className="space-y-2 text-[10px] font-mono">
-                  <div className="flex justify-between"><span className="text-slate-500">Role</span><span className="text-emerald-400 font-bold">PRIMARY_GUARDIAN</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">Phase</span><span className="text-white font-bold">{yhwhPhase}</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">Arithmetic</span><span className="text-sky-400 font-bold">S60 / Base-60</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">Sync State</span><span className={`font-bold ${networkOpen ? "text-emerald-400" : "text-rose-400"}`}>{networkOpen ? "RESONANT" : "SEALED"}</span></div>
+                  <div className="flex justify-between"><span className="text-slate-500">Rol</span><span className="text-emerald-400 font-bold">GUARDIAN_PRIMARIO</span></div>
+                  <div className="flex justify-between"><span className="text-slate-500">Fase</span><span className="text-white font-bold">{yhwhPhase}</span></div>
+                  <div className="flex justify-between"><span className="text-slate-500">Aritmética</span><span className="text-sky-400 font-bold">S60 / Base-60</span></div>
+                  <div className="flex justify-between"><span className="text-slate-500">Estado Sync</span><span className={`font-bold ${networkOpen ? "text-emerald-400" : "text-rose-400"}`}>{networkOpen ? "RESONANTE" : "SELLADO"}</span></div>
                 </div>
               </div>
               <div className="glass-card p-5 space-y-3">
-                <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">Remote Node — CUBEPATH</h3>
+                <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">Nodo Remoto — CUBEPATH</h3>
                 <div className="space-y-2 text-[10px] font-mono">
-                  <div className="flex justify-between"><span className="text-slate-500">Role</span><span className="text-amber-400 font-bold">REMOTE_S60</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">Protocol</span><span className="text-white font-bold">YHWH Phase Sync</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">Frequency</span><span className="text-sky-400 font-bold">41 Hz crystal</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">Entropy</span><span className="text-slate-400 font-bold">CONTROLLED</span></div>
+                  <div className="flex justify-between"><span className="text-slate-500">Rol</span><span className="text-amber-400 font-bold">REMOTO_S60</span></div>
+                  <div className="flex justify-between"><span className="text-slate-500">Protocolo</span><span className="text-white font-bold">Sincronía Fase YHWH</span></div>
+                  <div className="flex justify-between"><span className="text-slate-500">Frecuencia</span><span className="text-sky-400 font-bold">41 Hz cristal</span></div>
+                  <div className="flex justify-between"><span className="text-slate-500">Entropía</span><span className="text-slate-400 font-bold">CONTROLADA</span></div>
                 </div>
               </div>
             </div>
@@ -345,8 +345,8 @@ export function Dashboard() {
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-black uppercase tracking-tighter text-white">Audit Vault</h1>
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Ring-0 Kernel Event Archive — Read Only</p>
+                <h1 className="text-3xl font-black uppercase tracking-tighter text-white">Bóveda de Auditoría</h1>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Archivo de Eventos Kernel Ring-0 — Solo Lectura</p>
               </div>
               <div className="px-4 py-2 bg-slate-800 border border-white/5 rounded-xl flex items-center gap-3">
                 <div className="w-2 h-2 rounded-full bg-slate-500" />
@@ -379,8 +379,8 @@ export function Dashboard() {
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-black uppercase tracking-tighter text-white">Kernel Settings</h1>
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Core S60 Configuration — Biometric-Locked</p>
+                <h1 className="text-3xl font-black uppercase tracking-tighter text-white">Configuración Kernel</h1>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Configuración Núcleo S60 — Bloqueado Biométrico</p>
               </div>
               <div className="px-4 py-2 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-3">
                 <Lock className="w-3 h-3 text-rose-400" />
@@ -390,24 +390,24 @@ export function Dashboard() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="glass-card p-6 space-y-6">
-                <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-300 border-b border-white/5 pb-2">Cognitive Thresholds</h3>
+                <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-300 border-b border-white/5 pb-2">Umbrales Cognitivos</h3>
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">AI Coherence Score</span><span className="text-[10px] text-white font-mono">{(status?.bio_coherence ? Math.min(1.0, status.bio_coherence/12960000) : 0.82).toFixed(2)} / 1.0</span></div>
+                    <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">Puntuación Coherencia IA</span><span className="text-[10px] text-white font-mono">{(status?.bio_coherence ? Math.min(1.0, status.bio_coherence/12960000) : 0.82).toFixed(2)} / 1.0</span></div>
                     <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden"><div className="h-full bg-sky-500 transition-all duration-1000" style={{ width: `${(status?.bio_coherence ? Math.min(1.0, status.bio_coherence/12960000) : 0.82)*100}%` }} /></div>
                   </div>
                   <div className="space-y-2">
-                    <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">LSM Interception Depth</span><span className="text-[10px] text-white font-mono">{status?.lsm_cognitive || "RING-0"}</span></div>
+                    <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">Profundidad Intercepción LSM</span><span className="text-[10px] text-white font-mono">{status?.lsm_cognitive || "RING-0"}</span></div>
                     <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden"><div className="h-full bg-emerald-500 w-[100%]" /></div>
                   </div>
                 </div>
               </div>
 
               <div className="glass-card p-6 space-y-4">
-                <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-300 border-b border-white/5 pb-2">Resonance Clock</h3>
+                <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-300 border-b border-white/5 pb-2">Reloj de Resonancia</h3>
                 <div className="flex items-center gap-6">
                   <div className="flex-1 space-y-1">
-                    <p className="text-[9px] text-slate-500 uppercase font-black">Puntuación Coherencia IA</p>
+                    <p className="text-[9px] text-slate-500 uppercase font-black">Frecuencia Base S60</p>
                     <p className="text-2xl font-black text-white italic">41.00 <span className="text-xs text-slate-600">Hz</span></p>
                   </div>
                   <div className="w-12 h-12 rounded-full border-2 border-slate-800 flex items-center justify-center">

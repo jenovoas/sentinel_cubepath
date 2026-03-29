@@ -55,7 +55,7 @@ const EXPERIMENTS = [
   },
   { 
     id: "EXP-028", 
-    label: "Resonant Diffusion", 
+    label: "Difusión Resonante",
     pulse_type: "DIFFUSION", 
     energy: 2000000, 
     severity: 2,
@@ -63,7 +63,7 @@ const EXPERIMENTS = [
   },
   { 
     id: "EXP-029", 
-    label: "Quantum Leap Stress", 
+    label: "Estrés Salto Cuántico",
     pulse_type: "STRESS", 
     energy: 12960000, 
     severity: 4,
@@ -171,14 +171,14 @@ export function CrystalLatticeView() {
           <div className="glass-card px-4 py-2 border-white/5 flex items-center gap-3">
              <Thermometer className="w-4 h-4 text-rose-500" />
              <div className="flex flex-col">
-                <span className="text-[8px] text-slate-600 font-black uppercase">Host Entropy</span>
+                <span className="text-[8px] text-slate-600 font-black uppercase">Entropía Host</span>
                 <span className="text-[10px] mono text-white font-bold italic">{(Math.random() * 0.05 + 0.92).toFixed(4)} u60</span>
              </div>
           </div>
           <div className="glass-card px-4 py-2 border-white/5 flex items-center gap-3">
              <Waves className="w-4 h-4 text-sky-500" />
              <div className="flex flex-col">
-                <span className="text-[8px] text-slate-600 font-black uppercase">Tick Frequency</span>
+                <span className="text-[8px] text-slate-600 font-black uppercase">Frecuencia Tick</span>
                 <span className="text-[10px] mono text-white font-bold italic">41.7713 Hz</span>
              </div>
           </div>
@@ -193,7 +193,7 @@ export function CrystalLatticeView() {
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
-              <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">Resonant Crystal Matrix (1024 nodes)</h3>
+              <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">Matriz Crystal Resonante (1024 nodos)</h3>
             </div>
             <span className="text-[9px] mono text-slate-500 uppercase">Aritmética S60 Pura</span>
           </div>
@@ -326,7 +326,7 @@ export function CrystalLatticeView() {
             </p>
             
             <div className="mt-4 flex items-center justify-between relative z-10">
-               <span className="text-[8px] font-black text-slate-400 uppercase">Input Energy</span>
+               <span className="text-[8px] font-black text-slate-400 uppercase">Energía de Entrada</span>
                <span className="text-[10px] mono text-sky-400 font-bold">{(exp.energy / 1000).toFixed(1)}k u60</span>
             </div>
           </button>
@@ -341,15 +341,15 @@ export function CrystalLatticeView() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
            <div className="space-y-1">
-              <p className="text-[8px] text-slate-600 font-black uppercase">Mathematical Engine</p>
+              <p className="text-[8px] text-slate-600 font-black uppercase">Motor Matemático</p>
               <p className="text-[10px] text-slate-300 font-bold mono">Pure S60 Taylor-Fixed</p>
            </div>
            <div className="space-y-1">
-              <p className="text-[8px] text-slate-600 font-black uppercase">Decay Constant</p>
+              <p className="text-[8px] text-slate-600 font-black uppercase">Constante de Decaimiento</p>
               <p className="text-[10px] text-slate-300 font-bold mono">54/60 (Neural) | 30/3600 (Lattice)</p>
            </div>
            <div className="space-y-1">
-              <p className="text-[8px] text-slate-600 font-black uppercase">Quarantine Protocol</p>
+              <p className="text-[8px] text-slate-600 font-black uppercase">Protocolo Cuarentena</p>
               <p className="text-[10px] text-emerald-400 font-bold mono italic">AUTO-HEAL TRIGGERED @ 12.96M</p>
            </div>
            <div className="space-y-1">

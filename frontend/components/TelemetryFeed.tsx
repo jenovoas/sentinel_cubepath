@@ -124,7 +124,7 @@ export function TelemetryFeed() {
         connected ? "bg-emerald-500/5 text-emerald-500 border-emerald-500/10" : "bg-rose-500/5 text-rose-400 border-rose-500/10"
       )}>
         <div className={clsx("w-1.5 h-1.5 rounded-full", connected ? "bg-emerald-500 animate-pulse" : "bg-rose-500")} />
-        {connected ? "Ring-0 Stream Active" : "Connecting to Kernel..."}
+        {connected ? "Flujo Ring-0 Activo" : "Conectando al Kernel..."}
       </div>
 
       {/* Scrollable area - strictly contained */}
@@ -135,8 +135,8 @@ export function TelemetryFeed() {
             <Terminal className="w-10 h-10 text-slate-700" />
           </div>
           <div className="text-center space-y-1">
-            <p className="uppercase tracking-[0.25em] font-bold text-[10px]">Awaiting Ring-0 Events</p>
-            <p className="text-[9px] text-slate-700 normal-case tracking-normal">Kernel telemetry will appear here in real-time</p>
+            <p className="uppercase tracking-[0.25em] font-bold text-[10px]">Esperando Eventos Ring-0</p>
+            <p className="text-[9px] text-slate-700 normal-case tracking-normal">La telemetría del kernel aparecerá aquí en tiempo real</p>
           </div>
         </div>
       )}

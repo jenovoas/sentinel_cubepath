@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Sentinel Ring-0 | Cognitive Firewall",
-  description: "Advanced AI Safety at Kernel Level for Autonomous Agents",
+  description: "Seguridad IA Avanzada a Nivel Kernel para Agentes Autónomos",
   icons: {
     icon: '/favicon.png',
   },

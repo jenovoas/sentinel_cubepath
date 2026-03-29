@@ -69,7 +69,7 @@ impl SPAMath {
             }
             res += term;
         }
-        SPA::from_raw((res as i64) * s_sin)
+        SPA::from_raw(i64::try_from(res.clamp(i64::MIN as i128, i64::MAX as i128)).unwrap_or(i64::MAX) * s_sin)
     }
 
     pub fn cos(angle: SPA) -> SPA {
@@ -89,7 +89,7 @@ impl SPAMath {
             }
             res += term;
         }
-        SPA::from_raw((res as i64) * s_cos)
+        SPA::from_raw(i64::try_from(res.clamp(i64::MIN as i128, i64::MAX as i128)).unwrap_or(i64::MAX) * s_cos)
     }
 
     pub fn sqrt(n: SPA) -> SPA {
@@ -138,7 +138,7 @@ impl SPAMath {
             res += term;
         }
 
-        SPA::from_raw(res as i64)
+        SPA::from_raw(i64::try_from(res.clamp(i64::MIN as i128, i64::MAX as i128)).unwrap_or(i64::MAX))
     }
 
     /// Natural Logarithm ln(x).
@@ -211,13 +211,13 @@ impl SPAMath {
         let k_factor = k as i128 * Self::LN_2 as i128;
         res += k_factor;
 
-        SPA::from_raw(res as i64)
+        SPA::from_raw(i64::try_from(res.clamp(i64::MIN as i128, i64::MAX as i128)).unwrap_or(i64::MAX))
     }
 
     pub fn from_radians(rad_raw: i64) -> SPA {
         // rad_raw is scaled by SCALE_0. Convert to Degrees: (rad * 180 / PI)
         let deg_raw = (rad_raw as i128 * 180) / Self::PI.to_raw() as i128;
-        SPA::from_raw((deg_raw as i64) * SPA::SCALE_0)
+        SPA::from_raw(i64::try_from(deg_raw.clamp(i64::MIN as i128, i64::MAX as i128)).unwrap_or(i64::MAX) * SPA::SCALE_0)
     }
 }
 

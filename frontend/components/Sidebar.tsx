@@ -110,7 +110,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
         {/* Observability / Automation separator */}
         <div className="mx-4 my-3 border-t border-white/5" />
         <div className="hidden md:block px-4 pb-1">
-          <span className="text-[7px] font-black uppercase tracking-[0.25em] text-slate-700">Observability</span>
+          <span className="text-[7px] font-black uppercase tracking-[0.25em] text-slate-700">Observabilidad</span>
         </div>
 
         {/* External service links */}
@@ -153,7 +153,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
           )}
         >
           <Settings className="w-4 h-4" />
-          <span className="hidden lg:block text-[9px] font-bold uppercase tracking-widest">Settings</span>
+          <span className="hidden lg:block text-[9px] font-bold uppercase tracking-widest">Configuración</span>
         </button>
       </div>
     </div>

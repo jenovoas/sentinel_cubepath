@@ -20,7 +20,7 @@ export function TruthSyncReport({ status }: TruthSyncReportProps) {
         <div>
           <h3 className="text-sm font-bold text-slate-100 uppercase tracking-tighter flex items-center gap-2">
             <Fingerprint className="w-4 h-4 text-sky-400" />
-            TruthSync Certification
+            Certificación TruthSync
           </h3>
           <p className="text-[10px] text-slate-500 font-medium mt-1 uppercase tracking-widest">
             Autoridad de Verdad Proactiva S60
@@ -31,7 +31,7 @@ export function TruthSyncReport({ status }: TruthSyncReportProps) {
           isSealed ? "bg-rose-500/10 border-rose-500/30 text-rose-400" :
           isCertified ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" : "bg-sky-500/10 border-sky-500/30 text-sky-400"
         )}>
-          {isSealed ? "QUARANTINED" : isCertified ? "CERTIFIED" : "SYNC_PENDING"}
+          {isSealed ? "CUARENTENA" : isCertified ? "CERTIFICADO" : "SYNC_PENDIENTE"}
         </div>
       </div>
 
@@ -51,7 +51,7 @@ export function TruthSyncReport({ status }: TruthSyncReportProps) {
         </div>
 
         <div className="relative z-10 flex-1">
-          <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Certificate ID (TruthSync)</p>
+          <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">ID de Certificado (TruthSync)</p>
           <p className="text-xs font-mono text-slate-100 truncate">{sealId}</p>
           <div className="flex items-center gap-4 mt-2">
             <div className="flex items-center gap-1 text-[8px] text-slate-600 font-bold">
@@ -60,7 +60,7 @@ export function TruthSyncReport({ status }: TruthSyncReportProps) {
             </div>
             <div className="flex items-center gap-1 text-[8px] text-emerald-500/60 font-black">
               <CheckCircle2 className="w-3 h-3" />
-              P322 Ratio Integrity: VALID
+              Integridad Ratio P322: VÁLIDO
             </div>
           </div>
         </div>
@@ -68,11 +68,11 @@ export function TruthSyncReport({ status }: TruthSyncReportProps) {
 
       <div className="grid grid-cols-2 gap-4">
         <div className="p-3 rounded-lg bg-black/30 border border-slate-900 group hover:border-sky-500/20 transition-colors">
-          <p className="text-[8px] text-slate-600 font-bold uppercase mb-1 tracking-widest">Harmonic Score (P322)</p>
+          <p className="text-[8px] text-slate-600 font-bold uppercase mb-1 tracking-widest">Puntuación Armónica (P322)</p>
           <div className="text-sm font-mono text-sky-400">{(status?.p322_ratio_integrity || 0.99984).toFixed(6)}</div>
         </div>
         <div className="p-3 rounded-lg bg-black/30 border border-slate-900 group hover:border-emerald-500/20 transition-colors">
-          <p className="text-[8px] text-slate-600 font-bold uppercase mb-1 tracking-widest">Cortex Latency</p>
+          <p className="text-[8px] text-slate-600 font-bold uppercase mb-1 tracking-widest">Latencia Cortex</p>
           <div className="text-sm font-mono text-emerald-400">
              {status?.cortex_latency_ms ? `${status.cortex_latency_ms.toFixed(3)}ms` : "< 0.04ms"}
           </div>

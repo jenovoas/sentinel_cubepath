@@ -102,7 +102,7 @@ export function MyCNetNodeGraph({ phase, isOpen }: { phase: string, isOpen: bool
               
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-900 px-3 py-1 flex items-center gap-2 border border-slate-800 rounded-full z-20">
                  <Lock className="w-3 h-3 text-slate-500" />
-                 <span className="text-[8px] text-slate-400 font-bold uppercase tracking-widest mono">Phase Hash</span>
+                 <span className="text-[8px] text-slate-400 font-bold uppercase tracking-widest mono">Hash de Fase</span>
               </div>
            </div>
 
