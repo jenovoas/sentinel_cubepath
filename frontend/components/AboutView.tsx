@@ -704,13 +704,13 @@ export function AboutView() {
               <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-200">Firewall Entrópico</h3>
             </div>
             <p className="text-[9px] text-slate-500 leading-relaxed">
-              Analiza la señal biométrica con Lyapunov + Shannon. Detecta si hay un operador humano real detrás del sistema.
+              Analiza la señal biométrica con Lyapunov + Shannon + Q-Factor. Detecta si hay un operador humano real detrás del sistema.
             </p>
             <div className="space-y-2">
               {[
-                { label: "Entropía Shannon", val: "≥ 10 símbolos distintos", c: "sky" },
-                { label: "Exponente Lyapunov", val: "Caos controlado ≥ 0.5×", c: "violet" },
-                { label: "Señal mínima", val: "≥ 4 muestras por ventana", c: "emerald" },
+                { label: "Entropía Shannon (H)", val: "Diversidad ≥ 0.5 S60",    c: "sky"    },
+                { label: "Exponente Lyapunov (λ)", val: "Caos 0.1 – 2.5 S60",   c: "violet" },
+                { label: "Q-Factor Armónico",     val: "Resonancia 2 – 8 S60",   c: "emerald" },
               ].map(m => (
                 <div key={m.label} className="p-2 bg-slate-900/40 rounded-lg border border-white/5">
                   <p className="text-[7px] text-slate-600 font-bold uppercase">{m.label}</p>
@@ -721,7 +721,7 @@ export function AboutView() {
             <div className="p-2 bg-slate-900/40 rounded-lg border border-white/5 text-[8px] font-mono">
               <span className="text-sky-400 font-black">EntropicFirewall</span>
               <span className="text-slate-600"> → </span>
-              <span className="text-emerald-400">SoulVerifier::analyze()</span>
+              <span className="text-emerald-400">BiometricVerifier::verify_liveness(nonce)</span>
             </div>
           </div>
 
@@ -739,7 +739,8 @@ export function AboutView() {
                 { from: "Syscall OS",        arrow: "→", to: "SemanticFirewall",  c: "rose"    },
                 { from: "Comando IA",        arrow: "→", to: "SemanticFirewall",  c: "rose"    },
                 { from: "Telemetría Red",    arrow: "→", to: "EntropicFirewall",  c: "sky"     },
-                { from: "Señal Bio",         arrow: "→", to: "SoulVerifier",      c: "violet"  },
+                { from: "Señal Bio",         arrow: "→", to: "LivenessChallenge",  c: "violet"  },
+                { from: "LivenessChallenge", arrow: "→", to: "BiometricVerifier",  c: "violet"  },
                 { from: "Output limpio",     arrow: "→", to: "Cortex Ring-0",     c: "emerald" },
               ].map((row, i) => (
                 <div key={i} className="flex items-center gap-1.5 text-[8px]">
@@ -820,11 +821,11 @@ export function AboutView() {
 
           {/* Métricas biométricas */}
           <div className="space-y-3">
-            <p className="text-[8px] font-black uppercase tracking-widest text-slate-500">Análisis SoulVerifier (EXP-019)</p>
+            <p className="text-[8px] font-black uppercase tracking-widest text-slate-500">BiometricProof — EXP-019 (λ + H + Q)</p>
             {[
-              { label: "Exponente de Lyapunov",   desc: "Caos determinista — firma única de presencia humana",  c: "violet", val: status?.bio_coherence ? "DETECTADO" : "MIDIENDO" },
-              { label: "Entropía de Shannon",      desc: "Diversidad simbólica de la señal biométrica",          c: "sky",    val: status?.bio_coherence ? "VÁLIDA"    : "MIDIENDO" },
-              { label: "Curva de Coherencia",      desc: "Integración en ventana temporal deslizante de 256 ms", c: "emerald",val: `${bioCoherencePct.toFixed(1)}%` },
+              { label: "Exponente de Lyapunov (λ)", desc: "Caos determinista — firma única de presencia humana",     c: "violet", val: status?.bio_coherence ? "DETECTADO" : "MIDIENDO" },
+              { label: "Entropía de Shannon (H)",   desc: "Diversidad simbólica de la señal biométrica",             c: "sky",    val: status?.bio_coherence ? "VÁLIDA"    : "MIDIENDO" },
+              { label: "Q-Factor Armónico",          desc: "Resonancia piezoeléctrica 2–8 S60 · calculate_q_factor_s60()", c: "emerald", val: `${bioCoherencePct.toFixed(1)}%` },
             ].map(m => (
               <div key={m.label} className="flex items-start gap-3 p-3 bg-slate-900/40 rounded-xl border border-white/5">
                 <div className={`w-1.5 h-full min-h-[32px] rounded-full bg-${m.c}-500/40 shrink-0`} />
