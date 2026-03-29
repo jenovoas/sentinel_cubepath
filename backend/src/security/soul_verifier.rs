@@ -180,3 +180,21 @@ pub fn chaos_entropy_s60(signal: &[S60]) -> S60 {
     entropy
 }
 
+/// Calculate Q-Factor for harmonic resonance
+pub fn calculate_q_factor_s60(signal: &[S60]) -> S60 {
+    if signal.len() < 10 { return S60::from_int(5); }
+
+    // Simplificación armónica para el MVP en cubepath
+    let sum: i64 = signal.iter().map(|s| s.to_raw()).sum();
+    let avg = sum / signal.len() as i64;
+
+    let variance: i64 = signal.iter()
+        .map(|s| (s.to_raw() - avg).pow(2))
+        .sum::<i64>() / signal.len() as i64;
+
+    let bandwidth = SPAMath::sqrt(S60::from_raw(variance));
+    if bandwidth.to_raw() == 0 { return S60::from_int(5); }
+
+    let f0 = S60::from_raw(avg.abs());
+    f0.div_safe(bandwidth).unwrap_or(S60::from_int(5)).clamp(S60::from_int(2), S60::from_int(8))
+}

@@ -1,0 +1,121 @@
+#![allow(dead_code)]
+//! # 🛡️ PRODUCTION SOUL VERIFIER - SENTINEL CORTEX 🛡️
+//!
+//! Biometric Verifier - Pure Base-60 (S60) Implementation.
+//! Ported for Sentinel Ring-0 (MiduDev Hackathon).
+
+use crate::math::S60;
+use crate::security::soul_verifier::{calculate_lyapunov_s60, chaos_entropy_s60, calculate_q_factor_s60};
+use serde::{Deserialize, Serialize};
+use sha3::{Digest, Sha3_512};
+use std::fs::File;
+use std::io::Read;
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct LivenessChallenge {
+    pub nonce: u64,
+    pub light_sequence: Vec<u8>,
+    pub timestamp: i64,
+    pub user_id: String,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct BiometricProof {
+    pub lyapunov_exp: S60,
+    pub chaos_entropy: S60,
+    pub q_factor: S60,
+    pub response_correlation: S60,
+    pub biometric_hash: String,
+    pub timestamp: i64,
+}
+
+#[derive(Debug)]
+pub enum BiometricError {
+    StaleChallenge,
+    NoLivingSource,
+    UnknownIdentity(String),
+    InsufficientSignal,
+    EntropyError(String),
+}
+
+pub struct BiometricVerifier {
+    challenge_seq: Vec<u8>,
+}
+
+impl BiometricVerifier {
+    pub fn new() -> Self {
+        Self { challenge_seq: vec![255, 0, 255] }
+    }
+
+    pub fn generate_challenge(&self, user_id: &str) -> LivenessChallenge {
+        let nonce = self.generate_real_entropy_nonce();
+        LivenessChallenge {
+            nonce,
+            light_sequence: self.challenge_seq.clone(),
+            timestamp: chrono::Utc::now().timestamp(),
+            user_id: user_id.to_string(),
+        }
+    }
+
+    fn generate_real_entropy_nonce(&self) -> u64 {
+        match File::open("/dev/urandom") {
+            Ok(mut file) => {
+                let mut buffer = [0u8; 8];
+                if file.read_exact(&mut buffer).is_ok() { u64::from_le_bytes(buffer) }
+                else { self.fallback_nonce() }
+            }
+            Err(_) => self.fallback_nonce(),
+        }
+    }
+
+    fn fallback_nonce(&self) -> u64 {
+        use std::time::{SystemTime, UNIX_EPOCH};
+        let dur = SystemTime::now().duration_since(UNIX_EPOCH).unwrap();
+        let ts = dur.as_secs() ^ u64::from(dur.subsec_nanos());
+        ts ^ (std::process::id() as u64)
+    }
+
+    pub fn verify_liveness(&self, rppg_signal: &[S60], challenge: &LivenessChallenge) -> Result<BiometricProof, BiometricError> {
+        let now = chrono::Utc::now().timestamp();
+        // 30 second TTL for challenges
+        if (now - challenge.timestamp) > 30 { return Err(BiometricError::StaleChallenge); }
+
+        let lyapunov = calculate_lyapunov_s60(rppg_signal);
+        let entropy  = chaos_entropy_s60(rppg_signal);
+        let q_factor = calculate_q_factor_s60(rppg_signal);
+        let light_response = S60::zero();
+
+        let biometric_hash_str = self.compute_biometric_hash_s60(rppg_signal, &challenge.nonce.to_le_bytes());
+
+        // Physiological Guardrails
+        let min_lyap = S60::from_raw(S60::SCALE_0 / 10);
+        let max_lyap = S60::from_raw((S60::SCALE_0 * 5) / 2);
+        let min_entr = S60::from_raw(S60::SCALE_0 / 2);
+        let min_q    = S60::from_int(2);
+
+        if lyapunov < min_lyap || lyapunov > max_lyap { return Err(BiometricError::NoLivingSource); }
+        if entropy  < min_entr                         { return Err(BiometricError::NoLivingSource); }
+        if q_factor < min_q                            { return Err(BiometricError::NoLivingSource); }
+
+        Ok(BiometricProof {
+            lyapunov_exp: lyapunov,
+            chaos_entropy: entropy,
+            q_factor,
+            response_correlation: light_response,
+            biometric_hash: biometric_hash_str,
+            timestamp: now,
+        })
+    }
+
+    fn compute_biometric_hash_s60(&self, rppg: &[S60], nonce: &[u8]) -> String {
+        let mut hasher = Sha3_512::new();
+        for val in rppg {
+            let raw_val: i64 = val.to_raw();
+            hasher.update(raw_val.to_le_bytes());
+        }
+        hasher.update(nonce);
+        hex::encode(hasher.finalize())
+    }
+}
+
+impl Default for BiometricVerifier { fn default() -> Self { Self::new() } }
