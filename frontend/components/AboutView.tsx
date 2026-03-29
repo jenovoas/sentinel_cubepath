@@ -36,24 +36,30 @@ function buildBootLines(status: any, tick: number) {
   const isSealed = status?.ring_status === "SEALED";
   const lat      = status?.cortex_latency_ms?.toFixed(3) ?? "0.039";
   const bioPct   = status?.bio_coherence
-    ? ((status.bio_coherence / 12_960_000) * 100).toFixed(1) : "0.0";
+    ? ((Math.abs(status.bio_coherence) / 12_960_000) * 100).toFixed(1) : "0.0";
+
+  // Campos dinámicos reales del backend desplegado
+  const seal     = status?.truthsync_seal ?? "VERIFICANDO";      // Real: "TS-SYNC-S60-3AE4"
+  const p322     = status?.p322_ratio_integrity
+    ? (typeof status.p322_ratio_integrity === "number"
+        ? status.p322_ratio_integrity.toFixed(6)
+        : status.p322_ratio_integrity)
+    : "0.999840";                                                 // Real: 0.9998
+  const sync     = status?.harmonic_sync ?? "CALCULANDO";        // Real: "STABLE"
+  const threats  = status?.threat_count ?? 0;                    // Real: contador de amenazas
+  const lsmMode  = status?.lsm_cognitive ?? "RING-0";           // Real: "ENFORCING"
 
   return [
-    { text: "> Iniciando Sentinel Ring-0 v1.0.0 — Hackatón CubePath 2026...", level: "dim" },
-    { text: `[${xdpOk ? "OK" : "WARN"}] Kernel eBPF cargado — hooks execve / openat / chmod`, level: xdpOk ? "ok" : "warn" },
-    { text: `[${xdpFull ? "OK" : "BYPASS"}] XDP TC Firewall en línea — latencia media ${lat}ms`, level: xdpFull ? "ok" : "warn" },
-    { text: `[${lsmOk ? "OK" : "WARN"}] LSM Cognitive activo — ${status?.lsm_cognitive ?? "RING-0"}`, level: lsmOk ? "ok" : "warn" },
-    { text: `[OK] Motor S60 Base-60 corriendo — tick #${tick.toLocaleString("es-CL")} — 0 floats`, level: "ok" },
-    { text: `[${crystalOk ? "OK" : "STANDBY"}] Cristal de Tiempo resonando — P322 ratio 0.999840 — 41.77 Hz`, level: crystalOk ? "ok" : "dim" },
-    { text: `[${bioOk ? "OK" : "WARN"}] Bio-Resonador activo — coherencia ${bioPct}% — Watchdog armado`, level: bioOk ? "ok" : "warn" },
-    { text: "[OK] TruthSync certificado — Plimpton 322 Row 12 verificado", level: "ok" },
-    { text: "[OK] Sanitizador semántico activo — patrones de inyección bloqueados", level: "ok" },
-    { text: "[OK] MyCNet P2P en línea — FENIX ↔ CUBEPATH — ciclo YHWH 10-5-6-5", level: "ok" },
-    { text: "─────────────────────────────────────────────────────────────────────", level: "dim" },
+    { text: `> Iniciando Sentinel Ring-0 v1.0.0 — ${threats} amenazas interceptadas`, level: "dim" },
+    { text: `[${xdpOk ? "OK" : "WARN"}] eBPF Ring-0: XDP ${xdpFull ? "ACTIVE_XDP" : "STANDBY"} · LSM ${lsmMode}`, level: xdpOk ? "ok" : "warn" },
+    { text: `[OK] Motor S60 Base-60 · tick #${tick.toLocaleString("es-CL")} · P322 ratio ${p322}`, level: "ok" },
+    { text: `[${crystalOk ? "OK" : "STANDBY"}] Cristal de Tiempo @ 41.77 Hz · sync harmónico ${sync}`, level: crystalOk ? "ok" : "dim" },
+    { text: `[${bioOk ? "OK" : "WARN"}] Bio-Resonador coherencia ${bioPct}% · Latencia ${lat}ms`, level: bioOk ? "ok" : "warn" },
+    { text: `[OK] TruthSync ${seal} · Sello Plimpton 322 Activo`, level: "ok" },
     {
       text: isSealed
         ? "⚠  MODO CUARENTENA ACTIVO — SISTEMA SELLADO"
-        : "✓  SENTINEL RING-0 — GUARDIÁN ACTIVO — SISTEMA OPERATIVO",
+        : "✓  SENTINEL RING-0 — GUARDIÁN ACTIVO",
       level: isSealed ? "warn" : "success",
     },
   ];
@@ -99,7 +105,7 @@ export function AboutView() {
   const matrixId    = useRef(0);
   const wsRef       = useRef<WebSocket | null>(null);
 
-  // ── status polling ──
+  // ── status polling (usando el backend real desplegado) ──
   useEffect(() => {
     const base = process.env.NEXT_PUBLIC_API_URL ?? "";
     const go = () =>
@@ -109,13 +115,13 @@ export function AboutView() {
     return () => clearInterval(iv);
   }, []);
 
-  // ── tick polling ──
+  // ── tick polling desde /health (campo tick real del backend) ──
   useEffect(() => {
     const base = process.env.NEXT_PUBLIC_API_URL ?? "";
     const go = () =>
-      fetch(`${base}/api/v1/lattice/state`)
+      fetch(`${base}/health`)
         .then(r => r.json())
-        .then(d => setTick(d.global_tick ?? 0))
+        .then(d => { if (d?.tick !== undefined) setTick(d.tick); })
         .catch(() => {});
     go();
     const iv = setInterval(go, 2000);
@@ -250,9 +256,6 @@ export function AboutView() {
                 <h1 className="text-4xl font-extrabold tracking-tighter text-white">
                   Sentinel <span className="text-emerald-400">Ring-0</span>
                 </h1>
-                <p className="text-[9px] text-emerald-500/60 font-bold uppercase tracking-[0.3em] mt-0.5">
-                  Firewall Cognitivo de Kernel · Hackatón CubePath 2026
-                </p>
               </div>
             </div>
 
@@ -266,15 +269,15 @@ export function AboutView() {
             </p>
 
             <div className="flex flex-wrap gap-3">
-              <a href="https://vps23309.cubepath.net/" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500/10 border border-emerald-500/40 rounded-xl text-xs font-black text-emerald-400 uppercase tracking-widest hover:bg-emerald-500 hover:text-slate-950 transition-all shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]">
-                <div className="w-2 h-2 rounded-full bg-current animate-pulse" />
-                Demo en Vivo <ExternalLink className="w-3.5 h-3.5" />
-              </a>
               <a href="https://github.com/jenovoas/sentinel_cubepath" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 px-5 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-xs font-black text-slate-300 uppercase tracking-widest hover:bg-slate-700 hover:text-white transition-all">
+                className="flex items-center gap-2 px-6 py-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-xs font-black text-emerald-400 uppercase tracking-widest hover:bg-emerald-500 hover:text-slate-950 transition-all shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+                <GitBranch className="w-4 h-4" />
                 Repositorio GitHub
               </a>
+              <Link href="/docs" className="flex items-center gap-2 px-6 py-3 bg-slate-800 border border-white/10 rounded-xl text-xs font-black text-slate-300 uppercase tracking-widest hover:bg-slate-700 hover:text-white transition-all">
+                <BookOpen className="w-4 h-4" />
+                Documentación
+              </Link>
             </div>
           </div>
         </motion.div>

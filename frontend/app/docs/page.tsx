@@ -111,9 +111,18 @@ export default function DocsIndex() {
     return acc;
   }, {} as Record<string, {path: string, name: string, isMansfield: boolean}[]>);
 
+  // Sorting documents within folders to ensure ACADEMIC_VALIDATION is first
+  Object.keys(categorized).forEach(folder => {
+    categorized[folder].sort((a: any, b: any) => {
+      if (a.isMansfield) return -1;
+      if (b.isMansfield) return 1;
+      return a.name.localeCompare(b.name);
+    });
+  });
+
   const sortedFolders = Object.keys(categorized).sort((a, b) => {
-    if (a === "ROOT DOCUMENTS") return 1;
-    if (b === "ROOT DOCUMENTS") return -1;
+    if (a === "ROOT DOCUMENTS") return -1; // Root folder first for key docs
+    if (b === "ROOT DOCUMENTS") return 1;
     return a.localeCompare(b);
   });
 

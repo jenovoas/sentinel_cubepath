@@ -14,7 +14,8 @@ import { CrystalLatticeView } from "./CrystalLatticeView";
 import { AboutView } from "./AboutView";
 import { MonitoringView } from "./MonitoringView";
 import { clsx } from "clsx";
-import { ShieldAlert as ShieldAlertIcon } from "lucide-react"; // Alias if needed, but we'll stick to ShieldAlert
+import { ShieldAlert as ShieldAlertIcon, Github, BookOpen } from "lucide-react";
+import Link from "next/link";
 
 export function Dashboard() {
   const [status, setStatus] = useState<any>(null);
@@ -23,7 +24,7 @@ export function Dashboard() {
   const [encryptionLayer, setEncryptionLayer] = useState<string>("S60_SHIELD_INITIALIZING");
   const [yhwhPhase, setYhwhPhase] = useState<string>("HE2");
   const [networkOpen, setNetworkOpen] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<string>("dashboard");
+  const [activeTab, setActiveTab] = useState<string>("about");
   const [vaultEvents, setVaultEvents] = useState<any[]>([]);
 
   // Telemetry listener for dynamic encryption layer (SNN+RMM acoplado)
@@ -97,6 +98,31 @@ export function Dashboard() {
       <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
 
       <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-2 pb-8">
+        {/* TOP UTILITY BAR */}
+        <div className="flex items-center justify-end gap-6 py-4 px-2 mb-2 border-b border-white/5">
+          <a
+            href="https://github.com/jenovoas/sentinel_cubepath"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate-500 hover:text-white transition-colors p-1"
+            title="Ver Repositorio GitHub"
+          >
+            <Github className="w-4 h-4" />
+          </a>
+          <Link
+            href="/docs"
+            className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-emerald-400 transition-colors"
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>Documentación</span>
+          </Link>
+          <div className="w-px h-4 bg-white/10" />
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[9px] font-bold text-emerald-500/80 uppercase tracking-tighter">Ring-0 Enforced</span>
+          </div>
+        </div>
+
         {activeTab === "about" ? (
           <AboutView />
         ) : activeTab === "dashboard" ? (
