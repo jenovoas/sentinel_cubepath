@@ -23,6 +23,14 @@
 - **Soberanía S60**: No proponer ni aceptar ninguna simplificación que use `f32/f64`. El compilador está ahora configurado con `clippy-driver` para rechazarlo.
 - **Cero Distracciones**: Si no hay una tarea clara, investigar en silencio y reportar hallazgos de forma concisa.
 
+## 5. Reglas de Despliegue Frontend (CRÍTICO — aprendido 2026-03-29)
+
+- **NO ejecutar `npm run build`**: El servicio usa `npm run dev`. Ejecutar un build de producción interfiere con el dev server y rompe el CSS. Está **prohibido** salvo instrucción explícita del usuario.
+- **Cambios en el frontend**: Solo editar el archivo fuente. El dev server (`npm run dev`) recarga automáticamente. No se necesita ningún build ni restart.
+- **Si el frontend se cae**: La única acción permitida sin aprobación es `systemctl status`. Para reiniciar, **solicitar aprobación explícita**.
+- **`rm` sigue prohibido sin excepción**: Incluso para limpiar artefactos de build que yo mismo creé por error.
+- **Múltiples restarts = procesos zombie**: Cada `systemctl restart` sin esperar que el proceso anterior muera puede dejar instancias zombie bloqueando puertos. Diagnóstico obligatorio con `ss -tlnp | grep 300` antes de cualquier restart adicional.
+
 ---
 
 _Estas lecciones son vinculantes para Gemini AI en cada turno de esta sesión y futuras._
