@@ -15,6 +15,7 @@ import {
   ExternalLink,
   Info,
   Microscope,
+  User,
 } from "lucide-react";
 
 import { clsx } from "clsx";
@@ -48,6 +49,14 @@ const EXTERNAL_SERVICES = [
     href: "https://vps23309.cubepath.net/n8n/",
     color: "text-violet-400",
     dot: "bg-violet-500",
+  },
+  {
+    id: "portfolio",
+    label: "Portfolio",
+    icon: User,
+    href: "https://portfolio.pinguinoseguro.cl/",
+    color: "text-sky-400",
+    dot: "bg-sky-500",
   },
 ];
 

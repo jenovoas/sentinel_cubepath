@@ -16,7 +16,7 @@ use crate::math::{S60, SPAMath};
 use std::collections::HashMap;
 
 // =========================================================================
-// BIO-RESONANCE: SoulVerifier (from me-60os/src/bio.rs)
+// BIO-RESONANCE: SoulVerifier (from /src/bio.rs)
 // =========================================================================
 
 #[derive(Debug, Clone)]

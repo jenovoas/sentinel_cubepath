@@ -6,13 +6,7 @@ use std::time::Duration;
 
 pub mod bridge;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub enum Severity {
-    Low,
-    Medium,
-    High,
-    Critical,
-}
+use crate::models::{Severity, Event};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SecurityEvent {

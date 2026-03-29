@@ -11,7 +11,7 @@
 use crate::math::SPA;
 use std::cell::UnsafeCell;
 use std::sync::atomic::{AtomicUsize, Ordering};
-use crate::nerves::bridge::CortexEvent;
+use crate::models::CortexEvent;
 
 /// Constants
 pub const BUFFER_SIZE_S60: usize = 3600; // 60^2 blocks
