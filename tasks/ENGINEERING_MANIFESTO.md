@@ -12,7 +12,6 @@
 
 ## 📐 ARQUITECTURA DE NODOS (UBICACIÓN FÍSICA)
 
-- **FENIX (Local)**: Servidor de PRODUCCIÓN personal de Jaime. **PROHIBIDR DESPLEGAR**. Es el entorno de edición de código y control maestro.
 - **SENTINEL-CUBEPATH (Remoto)**: Nodo de la HACKATÓN (4GB RAM). Único objetivo de despliegue, ejecución y pruebas. Puerto SSH: **4222**.
 
 ## 🧬 ESPECIFICACIONES TÉCNICAS (TRUTH MODE)
@@ -29,4 +28,5 @@
 - Verificación de procesos huérfanos con `ps aux | grep sentinel`.
 
 ---
+
 _Este manifiesto es la Fuente de Verdad para todo desarrollo en Sentinel Cubepath._

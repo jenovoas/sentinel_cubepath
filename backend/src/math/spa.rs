@@ -79,10 +79,6 @@ impl SPA {
     pub fn to_components(&self) -> [i64; 5] { self.components }
     pub fn from_legacy_tertia(tertia: i64) -> Self { Self::from_raw(tertia * 60) }
     pub fn to_legacy_tertia(&self) -> i64 { self.to_raw() / 60 }
-    pub fn from_decimal_for_import_only(decimal: f64) -> Self {
-        let raw = (decimal * Self::SCALE_0 as f64).round() as i64;
-        Self::from_raw(raw)
-    }
 }
 
 // --- ARITHMETIC ---
