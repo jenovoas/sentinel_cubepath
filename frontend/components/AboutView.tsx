@@ -239,53 +239,11 @@ export function AboutView() {
       {/* ══════════════════════════════════════════════════════════
           2.  HERO — TÍTULO + MÉTRICAS EN VIVO
       ══════════════════════════════════════════════════════════ */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-        {/* Descripción principal */}
+      {/* 2.  MÉTRICAS EN VIVO — REAJUSTADO */}
+      <div className="grid grid-cols-1 gap-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-          className="glass-card col-span-1 lg:col-span-7 p-8 relative overflow-hidden group hover:border-emerald-500/30 transition-colors"
-        >
-          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[100px] group-hover:bg-emerald-500/10 transition-all duration-700 pointer-events-none" />
-          <div className="relative z-10">
-            <div className="flex flex-wrap items-center gap-3 mb-4">
-              <div className="p-3 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
-                <Shield className="w-8 h-8 text-emerald-400" />
-              </div>
-              <div>
-                <h1 className="text-4xl font-extrabold tracking-tighter text-white">
-                  Sentinel <span className="text-emerald-400">Ring-0</span>
-                </h1>
-              </div>
-            </div>
-
-            <p className="text-slate-400 text-sm leading-relaxed max-w-xl font-medium mb-6">
-              El primer sistema de seguridad para IA que opera en{" "}
-              <strong className="text-white">Ring-0</strong> — interceptando syscalls maliciosos{" "}
-              <em>antes</em> de su ejecución mediante eBPF, con aritmética
-              hiper-determinista <strong className="text-emerald-400">Base-60</strong> derivada
-              de la tableta babilónica Plimpton 322 (1800 a.C.). Un guardián que combina
-              física del kernel, matemática ancestral y biometría en tiempo real.
-            </p>
-
-            <div className="flex flex-wrap gap-3">
-              <a href="https://github.com/jenovoas/sentinel_cubepath" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 px-6 py-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-xs font-black text-emerald-400 uppercase tracking-widest hover:bg-emerald-500 hover:text-slate-950 transition-all shadow-[0_0_20px_rgba(16,185,129,0.1)]">
-                <GitBranch className="w-4 h-4" />
-                Repositorio GitHub
-              </a>
-              <Link href="/docs" className="flex items-center gap-2 px-6 py-3 bg-slate-800 border border-white/10 rounded-xl text-xs font-black text-slate-300 uppercase tracking-widest hover:bg-slate-700 hover:text-white transition-all">
-                <BookOpen className="w-4 h-4" />
-                Documentación
-              </Link>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Métricas en vivo */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-          className="glass-card col-span-1 lg:col-span-5 p-6 flex flex-col gap-4 relative overflow-hidden"
+          className="glass-card p-6 flex flex-col gap-4 relative overflow-hidden h-full border-emerald-500/10"
         >
           <div className="absolute bottom-0 right-0 w-48 h-48 bg-sky-500/5 rounded-full blur-[60px] pointer-events-none" />
           <div className="relative z-10 space-y-4">
@@ -303,56 +261,69 @@ export function AboutView() {
               </div>
             </div>
 
-            {/* Tick S60 */}
-            <div className="flex items-center justify-between">
-              <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">Tick S60</span>
-              <span className="text-xl font-bold mono text-white tabular-nums">{tick.toLocaleString("es-CL")}</span>
-            </div>
-
-            {/* Bio-coherencia */}
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-[9px] uppercase font-black tracking-widest">
-                <span className="text-slate-500">Bio-Coherencia</span>
-                <span className="text-violet-400">{bioCoherencePct.toFixed(1)}%</span>
-              </div>
-              <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
-                <motion.div className="h-full bg-gradient-to-r from-violet-700 to-violet-400 rounded-full"
-                  initial={{ width: 0 }} animate={{ width: `${bioCoherencePct}%` }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
-                />
-              </div>
-            </div>
-
-            {/* Resonancia S60 */}
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-[9px] uppercase font-black tracking-widest">
-                <span className="text-slate-500">Resonancia S60</span>
-                <span className="text-sky-400">{s60Pct.toFixed(1)}%</span>
-              </div>
-              <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
-                <motion.div className="h-full bg-gradient-to-r from-sky-700 to-sky-400 rounded-full"
-                  initial={{ width: 0 }} animate={{ width: `${s60Pct}%` }}
-                  transition={{ duration: 1.5, ease: "easeOut", delay: 0.25 }}
-                />
-              </div>
-            </div>
-
-            {/* Tres métricas clave */}
-            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5">
-              {[
-                { label: "Ahorro CPU",   val: "62.9%",                          color: "text-emerald-400" },
-                { label: "Latencia",     val: lat ? `${lat.toFixed(2)}ms` : "< 0.04ms", color: "text-sky-400"     },
-                { label: "P322 Ratio",   val: p322,                             color: "text-amber-400"  },
-              ].map(m => (
-                <div key={m.label} className="text-center">
-                  <p className="text-[7px] text-slate-600 font-bold uppercase tracking-wider">{m.label}</p>
-                  <p className={clsx("text-sm font-black mono tabular-nums", m.color)}>{m.val}</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+               <div className="space-y-4">
+                {/* Tick S60 */}
+                <div className="flex items-center justify-between">
+                  <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">Tick S60</span>
+                  <span className="text-xl font-bold mono text-white tabular-nums">{tick.toLocaleString("es-CL")}</span>
                 </div>
-              ))}
+
+                {/* Bio-coherencia */}
+                <div className="space-y-1.5">
+                  <div className="flex justify-between text-[9px] uppercase font-black tracking-widest">
+                    <span className="text-slate-500">Bio-Coherencia</span>
+                    <span className="text-violet-400">{bioCoherencePct.toFixed(1)}%</span>
+                  </div>
+                  <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
+                    <motion.div className="h-full bg-gradient-to-r from-violet-700 to-violet-400 rounded-full"
+                      initial={{ width: 0 }} animate={{ width: `${bioCoherencePct}%` }}
+                      transition={{ duration: 1.5, ease: "easeOut" }}
+                    />
+                  </div>
+                </div>
+               </div>
+
+               <div className="space-y-4">
+                {/* Resonancia S60 */}
+                <div className="space-y-1.5 pt-1.5">
+                  <div className="flex justify-between text-[9px] uppercase font-black tracking-widest">
+                    <span className="text-slate-500">Resonancia S60</span>
+                    <span className="text-sky-400">{s60Pct.toFixed(1)}%</span>
+                  </div>
+                  <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
+                    <motion.div className="h-full bg-gradient-to-r from-sky-700 to-sky-400 rounded-full"
+                      initial={{ width: 0 }} animate={{ width: `${s60Pct}%` }}
+                      transition={{ duration: 1.5, ease: "easeOut", delay: 0.25 }}
+                    />
+                  </div>
+                </div>
+
+                {/* Tres métricas clave */}
+                <div className="grid grid-cols-3 gap-2 pt-1">
+                  {[
+                    { label: "Ahorro CPU",   val: "62.9%",                          color: "text-emerald-400" },
+                    { label: "Latencia",     val: lat ? `${lat.toFixed(2)}ms` : "< 0.04ms", color: "text-sky-400"     },
+                    { label: "P322 Ratio",   val: p322,                             color: "text-amber-400"  },
+                  ].map(m => (
+                    <div key={m.label} className="text-center">
+                      <p className="text-[7px] text-slate-600 font-bold uppercase tracking-wider">{m.label}</p>
+                      <p className={clsx("text-sm font-black mono tabular-nums", m.color)}>{m.val}</p>
+                    </div>
+                  ))}
+                </div>
+               </div>
+
+               <div className="flex flex-col justify-center items-center p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl">
+                  <Shield className="w-8 h-8 text-emerald-500/30 mb-2" />
+                  <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Ring-0 Activo</p>
+                  <p className="text-[8px] text-slate-600 font-bold uppercase mt-1">Sincronización Sexagesimal</p>
+               </div>
             </div>
           </div>
         </motion.div>
       </div>
+
 
       {/* ══════════════════════════════════════════════════════════
           3.  EL GAP RING-0 — ARQUITECTURA DE INTERCEPCIÓN

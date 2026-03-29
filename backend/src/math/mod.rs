@@ -8,12 +8,14 @@ pub mod spa_math;
 pub mod complex;
 pub mod core;
 pub mod isochronous_oscillator;
+pub mod resonant_matrix;
 
 pub use spa::SPA;
 pub use spa_math::SPAMath;
 pub use complex::ComplexSPA;
 pub use core::{S60PID, IsochronousClock, ResonantBuffer, LiquidLattice};
 pub use isochronous_oscillator::IsochronousOscillator;
+pub use resonant_matrix::ResonantMatrix;
 
 // S60 is a semantic alias for SPA to align with external Quantum/eBPF modules
 pub type S60 = SPA;

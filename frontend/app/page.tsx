@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Dashboard } from "@/components/Dashboard";
-import { Shield, Clock, HardDrive, Terminal } from "lucide-react";
+import { Shield, Clock, HardDrive, Terminal, Github } from "lucide-react";
 
 export default function Home() {
   const [time, setTime] = useState<Date | null>(null);
@@ -35,6 +35,21 @@ export default function Home() {
         </div>
         
         <div className="flex items-center gap-6 glass-card px-6 py-3 border-emerald-500/10">
+          <a
+            href="https://github.com/jenovoas/sentinel_cubepath"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:flex items-center gap-3 pr-6 border-r border-white/5 hover:text-emerald-400 transition-colors group"
+          >
+            <div className="p-1.5 bg-emerald-500/5 rounded-lg border border-emerald-500/10 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-all">
+              <Github className="w-4 h-4 text-emerald-500" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Repositorio</span>
+              <span className="text-[10px] font-bold uppercase tracking-tighter">GitHub</span>
+            </div>
+          </a>
+
           <Link
             href="/docs"
             className="hidden sm:flex items-center gap-3 pr-6 border-r border-white/5 hover:text-emerald-400 transition-colors group"
@@ -47,6 +62,7 @@ export default function Home() {
               <span className="text-[10px] font-bold uppercase tracking-tighter">/docs</span>
             </div>
           </Link>
+
 
           <div className="hidden sm:flex flex-col items-end">
             <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Nodo Soberano</span>

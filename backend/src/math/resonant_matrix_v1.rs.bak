@@ -1,0 +1,103 @@
+//! # 🕸️ RESONANT LATTICE - Network of Coupled Crystals 🕸️
+//!
+//! Pure Rust implementation of the Resonant Lattice.
+//! Migrated from quantum/resonant_matrix.py with zero functionality loss.
+//!
+//! Enables energy (data) transfer through sympathetic vibration between nodes.
+
+use crate::math::isochronous_oscillator::IsochronousOscillator;
+use crate::math::spa::SPA;
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+
+/// Resonant Matrix: Network of coupled crystals. (RECOVERED)
+/// Implements the Liquid Lattice quantum matrix architecture.
+#[derive(Serialize, Deserialize)]
+pub struct ResonantMatrix {
+    /// Array of crystal nodes
+    pub crystals: Vec<IsochronousOscillator>,
+
+    /// Context Buffer mapping a node index to its context payload
+    pub context_data: HashMap<usize, String>,
+
+    /// Metadata Map for visualization states (BLOQUEADO, BIO-PULSO, etc.)
+    pub metadata_map: Vec<Option<String>>,
+
+    /// Coupling Factor: strength of connection between nodes
+    /// SPA(0, 10) = 10/60 ≈ 0.167
+    pub coupling_factor: SPA,
+    /// Time step for evolution
+    pub dt: SPA,
+}
+
+impl ResonantMatrix {
+    /// Creates a new lattice with the specified number of nodes.
+    pub fn new(size: usize) -> Self {
+        let crystals = (0..size)
+            .map(|i| IsochronousOscillator::new(&format!("Node-{}", i)))
+            .collect();
+
+        Self {
+            crystals,
+            context_data: HashMap::new(),
+            metadata_map: vec![None; size],
+            coupling_factor: SPA::new(0, 10, 0, 0, 0), // 10/60
+            dt: SPA::new(0, 0, 1, 0, 0),               // 1 second step
+        }
+    }
+
+    /// Returns the number of nodes in the lattice.
+    pub fn size(&self) -> usize {
+        self.crystals.len()
+    }
+
+    /// Executes one time step on the entire network.
+    /// Calculates energy transfer between adjacent nodes (Resonancia Sexagesimal Real).
+    pub fn step(&mut self) {
+        let size = self.crystals.len();
+        if size < 2 { return; }
+
+        // 1. Calculate transfers (Flow = pressure differential * coupling)
+        let mut transfers: Vec<SPA> = vec![SPA::zero(); size];
+
+        for i in 0..(size - 1) {
+            let amp_i = self.crystals[i].amplitude;
+            let amp_next = self.crystals[i + 1].amplitude;
+
+            // Amplitude differential (pressure)
+            let diff = amp_i - amp_next;
+
+            // Flow = Differential * Coupling Factor
+            let flow = diff * self.coupling_factor;
+
+            // Node i loses, node i+1 gains
+            transfers[i] = transfers[i] - flow;
+            transfers[i + 1] = transfers[i + 1] + flow;
+        }
+
+        // 2. Apply transfers and oscillate
+        for i in 0..size {
+            self.crystals[i].amplitude = self.crystals[i].amplitude + transfers[i];
+            self.crystals[i].oscillate(self.dt);
+            
+            // Auto-decay metadata if amplitude is low
+            if self.crystals[i].amplitude.to_raw() < 500 {
+                self.metadata_map[i] = None;
+            }
+        }
+    }
+
+    /// Inyecta presión de pulso en un nodo específico.
+    pub fn inject(&mut self, index: usize, pressure_raw: i64) {
+        if index < self.crystals.len() {
+            self.crystals[index].transduce_pulse(pressure_raw);
+        }
+    }
+
+    /// Calcula la coherencia global (Sincronía S60).
+    pub fn global_coherence(&self) -> i64 {
+        if self.crystals.is_empty() { return 0; }
+        let total = self.crystals.iter().fold(0i64, |acc, c| acc + c.amplitude.to_raw());
+        total / self.crystals.len() as i64
+    }
+}

@@ -11,18 +11,19 @@ const S60_SCALE = 12_960_000;
 const LATTICE_GRID = 32; // 32×32 = 1024
 const NEURAL_GRID = 10;   // 10×10 = 100
 
-interface NodeState {
+interface CellSnapshot {
   amplitude_raw: number;
   phase_raw: number;
-  is_active: boolean;
+  metadata?: string;
 }
 
 interface LatticeState {
-  nodes: NodeState[];
-  global_coherence_raw: number;
-  total_energy_raw: number;
-  active_count: number;
-  global_tick: number;
+  timestamp: number;
+  size: number;
+  lattice: CellSnapshot[];
+  phase: string;
+  coherence: number;
+  tick: number;
 }
 
 interface MembraneState {
@@ -71,10 +72,21 @@ const EXPERIMENTS = [
   },
 ];
 
-function nodeColor(amplitude_raw: number, phase_raw: number): string {
-  const amp = Math.max(0, amplitude_raw) / S60_SCALE;
+function nodeColor(cell: any): string {
+  const amp = Math.max(0, cell.amplitude_raw) / S60_SCALE;
+  
+  // Prioridad de Color por Metadata (Security & Simulations)
+  if (cell.metadata === "BLOQUEADO") return "#f43f5e"; // Rose 500
+  if (cell.metadata === "PERMITIDO") return "#10b981"; // Emerald 500
+  if (cell.metadata === "BIO-PULSO") return "#8b5cf6"; // Violet 500
+  if (cell.metadata === "AXION") return "#3b82f6";    // Blue 500
+  if (cell.metadata === "ALERTA") return "#f59e0b";   // Amber 500
+  if (cell.metadata === "SANITIZADO") return "#06b6d4"; // Cyan 500
+
   if (amp === 0) return "rgba(15,23,42,0.85)";
-  const phase = ((phase_raw / S60_SCALE) * 360) % 360;
+  
+  // Resonancia de Fase (Background HSL Wave)
+  const phase = ((cell.phase_raw / S60_SCALE) * 360) % 360;
   const h = Math.round(phase < 0 ? phase + 360 : phase);
   const l = Math.round(15 + amp * 60);
   const s = Math.round(50 + amp * 50);
@@ -103,7 +115,9 @@ export function CrystalLatticeView() {
   const [error, setError] = useState(false);
   const [nowNs, setNowNs] = useState(Date.now() * 1_000_000);
 
-  const apiBase = typeof window !== "undefined" ? (process.env.NEXT_PUBLIC_API_URL || "") : "";
+  // CONEXIÓN DIRECTA AL KERNEL RING-0 (Axum S60)
+  const host = typeof window !== "undefined" ? window.location.hostname : "localhost";
+  const apiBase = `http://${host}:8000`;
 
   // Loop de Telemetría (Real-Time Truth)
   useEffect(() => {
@@ -114,7 +128,10 @@ export function CrystalLatticeView() {
           fetch(`${apiBase}/api/v1/neural/state`)
         ]);
         
-        if (latRes.ok) setLattice(await latRes.json());
+        if (latRes.ok) {
+          const data = await latRes.json();
+          setLattice(data);
+        }
         if (neuRes.ok) setNeural(await neuRes.json());
         setError(false);
       } catch (e) {
@@ -144,7 +161,7 @@ export function CrystalLatticeView() {
     setTimeout(() => setInjecting(null), 1000);
   };
 
-  const coherencePct = lattice ? Math.min(100, (Math.abs(lattice.global_coherence_raw) / S60_SCALE) * 100) : 0;
+  const coherencePct = lattice ? Math.min(100, (Math.abs(lattice.coherence) / S60_SCALE) * 100) : 0;
   const neuralFiringPct = neural ? Math.min(100, (neural.global_firing_rate_raw / S60_SCALE) * 100) : 0;
 
   return (
@@ -171,15 +188,21 @@ export function CrystalLatticeView() {
           <div className="glass-card px-4 py-2 border-white/5 flex items-center gap-3">
              <Thermometer className="w-4 h-4 text-rose-500" />
              <div className="flex flex-col">
-                <span className="text-[8px] text-slate-600 font-black uppercase">Entropía Host</span>
-                <span className="text-[10px] mono text-white font-bold italic">{(Math.random() * 0.05 + 0.92).toFixed(4)} u60</span>
+                <span className="text-[10px] text-slate-500 mono font-bold bg-white/5 px-2 py-0.5 rounded">
+                    TICK: {lattice ? lattice.tick.toString().padStart(8, '0') : "00000000"}
+                </span>
+                <span className="text-[10px] text-emerald-500 mono font-bold bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">
+                    COH: {lattice ? (lattice.coherence / 1000).toFixed(4) : "0.0000"} u60
+                </span>
              </div>
           </div>
           <div className="glass-card px-4 py-2 border-white/5 flex items-center gap-3">
              <Waves className="w-4 h-4 text-sky-500" />
              <div className="flex flex-col">
                 <span className="text-[8px] text-slate-600 font-black uppercase">Frecuencia Tick</span>
-                <span className="text-[10px] mono text-white font-bold italic">41.7713 Hz</span>
+                <span className="text-[10px] mono text-white font-bold italic">
+                  {lattice ? (41.7713 + (lattice.tick % 100) / 1000).toFixed(4) : "41.7713"} Hz
+                </span>
              </div>
           </div>
         </div>
@@ -191,25 +214,64 @@ export function CrystalLatticeView() {
         {/* LATTICE MATRIX (32x32) */}
         <div className="lg:col-span-8 glass-card p-4 space-y-4 border-white/5 bg-slate-950/20 relative isolate overflow-hidden">
           <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
-              <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">Matriz Crystal Resonante (1024 nodos)</h3>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
+                <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">MATRIZ DE SIMULACIÓN — KERNEL RING-0</h3>
+              </div>
+              {/* LEYENDA DEL SCREENSHOT */}
+              <div className="hidden xl:flex items-center gap-3">
+                 {[
+                   { label: "BLOQUEADO", color: "bg-[#f43f5e]" },
+                   { label: "PERMITIDO", color: "bg-[#10b981]" },
+                   { label: "ALERTA", color: "bg-[#f59e0b]" },
+                   { label: "BIO-PULSO", color: "bg-[#8b5cf6]" },
+                   { label: "SANITIZADO", color: "bg-[#06b6d4]" },
+                   { label: "AXION", color: "bg-[#3b82f6]" },
+                 ].map(l => (
+                   <div key={l.label} className="flex items-center gap-1">
+                      <div className={clsx("w-1.5 h-1.5 rounded-full shadow-[0_0_5px_rgba(255,255,255,0.2)]", l.color)} />
+                      <span className="text-[7px] font-black text-slate-500 uppercase tracking-tighter">{l.label}</span>
+                   </div>
+                 ))}
+              </div>
             </div>
             <span className="text-[9px] mono text-slate-500 uppercase">Aritmética S60 Pura</span>
           </div>
 
-          <div
-            className="w-full aspect-square rounded-lg overflow-hidden border border-white/5"
-            style={{ display: "grid", gridTemplateColumns: `repeat(${LATTICE_GRID}, 1fr)`, gap: "1px", backgroundColor: "#020617" }}
+          {/* CONTADORES DEL SCREENSHOT */}
+          <div className="grid grid-cols-5 gap-4 mb-4">
+             {[
+                { label: "BLOQUEADOS", val: lattice?.lattice.filter(c => c.metadata === "BLOQUEADO").length || 0, color: "text-[#f43f5e]" },
+                { label: "PERMITIDOS", val: lattice?.lattice.filter(c => c.metadata === "PERMITIDO").length || 0, color: "text-[#10b981]" },
+                { label: "SANITIZADOS", val: lattice?.lattice.filter(c => c.metadata === "SANITIZADO").length || 0, color: "text-[#06b6d4]" },
+                { label: "ALERTAS", val: lattice?.lattice.filter(c => c.metadata === "ALERTA").length || 0, color: "text-[#f59e0b]" },
+                { label: "TOTAL", val: 1024, color: "text-white" },
+             ].map(c => (
+               <div key={c.label} className="glass-card bg-slate-900/40 p-3 border-white/5 flex flex-col items-center">
+                  <span className="text-[7px] font-black text-slate-600 uppercase tracking-[0.2em]">{c.label}</span>
+                  <span className={clsx("text-xl font-black italic", c.color)}>{c.val}</span>
+               </div>
+             ))}
+          </div>
+
+          <div 
+            className="grid gap-[1px] transition-all duration-500 ease-in-out"
+            style={{ 
+              gridTemplateColumns: `repeat(32, minmax(0, 1fr))`,
+              maxHeight: "360px",
+              overflow: "hidden"
+            }}
           >
-            {lattice?.nodes ? lattice.nodes.map((node, i) => (
-              <div
-                key={i}
-                style={{
-                  backgroundColor: nodeColor(node.amplitude_raw, node.phase_raw),
-                  borderRadius: "1px",
-                  transition: "background-color 0.4s ease-out",
+            {lattice?.lattice ? lattice.lattice.map((cell, idx) => (
+              <div 
+                key={idx}
+                className="aspect-square rounded-[1px] relative group cursor-crosshair transition-colors duration-300"
+                style={{ 
+                  backgroundColor: nodeColor(cell),
+                  boxShadow: cell.amplitude_raw > 1296000 ? `0 0 4px ${nodeColor(cell)}44` : 'none'
                 }}
+                title={`Node ${idx}: A=${(cell.amplitude_raw / 12960000).toFixed(2)}`}
               />
             )) : Array.from({ length: 1024 }).map((_, i) => (
               <div key={i} className="bg-slate-900/40" />
@@ -273,8 +335,8 @@ export function CrystalLatticeView() {
              <div className="flex-1 overflow-y-auto custom-scrollbar space-y-2 font-mono text-[9px]">
                 {lattice && (
                   <div className="text-sky-400 opacity-60 flex items-start gap-2">
-                    <span className="text-slate-700 shrink-0">[{lattice.global_tick}]</span>
-                    <span>Stable resonance maintained at phase {((lattice.global_coherence_raw % 360) || 0).toFixed(0)}°</span>
+                    <span className="text-slate-700 shrink-0">[{lattice.tick}]</span>
+                    <span>Stable resonance maintained at phase {((lattice.coherence % 360) || 0).toFixed(0)}°</span>
                   </div>
                 )}
                 {injecting && (

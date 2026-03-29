@@ -13,9 +13,9 @@ import { AIOpsShieldView } from "./AIOpsShieldView";
 import { CrystalLatticeView } from "./CrystalLatticeView";
 import { AboutView } from "./AboutView";
 import { MonitoringView } from "./MonitoringView";
+import { AIOpsIntercept } from "./AIOpsIntercept";
 import { clsx } from "clsx";
-import { ShieldAlert as ShieldAlertIcon, Github, BookOpen } from "lucide-react";
-import Link from "next/link";
+import { ShieldAlert as ShieldAlertIcon } from "lucide-react";
 
 export function Dashboard() {
   const [status, setStatus] = useState<any>(null);
@@ -35,8 +35,9 @@ export function Dashboard() {
       wsUrl = apiUrl.replace(/^http/, "ws") + "/api/v1/telemetry";
     } else {
       const proto = typeof window !== "undefined" && window.location.protocol === "https:" ? "wss" : "ws";
-      const host = typeof window !== "undefined" ? window.location.host : "localhost:8000";
-      wsUrl = `${proto}://${host}/api/v1/telemetry`;
+      // DETECCIÓN DINÁMICA DEL KERNEL
+      const host = typeof window !== "undefined" ? window.location.hostname : "localhost";
+      wsUrl = `${proto}://${host}:8000/api/v1/telemetry`;
     }
     const ws = new WebSocket(wsUrl);
     ws.onmessage = (e) => {
@@ -57,7 +58,8 @@ export function Dashboard() {
   useEffect(() => {
     const fetchStatus = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"}/api/v1/sentinel_status`);
+        const host = typeof window !== "undefined" ? window.location.hostname : "localhost";
+        const res = await fetch(`http://${host}:8000/api/v1/sentinel_status`);
         const data = await res.json();
         setStatus({ ...data, is_active: true });
       } catch (e) {
@@ -94,34 +96,11 @@ export function Dashboard() {
 
   return (
     <div className="flex gap-6 h-full overflow-hidden">
+      <AIOpsIntercept />
       {/* Sidebar */}
       <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
 
       <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-2 pb-8">
-        {/* TOP UTILITY BAR */}
-        <div className="flex items-center justify-end gap-6 py-4 px-2 mb-2 border-b border-white/5">
-          <a
-            href="https://github.com/jenovoas/sentinel_cubepath"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-slate-500 hover:text-white transition-colors p-1"
-            title="Ver Repositorio GitHub"
-          >
-            <Github className="w-4 h-4" />
-          </a>
-          <Link
-            href="/docs"
-            className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-emerald-400 transition-colors"
-          >
-            <BookOpen className="w-3.5 h-3.5" />
-            <span>Documentación</span>
-          </Link>
-          <div className="w-px h-4 bg-white/10" />
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[9px] font-bold text-emerald-500/80 uppercase tracking-tighter">Ring-0 Enforced</span>
-          </div>
-        </div>
 
         {activeTab === "about" ? (
           <AboutView />
@@ -257,7 +236,7 @@ export function Dashboard() {
           </div>
         ) : activeTab === "matrix" ? (
           <CrystalLatticeView />
-        ) : activeTab === "matrix_old" ? (
+        ) : activeTab === "observability" ? (
           <MonitoringView />
         ) : activeTab === "null" ? (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">

@@ -10,6 +10,7 @@ use std::sync::Arc;
 use tokio::sync::{broadcast, Mutex, MutexGuard};
 use std::time::Duration;
 use tracing::{info, error};
+use serde_json::{self, json, Value};
 
 // --- MODULOS CORE ---
 pub mod math;
@@ -20,14 +21,29 @@ pub mod security;
 pub mod truthsync;
 pub mod predictive;
 pub mod mycnet;
+pub mod neural;
 
-use crate::math::{SPA, SPAMath};
+use crate::math::spa::SPA;
+use crate::math::core::{LiquidLattice, CrystalSnapshot, CellSnapshot};
+use crate::neural::{NeuralMemory, NeuralMembraneState};
+use crate::quantum::buffer_system::ResonantBuffer;
 use crate::security::wal::SecurityWAL;
 use crate::truthsync::TruthSync;
-use crate::models::{CortexEvent, Severity, EventType, Event};
+use crate::models::CortexEvent;
+use crate::math::ResonantMatrix;
 use crate::predictive::AIBufferCascade;
 use crate::mycnet::MyCNetState;
-use crate::quantum::buffer_system::ResonantBuffer;
+
+use std::collections::VecDeque;
+
+#[derive(Serialize, Clone)]
+pub struct MetricSnapshot {
+    pub tick: u64,
+    pub resonance_raw: i64,
+    pub load_raw: i64,
+    pub throughput_raw: i64,
+    pub latency_ns: u64,
+}
 
 /// Estado Central de Sentinel (SharedState)
 pub struct AppState {
@@ -38,12 +54,16 @@ pub struct AppState {
     pub predictive: Mutex<AIBufferCascade>,
     pub mycnet_state: Arc<MyCNetState>,
     pub global_tick: std::sync::atomic::AtomicU64,
+    pub lattice: Mutex<ResonantMatrix>,
+    pub neural: Mutex<NeuralMemory>,
+    pub metrics_history: Mutex<VecDeque<MetricSnapshot>>,
+    pub recent_blocks: Mutex<VecDeque<usize>>, 
 }
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt::init();
-    info!("🚀 Iniciando Sentinel Ring-0 - Cognitive Firewall (Restored)");
+    info!("🚀 Iniciando Sentinel Ring-0 - Cognitive Firewall (Sincronía Total)");
 
     // 1. Inicializar Canales de Comunicación (Event Stream)
     let (tx, _) = broadcast::channel(1024);
@@ -57,63 +77,101 @@ async fn main() -> anyhow::Result<()> {
         predictive: Mutex::new(AIBufferCascade::new()),
         mycnet_state: MyCNetState::new(),
         global_tick: std::sync::atomic::AtomicU64::new(0),
+        lattice: Mutex::new(ResonantMatrix::new(1024)), 
+        neural: Mutex::new(crate::neural::NeuralMemory::new(100)),        
+        metrics_history: Mutex::new(VecDeque::with_capacity(60)),
+        recent_blocks: Mutex::new(VecDeque::with_capacity(10)),
     });
 
-    // 3. Spawning Ciclos de Integridad (Second Loop - Telemetry Background)
+    // 3. Spawning Ciclos de Integridad (Excitación Física Real)
     let state_clone = shared_state.clone();
     tokio::spawn(async move {
-        let mut interval = tokio::time::interval(Duration::from_millis(100));
-        loop {
-            interval.tick().await;
-            let tick = state_clone.global_tick.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+            let mut interval = tokio::time::interval(Duration::from_millis(150)); 
+            let mut tick = 0u64;
             
-            // Simulación de Inyección de Ruido Físico (Entropía)
-            if tick % 10 == 0 {
-                let mut buffer: MutexGuard<ResonantBuffer> = state_clone.ebpf_buffer.lock().await;
+            loop {
+                interval.tick().await;
+                tick = state_clone.global_tick.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                          let mut lattice = state_clone.lattice.lock().await;
+                let mut recent_blocks = state_clone.recent_blocks.lock().await;
+                let mut history = state_clone.metrics_history.lock().await;
+
+                // A. RESONANCIA SEXAGESIMAL REAL (Step Físico)
+                lattice.step();
+                
+                // Background Noise (Axions) - Alineado con Salto-17
+                if tick % 17 == 0 {
+                   let noise_idx = (tick as usize) % lattice.size();
+                   lattice.inject(noise_idx, 150);
+                   lattice.metadata_map[noise_idx] = Some("AXION".to_string());
+                }
+
+                // B. Simulación de Ataque (para Demo / Hackaton)
+                if tick % 80 == 0 {
+                    let attack_idx = (rand::random::<usize>() % lattice.size());
+                    recent_blocks.push_back(attack_idx);
+                    if recent_blocks.len() > 10 { recent_blocks.pop_front(); }
+                }
+
+                // Pintar bloqueos en la Matrix
+                for &idx in recent_blocks.iter() {
+                    lattice.crystals[idx].amplitude = SPA::new(1500, 0, 0, 0, 0);
+                    lattice.metadata_map[idx] = Some("BLOQUEADO".to_string());
+                }
+
+                // C. Bio-Pulsos Neuronales (Experiments)
                 let prediction = {
-                    let mut predictive: MutexGuard<AIBufferCascade> = state_clone.predictive.lock().await;
-                    // Alimentar señal y extraer la predicción no-markoviana (OUK)
+                    let predictive = state_clone.predictive.lock().await;
                     predictive.push(SPA::new(tick as i64 % 60, 0, 0, 0, 0))
                 };
                 
+                let pulse_idx = (tick as usize) % lattice.size();
+                lattice.inject(pulse_idx, prediction.to_raw());
+                lattice.metadata_map[pulse_idx] = Some("BIO-PULSO".to_string());
+
+                // SNAPSHOT
+                if tick % 7 == 0 {
+                    let snapshot = MetricSnapshot {
+                        tick,
+                        resonance_raw: prediction.to_raw(),
+                        load_raw: (recent_blocks.len() as i64) * 6,
+                        throughput_raw: (recent_blocks.len() as i64) * 100, 
+                        latency_ns: 40_000 + (tick % 5000),
+                    };
+                    history.push_back(snapshot);
+                    if history.len() > 60 { history.pop_front(); }
+                }
+
                 let event = CortexEvent {
                     event_id: tick,
-                    event_type: "SYSCALL_MONITOR".to_string(),
+                    event_type: "MATRIX_SYNC".to_string(),
                     severity: 0,
                     payload_hash: [0u8; 32],
                     entropy_signal: prediction.to_raw(),
-                    timestamp_ns: tick * 1000,
+                    timestamp_ns: tick * 1000000,
                 };
-                
-                buffer.push(event.clone());
                 let _ = state_clone.event_stream.send(event);
             }
-
-            // Reporte de Salud cada 50 ticks (Sentinela)
-            if tick % 50 == 0 {
-                let load = state_clone.ebpf_buffer.lock().await.load_factor().to_raw() / 60;
-                let integrity = SentinelIntegrity {
-                    effective_mass: 1000,
-                    quantum_load: load,
-                    truthsync_seal: "YATRA_CERTIFIED".to_string(),
-                    p322_ratio_integrity: 12_960_000, 
-                    nerve_a_status: "ACTIVE".to_string(),
-                    nerve_b_status: "ACTIVE".to_string(),
-                    cortex_confidence: 12_960_000,
-                    logic_state: "STABLE".to_string(),
-                };
-                info!("📊 Integrity Report [T={}]: S60 Load={} deg", tick, integrity.quantum_load);
-            }
-        }
     });
 
     // 4. Iniciar Rutas API v1
+    let cors = tower_http::cors::CorsLayer::new()
+        .allow_origin(tower_http::cors::Any)
+        .allow_methods([axum::http::Method::GET, axum::http::Method::POST])
+        .allow_headers(tower_http::cors::Any);
+
     let app = Router::new()
         .route("/", get(root_handler))
         .route("/health", get(health_handler))
         .route("/api/v1/sentinel_status", get(status_handler))
         .route("/api/v1/telemetry", get(telemetry_ws_handler))
-        .with_state(shared_state);
+        .route("/api/v1/lattice/state", get(lattice_state_handler))
+        .route("/api/v1/neural/state", get(neural_state_handler))
+        .route("/api/v1/inject_truth_pulse", axum::routing::post(inject_pulse_handler))
+        .route("/api/v1/observability/metrics", get(observability_metrics_handler))
+        .with_state(shared_state)
+        .layer(cors)
+        .layer(tower_http::trace::TraceLayer::new_for_http());
 
     // 5. Encender el Motor Ring-0
     let addr = SocketAddr::from(([0, 0, 0, 0], 8000));
@@ -165,10 +223,10 @@ async fn health_handler(State(state): State<Arc<AppState>>) -> Json<HealthStatus
 async fn status_handler(State(state): State<Arc<AppState>>) -> Json<SentinelStatusResponse> {
     let mycnet_nodes = state.mycnet_state.adm.lock().await.nodes.len();
     let predictive_val: i64 = {
-        let mut pred: MutexGuard<AIBufferCascade> = state.predictive.lock().await;
+        let pred = state.predictive.lock().await;
         pred.predict_evolution().to_raw()
     };
-    let load_raw = state.ebpf_buffer.lock().await.load_factor().to_raw() / 60;
+    let load_raw = (state.recent_blocks.lock().await.len() as i64) * 6;
     
     let integrity = SentinelIntegrity {
         effective_mass: 1000,
@@ -186,6 +244,69 @@ async fn status_handler(State(state): State<Arc<AppState>>) -> Json<SentinelStat
         mycnet_nodes,
         predictive_memory: predictive_val,
     })
+}
+
+async fn lattice_state_handler(State(state): State<Arc<AppState>>) -> Json<CrystalSnapshot> {
+    let lattice = state.lattice.lock().await;
+    
+    let snapshot = CrystalSnapshot {
+        timestamp: SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs(),
+        size: lattice.size(),
+        lattice: lattice.crystals.iter().enumerate().map(|(i, c)| {
+            CellSnapshot {
+                index: i,
+                amplitude_raw: c.amplitude.to_raw(),
+                phase_raw: c.phase.to_raw(),
+                metadata: lattice.metadata_map[i].clone(),
+            }
+        }).collect(),
+        phase: "RESONANT".to_string(),
+        coherence: lattice.global_coherence() as u64,
+        tick: state.global_tick.load(std::sync::atomic::Ordering::SeqCst),
+    };
+    
+    Json(snapshot)
+}
+
+async fn neural_state_handler(State(state): State<Arc<AppState>>) -> Json<Value> {
+    let neural: MutexGuard<NeuralMemory> = state.neural.lock().await;
+    let states = neural.get_states();
+    
+    // Retornamos un objeto que contiene las membranas y la tasa de disparo
+    Json(json!({
+        "membranes": states,
+        "global_firing_rate_raw": neural.firing_rate().to_raw()
+    }))
+}
+
+#[derive(Deserialize)]
+struct PulseRequest {
+    pub pulse_type: String,
+    pub energy_s60_raw: i64,
+    pub severity: u8,
+}
+
+async fn inject_pulse_handler(
+    State(state): State<Arc<AppState>>,
+    Json(req): Json<PulseRequest>
+) -> Json<serde_json::Value> {
+    let mut lattice = state.lattice.lock().await;
+    let tick = state.global_tick.load(std::sync::atomic::Ordering::SeqCst);
+    
+    // Inyectar en un punto aleatorio/central de la matriz
+    let idx = 512; // Centro de la matriz 32x32
+    lattice.inject(idx, req.energy_s60_raw);
+    
+    info!("⚡ Pulso de Verdad inyectado: {} (E={})", req.pulse_type, req.energy_s60_raw);
+    
+    Json(serde_json::json!({ "status": "pulsed", "tick": tick }))
+}
+
+async fn observability_metrics_handler(
+    State(state): State<Arc<AppState>>
+) -> Json<Vec<MetricSnapshot>> {
+    let history = state.metrics_history.lock().await;
+    Json(history.iter().cloned().collect())
 }
 
 async fn telemetry_ws_handler(
@@ -207,3 +328,6 @@ async fn telemetry_ws_handler(
         }
     })
 }
+
+use std::time::SystemTime;
+use std::time::UNIX_EPOCH;

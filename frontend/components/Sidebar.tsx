@@ -124,11 +124,15 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
 
         {/* External service links */}
         {EXTERNAL_SERVICES.map((svc) => (
-          <a
+          <button
             key={svc.id}
-            href={svc.href}
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={() => {
+              if (svc.id === "grafana" || svc.id === "prometheus") {
+                onTabChange("observability");
+              } else {
+                window.open(svc.href, "_blank", "noopener,noreferrer");
+              }
+            }}
             className="w-full flex items-center gap-3 px-4 py-3 transition-all group relative text-slate-500 hover:bg-white/5"
           >
             <div className="relative">
@@ -137,9 +141,14 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
             </div>
             <span className="hidden md:block text-[10px] uppercase tracking-widest font-bold opacity-40 group-hover:opacity-100 transition-all">
               {svc.label}
+              {(svc.id === "grafana" || svc.id === "prometheus") && (
+                <span className="ml-2 text-[6px] bg-sky-500/20 text-sky-400 px-1 rounded">S60</span>
+              )}
             </span>
-            <ExternalLink className="hidden md:block w-2.5 h-2.5 ml-auto opacity-0 group-hover:opacity-30 transition-opacity shrink-0" />
-          </a>
+            {svc.id !== "grafana" && svc.id !== "prometheus" && (
+              <ExternalLink className="hidden md:block w-2.5 h-2.5 ml-auto opacity-0 group-hover:opacity-30 transition-opacity shrink-0" />
+            )}
+          </button>
         ))}
       </div>
 
