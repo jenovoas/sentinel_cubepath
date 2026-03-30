@@ -14,18 +14,20 @@ interface Event {
 }
 
 const EVENT_CONFIG: Record<string, { icon: any; label: string; colorSet: string }> = {
-  FILE_BLOCKED: { icon: ShieldX, label: "FILE BLOCKED", colorSet: "rose" },
-  EXEC_BLOCKED: { icon: AlertTriangle, label: "EXEC BLOCKED", colorSet: "rose" },
-  FILE_ALLOWED: { icon: ShieldCheck, label: "FILE OK", colorSet: "emerald" },
-  EXEC_ALLOWED: { icon: ShieldCheck, label: "EXEC OK", colorSet: "emerald" },
-  NETWORK_BURST: { icon: Zap, label: "NET BURST", colorSet: "amber" },
-  NETWORK_NORMAL: { icon: Activity, label: "NET OK", colorSet: "slate" },
-  SYSTEM_METRIC: { icon: Cpu, label: "METRIC", colorSet: "slate" },
-  BIO_PULSE: { icon: Heart, label: "BIO PULSE", colorSet: "emerald" },
-  PHASE_RESYNC: { icon: Activity, label: "PHASE RESYNC", colorSet: "sky" },
-  SYSTEM_ONLINE: { icon: ShieldCheck, label: "SYSTEM ONLINE", colorSet: "emerald" },
-  MANUAL_AXION_PULSE: { icon: Zap, label: "AXION PULSE", colorSet: "sky" },
-  MANUAL_AXION_PULSE_SANITIZED: { icon: ShieldCheck, label: "AXION SANITIZED", colorSet: "emerald" },
+  FILE_BLOCKED:                  { icon: ShieldX,    label: "FILE BLOCKED",    colorSet: "rose"    },
+  EXEC_BLOCKED:                  { icon: AlertTriangle, label: "EXEC BLOCKED", colorSet: "rose"    },
+  FILE_ALLOWED:                  { icon: ShieldCheck, label: "FILE OK",        colorSet: "emerald" },
+  EXEC_ALLOWED:                  { icon: ShieldCheck, label: "EXEC OK",        colorSet: "emerald" },
+  NETWORK_BURST:                 { icon: Zap,         label: "NET BURST",      colorSet: "amber"   },
+  NETWORK_NORMAL:                { icon: Activity,    label: "NET OK",         colorSet: "slate"   },
+  SYSTEM_METRIC:                 { icon: Cpu,         label: "METRIC",         colorSet: "slate"   },
+  BIO_PULSE:                     { icon: Heart,       label: "BIO PULSE",      colorSet: "emerald" },
+  PHASE_RESYNC:                  { icon: Activity,    label: "PHASE RESYNC",   colorSet: "sky"     },
+  SYSTEM_ONLINE:                 { icon: ShieldCheck, label: "SYSTEM ONLINE",  colorSet: "emerald" },
+  MANUAL_AXION_PULSE:            { icon: Zap,         label: "AXION PULSE",    colorSet: "sky"     },
+  MANUAL_AXION_PULSE_SANITIZED:  { icon: ShieldCheck, label: "AXION SANITIZED",colorSet: "emerald" },
+  MATRIX_SYNC:                   { icon: Activity,    label: "MATRIX SYNC",    colorSet: "slate"   },
+  ENCRYPT_PULSE:                 { icon: Cpu,         label: "ENCRYPT PULSE",  colorSet: "slate"   },
 };
 
 const COLOR_MAP: Record<string, { border: string; bg: string; text: string; dot: string }> = {
@@ -114,7 +116,17 @@ export function TelemetryFeed() {
     }
   };
 
-  const resonancePercent = (raw: number) => ((raw / 12960000) * 100).toFixed(1);
+  const resonancePercent = (raw: number | undefined | null) => {
+    if (raw == null || isNaN(raw) || raw === 0) return "0.0";
+    return ((raw / 12960000) * 100).toFixed(1);
+  };
+
+  // Deduplicate consecutive MATRIX_SYNC / ENCRYPT_PULSE (heartbeat floods)
+  const dedupedEvents = events.reduce<Event[]>((acc, ev) => {
+    const isHeartbeat = ev.event_type === "MATRIX_SYNC" || ev.event_type === "ENCRYPT_PULSE";
+    if (isHeartbeat && acc.length > 0 && acc[0].event_type === ev.event_type) return acc;
+    return [ev, ...acc.slice(0, 149)];
+  }, []).reverse();
 
   return (
     <div ref={feedRef} className="absolute inset-0 flex flex-col w-full font-mono text-[10px] overflow-hidden">
@@ -141,7 +153,7 @@ export function TelemetryFeed() {
         </div>
       )}
 
-      {events.map((ev, i) => {
+      {dedupedEvents.map((ev, i) => {
         const { icon: Icon, label, colors } = getConfig(ev);
         const isCritical = ev.severity >= 3 || ev.event_type.includes("BLOCKED");
 
@@ -176,7 +188,7 @@ export function TelemetryFeed() {
                 </div>
 
                 {/* PID */}
-                {ev.pid !== 0 && (
+                {ev.pid != null && !isNaN(Number(ev.pid)) && Number(ev.pid) !== 0 && (
                   <span className="text-slate-500 shrink-0 text-[10px]">
                     PID <span className="text-slate-400 font-bold">{ev.pid}</span>
                   </span>
