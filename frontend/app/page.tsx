@@ -19,14 +19,17 @@ export default function Home() {
       {/* Premium Header */}
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 px-2">
         <div className="space-y-1">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-500/10 rounded-xl border border-emerald-500/20 shadow-lg shadow-emerald-500/5">
-              <Shield className="w-8 h-8 text-emerald-400" />
+          <button 
+            onClick={() => window.location.hash = "dashboard"}
+            className="flex items-center gap-3 hover:scale-105 hover:opacity-90 active:scale-95 transition-all text-left group"
+          >
+            <div className="p-1.5 bg-emerald-500/10 rounded-xl border border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.15)] group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all flex items-center justify-center overflow-hidden">
+              <img src="/favicon.png" alt="Sentinel S60" className="w-9 h-9 object-contain" />
             </div>
             <h1 className="text-4xl font-extrabold tracking-tighter sentinel-gradient-text uppercase">
-              Sentinel <span className="text-white opacity-90">Ring-0</span>
+              Sentinel <span className="text-white opacity-90 transition-opacity">Ring-0</span>
             </h1>
-          </div>
+          </button>
           <div className="flex items-center gap-2 text-slate-500 text-[10px] font-bold uppercase tracking-[0.3em] md:pl-14">
             <span className="text-emerald-500">Firewall Cognitivo Ring-0</span>
             <span className="opacity-30">|</span>

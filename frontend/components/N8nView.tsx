@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Workflow, Play, Square, ExternalLink, ShieldAlert, Cpu, Database, Network, Clock, Terminal } from "lucide-react";
+import { Workflow, Play, Square, ExternalLink, ShieldAlert, Cpu, Database, Network, Clock, Terminal, Activity, AlertTriangle } from "lucide-react";
 import { clsx } from "clsx";
 
 const AUTOMATIONS = [
@@ -50,15 +50,92 @@ const AUTOMATIONS = [
     logs: ["Comprimiendo WAL...", "Cifrando con P322...", "Backup subido a Cold Storage."]
   },
   {
-    id: "backend",
-    name: "Cortex API Health Check",
-    description: "Sondeo de latencia y reinicio preventivo de la API principal",
+    id: "slo_report",
+    name: "Daily SLO Report",
+    description: "Generación de métricas de servicio y consolidado Ring-0",
+    icon: Activity,
+    color: "slate",
+    trigger: "Cron (23:59)",
+    lastRun: "Hace 3 horas",
+    status: "active",
+    logs: ["Agregando métricas 24h...", "Calculando SLOs...", "Reporte generado en Slack."]
+  },
+  {
+    id: "high_cpu",
+    name: "High CPU Alert",
+    description: "Evaluación térmica de Cortex y límite P322",
+    icon: Activity,
+    color: "rose",
+    trigger: "Prometheus",
+    lastRun: "Hace 2 días",
+    status: "active",
+    logs: ["CPU Spike > 90%", "Trazando PID culpable...", "Alerta generada y mitigación disparada."]
+  },
+  {
+    id: "anomaly",
+    name: "TruthSync Anomaly Detector",
+    description: "Heurística IA para desviaciones en simetría matemática S60",
+    icon: ShieldAlert,
+    color: "violet",
+    trigger: "Stream WAL",
+    lastRun: "Hace 1 hora",
+    status: "active",
+    logs: ["Calculando divergencia cuántica...", "Simetría Mantenida: 99.8%", "Revisión OK."]
+  },
+  {
+    id: "db_health",
+    name: "Database Health Check",
+    description: "Test de inmutabilidad y latencia en base de datos PostgreSQL",
+    icon: Database,
+    color: "emerald",
+    trigger: "Interval (5m)",
+    lastRun: "Hace 2 min",
+    status: "active",
+    logs: ["Ping DB OK (2ms)...", "Verificando consistencia transaccional...", "Status: Verde."]
+  },
+  {
+    id: "memory_warn",
+    name: "Memory Warning Alert",
+    description: "Purga de búferes SNN ante saturación de RAM",
+    icon: Cpu,
+    color: "amber",
+    trigger: "Metric > 80%",
+    lastRun: "Hace 4 horas",
+    status: "active",
+    logs: ["Memoria alcanzando 82%", "Desalojando caché de lectura SNN...", "Estabilización lograda a 65%."]
+  },
+  {
+    id: "ai_generator",
+    name: "AI Workflow Generator",
+    description: "Auto-adaptación de reglas corticales usando Modelos Locales",
+    icon: Terminal,
+    color: "indigo",
+    trigger: "Manual / Threat",
+    lastRun: "Hace 6 días",
+    status: "active",
+    logs: ["Modelos Llama/Phi3 iniciados...", "Consultando vector de Zero-Day...", "Matriz actualizada."]
+  },
+  {
+    id: "alert_enriched",
+    name: "Alert Enrichment Protocol",
+    description: "Aumento cognitivo de logs con OSINT & TTPs (MITRE ATT&CK)",
+    icon: ShieldAlert,
+    color: "sky",
+    trigger: "Loki Event",
+    lastRun: "Hace 15 min",
+    status: "active",
+    logs: ["TTP detectado: T1059", "Buscando contexto externo...", "Alerta enriquecida adjunta."]
+  },
+  {
+    id: "backend_health",
+    name: "Rust Backend Health Failsafe",
+    description: "Sondeo agresivo de latencia en la API principal Cortex",
     icon: Activity,
     color: "teal",
     trigger: "Interval (1m)",
     lastRun: "Hace 30 seg",
     status: "active",
-    logs: ["Ping a /health... 32ms", "Verificando base de datos...", "Status: 100% Operativo."]
+    logs: ["API Response: 0.039ms", "Latencia S60 Perfecta...", "Sistema vivo."]
   },
   {
     id: "redis",
@@ -69,29 +146,40 @@ const AUTOMATIONS = [
     trigger: "Metric > 85%",
     lastRun: "Hace 2 días",
     status: "active",
-    logs: ["Alerta: Memoria > 85%", "Ejecutando FLUSHALL temporal...", "Memoria liberada: 420MB."]
+    logs: ["Alerta: Memoria > 85%", "Ejecutando FLUSHALL parcial...", "Memoria liberada: 420MB."]
   },
   {
-    id: "slo",
-    name: "SLO/SLA Breach Alert",
-    description: "Notificación de degradación algorítmica y latencia S60",
-    icon: AlertTriangle,
-    color: "orange",
-    trigger: "Prometheus Alert",
-    lastRun: "Nunca (No Breached)",
-    status: "active",
-    logs: ["Evaluando latencia P322...", "0.039ms < 0.1ms", "SLA Cumplido."]
-  },
-  {
-    id: "ai",
-    name: "AI Cognitive Generator",
-    description: "Síntesis dinámica de contramedidas via LLM Matrix",
+    id: "phi3",
+    name: "Phi-3 Mini Cognitive Core",
+    description: "Simulación de inferencia perimetral IA",
     icon: Terminal,
     color: "indigo",
-    trigger: "Manual / Threat",
-    lastRun: "Hace 4 horas",
+    trigger: "Threat Analysis",
+    lastRun: "Hace 1 día",
     status: "active",
-    logs: ["Analizando vector de ataque...", "Desplegando prompt anti-secuestro...", "Payload generado y encolado."]
+    logs: ["Cargando pesos de inferencia...", "Inferencia Exitosa: Ataque Nulo.", "Core offline."]
+  },
+  {
+    id: "watchdog1",
+    name: "Watchdog Integration System",
+    description: "Cadena de supervisión del módulo Kernel XDP",
+    icon: ShieldAlert,
+    color: "rose",
+    trigger: "Kernel Event",
+    lastRun: "Hace 3 horas",
+    status: "active",
+    logs: ["Supervisando BPF Maps...", "Tablas estables.", "Auditoría en verde."]
+  },
+  {
+    id: "observability",
+    name: "Observability Telemetry Sync",
+    description: "Consolidación de paneles y dashboards a TruthSync",
+    icon: Activity,
+    color: "cyan",
+    trigger: "Cron (Hourly)",
+    lastRun: "Hace 21 min",
+    status: "active",
+    logs: ["Grafana API OK...", "Loki OK...", "Prometheus OK... Sync completado."]
   }
 ];
 

@@ -16,6 +16,8 @@ import {
   Info,
   Microscope,
   User,
+  Film,
+  BookOpen,
 } from "lucide-react";
 
 import { clsx } from "clsx";
@@ -26,6 +28,14 @@ interface SidebarProps {
 }
 
 const EXTERNAL_SERVICES = [
+  {
+    id: "n8n",
+    label: "Arco Reflejo",
+    icon: Workflow,
+    href: "https://vps23309.cubepath.net/n8n/",
+    color: "text-violet-400",
+    dot: "bg-violet-500",
+  },
   {
     id: "grafana",
     label: "Grafana",
@@ -44,20 +54,21 @@ const EXTERNAL_SERVICES = [
     dot: "bg-red-500",
   },
   {
-    id: "n8n",
-    label: "n8n Reflex",
-    icon: Workflow,
-    href: "https://vps23309.cubepath.net/n8n/",
-    color: "text-violet-400",
-    dot: "bg-violet-500",
-  },
-  {
     id: "portfolio",
     label: "Portfolio",
     icon: User,
     href: "https://portfolio.pinguinoseguro.cl/",
     color: "text-sky-400",
     dot: "bg-sky-500",
+  },
+  {
+    id: "sentinel_media",
+    label: "Sentinel Media",
+    icon: Film,
+    href: "https://github.com/jenovoas/sentinel_media",
+    color: "text-fuchsia-400",
+    dot: "bg-fuchsia-500",
+    badge: "GitHub",
   },
 ];
 
@@ -68,8 +79,8 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
     { id: "aiops_shield", label: "AIOps Shield", icon: ShieldAlert },
     { id: "matrix", label: "S60 Laboratory", icon: Microscope },
     { id: "mycnet", label: "MyCNet", icon: Network },
-
     { id: "vault", label: "Vault", icon: Terminal },
+    { id: "docs", label: "Docs", icon: BookOpen },
   ];
 
   return (
@@ -79,7 +90,13 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
         {menuItems.map((item) => (
           <button
             key={item.id}
-            onClick={() => onTabChange(item.id)}
+            onClick={() => {
+              if (item.id === "docs") {
+                window.open("/docs", "_blank", "noopener,noreferrer");
+              } else {
+                onTabChange(item.id);
+              }
+            }}
             className={clsx(
               "w-full flex items-center gap-3 px-4 py-3 transition-all group relative",
               activeTab === item.id
@@ -146,6 +163,9 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
               {svc.label}
               {(svc.id === "grafana" || svc.id === "prometheus") && (
                 <span className="ml-2 text-[6px] bg-sky-500/20 text-sky-400 px-1 rounded">S60</span>
+              )}
+              {"badge" in svc && svc.badge && (
+                <span className="ml-2 text-[6px] bg-fuchsia-500/20 text-fuchsia-400 px-1 rounded">{svc.badge as string}</span>
               )}
             </span>
             {svc.id !== "grafana" && svc.id !== "prometheus" && (
