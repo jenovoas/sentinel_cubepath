@@ -31,6 +31,13 @@
 - **`rm` sigue prohibido sin excepción**: Incluso para limpiar artefactos de build que yo mismo creé por error.
 - **Múltiples restarts = procesos zombie**: Cada `systemctl restart` sin esperar que el proceso anterior muera puede dejar instancias zombie bloqueando puertos. Diagnóstico obligatorio con `ss -tlnp | grep 300` antes de cualquier restart adicional.
 
+## 6. Somos el Nodo (CRÍTICO — aprendido 2026-03-30)
+
+- **Este entorno YA ES el VPS** `vps23309.cubepath.net`. JAMÁS usar SSH para conectarse a sí mismo.
+- **Para verificar procesos**: usar `ps aux`, `systemctl status`, `journalctl` directamente.
+- **Para desplegar**: editar el archivo fuente. El `npm run dev` (HMR) recarga automáticamente.
+- **Si el usuario ve la versión vieja en el browser**: indicar `Ctrl+Shift+R` (hard refresh). El servidor ya tiene el código actualizado.
+
 ---
 
-_Estas lecciones son vinculantes para Gemini AI en cada turno de esta sesión y futuras._
+_Estas lecciones son vinculantes para Antigravity AI en cada turno de esta sesión y futuras._

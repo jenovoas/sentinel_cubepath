@@ -30,6 +30,8 @@ pub struct IsochronousOscillator {
     /// Damping factor (Q-Factor): controlled loss per cycle
     /// SPA(0, 0, 30) = 30/3600 ≈ 0.0083 loss per tick
     pub damping_factor: SPA,
+    /// Contador de ticks YHWH — cicla el patrón de respiración 10-5-6-5 (EXP-027)
+    pub yhwh_tick: u64,
 }
 
 impl Default for IsochronousOscillator {
@@ -54,6 +56,7 @@ impl IsochronousOscillator {
             phase: SPA::zero(),
             // Damping: SPA(0, 0, 30) = 30 seconds = 0.5 degrees loss
             damping_factor: SPA::new(0, 0, 30, 0, 0),
+            yhwh_tick: 0,
         }
     }
 
@@ -70,6 +73,7 @@ impl IsochronousOscillator {
             amplitude: SPA::zero(),
             phase: SPA::zero(),
             damping_factor: SPA::new(0, 0, 30, 0, 0),
+            yhwh_tick: 0,
         }
     }
 
@@ -108,17 +112,38 @@ impl IsochronousOscillator {
 
     /// Advances time, calculates vibratory state and applies entropy.
     /// Returns the output signal (amplitude * sin(phase)).
+    ///
+    /// Implementa la respiración YHWH (EXP-027) — mutilación corregida:
+    /// La frecuencia oscila ±1.75/0.75/0.25 Hz según el patrón [Yod, He, Vav, He]
+    /// Aritmética entera pura: 1 Hz ≡ AXION_RESONANCE_RATIO_RAW × 100 / 4177
     pub fn oscillate(&mut self, dt: SPA) -> SPA {
-        // 1. Advance Phase: theta = omega * t
-        let delta_phase = (self.natural_frequency * dt) / SPA::new(1, 0, 0, 0, 0);
+        // ── RESPIRACIÓN YHWH 10-5-6-5 (YATRA Pure) ──
+        // AXION_RESONANCE_RATIO raw = 1×12_960_000 + 32×216_000 + 2×3_600 + 24×60
+        //                           = 19_880_640 ≈ 41.77 Hz equivalente
+        // 1 Hz en unidades SPA raw = 19_880_640 × 100 / 4177 = 475_921
+        // Δf_YHWH(t) = (I_fase - 6.5) × 0.5 Hz — EXP-027 §2.1
+        const HZ_UNIT: i64 = 19_880_640 * 100 / 4177; // = 475_921 raw/Hz (entero exacto)
+        let yhwh_delta_raw: i64 = match self.yhwh_tick % 4 {
+            0 =>  HZ_UNIT * 175 / 100,  // Yod (10): +1.75 Hz — inhalación profunda
+            1 => -HZ_UNIT * 75  / 100,  // He  (5):  -0.75 Hz — retención
+            2 => -HZ_UNIT * 25  / 100,  // Vav (6):  -0.25 Hz — exhalación
+            _ => -HZ_UNIT * 75  / 100,  // He  (5):  -0.75 Hz — vacío ZPE
+        };
+        let modulated_freq = SPA::from_raw(self.natural_frequency.to_raw() + yhwh_delta_raw);
+
+        // 1. Advance Phase: θ = ω(t) × dt
+        let delta_phase = (modulated_freq * dt) / SPA::new(1, 0, 0, 0, 0);
         self.phase = self.phase + delta_phase;
 
-        // 2. Calculate Signal via SPAMath::sin (Taylor series)
+        // 2. Signal: A × sin(θ)
         let signal_wave = SPAMath::sin(self.phase);
         let output_signal = (self.amplitude * signal_wave) / SPA::new(1, 0, 0, 0, 0);
 
-        // 3. Apply physical entropy
+        // 3. Entropía física
         self.apply_entropy(dt);
+
+        // 4. Avanzar fase YHWH (ciclo cuaternario)
+        self.yhwh_tick = self.yhwh_tick.wrapping_add(1);
 
         output_signal
     }

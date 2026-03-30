@@ -284,6 +284,72 @@ export function CrystalLatticeView() {
         </div>
       </div>
 
+      {/* ── SIMULACIONES EXPERIMENTALES ── visible sin scroll */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-3">
+          <Microscope className="w-4 h-4 text-sky-400" />
+          <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Simulaciones Experimentales Validadas</h3>
+          <span className="text-[8px] px-2 py-0.5 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-400 font-bold uppercase">Interactivo — Live on VPS</span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+          {SIMULATIONS.map((sim) => {
+            const c = COLOR_MAP[sim.color];
+            const running = injecting === sim.id;
+            return (
+              <button
+                key={sim.id}
+                onClick={() => runSimulation(sim)}
+                disabled={!!injecting}
+                className={clsx(
+                  "glass-card p-4 text-left transition-all group relative overflow-hidden",
+                  running ? `${c.border} ${c.bg}` : "border-white/5 hover:" + c.border
+                )}
+              >
+                {running && <div className={clsx("absolute inset-0 animate-pulse", c.bg)} />}
+
+                <div className="relative z-10 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest">{sim.id}</span>
+                    <span className={clsx("text-[7px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest", c.badge)}>{sim.badge}</span>
+                  </div>
+
+                  <div>
+                    <h4 className={clsx("text-[11px] font-black uppercase tracking-tight mb-1 transition-colors", running ? c.text : "text-white group-hover:" + c.text.replace("text-", "text-"))}>
+                      {sim.name}
+                    </h4>
+                    <p className="text-[8px] text-slate-500 leading-relaxed">{sim.desc}</p>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                    <span className="text-[7px] text-slate-600 font-bold">{sim.steps.length} pasos</span>
+                    <div className={clsx("flex items-center gap-1", c.text)}>
+                      {running ? (
+                        <><Activity className="w-3 h-3 animate-pulse" /><span className="text-[8px] font-bold">Running...</span></>
+                      ) : (
+                        <><Play className="w-3 h-3" /><span className="text-[8px] font-bold">Ejecutar</span></>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Log de simulación */}
+        {simLog.length > 0 && (
+          <div className="glass-card p-4 bg-slate-950/60 border-white/5 font-mono text-[9px] space-y-1 max-h-24 overflow-y-auto custom-scrollbar">
+            {simLog.map((line, i) => (
+              <div key={i} className={clsx("flex gap-2", i === 0 ? "text-emerald-400" : "text-slate-500")}>
+                <span className="text-slate-700 shrink-0">{">>"}</span>
+                <span>{line}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       {/* ── GRID PRINCIPAL: LATTICE & NEURAL ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
@@ -426,72 +492,6 @@ export function CrystalLatticeView() {
              </div>
           </div>
         </div>
-      </div>
-
-      {/* ── SIMULACIONES EXPERIMENTALES ── */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-3">
-          <Microscope className="w-4 h-4 text-sky-400" />
-          <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Simulaciones Experimentales Validadas</h3>
-          <span className="text-[8px] px-2 py-0.5 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-400 font-bold uppercase">Interactivo — Live on VPS</span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
-          {SIMULATIONS.map((sim) => {
-            const c = COLOR_MAP[sim.color];
-            const running = injecting === sim.id;
-            return (
-              <button
-                key={sim.id}
-                onClick={() => runSimulation(sim)}
-                disabled={!!injecting}
-                className={clsx(
-                  "glass-card p-4 text-left transition-all group relative overflow-hidden",
-                  running ? `${c.border} ${c.bg}` : "border-white/5 hover:" + c.border
-                )}
-              >
-                {running && <div className={clsx("absolute inset-0 animate-pulse", c.bg)} />}
-
-                <div className="relative z-10 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest">{sim.id}</span>
-                    <span className={clsx("text-[7px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest", c.badge)}>{sim.badge}</span>
-                  </div>
-
-                  <div>
-                    <h4 className={clsx("text-[11px] font-black uppercase tracking-tight mb-1 transition-colors", running ? c.text : "text-white group-hover:" + c.text.replace("text-", "text-"))}>
-                      {sim.name}
-                    </h4>
-                    <p className="text-[8px] text-slate-500 leading-relaxed">{sim.desc}</p>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                    <span className="text-[7px] text-slate-600 font-bold">{sim.steps.length} pasos</span>
-                    <div className={clsx("flex items-center gap-1", c.text)}>
-                      {running ? (
-                        <><Activity className="w-3 h-3 animate-pulse" /><span className="text-[8px] font-bold">Running...</span></>
-                      ) : (
-                        <><Play className="w-3 h-3" /><span className="text-[8px] font-bold">Ejecutar</span></>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Log de simulación */}
-        {simLog.length > 0 && (
-          <div className="glass-card p-4 bg-slate-950/60 border-white/5 font-mono text-[9px] space-y-1 max-h-32 overflow-y-auto custom-scrollbar">
-            {simLog.map((line, i) => (
-              <div key={i} className={clsx("flex gap-2", i === 0 ? "text-emerald-400" : "text-slate-500")}>
-                <span className="text-slate-700 shrink-0">{">>"}</span>
-                <span>{line}</span>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* ── ESPECIFICACIONES TÉCNICAS (Update) ── */}
