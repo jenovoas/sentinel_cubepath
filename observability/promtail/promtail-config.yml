@@ -8,7 +8,6 @@ server:
 
 clients:
   - url: http://loki:3100/loki/api/v1/push
-    tenant_id: sentinel-cubepath
     batchwait: 1s
     batchsize: 1048576
     backoff_config:
@@ -34,14 +33,7 @@ scrape_configs:
           layer: ring0
           lane: security
           source: wal
-          __path__: /var/log/sentinel/audit_lane.log
-    pipeline_stages:
-      - json:
-          expressions:
-            timestamp: timestamp
-            payload: payload
-      - labels:
-          source:
+          __path__: /var/log/sentinel/ring0.wal
   # Kernel audit logs (Watchdog LSM)
   - job_name: auditd-kernel-watchdog
     static_configs:

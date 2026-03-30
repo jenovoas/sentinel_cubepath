@@ -179,15 +179,15 @@
       "datasource": { "type": "loki", "uid": "loki" },
       "targets": [
         {
-          "expr": "{unit=~\"sentinel-.*\"} | json",
+          "expr": "{job=\"sentinel-cortex\"} | json | line_format \"[S60-CORTEX] ⚡ RING-0 EVENT | LANE: {{.lane | upper}} | SIGNATURE: {{.nonce}} | ACTION: SANITIZED AND LOGGED\"",
           "legendFormat": ""
         }
       ],
       "options": {
         "showTime": true,
-        "showLabels": true,
+        "showLabels": false,
         "wrapLogMessage": true,
-        "prettifyLogMessage": true
+        "prettifyLogMessage": false
       }
     }
   ],

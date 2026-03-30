@@ -145,7 +145,7 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: ${GF_ADMIN_PASSWORD:-sentinel2026}
       GF_SERVER_DOMAIN: vps23309.cubepath.net
       GF_SERVER_ROOT_URL: https://vps23309.cubepath.net/grafana/
-      GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+      GF_SERVER_SERVE_FROM_SUB_PATH: "false"
       GF_SERVER_PROTOCOL: http
       GF_PATHS_PROVISIONING: /etc/grafana/provisioning
       GF_SECURITY_ALLOW_EMBEDDING: "true"

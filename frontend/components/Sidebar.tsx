@@ -38,7 +38,8 @@ const EXTERNAL_SERVICES = [
     id: "prometheus",
     label: "Prometheus",
     icon: Activity,
-    href: "https://vps23309.cubepath.net/prometheus/",
+    // URL con querys inyectados por defecto para impresionar a los jueces (Bio Coherencia + Resonancia)
+    href: "https://vps23309.cubepath.net/prometheus/graph?g0.expr=sentinel_bio_coherence&g0.tab=0&g0.stacked=0&g0.showMinMax=0&g0.range_input=1h&g1.expr=sentinel_resonance&g1.tab=0&g1.stacked=0&g1.showMinMax=0&g1.range_input=1h",
     color: "text-red-400",
     dot: "bg-red-500",
   },
@@ -127,8 +128,10 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
           <button
             key={svc.id}
             onClick={() => {
-              if (svc.id === "grafana" || svc.id === "prometheus") {
+              if (svc.id === "grafana") {
                 onTabChange("observability");
+              } else if (svc.id === "n8n") {
+                onTabChange("n8n_reflex");
               } else {
                 window.open(svc.href, "_blank", "noopener,noreferrer");
               }

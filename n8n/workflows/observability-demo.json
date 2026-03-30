@@ -14,7 +14,10 @@
       "name": "Webhook Demo",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [260, 300]
+      "position": [
+        260,
+        300
+      ]
     },
     {
       "parameters": {
@@ -36,7 +39,10 @@
       "name": "Prometheus CPU",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
-      "position": [560, 180]
+      "position": [
+        560,
+        180
+      ]
     },
     {
       "parameters": {
@@ -70,7 +76,10 @@
       "name": "Loki Recent Errors",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
-      "position": [560, 420]
+      "position": [
+        560,
+        420
+      ]
     },
     {
       "parameters": {
@@ -80,7 +89,10 @@
       "name": "Format Demo Response",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [860, 300]
+      "position": [
+        860,
+        300
+      ]
     },
     {
       "parameters": {
@@ -91,7 +103,10 @@
       "name": "Respond",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [1160, 300]
+      "position": [
+        1160,
+        300
+      ]
     }
   ],
   "connections": {

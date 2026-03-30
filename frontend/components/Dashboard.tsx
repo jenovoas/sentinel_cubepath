@@ -14,6 +14,7 @@ import { CrystalLatticeView } from "./CrystalLatticeView";
 import { AboutView } from "./AboutView";
 import { MonitoringView } from "./MonitoringView";
 import { AIOpsIntercept } from "./AIOpsIntercept";
+import { N8nView } from "./N8nView";
 import { clsx } from "clsx";
 import { ShieldAlert as ShieldAlertIcon } from "lucide-react";
 
@@ -24,7 +25,23 @@ export function Dashboard() {
   const [encryptionLayer, setEncryptionLayer] = useState<string>("S60_SHIELD_INITIALIZING");
   const [yhwhPhase, setYhwhPhase] = useState<string>("HE2");
   const [networkOpen, setNetworkOpen] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<string>("about");
+  const [activeTab, setActiveTabRaw] = useState<string>("dashboard");
+
+  const setActiveTab = (tab: string) => {
+    setActiveTabRaw(tab);
+    if (typeof window !== "undefined") {
+      window.location.hash = tab;
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash.replace("#", "");
+      if (hash && ["about", "dashboard", "matrix", "observability", "aiops_shield", "mycnet", "vault", "settings", "n8n_reflex"].includes(hash)) {
+        setActiveTabRaw(hash);
+      }
+    }
+  }, []);
   const [vaultEvents, setVaultEvents] = useState<any[]>([]);
 
   // Telemetry listener for dynamic encryption layer (SNN+RMM acoplado)
@@ -238,6 +255,10 @@ export function Dashboard() {
           <CrystalLatticeView />
         ) : activeTab === "observability" ? (
           <MonitoringView />
+        ) : activeTab === "n8n_reflex" ? (
+          <div className="animate-in fade-in slide-in-from-right-4 duration-500 space-y-6 h-full">
+            <N8nView />
+          </div>
         ) : activeTab === "null" ? (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
             <div className="flex items-center justify-between">
