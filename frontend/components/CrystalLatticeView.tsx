@@ -195,6 +195,7 @@ export function CrystalLatticeView() {
   useEffect(() => {
     let ws: WebSocket | null = null;
     let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+    let pollTimer: ReturnType<typeof setInterval> | null = null;
 
     const fetchLatticeNeural = async () => {
       try {
@@ -211,38 +212,40 @@ export function CrystalLatticeView() {
       setNowNs(Date.now() * 1_000_000);
     };
 
+    // Polling de fallback — garantiza datos cada 1.5s aunque WS falle
+    fetchLatticeNeural();
+    pollTimer = setInterval(fetchLatticeNeural, 1500);
+
     const connect = () => {
-      const proto = typeof window !== "undefined" && window.location.protocol === "https:" ? "wss" : "ws";
-      const wsHost = typeof window !== "undefined" ? window.location.host : "localhost";
-      ws = new WebSocket(`${proto}://${wsHost}/api/v1/telemetry`);
+      // WS directo al backend en puerto 8000
+      const proto = "ws";
+      ws = new WebSocket(`${proto}://${host}:8000/api/v1/telemetry`);
 
       ws.onopen = () => {
         setWsConnected(true);
-        fetchLatticeNeural();
       };
 
-      ws.onmessage = async (e) => {
+      ws.onmessage = (e) => {
         try {
           const event = JSON.parse(e.data);
           if (event.event_type === "MATRIX_SYNC") {
             const pct = ((Math.abs(event.entropy_signal) / 12_960_000) * 100).toFixed(2);
-            const t = new Date(event.timestamp_ns / 1_000_000).toLocaleTimeString("es-CL", { hour12: false });
+            const t = new Date().toLocaleTimeString("es-CL", { hour12: false });
             setTickLog(prev => [{
               tick: event.event_id,
               entropy_pct: pct,
               time: t,
               event_type: event.event_type,
             }, ...prev].slice(0, 60));
-            await fetchLatticeNeural();
           }
         } catch { /* ignorar parse errors */ }
       };
 
-      ws.onerror = () => { setError(true); ws?.close(); };
+      ws.onerror = () => { ws?.close(); };
 
       ws.onclose = () => {
         setWsConnected(false);
-        reconnectTimer = setTimeout(connect, 3000);
+        reconnectTimer = setTimeout(connect, 5000);
       };
     };
 
@@ -251,15 +254,19 @@ export function CrystalLatticeView() {
     return () => {
       ws?.close();
       if (reconnectTimer) clearTimeout(reconnectTimer);
+      if (pollTimer) clearInterval(pollTimer);
     };
-  }, [apiBase]);
+  }, [apiBase, host]);
 
   const [simLog, setSimLog] = useState<string[]>([]);
+  const [simResult, setSimResult] = useState<{id: string; tick: number; nodes: number; energy_pct: number; coherence: number} | null>(null);
 
   const runSimulation = async (sim: Simulation) => {
     if (injecting) return;
     setInjecting(sim.id);
     setSimLog([]);
+    setSimResult(null);
+    let lastTick = 0;
     for (const step of sim.steps) {
       await new Promise(r => setTimeout(r, step.delay_ms));
       try {
@@ -275,11 +282,28 @@ export function CrystalLatticeView() {
           })
         });
         if (res.ok) {
-          const { tick } = await res.json();
-          setSimLog(l => [`[${tick}] ${step.label} → n°${step.idx} (${(step.energy / 12960000 * 100).toFixed(0)}% S60)`, ...l].slice(0, 20));
+          const data = await res.json();
+          lastTick = data.tick;
+          setSimLog(l => [`[${data.tick}] ${step.label} → n°${step.idx} E=${(step.energy / 12960000).toFixed(2)}°S60`, ...l].slice(0, 20));
         }
       } catch {}
     }
+    // Leer état coherencia final del cristal después de la simulación
+    try {
+      const latRes = await fetch(`${apiBase}/api/v1/lattice/state`);
+      if (latRes.ok) {
+        const lat = await latRes.json();
+        setLattice(lat);
+        const cohPct = Math.min(100, (Math.abs(lat.coherence) / 12_960_000) * 100);
+        setSimResult({
+          id: sim.id,
+          tick: lastTick,
+          nodes: sim.steps.length,
+          energy_pct: Math.round(sim.steps[0].energy / 12960000 * 100),
+          coherence: Math.round(cohPct * 100) / 100,
+        });
+      }
+    } catch {}
     setTimeout(() => setInjecting(null), 800);
   };
 
@@ -383,11 +407,33 @@ export function CrystalLatticeView() {
           })}
         </div>
 
-        {/* Log de simulación */}
+        {/* RESPUESTA REAL DEL BACKEND tras simulación */}
+        {simResult && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 animate-in fade-in duration-500">
+            <div className="glass-card p-4 border-emerald-500/20 bg-emerald-500/5 flex flex-col gap-1">
+              <span className="text-[8px] text-slate-500 font-black uppercase tracking-widest">Experimento</span>
+              <span className="text-sm font-black text-emerald-400 mono">{simResult.id}</span>
+            </div>
+            <div className="glass-card p-4 border-sky-500/20 bg-sky-500/5 flex flex-col gap-1">
+              <span className="text-[8px] text-slate-500 font-black uppercase tracking-widest">Tick Ring-0</span>
+              <span className="text-sm font-black text-sky-400 mono">{simResult.tick.toString().padStart(8,"0")}</span>
+            </div>
+            <div className="glass-card p-4 border-violet-500/20 bg-violet-500/5 flex flex-col gap-1">
+              <span className="text-[8px] text-slate-500 font-black uppercase tracking-widest">Nodos inyectados</span>
+              <span className="text-sm font-black text-violet-400 mono">{simResult.nodes} nodos · {simResult.energy_pct}% S60</span>
+            </div>
+            <div className="glass-card p-4 border-amber-500/20 bg-amber-500/5 flex flex-col gap-1">
+              <span className="text-[8px] text-slate-500 font-black uppercase tracking-widest">Coherencia cristal</span>
+              <span className="text-sm font-black text-amber-400 mono">{simResult.coherence.toFixed(2)}% S60</span>
+            </div>
+          </div>
+        )}
+
+        {/* Log compacto */}
         {simLog.length > 0 && (
-          <div className="glass-card p-4 bg-slate-950/60 border-white/5 font-mono text-[9px] space-y-1 max-h-24 overflow-y-auto custom-scrollbar">
+          <div className="glass-card p-3 bg-slate-950/60 border-white/5 font-mono text-[9px] space-y-0.5 max-h-20 overflow-y-auto custom-scrollbar">
             {simLog.map((line, i) => (
-              <div key={i} className={clsx("flex gap-2", i === 0 ? "text-emerald-400" : "text-slate-500")}>
+              <div key={i} className={clsx("flex gap-2", i === 0 ? "text-emerald-400" : "text-slate-600")}>
                 <span className="text-slate-700 shrink-0">{">>"}</span>
                 <span>{line}</span>
               </div>
@@ -396,79 +442,12 @@ export function CrystalLatticeView() {
         )}
       </div>
 
-      {/* ── GRID PRINCIPAL: LATTICE & NEURAL ── */}
+      {/* ── PORTAL & NEURAL ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        {/* LATTICE MATRIX (32x32) */}
-        <div className="lg:col-span-8 glass-card p-4 space-y-4 border-white/5 bg-slate-950/20 relative isolate overflow-hidden">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
-                <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">MATRIZ DE SIMULACIÓN — KERNEL RING-0</h3>
-              </div>
-              {/* LEYENDA DEL SCREENSHOT */}
-              <div className="hidden xl:flex items-center gap-3">
-                 {[
-                   { label: "BLOQUEADO", color: "bg-[#f43f5e]" },
-                   { label: "PERMITIDO", color: "bg-[#10b981]" },
-                   { label: "ALERTA", color: "bg-[#f59e0b]" },
-                   { label: "BIO-PULSO", color: "bg-[#8b5cf6]" },
-                   { label: "SANITIZADO", color: "bg-[#06b6d4]" },
-                   { label: "AXION", color: "bg-[#3b82f6]" },
-                 ].map(l => (
-                   <div key={l.label} className="flex items-center gap-1">
-                      <div className={clsx("w-1.5 h-1.5 rounded-full shadow-[0_0_5px_rgba(255,255,255,0.2)]", l.color)} />
-                      <span className="text-[7px] font-black text-slate-500 uppercase tracking-tighter">{l.label}</span>
-                   </div>
-                 ))}
-              </div>
-            </div>
-            <span className="text-[9px] mono text-slate-500 uppercase">Aritmética S60 Pura</span>
-          </div>
 
-          {/* CONTADORES DEL SCREENSHOT */}
-          <div className="grid grid-cols-5 gap-4 mb-4">
-             {[
-                { label: "BLOQUEADOS", val: lattice?.lattice.filter(c => c.metadata === "BLOQUEADO").length || 0, color: "text-[#f43f5e]" },
-                { label: "PERMITIDOS", val: lattice?.lattice.filter(c => c.metadata === "PERMITIDO").length || 0, color: "text-[#10b981]" },
-                { label: "SANITIZADOS", val: lattice?.lattice.filter(c => c.metadata === "SANITIZADO").length || 0, color: "text-[#06b6d4]" },
-                { label: "ALERTAS", val: lattice?.lattice.filter(c => c.metadata === "ALERTA").length || 0, color: "text-[#f59e0b]" },
-                { label: "TOTAL", val: 1024, color: "text-white" },
-             ].map(c => (
-               <div key={c.label} className="glass-card bg-slate-900/40 p-3 border-white/5 flex flex-col items-center">
-                  <span className="text-[7px] font-black text-slate-600 uppercase tracking-[0.2em]">{c.label}</span>
-                  <span className={clsx("text-xl font-black italic", c.color)}>{c.val}</span>
-               </div>
-             ))}
-          </div>
+        {/* PANEL COMPLETO */}
+        <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-          <div 
-            className="grid gap-[1px] transition-all duration-500 ease-in-out"
-            style={{ 
-              gridTemplateColumns: `repeat(32, minmax(0, 1fr))`,
-              maxHeight: "360px",
-              overflow: "hidden"
-            }}
-          >
-            {lattice?.lattice ? lattice.lattice.map((cell, idx) => (
-              <div 
-                key={idx}
-                className="aspect-square rounded-[1px] relative group cursor-crosshair transition-colors duration-300"
-                style={{ 
-                  backgroundColor: nodeColor(cell),
-                  boxShadow: cell.amplitude_raw > 1296000 ? `0 0 4px ${nodeColor(cell)}44` : 'none'
-                }}
-                title={`Node ${idx}: A=${(cell.amplitude_raw / 12960000).toFixed(2)}`}
-              />
-            )) : Array.from({ length: 1024 }).map((_, i) => (
-              <div key={i} className="bg-slate-900/40" />
-            ))}
-          </div>
-        </div>
-
-        {/* PANEL DERECHO */}
-        <div className="lg:col-span-4 space-y-4">
 
           {/* PORTAL HEPTA-RESONANCIA */}
           {(() => {
