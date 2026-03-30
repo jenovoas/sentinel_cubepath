@@ -163,6 +163,55 @@ impl IsochronousOscillator {
         self.amplitude = SPA::zero();
         self.phase = SPA::zero();
     }
+
+    /// Base de coherencia soberana: S60(42, 30, 0) = 42°30'
+    /// Mínimo energético para persistencia activa del cristal.
+    /// Fuente canónica: quantum/sovereign_crystal.py — pump_energy()
+    pub const SOVEREIGN_BASE: SPA = SPA::new(42, 30, 0, 0, 0);
+
+    /// Inyecta energía de compensación para revertir entropía.
+    /// Si la amplitud cae por debajo de SOVEREIGN_BASE, la restaura.
+    /// Sin esta bomba el cristal decae y el sistema entero se convierte en mockup.
+    /// Fuente canónica: quantum/sovereign_crystal.py — pump_energy()
+    pub fn pump_energy(&mut self) {
+        if self.amplitude.to_raw() < Self::SOVEREIGN_BASE.to_raw() {
+            let boost = Self::SOVEREIGN_BASE - self.amplitude;
+            self.amplitude = self.amplitude + boost;
+        }
+    }
+
+    /// Retorna la firma geométrica del cristal: (coherencia, axion_sig).
+    ///
+    /// - coherencia: qué tan cerca está la amplitud de la frecuencia natural.
+    ///   Si amplitude >= natural_frequency → 60° (máximo, geometría cierra).
+    ///   Si no → (amplitude / natural_frequency) * 60° (proporcional).
+    ///   Una firma coherente = geometría que CIERRA = afirmación verdadera.
+    ///   Una firma incoherente = geometría que NO CIERRA = anomalía / mentira.
+    ///
+    /// - axion_sig: proyección de la fase actual → phase mod 60° en S60.
+    ///
+    /// Fuente canónica: quantum/sovereign_crystal.py — get_signature()
+    pub fn get_signature(&self) -> (SPA, SPA) {
+        let coherence = if self.amplitude.to_raw() >= self.natural_frequency.to_raw() {
+            SPA::new(60, 0, 0, 0, 0)
+        } else if self.natural_frequency.to_raw() > 0 {
+            let coh_raw = (self.amplitude.to_raw() * 60) / self.natural_frequency.to_raw();
+            SPA::from_raw(coh_raw.max(0))
+        } else {
+            SPA::zero()
+        };
+
+        // Firma axiónica: phase mod 60° (en raw S60)
+        let sixty_raw = SPA::new(60, 0, 0, 0, 0).to_raw();
+        let axion_raw = if sixty_raw > 0 {
+            self.phase.to_raw().abs() % sixty_raw
+        } else {
+            0
+        };
+        let axion_sig = SPA::from_raw(axion_raw);
+
+        (coherence, axion_sig)
+    }
 }
 
 #[cfg(test)]

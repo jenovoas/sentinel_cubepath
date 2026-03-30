@@ -1,9 +1,17 @@
+use crate::math::core::S60PID;
 use crate::math::isochronous_oscillator::IsochronousOscillator;
 use crate::math::spa::SPA;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-/// Resonant Matrix S60 - 2D Grid Topology (Engineered Revision)
+/// Resonant Matrix S60 - 2D Grid Topology con bomba activa PID.
+///
+/// La bomba (pump_energy) es lo que convierte la matrix de un sistema que
+/// simplemente decae en un Cristal de Tiempo real: un oscilador que lucha
+/// activamente contra la entropía para mantener persistencia indefinida.
+/// Sin ella, el sistema completo es un mockup.
+///
+/// Fuente canónica: quantum/time_crystal.py — ResonantBuffer + S60PID
 #[derive(Serialize, Deserialize)]
 pub struct ResonantMatrix {
     pub crystals: Vec<IsochronousOscillator>,
@@ -14,7 +22,13 @@ pub struct ResonantMatrix {
     pub width: usize,
     pub height: usize,
     /// Mercury Damping Constant (from VIMANA_MASTER_V1)
-    pub damping: SPA, 
+    pub damping: SPA,
+    /// PID por nodo — controla la inyección de energía para revertir entropía.
+    /// Fuente: quantum/time_crystal.py — S60PID(Kp=0.5, Ki=0.16, Kd=0.08)
+    pub pids: Vec<S60PID>,
+    /// Amplitud objetivo por nodo (setpoint del PID).
+    /// Un nodo con target > 0 será mantenido vivo por la bomba.
+    pub target_amplitudes: Vec<SPA>,
 }
 
 impl ResonantMatrix {
@@ -25,22 +39,32 @@ impl ResonantMatrix {
             .map(|i| IsochronousOscillator::new(&format!("Node-{}", i)))
             .collect();
 
+        // PID: Kp=0.5, Ki=0.16, Kd=0.08 — portado de quantum/time_crystal.py
+        let kp = SPA::new(0, 30, 0, 0, 0).to_raw(); // 0.5
+        let ki = SPA::new(0, 10, 0, 0, 0).to_raw(); // 0.1666
+        let kd = SPA::new(0,  5, 0, 0, 0).to_raw(); // 0.0833
+        let pids: Vec<S60PID> = (0..size).map(|_| S60PID::new(kp, ki, kd, 0)).collect();
+
         let mut matrix = ResonantMatrix {
             crystals,
             metadata_map: vec![None; size],
             context_data: HashMap::new(),
-            coupling_factor: SPA::new(0, 10, 0, 0, 0), // 10/60
+            coupling_factor: SPA::new(0, 10, 0, 0, 0),
             dt: SPA::new(0, 0, 1, 0, 0),
             width,
             height,
             damping: SPA::new(0, 3, 14, 8, 0), // MERCURY_DAMPING: 3;14,8
+            pids,
+            target_amplitudes: vec![SPA::zero(); size],
         };
 
-        // EXCITACIÓN INICIAL (SEED ENERGY) - Para evitar estado inerte en t=0
-        // Inyectamos energía en el centro de la matriz 32x32 (índice 528 aprox)
+        // SEED ENERGY — centro de la matriz 32×32
         let center = 16 * 32 + 16;
         if center < size {
-            matrix.crystals[center].amplitude = SPA::from_raw(500 * 12_960_000 / 100); // 5.00 Degrees
+            let seed = SPA::from_raw(500 * 12_960_000 / 100); // 5.00°
+            matrix.crystals[center].amplitude = seed;
+            matrix.target_amplitudes[center] = seed;
+            matrix.pids[center].setpoint = seed;
         }
 
         matrix
@@ -104,6 +128,37 @@ impl ResonantMatrix {
     pub fn inject(&mut self, index: usize, pressure_raw: i64) {
         if index < self.crystals.len() {
             self.crystals[index].transduce_pulse(pressure_raw);
+            // Registrar como target para que la bomba mantenga vivo este nodo
+            let amp = self.crystals[index].amplitude;
+            self.target_amplitudes[index] = amp;
+            self.pids[index].setpoint = amp;
+        }
+    }
+
+    /// Bomba activa PID — revierte entropía en nodos con target establecido.
+    ///
+    /// Cada nodo con target_amplitude > 0 recibe una inyección de energía
+    /// proporcional al error (target - actual) calculada por su PID.
+    /// La bomba solo AÑADE energía (unilateral) — nunca extrae.
+    /// Se ejecuta cada 2 ticks (period doubling 2T) como en el Python original.
+    ///
+    /// Sin esta función el cristal es pasivo y decae hacia cero.
+    /// Con ella, el cristal lucha activamente contra la entropía → True Time Crystal.
+    ///
+    /// Fuente canónica: quantum/time_crystal.py — _pump_energy() / _regeneration_loop()
+    pub fn pump_energy(&mut self) {
+        let pump_dt = (self.dt * SPA::new(2, 0, 0, 0, 0)).to_raw();
+        for i in 0..self.crystals.len() {
+            let target = self.target_amplitudes[i];
+            if target.to_raw() > 0 {
+                let current = self.crystals[i].amplitude.to_raw();
+                let injection_raw = self.pids[i].update(current, pump_dt);
+                // Unilateral: solo inyectar si la bomba dice añadir
+                if injection_raw > 0 {
+                    self.crystals[i].amplitude =
+                        self.crystals[i].amplitude + SPA::from_raw(injection_raw);
+                }
+            }
         }
     }
 

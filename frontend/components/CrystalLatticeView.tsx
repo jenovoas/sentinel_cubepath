@@ -467,119 +467,312 @@ export function CrystalLatticeView() {
           </div>
         </div>
 
-        {/* NEURAL MATRIX & STATS */}
-        <div className="lg:col-span-4 space-y-6">
-          
-          {/* NEURAL SPIKES (10x10) */}
-          <div className="glass-card p-5 border-sky-400/10 bg-sky-400/5 relative isolate overflow-hidden">
-            <div className="flex items-center justify-between mb-6">
-               <div className="flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-sky-400" />
-                  <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white">SNN Neural Spikes</h3>
-               </div>
-               <span className="text-[9px] font-bold text-sky-400 mono">{(neuralFiringPct).toFixed(1)}% activity</span>
-            </div>
+        {/* PANEL DERECHO */}
+        <div className="lg:col-span-4 space-y-4">
 
-            <div className="flex flex-col items-center gap-6">
-               <div
-                className="grid gap-2"
-                style={{ gridTemplateColumns: `repeat(${NEURAL_GRID}, 1fr)` }}
-               >
-                {neural?.membranes ? neural.membranes.map((mb, i) => (
-                  <div
-                    key={i}
-                    className="w-5 h-5 rounded-full transition-all duration-300 shadow-[0_0_8px_rgba(56,189,248,0.1)]"
-                    style={{
-                      backgroundColor: membraneColor(mb.potential_raw, mb.last_spike_ns, nowNs),
-                      transform: (nowNs - mb.last_spike_ns) / 1_000_000 < 200 ? "scale(1.2)" : "scale(1)"
-                    }}
-                  />
-                )) : Array.from({ length: 100 }).map((_, i) => (
-                  <div key={i} className="w-5 h-5 rounded-full bg-slate-800/50" />
-                ))}
-               </div>
+          {/* PORTAL HEPTA-RESONANCIA */}
+          {(() => {
+            // Tiempo en segundos desde tick (cada tick = 150ms)
+            const t = lattice ? lattice.tick * 0.150 : 0;
+            const TWO_PI = 2 * Math.PI;
+            const phaseBase = TWO_PI * t / 17;
 
-               <div className="w-full space-y-3 pt-4 border-t border-white/10">
-                  <div className="flex justify-between items-center text-[9px] font-black uppercase italic tracking-widest text-slate-500">
-                     <span>Coherencia Global</span>
-                     <span className="text-white">{coherencePct.toFixed(2)}%</span>
+            // Offsets estelares: (λ_eclíptica / 360°) * 2π
+            const oAldebaran = (68 + 58/60 + 48/3600) / 360 * TWO_PI;
+            const oRegulus   = (152 + 5/60  + 24/3600) / 360 * TWO_PI;
+            const oAntares   = (247 + 21/60           ) / 360 * TWO_PI;
+            const oFomalhaut = (344 + 24/60 + 36/3600) / 360 * TWO_PI;
+
+            const layers = [
+              { id: "BIO",       val: Math.sin(TWO_PI * t / 17),    color: "bg-emerald-500", text: "text-emerald-400", label: "BIO · 17s" },
+              { id: "CRYSTAL",   val: Math.sin(TWO_PI * t / 4.25),  color: "bg-sky-500",     text: "text-sky-400",     label: "CRYSTAL · 4.25s" },
+              { id: "VENUS",     val: Math.sin(TWO_PI * t / 16.18), color: "bg-violet-500",  text: "text-violet-400",  label: "VENUS · φ 16.18s" },
+              { id: "ALDEBARÁN", val: Math.sin(phaseBase + oAldebaran), color: "bg-rose-500",   text: "text-rose-400",   label: "ALDEBARÁN 68°58'" },
+              { id: "RÉGULO",    val: Math.sin(phaseBase + oRegulus),   color: "bg-amber-500",  text: "text-amber-400",  label: "RÉGULO 152°05'" },
+              { id: "ANTARES",   val: Math.sin(phaseBase + oAntares),   color: "bg-fuchsia-500",text: "text-fuchsia-400",label: "ANTARES 247°21'" },
+              { id: "FOMALHAUT", val: Math.sin(phaseBase + oFomalhaut), color: "bg-cyan-500",   text: "text-cyan-400",   label: "FOMALHAUT 344°24'" },
+            ];
+
+            const avg = layers.reduce((s, l) => s + l.val, 0) / 7;
+            const portalOpen = avg > 0.80;
+
+            return (
+              <div className={clsx(
+                "glass-card p-4 space-y-3 border transition-all duration-700",
+                portalOpen ? "border-emerald-500/40 bg-emerald-500/5 shadow-[0_0_30px_rgba(16,185,129,0.1)]" : "border-white/5"
+              )}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Zap className={clsx("w-4 h-4", portalOpen ? "text-emerald-400" : "text-slate-600")} />
+                    <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white">Portal Hepta-Resonancia</h3>
                   </div>
-                  <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-gradient-to-r from-sky-600 to-sky-400 transition-all duration-700"
-                      style={{ width: `${coherencePct}%` }}
+                  <span className={clsx(
+                    "text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest",
+                    portalOpen ? "bg-emerald-500/20 text-emerald-400" : "bg-slate-800 text-slate-500"
+                  )}>
+                    {portalOpen ? "⬟ ABIERTO" : "⬡ CERRADO"}
+                  </span>
+                </div>
+
+                {/* Resonancia media */}
+                <div className="flex items-center gap-3">
+                  <span className="text-[8px] text-slate-600 uppercase font-black">Resonancia</span>
+                  <div className="flex-1 h-1.5 bg-slate-900 rounded-full overflow-hidden">
+                    <div
+                      className={clsx("h-full rounded-full transition-all duration-300", portalOpen ? "bg-emerald-500" : "bg-slate-600")}
+                      style={{ width: `${Math.max(0, avg * 100).toFixed(1)}%` }}
                     />
                   </div>
-               </div>
+                  <span className={clsx("text-[10px] font-black mono tabular-nums w-12 text-right", portalOpen ? "text-emerald-400" : "text-slate-500")}>
+                    {(avg * 100).toFixed(1)}%
+                  </span>
+                </div>
+
+                {/* 7 capas */}
+                <div className="space-y-1.5">
+                  {layers.map((l) => {
+                    const pct = ((l.val + 1) / 2) * 100; // normalizar [-1,1] → [0,100]
+                    const over80 = l.val > 0.80;
+                    return (
+                      <div key={l.id} className="flex items-center gap-2">
+                        <span className={clsx("text-[7px] font-black uppercase tracking-tighter w-24 shrink-0", over80 ? l.text : "text-slate-600")}>
+                          {l.label}
+                        </span>
+                        <div className="flex-1 h-1 bg-slate-900 rounded-full overflow-hidden">
+                          <div
+                            className={clsx("h-full rounded-full transition-all duration-300", over80 ? l.color : "bg-slate-700")}
+                            style={{ width: `${pct.toFixed(1)}%` }}
+                          />
+                        </div>
+                        <span className={clsx("text-[7px] mono tabular-nums w-8 text-right shrink-0", over80 ? l.text : "text-slate-700")}>
+                          {l.val > 0 ? "+" : ""}{l.val.toFixed(2)}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="text-[7px] text-slate-700 pt-1 border-t border-white/5">
+                  θ = 0.80 · EXP-028 §2.2 · portal_detector.rs · spa_math.rs
+                </p>
+              </div>
+            );
+          })()}
+
+          {/* SNN NEURAL — 10×10 Membranas LIF */}
+          <div className="glass-card p-4 space-y-3 border-white/5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Activity className="w-4 h-4 text-sky-400" />
+                <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white">SNN Neural · LIF</h3>
+              </div>
+              <span className="text-[8px] mono text-slate-500 uppercase">
+                {neural ? `${(neuralFiringPct).toFixed(1)}% firing` : "—"}
+              </span>
+            </div>
+
+            {/* 10×10 grid de membranas */}
+            <div
+              className="grid gap-[2px]"
+              style={{ gridTemplateColumns: `repeat(${NEURAL_GRID}, minmax(0, 1fr))` }}
+            >
+              {neural?.membranes
+                ? neural.membranes.map((m, i) => (
+                    <div
+                      key={i}
+                      className="aspect-square rounded-[1px]"
+                      style={{ backgroundColor: membraneColor(m.potential_raw, m.last_spike_ns, nowNs) }}
+                      title={`N${i}: V=${(m.potential_raw / S60_SCALE).toFixed(3)}`}
+                    />
+                  ))
+                : Array.from({ length: 100 }).map((_, i) => (
+                    <div key={i} className="aspect-square rounded-[1px] bg-slate-900/40" />
+                  ))}
+            </div>
+
+            {/* Tasa de disparo global */}
+            <div className="space-y-1 pt-1 border-t border-white/5">
+              <div className="flex justify-between text-[8px] font-black uppercase text-slate-500">
+                <span>Tasa Disparo Global</span>
+                <span className="text-sky-400 mono">{neuralFiringPct.toFixed(2)}%</span>
+              </div>
+              <div className="h-1 bg-slate-900 rounded-full overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-sky-700 to-sky-400 transition-all duration-700 rounded-full"
+                  style={{ width: `${Math.min(100, neuralFiringPct)}%` }} />
+              </div>
             </div>
           </div>
 
-          {/* REAL TIME LOG */}
-          <div className="glass-card p-5 bg-slate-900/40 border-white/5 h-[300px] flex flex-col">
-             <h3 className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-4 flex items-center gap-2">
-                <Hash className="w-3 h-3" />
-                Truth Interaction Archive
+          {/* FIRMA DEL CRISTAL */}
+          <div className="glass-card p-4 space-y-3 border-white/5">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-amber-400" />
+              <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white">Firma del Cristal</h3>
+            </div>
+
+            {/* Coherencia global */}
+            <div className="space-y-1">
+              <div className="flex justify-between text-[8px] font-black uppercase text-slate-500">
+                <span>Coherencia Global</span>
+                <span className="text-white mono">{coherencePct.toFixed(2)}%</span>
+              </div>
+              <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-amber-600 to-amber-400 transition-all duration-700 rounded-full"
+                  style={{ width: `${coherencePct}%` }} />
+              </div>
+            </div>
+
+            {/* Nodos activos */}
+            {lattice && (() => {
+              const active = lattice.lattice.filter(c => c.amplitude_raw > 0).length;
+              const pct = (active / 1024) * 100;
+              return (
+                <div className="space-y-1">
+                  <div className="flex justify-between text-[8px] font-black uppercase text-slate-500">
+                    <span>Nodos Activos</span>
+                    <span className="text-sky-400 mono">{active} / 1024</span>
+                  </div>
+                  <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-sky-700 to-sky-400 transition-all duration-700 rounded-full"
+                      style={{ width: `${pct}%` }} />
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Axion signature desde fase del nodo central */}
+            {lattice?.lattice[528] && (() => {
+              const node = lattice.lattice[528];
+              const phaseDeg = ((node.phase_raw / 12_960_000) * 360) % 360;
+              const axionMod = Math.abs(phaseDeg % 60).toFixed(2);
+              return (
+                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/5">
+                  <div className="space-y-0.5">
+                    <p className="text-[7px] text-slate-600 uppercase font-black">Axion Sig · n°528</p>
+                    <p className="text-[10px] text-violet-400 font-bold mono">{axionMod}° mod 60</p>
+                  </div>
+                  <div className="space-y-0.5">
+                    <p className="text-[7px] text-slate-600 uppercase font-black">Fase Central</p>
+                    <p className="text-[10px] text-fuchsia-400 font-bold mono">{phaseDeg.toFixed(1)}°</p>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Bomba + tick stream */}
+            <div className="pt-2 border-t border-white/5 space-y-1 font-mono text-[8px]">
+              <div className="flex items-center justify-between">
+                <span className="text-slate-600 uppercase font-black">Bomba PID</span>
                 <span className={clsx(
-                  "ml-auto text-[7px] px-1.5 py-0.5 rounded-full font-black uppercase",
-                  wsConnected ? "bg-emerald-500/20 text-emerald-400" : "bg-rose-500/20 text-rose-400"
+                  "px-1.5 py-0.5 rounded text-[7px] font-black uppercase",
+                  lattice ? "bg-amber-500/20 text-amber-400" : "bg-slate-800 text-slate-600"
                 )}>
-                  {wsConnected ? "WS LIVE" : "RECONECTANDO"}
+                  {lattice ? "ACTIVA · 2T" : "OFFLINE"}
                 </span>
-             </h3>
-             <div className="flex-1 overflow-y-auto custom-scrollbar space-y-1 font-mono text-[9px]">
-                {injecting && (
-                   <div className="text-emerald-400 animate-pulse flex items-start gap-2 pb-1 border-b border-emerald-500/10">
-                      <span className="text-white shrink-0">{">>"}</span>
-                      <span>INJECTING {injecting} TRUTH PULSE... SEVERITY OVERRIDE ACTIVE</span>
-                   </div>
-                )}
-                {tickLog.length === 0 && (
-                  <div className="text-slate-700 italic">
-                    {wsConnected ? "Esperando ticks del kernel..." : "Estableciendo enlace con sentinel-cubepath..."}
-                  </div>
-                )}
-                {tickLog.map((entry, i) => (
-                  <div key={entry.tick} className={clsx(
-                    "flex items-center gap-2 transition-opacity",
-                    i === 0 ? "text-sky-400" : "text-slate-600 opacity-70"
-                  )}>
-                    <span className="text-slate-700 shrink-0 tabular-nums w-[58px]">[{entry.tick.toString().padStart(8, "0")}]</span>
-                    <span className="shrink-0 text-slate-500">MATRIX_SYNC</span>
-                    <span className="shrink-0">·</span>
-                    <span className={clsx("shrink-0 tabular-nums", i === 0 ? "text-sky-400" : "text-slate-500")}>
-                      E:{entry.entropy_pct}%
-                    </span>
-                    <span className="shrink-0 text-slate-700 ml-auto tabular-nums">{entry.time}</span>
-                  </div>
-                ))}
-             </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-600 uppercase font-black">Base Soberana</span>
+                <span className="text-amber-400 mono">S60(42,30,0)</span>
+              </div>
+              {tickLog.slice(0, 4).map((entry, i) => (
+                <div key={entry.tick} className={clsx(
+                  "flex gap-1 tabular-nums",
+                  i === 0 ? "text-sky-400" : "text-slate-700"
+                )}>
+                  <span className="shrink-0">[{entry.tick.toString().padStart(7, "0")}]</span>
+                  <span className="shrink-0">E:{entry.entropy_pct}%</span>
+                  <span className="ml-auto shrink-0">{entry.time}</span>
+                </div>
+              ))}
+              {tickLog.length === 0 && (
+                <div className="text-slate-700 italic">
+                  {wsConnected ? "Esperando ticks..." : "Conectando..."}
+                </div>
+              )}
+            </div>
           </div>
+
         </div>
       </div>
 
-      {/* ── ESPECIFICACIONES TÉCNICAS (Update) ── */}
+      {/* ── ESPECIFICACIONES TÉCNICAS — CRISTAL DE TIEMPO REAL ── */}
       <div className="glass-card p-6 bg-slate-950/40 border-l-4 border-l-sky-500/40">
         <div className="flex items-center gap-3 mb-4">
           <ShieldCheck className="w-5 h-5 text-sky-400" />
-          <h3 className="text-xs font-black uppercase tracking-[0.2em] text-white">Certificación TruthSync Ring-0</h3>
+          <h3 className="text-xs font-black uppercase tracking-[0.2em] text-white">
+            Certificación TruthSync Ring-0
+            <span className="ml-3 text-[8px] text-emerald-400 font-bold normal-case tracking-normal">
+              isochronous_oscillator.rs · resonant_matrix.rs
+            </span>
+          </h3>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-           <div className="space-y-1">
-              <p className="text-[8px] text-slate-600 font-black uppercase">Motor Matemático</p>
-              <p className="text-[10px] text-slate-300 font-bold mono">Pure S60 Taylor-Fixed</p>
-           </div>
-           <div className="space-y-1">
-              <p className="text-[8px] text-slate-600 font-black uppercase">Constante de Decaimiento</p>
-              <p className="text-[10px] text-slate-300 font-bold mono">54/60 (Neural) | 30/3600 (Lattice)</p>
-           </div>
-           <div className="space-y-1">
-              <p className="text-[8px] text-slate-600 font-black uppercase">Protocolo Cuarentena</p>
-              <p className="text-[10px] text-emerald-400 font-bold mono italic">AUTO-HEAL TRIGGERED @ 12.96M</p>
-           </div>
-           <div className="space-y-1">
-              <p className="text-[8px] text-slate-600 font-black uppercase">Synchronization</p>
-              <p className="text-[10px] text-sky-400 font-bold mono italic">YHWH 10-5-6-5 Breathing</p>
-           </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-5">
+
+          {/* Fila 1 — Física del oscilador */}
+          <div className="space-y-1">
+            <p className="text-[8px] text-slate-600 font-black uppercase">Motor Matemático</p>
+            <p className="text-[10px] text-slate-300 font-bold mono">S60 Base-60 · aritmética exacta</p>
+            <p className="text-[8px] text-slate-600 mono">Protocolo Yatra Pure — cero floats</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-[8px] text-slate-600 font-black uppercase">Frecuencia Natural</p>
+            <p className="text-[10px] text-violet-400 font-bold mono">Plimpton 322 Fila 12</p>
+            <p className="text-[8px] text-slate-600 mono">raw 62,159,999 · ~4.796 Hz Base-60</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-[8px] text-slate-600 font-black uppercase">Tick Isocrono</p>
+            <p className="text-[10px] text-sky-400 font-bold mono">41.7713 Hz</p>
+            <p className="text-[8px] text-slate-600 mono">23,939,835 ns/tick · Axion Resonance</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-[8px] text-slate-600 font-black uppercase">Respiración YHWH</p>
+            <p className="text-[10px] text-emerald-400 font-bold mono">10-5-6-5 · Yod-He-Vav-He</p>
+            <p className="text-[8px] text-slate-600 mono">±1.75 / -0.75 / -0.25 Hz por fase</p>
+          </div>
+
+          {/* Fila 2 — Bomba activa + acoplamiento */}
+          <div className="space-y-1">
+            <p className="text-[8px] text-amber-600 font-black uppercase">Bomba Activa PID ✓</p>
+            <p className="text-[10px] text-amber-400 font-bold mono">Kp=0.5 · Ki=0.16 · Kd=0.08</p>
+            <p className="text-[8px] text-slate-600 mono">Period doubling 2T · anti-entropía</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-[8px] text-slate-600 font-black uppercase">Base Soberana</p>
+            <p className="text-[10px] text-amber-400 font-bold mono">S60(42, 30, 0) = 42°30'</p>
+            <p className="text-[8px] text-slate-600 mono">Mínimo energético para persistencia</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-[8px] text-slate-600 font-black uppercase">Acoplamiento 2D</p>
+            <p className="text-[10px] text-slate-300 font-bold mono">10/60 ≈ 0.1667</p>
+            <p className="text-[8px] text-slate-600 mono">4 vecinos cardinales · 2 fases</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-[8px] text-slate-600 font-black uppercase">Mercury Damping</p>
+            <p className="text-[10px] text-slate-300 font-bold mono">S60(0, 3, 14, 8) VIMANA</p>
+            <p className="text-[8px] text-slate-600 mono">30/3600 por tick · ~0.014% pérdida</p>
+          </div>
+
+          {/* Fila 3 — Guardianes Celestes */}
+          <div className="space-y-1">
+            <p className="text-[8px] text-rose-600 font-black uppercase">Aldebarán · Este</p>
+            <p className="text-[10px] text-rose-400 font-bold mono">68°58'48" eclíptica</p>
+            <p className="text-[8px] text-slate-600 mono">Alpha Tauri · Portal phase offset</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-[8px] text-amber-600 font-black uppercase">Régulo · Norte</p>
+            <p className="text-[10px] text-amber-400 font-bold mono">152°05'24" eclíptica</p>
+            <p className="text-[8px] text-slate-600 mono">Alpha Leonis · Portal phase offset</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-[8px] text-violet-600 font-black uppercase">Antares · Oeste</p>
+            <p className="text-[10px] text-violet-400 font-bold mono">247°21'00" eclíptica</p>
+            <p className="text-[8px] text-slate-600 mono">Alpha Scorpii · Portal phase offset</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-[8px] text-sky-600 font-black uppercase">Fomalhaut · Sur</p>
+            <p className="text-[10px] text-sky-400 font-bold mono">344°24'36" eclíptica</p>
+            <p className="text-[8px] text-slate-600 mono">Alpha PsA · Portal phase offset</p>
+          </div>
+
         </div>
       </div>
     </div>

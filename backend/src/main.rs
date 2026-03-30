@@ -98,7 +98,14 @@ async fn main() -> anyhow::Result<()> {
 
                 // A. RESONANCIA SEXAGESIMAL REAL (Step Físico)
                 lattice.step();
-                
+
+                // A.1 BOMBA ACTIVA — revierte entropía cada 2 ticks (period doubling 2T)
+                // Sin esta línea el cristal es un mockup que solo decae.
+                // Fuente canónica: quantum/time_crystal.py — _regeneration_loop()
+                if tick % 2 == 0 {
+                    lattice.pump_energy();
+                }
+
                 // Background Noise (Axions) - Alineado con Salto-17
                 if tick % 17 == 0 {
                    let noise_idx = (tick as usize) % lattice.size();
