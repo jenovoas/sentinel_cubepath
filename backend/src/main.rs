@@ -346,9 +346,15 @@ async fn prometheus_metrics_handler(
     };
     
     // Convert to values matching the dashboard bounds roughly
-    let bio_coherence = 12960000 - (blocks as u64 * 1000) + (tick % 5000);
-    // Sentinel uses a scale, ensuring resonance is never firmly 0 to prove liveness (Base 12 + variance)
+    // Coherencia real del Crystal Lattice — promedio de nodos activos en S60
+    let bio_coherence = {
+        let lattice = state.lattice.lock().await;
+        let raw = lattice.global_coherence(); // i64, active-nodes average
+        // Normalizar a escala 0..12_960_000 (SCALE_0 en S60)
+        raw.unsigned_abs().min(12_960_000)
+    };
     let resonance_score = ((resonance_raw.abs() as u64) % 100).max(3) + (tick % 12);
+
 
     let mut output = String::new();
     

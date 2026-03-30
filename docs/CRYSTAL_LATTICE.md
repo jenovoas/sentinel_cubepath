@@ -61,7 +61,7 @@ En un sólido cristalino real, los átomos están acoplados por fuerzas elástic
 flow_i→i+1 = (amplitude[i] - amplitude[i+1]) * coupling_factor
 ```
 
-El `coupling_factor = S60::new(0, 10, 0, 0, 0)` (10/60 ≈ 0.1667) es la fracción de la diferencia de amplitud que se transfiere por tick. Este valor garantiza que el lattice sea estable: si se excita un solo nodo con mucha energía, la energía se distribuye gradualmente sin causar oscilaciones explosivas.
+El `coupling_factor = S60::new(0, 10, 0, 0, 0)` (10/60 ≈ 0.1667) es la fracción de la diferencia de amplitud que se transfiere por tick entre nodos vecinos. El acoplamiento es **2D en grilla 32×32**: cada nodo está conectado a sus 4 vecinos cardinales (arriba, abajo, izquierda, derecha). Para preservar la simetría temporal y evitar doble-conteo, el paso solo itera hacia Derecha y Abajo, usando el vector de transferencias `transfers[]` para aplicar todos los flujos simultáneamente en la Fase 2.
 
 ### Entropía Termodinámica
 
@@ -205,24 +205,41 @@ Los 1024 cristales se indexan linealmente de 0 a 1023. Para la visualización, s
 
 ```rust
 pub fn step(&mut self) {
-    let n = self.crystals.len();  // 1024
+    let size = self.crystals.len(); // 1024
+    let mut transfers: Vec<SPA> = vec![SPA::zero(); size];
 
-    // Fase 1: Calcular todas las transferencias sin mutar
-    // (Importante para preservar la simetría temporal del paso)
-    let mut transfers: Vec<S60> = vec![S60::zero(); n];
-    for i in 0..n - 1 {
-        let a1 = self.crystals[i].get_amplitude();
-        let a2 = self.crystals[i + 1].get_amplitude();
-        let diff = a1 - a2;
-        let flow = diff * self.coupling_factor;
-        transfers[i]     = transfers[i]     - flow;  // Nodo i cede
-        transfers[i + 1] = transfers[i + 1] + flow;  // Nodo i+1 recibe
+    // Fase 1: Calcular todos los flujos (solo Derecha + Abajo para evitar doble-conteo)
+    for y in 0..self.height {
+        for x in 0..self.width {
+            let idx = y * self.width + x;
+            let amp_curr = self.crystals[idx].amplitude;
+
+            let neighbors = [
+                (x + 1, y), // Derecha
+                (x, y + 1), // Abajo
+            ];
+
+            for &(nx, ny) in neighbors.iter() {
+                if nx < self.width && ny < self.height {
+                    let n_idx = ny * self.width + nx;
+                    let diff = amp_curr - self.crystals[n_idx].amplitude;
+                    let flow = diff * self.coupling_factor;
+                    transfers[idx]   = transfers[idx]   - flow; // cede
+                    transfers[n_idx] = transfers[n_idx] + flow; // recibe
+                }
+            }
+        }
     }
 
-    // Fase 2: Aplicar todas las transferencias simultáneamente y oscilar
-    for (i, crystal) in self.crystals.iter_mut().enumerate() {
-        crystal.amplitude = crystal.amplitude + transfers[i];
-        crystal.oscillate();
+    // Fase 2: Aplicar transferencias + MERCURY_DAMPING + oscilar
+    for i in 0..size {
+        self.crystals[i].amplitude = self.crystals[i].amplitude + transfers[i];
+        if self.crystals[i].amplitude.to_raw() > 0 {
+            let loss = (self.crystals[i].amplitude * self.damping)
+                       / SPA::new(60, 0, 0, 0, 0);
+            self.crystals[i].amplitude = self.crystals[i].amplitude - loss;
+        }
+        self.crystals[i].oscillate(self.dt);
     }
 }
 ```
@@ -232,18 +249,17 @@ El algoritmo de dos fases (calcular primero, aplicar después) es crucial. Si se
 ### Coherencia Global
 
 ```rust
-pub fn global_coherence(&self) -> S60 {
-    let active: Vec<_> = self.crystals
-        .iter()
-        .filter(|c| c.get_amplitude().to_raw() > 0)
+pub fn global_coherence(&self) -> i64 {
+    let active: Vec<_> = self.crystals.iter()
+        .filter(|c| c.amplitude.to_raw() > 0)
         .collect();
-    if active.is_empty() { return S60::zero(); }
-    let sum = active.iter().fold(S60::zero(), |acc, c| acc + c.get_amplitude());
-    S60::from_raw(sum.to_raw() / active.len() as i64)
+    if active.is_empty() { return 0; }
+    let total = active.iter().fold(0i64, |acc, c| acc + c.amplitude.to_raw());
+    total / active.len() as i64  // Promedio SOLO de nodos activos
 }
 ```
 
-La coherencia global es el promedio de amplitud de todos los nodos activos (los que tienen energía mayor que cero). Este valor es directamente la `u64` que devuelve `ResonantMemory::get_coherence()` y que alimenta el motor de cifrado.
+La coherencia global es el promedio de amplitud de los **nodos activos** (amplitud > 0). Dividir por el total de 1024 cuando solo unos pocos nodos tienen energía produciría un valor artificialmente bajo. Este promedio sobre nodos activos da una señal real del "nivel de alerta" del sistema.
 
 ### El Lattice como Capa de ResonantMemory
 
@@ -298,12 +314,12 @@ El **brillo** de cada celda es proporcional a la amplitud (`amplitude_raw`). Una
 
 ### Patrones de Propagación
 
-Cuando ocurre un evento Ring-0, aparece un punto brillante en el heatmap. En los ticks siguientes, la energía se propaga linealmente a los nodos vecinos inmediatos (el acoplamiento está implementado solo entre nodos con índices consecutivos `i` e `i+1`, no en las cuatro direcciones de la grilla 2D). Visualmente esto crea una "onda" que se expande horizontalmente desde el nodo excitado.
+Cuando ocurre un evento Ring-0, aparece un punto brillante en el heatmap. En los ticks siguientes, la energía se propaga en **2D** a los 4 vecinos cardinales (arriba, abajo, izquierda, derecha). Visualmente esto crea un **diamante de expansión** desde el nodo excitado — exactamente como una onda en un medio físico 2D (agua, cristal, sólido elástico). La simetría del patrón depende de si el nodo está en el centro, en un borde o en una esquina de la grilla 32×32.
 
 Un operador experimentado puede leer el heatmap así:
 
 - **Punto aislado y brillante:** un evento único acaba de ocurrir
-- **Línea de puntos:** propagación activa de un evento reciente
+- **Diamante de puntos en expansión:** propagación activa de un evento reciente (2D wave front)
 - **Lattice completamente oscuro:** sistema en calma, sin actividad reciente
 - **Múltiples focos simultáneos:** ráfaga de eventos (posible ataque DDoS detectado por burst_sensor.c)
 

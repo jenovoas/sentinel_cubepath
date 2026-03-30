@@ -108,8 +108,11 @@ impl ResonantMatrix {
     }
 
     pub fn global_coherence(&self) -> i64 {
-        if self.crystals.is_empty() { return 0; }
-        let total = self.crystals.iter().fold(0i64, |acc, c| acc + c.amplitude.to_raw());
-        total / self.crystals.len() as i64
+        let active: Vec<_> = self.crystals.iter()
+            .filter(|c| c.amplitude.to_raw() > 0)
+            .collect();
+        if active.is_empty() { return 0; }
+        let total = active.iter().fold(0i64, |acc, c| acc + c.amplitude.to_raw());
+        total / active.len() as i64
     }
 }
