@@ -20,7 +20,7 @@ export default function Home() {
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 px-2">
         <div className="space-y-1">
           <button 
-            onClick={() => window.location.hash = "dashboard"}
+            onClick={() => window.location.hash = "about"}
             className="flex items-center gap-3 hover:scale-105 hover:opacity-90 active:scale-95 transition-all text-left group"
           >
             <div className="p-1.5 bg-emerald-500/10 rounded-xl border border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.15)] group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all flex items-center justify-center overflow-hidden">

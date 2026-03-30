@@ -25,7 +25,7 @@ export function Dashboard() {
   const [encryptionLayer, setEncryptionLayer] = useState<string>("S60_SHIELD_INITIALIZING");
   const [yhwhPhase, setYhwhPhase] = useState<string>("HE2");
   const [networkOpen, setNetworkOpen] = useState<boolean>(false);
-  const [activeTab, setActiveTabRaw] = useState<string>("dashboard");
+  const [activeTab, setActiveTabRaw] = useState<string>("about");
 
   const setActiveTab = (tab: string) => {
     setActiveTabRaw(tab);
