@@ -4,6 +4,11 @@ use crate::math::spa::SPA;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
+/// Amplitud máxima por nodo: 10 grados S60 = 10 × 12_960_000 = 129_600_000 raw.
+/// Sin este techo el PID pump crea realimentación positiva ilimitada
+/// que desborda i64 y hace que todos los nodos aparezcan negros.
+const MAX_AMP_RAW: i64 = 129_600_000; // S60(10, 0, 0, 0, 0)
+
 /// Resonant Matrix S60 - 2D Grid Topology con bomba activa PID.
 ///
 /// La bomba (pump_energy) es lo que convierte la matrix de un sistema que
@@ -110,7 +115,11 @@ impl ResonantMatrix {
             // Aplicar flujo de energía
             self.crystals[i].amplitude = self.crystals[i].amplitude + transfers[i];
             
-            // Aplicar MERCURY_DAMPING (amortiguamiento por fricción sexagesimal)
+            // CLAMP: evitar desbordamiento i64
+            let raw = self.crystals[i].amplitude.to_raw().clamp(-MAX_AMP_RAW, MAX_AMP_RAW);
+            self.crystals[i].amplitude = SPA::from_raw(raw);
+
+            // Aplicar MERCURY_DAMPING
             if self.crystals[i].amplitude.to_raw() > 0 {
                 let loss = (self.crystals[i].amplitude * self.damping) / SPA::new(60, 0, 0, 0, 0);
                 self.crystals[i].amplitude = self.crystals[i].amplitude - loss;
@@ -155,8 +164,8 @@ impl ResonantMatrix {
                 let injection_raw = self.pids[i].update(current, pump_dt);
                 // Unilateral: solo inyectar si la bomba dice añadir
                 if injection_raw > 0 {
-                    self.crystals[i].amplitude =
-                        self.crystals[i].amplitude + SPA::from_raw(injection_raw);
+                    let new_raw = (current + injection_raw).clamp(0, MAX_AMP_RAW);
+                    self.crystals[i].amplitude = SPA::from_raw(new_raw);
                 }
             }
         }
@@ -167,7 +176,8 @@ impl ResonantMatrix {
             .filter(|c| c.amplitude.to_raw() > 0)
             .collect();
         if active.is_empty() { return 0; }
-        let total = active.iter().fold(0i64, |acc, c| acc + c.amplitude.to_raw());
+        // Usar saturating_add para evitar overflow en la suma
+        let total = active.iter().fold(0i64, |acc, c| acc.saturating_add(c.amplitude.to_raw()));
         total / active.len() as i64
     }
 }

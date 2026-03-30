@@ -12,26 +12,36 @@ export function ShieldControl({ status }: ShieldControlProps) {
   const [loading, setLoading] = useState(false);
   const [lastResult, setLastResult] = useState<any>(null);
 
+  const host = typeof window !== "undefined" ? window.location.hostname : "localhost";
+
   const simulateAttack = async (type: "NORMAL" | "DOOM" | "CHAOS") => {
     setLoading(true);
-    let valOrigin = 0;
-    if (type === "NORMAL") valOrigin = 12960000; // Harmonic S60
-    if (type === "DOOM") valOrigin = 3735928559; // 0xDEADBEEF
-    if (type === "CHAOS") valOrigin = -1; // Negative Entropy
+    // Energy values mapeados a aritmética S60 real — EXP-027/EXP-035
+    const configs = {
+      NORMAL: { energy: 12_960_000,   idx: 528, label: "HARMONIC-AXION", pulse: "EXP-035" },
+      DOOM:   { energy: 3_735_928_559, idx: 496, label: "BLOQUEADO",      pulse: "DOOM-0xDEADBEEF" },
+      CHAOS:  { energy: -12_960_000,  idx: 512, label: "ALERTA",         pulse: "CHAOS-NEG-ENTROPY" },
+    };
+    const cfg = configs[type];
 
     try {
-      await fetch("/api/v1/simulate_telemetry", {
+      // Usa el endpoint REAL del Ring-0 backend — inject_truth_pulse
+      const res = await fetch(`http://${host}:8000/api/v1/inject_truth_pulse`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          event_type: "MANUAL_AXION_PULSE",
-          entropy_s60_raw: valOrigin,
-          severity: 0,
+          pulse_type: cfg.pulse,
+          energy_s60_raw: cfg.energy,
+          severity: type === "DOOM" ? 2 : type === "CHAOS" ? 1 : 0,
+          index: cfg.idx,
+          metadata: cfg.label,
         }),
       });
-      setLastResult({ type, success: true });
+      const data = res.ok ? await res.json() : null;
+      setLastResult({ type, success: !!data, tick: data?.tick });
     } catch (e) {
       console.error(e);
+      setLastResult({ type, success: false });
     } finally {
       setLoading(false);
     }
