@@ -116,17 +116,17 @@ export function TelemetryFeed() {
     }
   };
 
-  const resonancePercent = (raw: number | undefined | null) => {
-    if (raw == null || isNaN(raw) || raw === 0) return "0.0";
-    return ((raw / 12960000) * 100).toFixed(1);
-  };
+  // Eventos puramente de heartbeat — sólo confirman que el canal está vivo.
+  // No aportan información al operador, los filtramos del feed visible.
+  const HEARTBEAT_TYPES = new Set([
+    "MATRIX_SYNC", "ENCRYPT_PULSE",
+  ]);
+  const isHeartbeat = (type: string) =>
+    HEARTBEAT_TYPES.has(type) ||
+    type.startsWith("YHWH_PHASE_") ||
+    type.startsWith("ENCRYPT_LAYER_");
 
-  // Deduplicate consecutive MATRIX_SYNC / ENCRYPT_PULSE (heartbeat floods)
-  const dedupedEvents = events.reduce<Event[]>((acc, ev) => {
-    const isHeartbeat = ev.event_type === "MATRIX_SYNC" || ev.event_type === "ENCRYPT_PULSE";
-    if (isHeartbeat && acc.length > 0 && acc[0].event_type === ev.event_type) return acc;
-    return [ev, ...acc.slice(0, 149)];
-  }, []).reverse();
+  const visibleEvents = events.filter(ev => !isHeartbeat(ev.event_type));
 
   return (
     <div ref={feedRef} className="absolute inset-0 flex flex-col w-full font-mono text-[10px] overflow-hidden">
@@ -141,7 +141,7 @@ export function TelemetryFeed() {
 
       {/* Scrollable area - strictly contained */}
       <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar p-4 space-y-1.5 border-t border-white/5">
-      {events.length === 0 && (
+      {visibleEvents.length === 0 && (
         <div className="flex flex-col items-center justify-center h-full text-slate-600 gap-4">
           <div className="phase-ring p-6">
             <Terminal className="w-10 h-10 text-slate-700" />
@@ -153,7 +153,7 @@ export function TelemetryFeed() {
         </div>
       )}
 
-      {dedupedEvents.map((ev, i) => {
+      {visibleEvents.map((ev, i) => {
         const { icon: Icon, label, colors } = getConfig(ev);
         const isCritical = ev.severity >= 3 || ev.event_type.includes("BLOCKED");
 
@@ -196,7 +196,11 @@ export function TelemetryFeed() {
 
                 {/* S60 Resonance */}
                 <span className="text-slate-500 shrink-0 tabular-nums text-[10px]">
-                  <span className={clsx("font-bold", colors.text)}>{resonancePercent(ev.entropy_s60_raw)}%</span>
+                  <span className={clsx("font-bold", colors.text)}>
+                    {ev.entropy_s60_raw != null && !isNaN(ev.entropy_s60_raw) && ev.entropy_s60_raw > 0
+                      ? ((ev.entropy_s60_raw / 12960000) * 100).toFixed(1)
+                      : "0.0"}%
+                  </span>
                 </span>
               </div>
 
