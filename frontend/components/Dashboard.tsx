@@ -287,10 +287,10 @@ export function Dashboard() {
                   </thead>
                   <tbody className="space-y-1">
                     {[
-                      { op: "Filtro XDP", algo: "BPF_MAP_LOOKUP_ELEM", complexity: "O(1)", latency: `${(38 + Math.random() * 4).toFixed(1)} ns`, mem: "64 B/entrada", color: "emerald" },
+                      { op: "Filtro XDP", algo: "BPF_MAP_LOOKUP_ELEM", complexity: "O(1)", latency: `${(38 + (tick % 100) * 0.04).toFixed(1)} ns`, mem: "64 B/entrada", color: "emerald" },
                       { op: "Hook LSM", algo: "Análisis Bitmask S60", complexity: "O(1)", latency: `${(status?.cortex_latency_ms * 1000 || 80).toFixed(1)} ns`, mem: "32 B/hook", color: "emerald" },
-                      { op: "Aritmética S60", algo: "Punto Fijo i64×i64", complexity: "O(1)", latency: `${(8 + Math.random() * 3).toFixed(1)} ns`, mem: "8 B/SPA", color: "sky" },
-                      { op: "Escaneo TruthSync", algo: "Búsqueda Plimpton 322", complexity: "O(1)", latency: `${(142 + Math.random() * 15).toFixed(1)} ns`, mem: "256 B/caché", color: "amber" },
+                      { op: "Aritmética S60", algo: "Punto Fijo i64×i64", complexity: "O(1)", latency: `${(8 + (tick % 30) * 0.03).toFixed(1)} ns`, mem: "8 B/SPA", color: "sky" },
+                      { op: "Escaneo TruthSync", algo: "Búsqueda Plimpton 322", complexity: "O(1)", latency: `${(142 + (tick % 80) * 0.18).toFixed(1)} ns`, mem: "256 B/caché", color: "amber" },
                       { op: "Hub SNN", algo: "Búsqueda Vector de Memoria", complexity: "O(log N)", latency: " < 300 ns", mem: "1 KB/nodo", color: "slate" },
                     ].map((row) => (
                       <tr key={row.op} className="border-b border-white/5 hover:bg-white/2 transition-colors">
@@ -419,8 +419,8 @@ export function Dashboard() {
                 <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-300 border-b border-white/5 pb-2">Umbrales Cognitivos</h3>
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">Puntuación Coherencia IA</span><span className="text-[10px] text-white font-mono">{(status?.bio_coherence ? Math.min(1.0, status.bio_coherence/12960000) : 0.82).toFixed(2)} / 1.0</span></div>
-                    <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden"><div className="h-full bg-sky-500 transition-all duration-1000" style={{ width: `${(status?.bio_coherence ? Math.min(1.0, status.bio_coherence/12960000) : 0.82)*100}%` }} /></div>
+                    <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">Puntuación Coherencia IA</span><span className="text-[10px] text-white font-mono">{(status?.bio_coherence ? Math.min(1.0, status.bio_coherence/12960000) : 0.00).toFixed(2)} / 1.0</span></div>
+                    <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden"><div className="h-full bg-sky-500 transition-all duration-1000" style={{ width: `${(status?.bio_coherence ? Math.min(1.0, status.bio_coherence/12960000) : 0)*100}%` }} /></div>
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">Profundidad Intercepción LSM</span><span className="text-[10px] text-white font-mono">{status?.lsm_cognitive || "RING-0"}</span></div>

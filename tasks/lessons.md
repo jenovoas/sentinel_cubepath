@@ -41,3 +41,7 @@
 ---
 
 _Estas lecciones son vinculantes para Antigravity AI en cada turno de esta sesión y futuras._
+
+## 7. Pendientes identificados (2026-03-30)
+
+- **Aldebarán falta en referencias posicionales del cristal** (`docs/CRYSTAL_LATTICE.md`). Verificar qué sección le corresponde y completar con la referencia estelar correcta antes de la demo.

@@ -2,7 +2,7 @@
 
 La **Escalada de Privilegios en Linux (LPE)** se define, en la arquitectura de Sentinel, como la violación de la entropía de permisos predeterminada. Es el acto de transmutar una identidad de baja inercia (User `uid>1000`) en una entidad de inercia infinita (Root `uid=0`).
 
-Según la síntesis del dossier de **Joas Antonio** y la inteligencia actual de la red neural:
+Según la síntesis del dossier y la inteligencia actual de la red neural:
 
 1. **Escalada Horizontal:** Desplazamiento lateral. Acceder a `user_B` desde `user_A`. Riesgo moderado; robo de datos específicos.
 2. **Escalada Vertical (The Ascension):** El objetivo crítico. Acceder a `Ring 0` o `root` desde un usuario restringido. Esto otorga omnipotencia sobre el sistema de archivos, la memoria y el hardware.
@@ -80,9 +80,9 @@ Cuando los scripts fallan (o hay EDRs activos), la metodología manual prevalece
 1. **Identidad:** `id`, `whoami`, `cat /etc/passwd`.
 2. **Red:** `ip a`, `route -n` (Búsqueda de pivotes laterales).
 3. **Secretos (La Mina de Oro):**
-    - `cat ~/.bash_history` (Usuarios descuidados escriben contraseñas en CLI).
-    - `grep -r "password" /var/www/html/` (Credenciales de DB en configs web).
-    - Llaves SSH: `~/.ssh/id_rsa`.
+   - `cat ~/.bash_history` (Usuarios descuidados escriben contraseñas en CLI).
+   - `grep -r "password" /var/www/html/` (Credenciales de DB en configs web).
+   - Llaves SSH: `~/.ssh/id_rsa`.
 
 ---
 

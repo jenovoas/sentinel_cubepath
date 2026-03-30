@@ -188,7 +188,6 @@ Eleva la validación de la IA a grado judicial. Calcula el Exponente de Lyapunov
 | Nodos Crystal Lattice | 1024 (32×32) | CrystalLattice en resonant.rs |
 | Nodos MyCNet activos | 6 físicos | batman-adv mesh (10.10.0.11-16) |
 | Flujos Arco Reflejo | 16 | n8n workflows de defensa activa |
-| Flujos Arco Reflejo | 16 | n8n workflows de defensa activa |
 
 ---
 

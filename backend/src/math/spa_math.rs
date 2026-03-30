@@ -31,6 +31,23 @@ impl SPAMath {
     /// Harmonic Frequency (Exact: 153;24,0,0)
     pub const AXION_FREQUENCY_MHZ: SPA = SPA::new(153, 24, 0, 0, 0);
 
+    // --- ESTRELLAS REALES DE PERSIA (YATRA_CORE_SPEC.md — Longitudes Eclípticas) ---
+    // Fuente canónica: quantum/.yatra_backup/yatra_core.py
+    // Usadas como referencias posicionales inmutables del TimeCrystal
+    /// Aldebarán (Alpha Tauri)  — Eclíptica 68°58'48"
+    pub const STAR_ALDEBARAN: SPA = SPA::new(68, 58, 48, 0, 0);
+    /// Regulus (Alpha Leonis)   — Eclíptica 152°05'24"
+    pub const STAR_REGULUS: SPA   = SPA::new(152, 5, 24, 0, 0);
+    /// Antares (Alpha Scorpii)  — Eclíptica 247°21'00"
+    pub const STAR_ANTARES: SPA   = SPA::new(247, 21,  0, 0, 0);
+    /// Fomalhaut (Alpha PsA)    — Eclíptica 344°24'36"
+    pub const STAR_FOMALHAUT: SPA = SPA::new(344, 24, 36, 0, 0);
+
+    // --- YATRA_SALTO_17: 1/17 exacto en Base-60 ---
+    // Fuente canónica: quantum/.yatra_backup/yatra_core.py
+    // Usado como unidad de corrección cuántica de fase (Quantum Hiccup)
+    pub const YATRA_SALTO_17: SPA = SPA::new(0, 3, 31, 45, 52);
+
     /// Normalizes angle to [0, 360) and returns (normalized, sign_sin, sign_cos).
     fn normalize_quadrants(angle: SPA) -> (SPA, i64, i64) {
         let full = SPA::SCALE_0 * 360;

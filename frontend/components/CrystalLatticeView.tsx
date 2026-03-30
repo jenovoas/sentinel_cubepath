@@ -171,41 +171,87 @@ function membraneColor(potential_raw: number, last_spike_ns: number, now_ns: num
   return `rgba(56, 189, 248, ${0.2 + potential * 0.8})`; // Sky Blue
 }
 
+interface TickLogEntry {
+  tick: number;
+  entropy_pct: string;
+  time: string;
+  event_type: string;
+}
+
 export function CrystalLatticeView() {
   const [lattice, setLattice] = useState<LatticeState | null>(null);
   const [neural, setNeural] = useState<NeuralState | null>(null);
   const [injecting, setInjecting] = useState<string | null>(null);
   const [error, setError] = useState(false);
   const [nowNs, setNowNs] = useState(Date.now() * 1_000_000);
+  const [tickLog, setTickLog] = useState<TickLogEntry[]>([]);
+  const [wsConnected, setWsConnected] = useState(false);
 
   // CONEXIÓN DIRECTA AL KERNEL RING-0 (Axum S60)
   const host = typeof window !== "undefined" ? window.location.hostname : "localhost";
   const apiBase = `http://${host}:8000`;
 
-  // Loop de Telemetría (Real-Time Truth)
+  // WebSocket Ring-0 — sincronización real con el kernel
   useEffect(() => {
-    const fetchData = async () => {
+    let ws: WebSocket | null = null;
+    let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const fetchLatticeNeural = async () => {
       try {
         const [latRes, neuRes] = await Promise.all([
           fetch(`${apiBase}/api/v1/lattice/state`),
           fetch(`${apiBase}/api/v1/neural/state`)
         ]);
-        
-        if (latRes.ok) {
-          const data = await latRes.json();
-          setLattice(data);
-        }
+        if (latRes.ok) setLattice(await latRes.json());
         if (neuRes.ok) setNeural(await neuRes.json());
         setError(false);
-      } catch (e) {
+      } catch {
         setError(true);
       }
       setNowNs(Date.now() * 1_000_000);
     };
 
-    fetchData();
-    const interval = setInterval(fetchData, 150); // 150ms Polling - Balance CPU/Visuals
-    return () => clearInterval(interval);
+    const connect = () => {
+      const proto = typeof window !== "undefined" && window.location.protocol === "https:" ? "wss" : "ws";
+      const wsHost = typeof window !== "undefined" ? window.location.host : "localhost";
+      ws = new WebSocket(`${proto}://${wsHost}/api/v1/telemetry`);
+
+      ws.onopen = () => {
+        setWsConnected(true);
+        fetchLatticeNeural();
+      };
+
+      ws.onmessage = async (e) => {
+        try {
+          const event = JSON.parse(e.data);
+          if (event.event_type === "MATRIX_SYNC") {
+            const pct = ((Math.abs(event.entropy_signal) / 12_960_000) * 100).toFixed(2);
+            const t = new Date(event.timestamp_ns / 1_000_000).toLocaleTimeString("es-CL", { hour12: false });
+            setTickLog(prev => [{
+              tick: event.event_id,
+              entropy_pct: pct,
+              time: t,
+              event_type: event.event_type,
+            }, ...prev].slice(0, 60));
+            await fetchLatticeNeural();
+          }
+        } catch { /* ignorar parse errors */ }
+      };
+
+      ws.onerror = () => { setError(true); ws?.close(); };
+
+      ws.onclose = () => {
+        setWsConnected(false);
+        reconnectTimer = setTimeout(connect, 3000);
+      };
+    };
+
+    connect();
+
+    return () => {
+      ws?.close();
+      if (reconnectTimer) clearTimeout(reconnectTimer);
+    };
   }, [apiBase]);
 
   const [simLog, setSimLog] = useState<string[]>([]);
@@ -473,22 +519,39 @@ export function CrystalLatticeView() {
              <h3 className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-4 flex items-center gap-2">
                 <Hash className="w-3 h-3" />
                 Truth Interaction Archive
+                <span className={clsx(
+                  "ml-auto text-[7px] px-1.5 py-0.5 rounded-full font-black uppercase",
+                  wsConnected ? "bg-emerald-500/20 text-emerald-400" : "bg-rose-500/20 text-rose-400"
+                )}>
+                  {wsConnected ? "WS LIVE" : "RECONECTANDO"}
+                </span>
              </h3>
-             <div className="flex-1 overflow-y-auto custom-scrollbar space-y-2 font-mono text-[9px]">
-                {lattice && (
-                  <div className="text-sky-400 opacity-60 flex items-start gap-2">
-                    <span className="text-slate-700 shrink-0">[{lattice.tick}]</span>
-                    <span>Stable resonance maintained at phase {((lattice.coherence % 360) || 0).toFixed(0)}°</span>
-                  </div>
-                )}
+             <div className="flex-1 overflow-y-auto custom-scrollbar space-y-1 font-mono text-[9px]">
                 {injecting && (
-                   <div className="text-emerald-400 animate-pulse flex items-start gap-2">
+                   <div className="text-emerald-400 animate-pulse flex items-start gap-2 pb-1 border-b border-emerald-500/10">
                       <span className="text-white shrink-0">{">>"}</span>
                       <span>INJECTING {injecting} TRUTH PULSE... SEVERITY OVERRIDE ACTIVE</span>
                    </div>
                 )}
-
-                {!lattice && <div className="text-slate-700 italic">Estabeleciendo enlace con sentinel-cubepath...</div>}
+                {tickLog.length === 0 && (
+                  <div className="text-slate-700 italic">
+                    {wsConnected ? "Esperando ticks del kernel..." : "Estableciendo enlace con sentinel-cubepath..."}
+                  </div>
+                )}
+                {tickLog.map((entry, i) => (
+                  <div key={entry.tick} className={clsx(
+                    "flex items-center gap-2 transition-opacity",
+                    i === 0 ? "text-sky-400" : "text-slate-600 opacity-70"
+                  )}>
+                    <span className="text-slate-700 shrink-0 tabular-nums w-[58px]">[{entry.tick.toString().padStart(8, "0")}]</span>
+                    <span className="shrink-0 text-slate-500">MATRIX_SYNC</span>
+                    <span className="shrink-0">·</span>
+                    <span className={clsx("shrink-0 tabular-nums", i === 0 ? "text-sky-400" : "text-slate-500")}>
+                      E:{entry.entropy_pct}%
+                    </span>
+                    <span className="shrink-0 text-slate-700 ml-auto tabular-nums">{entry.time}</span>
+                  </div>
+                ))}
              </div>
           </div>
         </div>
