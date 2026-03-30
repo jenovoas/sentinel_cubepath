@@ -290,6 +290,8 @@ struct PulseRequest {
     pub pulse_type: String,
     pub energy_s60_raw: i64,
     pub severity: u8,
+    pub index: Option<usize>,    // Nodo objetivo en la grilla 32x32 (0..1023). None = centro (528)
+    pub metadata: Option<String>, // Etiqueta visual en el heatmap
 }
 
 async fn inject_pulse_handler(
@@ -299,13 +301,20 @@ async fn inject_pulse_handler(
     let mut lattice = state.lattice.lock().await;
     let tick = state.global_tick.load(std::sync::atomic::Ordering::SeqCst);
     
-    // Inyectar en un punto aleatorio/central de la matriz
-    let idx = 512; // Centro de la matriz 32x32
+    // Índice configurable — por defecto centro de la matriz 32x32 (16*32+16 = 528)
+    let idx = req.index
+        .map(|i| i.min(lattice.size() - 1))
+        .unwrap_or(528);
     lattice.inject(idx, req.energy_s60_raw);
     
-    info!("⚡ Pulso de Verdad inyectado: {} (E={})", req.pulse_type, req.energy_s60_raw);
+    // Etiqueta visual en el heatmap si se proporciona
+    if let Some(ref label) = req.metadata {
+        lattice.metadata_map[idx] = Some(label.clone());
+    }
     
-    Json(serde_json::json!({ "status": "pulsed", "tick": tick }))
+    info!("⚡ Pulso inyectado: {} → idx={} (E={})", req.pulse_type, idx, req.energy_s60_raw);
+    
+    Json(serde_json::json!({ "status": "pulsed", "tick": tick, "idx": idx }))
 }
 
 async fn observability_metrics_handler(

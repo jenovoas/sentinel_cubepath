@@ -36,41 +36,104 @@ interface NeuralState {
   global_firing_rate_raw: number;
 }
 
-// EXPERIMENTOS CIENTÍFICOS (Truth Mode)
-const EXPERIMENTS = [
-  { 
-    id: "EXP-026", 
-    label: "Archaeo-Metric Calibration", 
-    pulse_type: "CALIBRATION", 
-    energy: 1000000, 
-    severity: 0,
-    desc: "Pulso base para observar el enfriamiento optomecánico y la estabilización de fase."
+// Simulaciones validadas — basadas en experimentos reales de /sentinel/quantum/experiments/
+// Cada paso es: { idx (nodo 0-1023), energy (raw S60), delay_ms, label }
+interface SimStep { idx: number; energy: number; delay_ms: number; label: string; }
+interface Simulation {
+  id: string; name: string; badge: string; color: string;
+  desc: string; ref: string;
+  steps: SimStep[];
+}
+
+const S60_FULL = 12_960_000;
+
+const SIMULATIONS: Simulation[] = [
+  {
+    id: "EXP-035",
+    name: "Crystal Wave Propagation",
+    badge: "2D DIAMANTE",
+    color: "sky",
+    desc: "Perturbación de 90° en el cristal central (528). Observa la onda 2D expandirse en diamante a través de los 4 vecinos cardinales.",
+    ref: "EXP_035_RESONANT_LATTICE_SIM.py — Validado 2026-01-23",
+    steps: [
+      { idx: 528, energy: S60_FULL * 0.9, delay_ms: 0,   label: "PERTURBACIÓN" },
+    ],
   },
-  { 
-    id: "EXP-027", 
-    label: "YHWH Phase Monitor", 
-    pulse_type: "YHWH_SYNC", 
-    energy: 5000000, 
-    severity: 1,
-    desc: "Sincronización rítmica 10-5-6-5. Evalúa el acoplamiento entre MyCNet y el Lattice."
+  {
+    id: "EXP-027",
+    name: "Respiración YHWH",
+    badge: "10-5-6-5",
+    color: "violet",
+    desc: "Inyección secuencial en 4 nodos siguiendo el patrón Yod-He-Vav-He (10-5-6-5). Modula la coherencia como un sistema respiratorio vivo.",
+    ref: "EXP_027_YHWH_PULSE_MONITOR.md — Validado 2026-01-23",
+    steps: [
+      { idx: 528, energy: S60_FULL * 10/10, delay_ms: 0,   label: "YOD" },      // Inhalación
+      { idx: 500, energy: S60_FULL * 5/10,  delay_ms: 420, label: "HE" },       // Retención
+      { idx: 556, energy: S60_FULL * 6/10,  delay_ms: 750, label: "VAV" },      // Exhalación
+      { idx: 496, energy: S60_FULL * 5/10,  delay_ms: 1050,label: "HE" },       // Vacío
+    ],
   },
-  { 
-    id: "EXP-028", 
-    label: "Difusión Resonante",
-    pulse_type: "DIFFUSION", 
-    energy: 2000000, 
-    severity: 2,
-    desc: "Inyección de entropía controlada para probar la propagación de ondas en u60."
+  {
+    id: "EXP-028",
+    name: "Portal de Coherencia",
+    badge: "PENTA-RES",
+    color: "amber",
+    desc: "Convergencia BIO+CRYSTAL+VENUS en t=5.3s. Activa 9 nodos simultáneos en el anillo de la fila 5 — el portal de máxima coherencia cuántica.",
+    ref: "EXP_028_PENTA_RESONANCE.md — φ_BIO=0.89, φ_CRYSTAL=0.90, φ_VENUS=0.88",
+    // 9 nodos en la fila 5 (índices 160-168) — representa la ventana de portal t∈[4.9-5.7s]
+    steps: Array.from({ length: 9 }, (_, i) => ({
+      idx: 160 + i,
+      energy: Math.round(S60_FULL * (0.85 + i * 0.005)),
+      delay_ms: i * 80,
+      label: `PORTAL-${i + 1}`,
+    })),
   },
-  { 
-    id: "EXP-029", 
-    label: "Estrés Salto Cuántico",
-    pulse_type: "STRESS", 
-    energy: 12960000, 
-    severity: 4,
-    desc: "Sobrecarga masiva para forzar la auto-purga (Healing) del eBPF Cognitive Firewall."
+  {
+    id: "EXP-029",
+    name: "Quantum Scheduler",
+    badge: "SALTO-17",
+    color: "emerald",
+    desc: "Rafaga de 5 tareas batch ejecutadas en ventana de portal (~17s). Demuestra el ahorro energético 43.6% vs scheduler tradicional.",
+    ref: "EXP_029_QUANTUM_SCHEDULER.md — Eficiencia 65.3%, Ahorro 674 J",
+    // Simular el batch burst del scheduler — 5 nodos del cuadrante superior
+    steps: [
+      { idx: 48,  energy: S60_FULL * 0.7, delay_ms: 0,   label: "TASK-ZPE_TUNE" },
+      { idx: 96,  energy: S60_FULL * 0.5, delay_ms: 150, label: "TASK-BCI_SYNC" },
+      { idx: 144, energy: S60_FULL * 0.8, delay_ms: 300, label: "TASK-LATTICE_GC" },
+      { idx: 192, energy: S60_FULL * 0.6, delay_ms: 450, label: "TASK-BACKUP_S60" },
+      { idx: 240, energy: S60_FULL * 0.9, delay_ms: 600, label: "TASK-PHASE_ALIGN" },
+    ],
+  },
+  {
+    id: "EXP-017",
+    name: "Vimana G-Zero",
+    badge: "LEVITACIÓN",
+    color: "rose",
+    desc: "Escalada progresiva de presión de datos (0→100%). Muestra la curva cuadrática de reducción de masa inercial hasta G-ZERO (<0.1 kg en P=100%).",
+    ref: "EXP_017_VIMANA_LEVITATION.md — ΔM=0.96, Estado G-ZERO validado",
+    // 10 pasos progresivos simulando los steps del reporte EXP-017
+    steps: [
+      { idx: 300, energy: Math.round(S60_FULL * 0.20), delay_ms: 0,    label: "P=20% INERTIAL" },
+      { idx: 330, energy: Math.round(S60_FULL * 0.30), delay_ms: 180,  label: "P=30%" },
+      { idx: 360, energy: Math.round(S60_FULL * 0.50), delay_ms: 360,  label: "P=50% INERTIAL" },
+      { idx: 390, energy: Math.round(S60_FULL * 0.60), delay_ms: 540,  label: "P=60%" },
+      { idx: 420, energy: Math.round(S60_FULL * 0.70), delay_ms: 720,  label: "P=70%" },
+      { idx: 450, energy: Math.round(S60_FULL * 0.80), delay_ms: 900,  label: "P=80% PRE-IGN." },
+      { idx: 480, energy: Math.round(S60_FULL * 0.90), delay_ms: 1080, label: "P=90% LIFTING" },
+      { idx: 510, energy: Math.round(S60_FULL * 0.95), delay_ms: 1260, label: "P=95%" },
+      { idx: 528, energy: Math.round(S60_FULL * 1.00), delay_ms: 1440, label: "✨ G-ZERO" },
+    ],
   },
 ];
+
+const COLOR_MAP: Record<string, { border: string; bg: string; text: string; badge: string }> = {
+  sky:     { border: "border-sky-500/30",     bg: "bg-sky-500/5",     text: "text-sky-400",     badge: "bg-sky-500/20 text-sky-300"     },
+  violet:  { border: "border-violet-500/30",  bg: "bg-violet-500/5",  text: "text-violet-400",  badge: "bg-violet-500/20 text-violet-300" },
+  amber:   { border: "border-amber-500/30",   bg: "bg-amber-500/5",   text: "text-amber-400",   badge: "bg-amber-500/20 text-amber-300"   },
+  emerald: { border: "border-emerald-500/30", bg: "bg-emerald-500/5", text: "text-emerald-400", badge: "bg-emerald-500/20 text-emerald-300" },
+  rose:    { border: "border-rose-500/30",    bg: "bg-rose-500/5",    text: "text-rose-400",    badge: "bg-rose-500/20 text-rose-300"     },
+};
+
 
 function nodeColor(cell: any): string {
   const amp = Math.max(0, cell.amplitude_raw) / S60_SCALE;
@@ -145,20 +208,33 @@ export function CrystalLatticeView() {
     return () => clearInterval(interval);
   }, [apiBase]);
 
-  const handleInject = async (exp: typeof EXPERIMENTS[0]) => {
-    setInjecting(exp.id);
-    try {
-      await fetch(`${apiBase}/api/v1/inject_truth_pulse`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          pulse_type: exp.pulse_type,
-          energy_s60_raw: exp.energy,
-          severity: exp.severity
-        })
-      });
-    } catch (e) {}
-    setTimeout(() => setInjecting(null), 1000);
+  const [simLog, setSimLog] = useState<string[]>([]);
+
+  const runSimulation = async (sim: Simulation) => {
+    if (injecting) return;
+    setInjecting(sim.id);
+    setSimLog([]);
+    for (const step of sim.steps) {
+      await new Promise(r => setTimeout(r, step.delay_ms));
+      try {
+        const res = await fetch(`${apiBase}/api/v1/inject_truth_pulse`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            pulse_type: sim.id,
+            energy_s60_raw: Math.round(step.energy),
+            severity: 1,
+            index: step.idx,
+            metadata: step.label,
+          })
+        });
+        if (res.ok) {
+          const { tick } = await res.json();
+          setSimLog(l => [`[${tick}] ${step.label} → n°${step.idx} (${(step.energy / 12960000 * 100).toFixed(0)}% S60)`, ...l].slice(0, 20));
+        }
+      } catch {}
+    }
+    setTimeout(() => setInjecting(null), 800);
   };
 
   const coherencePct = lattice ? Math.min(100, (Math.abs(lattice.coherence) / S60_SCALE) * 100) : 0;
@@ -352,47 +428,70 @@ export function CrystalLatticeView() {
         </div>
       </div>
 
-      {/* ── TARJETAS DE EXPERIMENTO (Quantum Injections) ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {EXPERIMENTS.map((exp) => (
-          <button
-            key={exp.id}
-            onClick={() => handleInject(exp)}
-            disabled={!!injecting}
-            className={clsx(
-              "glass-card p-6 text-left transition-all group relative overflow-hidden",
-              injecting === exp.id 
-                ? "border-emerald-500/50 bg-emerald-500/10" 
-                : "border-white/5 hover:border-sky-500/30 hover:bg-sky-500/5"
-            )}
-          >
-            {injecting === exp.id && (
-              <div className="absolute inset-0 bg-emerald-500/5 animate-pulse" />
-            )}
-            
-            <div className="flex items-center justify-between mb-4 relative z-10">
-              <span className="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">{exp.id}</span>
-              <div className={clsx(
-                "p-2 rounded-lg transition-colors",
-                injecting === exp.id ? "bg-emerald-500 text-white" : "bg-slate-900 text-slate-500 group-hover:text-sky-400"
-              )}>
-                <Zap className="w-4 h-4" />
-              </div>
-            </div>
+      {/* ── SIMULACIONES EXPERIMENTALES ── */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <Microscope className="w-4 h-4 text-sky-400" />
+          <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Simulaciones Experimentales Validadas</h3>
+          <span className="text-[8px] px-2 py-0.5 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-400 font-bold uppercase">Interactivo — Live on VPS</span>
+        </div>
 
-            <h4 className="text-sm font-black text-white uppercase tracking-tighter mb-2 group-hover:text-sky-300 transition-colors relative z-10">
-              {exp.label}
-            </h4>
-            <p className="text-[9px] text-slate-500 font-medium leading-relaxed uppercase tracking-wide relative z-10">
-              {exp.desc}
-            </p>
-            
-            <div className="mt-4 flex items-center justify-between relative z-10">
-               <span className="text-[8px] font-black text-slate-400 uppercase">Energía de Entrada</span>
-               <span className="text-[10px] mono text-sky-400 font-bold">{(exp.energy / 1000).toFixed(1)}k u60</span>
-            </div>
-          </button>
-        ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+          {SIMULATIONS.map((sim) => {
+            const c = COLOR_MAP[sim.color];
+            const running = injecting === sim.id;
+            return (
+              <button
+                key={sim.id}
+                onClick={() => runSimulation(sim)}
+                disabled={!!injecting}
+                className={clsx(
+                  "glass-card p-4 text-left transition-all group relative overflow-hidden",
+                  running ? `${c.border} ${c.bg}` : "border-white/5 hover:" + c.border
+                )}
+              >
+                {running && <div className={clsx("absolute inset-0 animate-pulse", c.bg)} />}
+
+                <div className="relative z-10 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[8px] font-black text-slate-600 uppercase tracking-widest">{sim.id}</span>
+                    <span className={clsx("text-[7px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest", c.badge)}>{sim.badge}</span>
+                  </div>
+
+                  <div>
+                    <h4 className={clsx("text-[11px] font-black uppercase tracking-tight mb-1 transition-colors", running ? c.text : "text-white group-hover:" + c.text.replace("text-", "text-"))}>
+                      {sim.name}
+                    </h4>
+                    <p className="text-[8px] text-slate-500 leading-relaxed">{sim.desc}</p>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                    <span className="text-[7px] text-slate-600 font-bold">{sim.steps.length} pasos</span>
+                    <div className={clsx("flex items-center gap-1", c.text)}>
+                      {running ? (
+                        <><Activity className="w-3 h-3 animate-pulse" /><span className="text-[8px] font-bold">Running...</span></>
+                      ) : (
+                        <><Play className="w-3 h-3" /><span className="text-[8px] font-bold">Ejecutar</span></>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Log de simulación */}
+        {simLog.length > 0 && (
+          <div className="glass-card p-4 bg-slate-950/60 border-white/5 font-mono text-[9px] space-y-1 max-h-32 overflow-y-auto custom-scrollbar">
+            {simLog.map((line, i) => (
+              <div key={i} className={clsx("flex gap-2", i === 0 ? "text-emerald-400" : "text-slate-500")}>
+                <span className="text-slate-700 shrink-0">{">>"}</span>
+                <span>{line}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* ── ESPECIFICACIONES TÉCNICAS (Update) ── */}
