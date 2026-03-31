@@ -1,30 +1,33 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useTelemetry } from "../hooks/useTelemetry";
+import { clsx } from "clsx";
+import { 
+  ShieldAlert, 
+  ShieldCheck, 
+  Zap, 
+  Timer, 
+  Heart,
+  Lock as LockIcon,
+} from "lucide-react";
+
+// Componentes
+import { Sidebar } from "./Sidebar";
+import { StatsGrid } from "./StatsGrid";
 import { TelemetryFeed } from "./TelemetryFeed";
 import { TruthClaimConsole } from "./TruthClaimConsole";
-import { StatsGrid } from "./StatsGrid";
-import { ShieldCheck, Zap, Heart, Timer, BarChart3, Fingerprint, ShieldAlert, Lock } from "lucide-react";
-import { ShieldControl } from "./ShieldControl";
 import { TruthSyncReport } from "./TruthSyncReport";
 import { MyCNetNodeGraph } from "./MyCNetNodeGraph";
-import { Sidebar } from "./Sidebar";
-import { AIOpsShieldView } from "./AIOpsShieldView";
-import { CrystalLatticeView } from "./CrystalLatticeView";
 import { AboutView } from "./AboutView";
+import { CrystalLatticeView } from "./CrystalLatticeView";
 import { MonitoringView } from "./MonitoringView";
+import { AIOpsShieldView } from "./AIOpsShieldView";
 import { AIOpsIntercept } from "./AIOpsIntercept";
 import { N8nView } from "./N8nView";
-import { clsx } from "clsx";
-import { ShieldAlert as ShieldAlertIcon } from "lucide-react";
 
 export function Dashboard() {
-  const [status, setStatus] = useState<any>(null);
-  const [cycleTime, setCycleTime] = useState(0);
-  const [tick, setTick] = useState(0);
-  const [encryptionLayer, setEncryptionLayer] = useState<string>("S60_SHIELD_INITIALIZING");
-  const [yhwhPhase, setYhwhPhase] = useState<string>("HE2");
-  const [networkOpen, setNetworkOpen] = useState<boolean>(false);
+  const { status, events, connected, tick } = useTelemetry();
   const [activeTab, setActiveTabRaw] = useState<string>("about");
 
   const setActiveTab = (tab: string) => {
@@ -34,96 +37,37 @@ export function Dashboard() {
     }
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const hash = window.location.hash.replace("#", "");
-      if (hash && ["about", "dashboard", "matrix", "observability", "aiops_shield", "mycnet", "vault", "settings", "n8n_reflex"].includes(hash)) {
-        setActiveTabRaw(hash);
-      }
-    }
-  }, []);
-  const [vaultEvents, setVaultEvents] = useState<any[]>([]);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
-  // Telemetry listener for dynamic encryption layer (SNN+RMM acoplado)
   useEffect(() => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
-    let wsUrl: string;
-    if (apiUrl.startsWith("http://") || apiUrl.startsWith("https://")) {
-      wsUrl = apiUrl.replace(/^http/, "ws") + "/api/v1/telemetry";
-    } else {
-      const proto = typeof window !== "undefined" && window.location.protocol === "https:" ? "wss" : "ws";
-      // DETECCIÓN DINÁMICA DEL KERNEL
-      const host = typeof window !== "undefined" ? window.location.hostname : "localhost";
-      wsUrl = `${proto}://${host}:8000/api/v1/telemetry`;
-    }
-    const ws = new WebSocket(wsUrl);
-    ws.onmessage = (e) => {
-      try {
-        const event = JSON.parse(e.data);
-        if (event.event_type.startsWith("ENCRYPT_LAYER_")) {
-          setEncryptionLayer(event.event_type.replace("ENCRYPT_LAYER_", ""));
-        } else if (event.event_type.startsWith("YHWH_PHASE_")) {
-          setYhwhPhase(event.event_type.replace("YHWH_PHASE_", ""));
-          setNetworkOpen(event.severity === 1);
+    const handleHashChange = () => {
+      if (typeof window !== "undefined") {
+        const hash = window.location.hash.replace("#", "");
+        if (hash && ["about", "dashboard", "matrix", "observability", "aiops_shield", "mycnet", "vault", "settings", "n8n_reflex"].includes(hash)) {
+          setActiveTabRaw(hash);
+        } else {
+          setActiveTabRaw("about");
+          window.location.hash = "about";
         }
-        setVaultEvents(prev => [event, ...prev].slice(0, 150));
-      } catch (err) {}
-    };
-    return () => ws.close();
-  }, []);
-
-  useEffect(() => {
-    const fetchStatus = async () => {
-      try {
-        const host = typeof window !== "undefined" ? window.location.hostname : "localhost";
-        const res = await fetch(`http://${host}:8000/api/v1/sentinel_status`);
-        const data = await res.json();
-        // Mapeo adaptativo desde SentinelStatusResponse (Rust Backend) a lo que espera AIOpsShieldView y StatsGrid
-        const mappedStatus = {
-          ring_status: data.integrity?.logic_state === "STABLE" ? "SEALED" : "UNKNOWN",
-          xdp_firewall: data.integrity?.truthsync_seal?.includes("YATRA") ? "ACTIVE_XDP" : "OFFLINE",
-          lsm_cognitive: data.integrity?.nerve_a_status === "ACTIVE" ? "ENFORCING" : "OFFLINE",
-          s60_resonance: data.predictive_memory || 0,
-          bio_coherence: data.integrity?.cortex_confidence || 0,
-          portal_intensity: data.integrity?.cortex_confidence || 0,
-          quantum_load: data.integrity?.quantum_load || 0,
-          effective_mass: data.integrity?.effective_mass === 1000 ? 12960000 : (data.integrity?.effective_mass || 12960000),
-          harmonic_sync: data.integrity?.logic_state === "STABLE" ? "RESONANCE_MAX" : "STABLE",
-          crystal_oscillator_active: true,
-          cortex_latency_ms: 0.039 + (data.integrity?.quantum_load || 0) * 0.001,
-          mycnet_nodes: data.mycnet_nodes || 0,
-          is_active: true,
-          ...data
-        };
-        setStatus(mappedStatus);
-      } catch (e) {
-        // Honest Offline State
-        setStatus({
-          ring_status: "UNKNOWN",
-          xdp_firewall: "OFFLINE",
-          lsm_cognitive: "OFFLINE",
-          s60_resonance: 0,
-          bio_coherence: 0,
-          portal_intensity: 0,
-          is_active: false,
-          harmonic_sync: "OFFLINE",
-        });
       }
     };
-    fetchStatus();
-    const interval = setInterval(fetchStatus, 3000);
-    return () => clearInterval(interval);
-  }, [tick]);
 
-  // Phase cycle counter (68s)
-  useEffect(() => {
-    const cycleTimer = setInterval(() => {
-      setTick(t => t + 1);
-      setCycleTime(prev => (prev + 1) % 68);
-    }, 1000);
-    return () => clearInterval(cycleTimer);
+    // Al montar, procesar el hash actual
+    handleHashChange();
+
+    // Escuchar cambios de hash (logo, botones externos, etc)
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
+  // Derivación de estados desde eventos de telemetría reales (Cortex Events)
+  const encryptionLayer = events.find(e => e.event_type.startsWith("ENCRYPT_LAYER_"))?.event_type.replace("ENCRYPT_LAYER_", "") || "S60_SHIELD_READY";
+  const yhwhPhase = events.find(e => e.event_type.startsWith("YHWH_PHASE_"))?.event_type.replace("YHWH_PHASE_", "") || "YOD";
+  const networkOpen = events.some(e => e.event_type.startsWith("YHWH_PHASE_") && e.severity === 1);
+
+  // Ciclo de fase unificado al Tick Global del Kernel
+  const cycleTime = tick % 68;
   const cyclePercent = (cycleTime / 68) * 100;
   const isPulseTime = cycleTime % 17 === 0 && cycleTime > 0;
   const isResyncTime = cycleTime === 0;
@@ -233,11 +177,11 @@ export function Dashboard() {
                         <div className="flex-1 bg-slate-900 rounded-full h-2 overflow-hidden border border-white/5">
                           <div
                             className="h-full rounded-full bg-gradient-to-r from-rose-600 via-rose-500 to-rose-400 shadow-[0_0_10px_rgba(244,63,94,0.3)] transition-all duration-1000"
-                            style={{ width: `${status?.bio_coherence ? Math.min(100, (status.bio_coherence / 12960000) * 100) : 0}%` }}
+                            style={{ width: `${status?.integrity?.bio_coherence ? Math.min(100, (status.integrity.bio_coherence / 12960000) * 100) : 0}%` }}
                           />
                         </div>
                         <span className="text-[10px] mono text-rose-400 font-bold w-10 text-right">
-                          {status?.bio_coherence ? `${((status.bio_coherence / 12960000) * 100).toFixed(0)}%` : "0%"}
+                          {status?.integrity?.bio_coherence ? `${((status.integrity.bio_coherence / 12960000) * 100).toFixed(0)}%` : "0%"}
                         </span>
                       </div>
                       <p className="text-[8px] font-medium text-slate-600 uppercase tracking-widest leading-relaxed">
@@ -260,8 +204,8 @@ export function Dashboard() {
               <div className="flex gap-2 shrink-0">
                 <span className={clsx(
                   "px-2 py-0.5 bg-slate-950 border rounded text-[8px] font-bold mono",
-                  status?.xdp_firewall === "ACTIVE_XDP" ? "border-emerald-500/30 text-emerald-400" : "border-white/5 text-slate-400"
-                )}>XDP: {status?.xdp_firewall || "BYPASS"}</span>
+                  status?.integrity?.xdp_firewall === "ACTIVE_XDP" ? "border-emerald-500/30 text-emerald-400" : "border-white/5 text-slate-400"
+                )}>XDP: {status?.integrity?.xdp_firewall || "BYPASS"}</span>
                 <span className={clsx(
                   "px-2 py-0.5 bg-slate-950 border rounded text-[8px] font-bold mono",
                   status?.integrity?.logic_state === "STABLE" ? "border-emerald-500/30 text-emerald-400" : "border-white/5 text-slate-400"
@@ -305,10 +249,10 @@ export function Dashboard() {
                   </thead>
                   <tbody className="space-y-1">
                     {[
-                      { op: "Filtro XDP", algo: "BPF_MAP_LOOKUP_ELEM", complexity: "O(1)", latency: `${(38 + (tick % 100) * 0.04).toFixed(1)} ns`, mem: "64 B/entrada", color: "emerald" },
-                      { op: "Hook LSM", algo: "Análisis Bitmask S60", complexity: "O(1)", latency: `${(status?.cortex_latency_ms * 1000 || 80).toFixed(1)} ns`, mem: "32 B/hook", color: "emerald" },
-                      { op: "Aritmética S60", algo: "Punto Fijo i64×i64", complexity: "O(1)", latency: `${(8 + (tick % 30) * 0.03).toFixed(1)} ns`, mem: "8 B/SPA", color: "sky" },
-                      { op: "Escaneo TruthSync", algo: "Búsqueda Plimpton 322", complexity: "O(1)", latency: `${(142 + (tick % 80) * 0.18).toFixed(1)} ns`, mem: "256 B/caché", color: "amber" },
+                      { op: "Filtro XDP", algo: "BPF_MAP_LOOKUP_ELEM", complexity: "O(1)", latency: status?.integrity?.cortex_latency_ms ? `${(status.integrity.cortex_latency_ms * 1000).toFixed(1)} ns` : "---", mem: "64 B/entrada", color: "emerald" },
+                      { op: "Hook LSM", algo: "Análisis Bitmask S60", complexity: "O(1)", latency: status?.integrity?.cortex_latency_ms ? `${(status.integrity.cortex_latency_ms * 1000).toFixed(1)} ns` : "---", mem: "32 B/hook", color: "emerald" },
+                      { op: "Aritmética S60", algo: "Punto Fijo i64×i64", complexity: "O(1)", latency: status?.integrity?.cortex_latency_ms ? `${(status.integrity.cortex_latency_ms * 1000).toFixed(1)} ns` : "---", mem: "8 B/SPA", color: "sky" },
+                      { op: "Escaneo TruthSync", algo: "Búsqueda Plimpton 322", complexity: "O(1)", latency: "---", mem: "256 B/caché", color: "amber" },
                       { op: "Hub SNN", algo: "Búsqueda Vector de Memoria", complexity: "O(log N)", latency: " < 300 ns", mem: "1 KB/nodo", color: "slate" },
                     ].map((row) => (
                       <tr key={row.op} className="border-b border-white/5 hover:bg-white/2 transition-colors">
@@ -326,13 +270,13 @@ export function Dashboard() {
 
             <div className="grid grid-cols-3 gap-4">
               {[
-                { label: "Precisión S60", value: "±0.0077 ppm", sub: "vs errores IEEE 754", color: "emerald" },
-                { label: "Ahorro CPU", value: "62.9%", sub: "vs interceptores ptrace", color: "sky" },
-                { label: "Precisión Planificación", value: "94.4%", sub: "Modo ráfaga adaptativo", color: "amber" },
+                { label: "Precisión S60", value: "PURE_B60", sub: "Ratio Plimpton 322", color: "emerald" },
+                { label: "Modo Kernel", value: "RING-0", sub: "Intercepción Directa", color: "sky" },
+                { label: "Estado S60", value: status?.integrity?.logic_state || "SINCRONIZANDO", sub: "Determinismo B60", color: "amber" },
               ].map(m => (
                 <div key={m.label} className="glass-card p-4 text-center">
                   <p className="text-[9px] text-slate-500 uppercase tracking-widest mb-2">{m.label}</p>
-                  <p className={`text-2xl font-black ${m.color === "emerald" ? "text-emerald-400" : m.color === "sky" ? "text-sky-400" : "text-amber-400"}`}>{m.value}</p>
+                  <p className={`text-2xl font-black ${m.color === "emerald" ? "text-emerald-400" : m.color === "sky" ? "text-sky-400" : m.color === "amber" ? "text-amber-400" : "text-slate-500"}`}>{m.value}</p>
                 </div>
               ))}
             </div>
@@ -342,14 +286,14 @@ export function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-black uppercase tracking-tighter text-white">IA Ops Shield</h1>
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Matriz Defensa Cognitiva S60 — Ring-0 Tiempo Real</p>
+                <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.3em] mt-1">Matriz Defensa Cognitiva S60 — Ring-0 Kernel Sync</p>
               </div>
               <div className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3">
                 <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="text-[10px] font-black text-emerald-400 tracking-widest uppercase">Guardián Activo</span>
               </div>
             </div>
-            <AIOpsShieldView status={status} events={vaultEvents} />
+            <AIOpsShieldView status={status} events={events} />
           </div>
         ) : activeTab === "mycnet" ? (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
@@ -386,31 +330,20 @@ export function Dashboard() {
             </div>
           </div>
         ) : activeTab === "vault" ? (
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-black uppercase tracking-tighter text-white">Bóveda de Auditoría</h1>
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Archivo de Eventos Kernel Ring-0 — Solo Lectura</p>
-              </div>
-              <div className="px-4 py-2 bg-slate-800 border border-white/5 rounded-xl flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-slate-500" />
-                <span className="text-[10px] font-black text-slate-400 tracking-widest uppercase">Registro Inmutable</span>
-              </div>
-            </div>
             <div className="glass-card p-0 overflow-hidden font-mono text-[10px]">
               <div className="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border-b border-white/5 shrink-0">
                 <div className="flex gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-rose-500/60" /><div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" /><div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" /></div>
                 <span className="text-slate-500 text-[9px] ml-2">sentinel-cortex / registro de auditoría del kernel</span>
               </div>
               <div className="p-4 space-y-1.5 overflow-y-auto max-h-[500px] custom-scrollbar bg-slate-950/80">
-                {vaultEvents.length === 0 && <div className="text-slate-600 opacity-50 italic">Esperando flujo de auditoría del kernel...</div>}
-                {vaultEvents.map((ev, i) => {
+                {events.length === 0 && <div className="text-slate-600 opacity-50 italic">Esperando flujo de auditoría del kernel...</div>}
+                {events.map((ev, i) => {
                   const isCritical = ev.severity >= 3 || ev.event_type.includes("BLOCK") || ev.event_type.includes("ALERT");
                   const isSys = ev.event_type.includes("HEALING") || ev.event_type.includes("PULSE");
                   const color = isCritical ? "text-rose-500" : isSys ? "text-sky-500" : "text-emerald-500";
                   return (
                     <div key={i} className="flex items-start gap-3 hover:bg-white/2 px-1 py-0.5 rounded transition-colors break-all">
-                      <span className="text-slate-600 tabular-nums shrink-0">{ev.timestamp_ns ? new Date(ev.timestamp_ns / 1000000).toLocaleTimeString("es-CL", { hour12: false }) : "--:--:--"}</span>
+                      <span className="text-slate-600 tabular-nums shrink-0">{mounted && ev.timestamp_ns ? new Date(ev.timestamp_ns / 1000000).toLocaleTimeString("es-CL", { hour12: false }) : "--:--:--"}</span>
                       <span className={`shrink-0 font-black w-[130px] truncate ${color}`}>[{ev.event_type}]</span>
                       <span className="text-slate-400">{ev.message}</span>
                     </div>
@@ -418,7 +351,6 @@ export function Dashboard() {
                 })}
               </div>
             </div>
-          </div>
         ) : activeTab === "settings" ? (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
             <div className="flex items-center justify-between">
@@ -427,7 +359,7 @@ export function Dashboard() {
                 <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Configuración Núcleo S60 — Bloqueado Biométrico</p>
               </div>
               <div className="px-4 py-2 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-3">
-                <Lock className="w-3 h-3 text-rose-400" />
+                <LockIcon className="w-3 h-3 text-rose-400" />
                 <span className="text-[10px] font-black text-rose-400 tracking-widest uppercase">Modo Administrador Requerido</span>
               </div>
             </div>
@@ -437,11 +369,11 @@ export function Dashboard() {
                 <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-300 border-b border-white/5 pb-2">Umbrales Cognitivos</h3>
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">Puntuación Coherencia IA</span><span className="text-[10px] text-white font-mono">{(status?.bio_coherence ? Math.min(1.0, status.bio_coherence/12960000) : 0.00).toFixed(2)} / 1.0</span></div>
-                    <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden"><div className="h-full bg-sky-500 transition-all duration-1000" style={{ width: `${(status?.bio_coherence ? Math.min(1.0, status.bio_coherence/12960000) : 0)*100}%` }} /></div>
+                    <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">Puntuación Coherencia IA</span><span className="text-[10px] text-white font-mono">{(status?.integrity?.bio_coherence ? Math.min(1.0, status.integrity.bio_coherence/12960000) : 0.00).toFixed(2)} / 1.0</span></div>
+                    <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden"><div className="h-full bg-sky-500 transition-all duration-1000" style={{ width: `${(status?.integrity?.bio_coherence ? Math.min(1.0, status.integrity.bio_coherence/12960000) : 0)*100}%` }} /></div>
                   </div>
                   <div className="space-y-2">
-                    <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">Profundidad Intercepción LSM</span><span className="text-[10px] text-white font-mono">{status?.lsm_cognitive || "RING-0"}</span></div>
+                    <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">Profundidad Intercepción LSM</span><span className="text-[10px] text-white font-mono">{status?.integrity?.lsm_cognitive || "RING-0"}</span></div>
                     <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden"><div className="h-full bg-emerald-500 w-[100%]" /></div>
                   </div>
                 </div>
@@ -471,10 +403,10 @@ export function Dashboard() {
                </div>
                <div className="grid grid-cols-2 gap-4">
                   {[
-                    { label: "Intercepción Execve", status: "ENFORCE", desc: "Bloquear syscalls malformados" },
-                    { label: "Purga de Paquetes XDP", status: "MONITOR", desc: "Registrar sin descartar" },
-                    { label: "Sellado Auto Bio-Silencio", status: "ACTIVE", desc: "Sellar tras 30s de inactividad" },
-                    { label: "Persistencia Log Auditoría", status: "ENABLED", desc: "Escribiendo en /var/log/sentinel" },
+                    { label: "Intercepción Kernel Ring-0", status: status?.integrity?.xdp_firewall === "ACTIVE_XDP" ? "ENFORCE" : "STANDBY", desc: "Evaluar syscalls y buffer predictivo S60" },
+                    { label: "Motor S60 Base", status: "ACTIVE", desc: "Resonancia Plimpton 322 en curso" },
+                    { label: "Inyección Bio-Pulso", status: (status?.integrity?.bio_coherence || 0) > 0 ? "ACTIVE" : "STANDBY", desc: "Recepción de telemetría BCI" },
+                    { label: "Registro Auditoría (WAL)", status: "ENABLED", desc: "Escribiendo en /var/log/sentinel" },
                   ].map((p, i) => (
                     <div key={i} className="p-4 bg-slate-950/50 rounded-2xl border border-white/5 flex justify-between items-center group hover:bg-emerald-500/5 transition-all">
                        <div>

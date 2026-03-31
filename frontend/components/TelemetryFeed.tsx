@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Terminal, AlertTriangle, ShieldCheck, Zap, Heart, Activity, Cpu, ShieldX } from "lucide-react";
 import { clsx } from "clsx";
+import { useTelemetry } from "../hooks/useTelemetry";
 
 interface Event {
   timestamp_ns: number;
@@ -39,68 +40,8 @@ const COLOR_MAP: Record<string, { border: string; bg: string; text: string; dot:
 };
 
 export function TelemetryFeed() {
-  const [events, setEvents] = useState<Event[]>([]);
-  const [connected, setConnected] = useState(false);
+  const { events, connected, error } = useTelemetry();
   const feedRef = useRef<HTMLDivElement>(null);
-  const queueRef = useRef<Event[]>([]);
-
-  useEffect(() => {
-    let ws: WebSocket | null = null;
-    let reconnectTimer: NodeJS.Timeout | null = null;
-
-    const connect = () => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
-      let wsUrl: string;
-      if (apiUrl.startsWith("http://") || apiUrl.startsWith("https://")) {
-        wsUrl = apiUrl.replace(/^http/, "ws") + "/api/v1/telemetry";
-      } else {
-        const proto = typeof window !== "undefined" && window.location.protocol === "https:" ? "wss" : "ws";
-        const host = typeof window !== "undefined" ? window.location.host : "localhost";
-        wsUrl = `${proto}://${host}/api/v1/telemetry`;
-      }
-      
-      ws = new WebSocket(wsUrl);
-
-      ws.onopen = () => {
-        setConnected(true);
-        console.log("Ring-0 Sentinel: Telemetry WebSocket Connected");
-      };
-
-      ws.onclose = () => {
-        setConnected(false);
-        console.warn("Ring-0 Sentinel: Telemetry WebSocket Closed. Reconnecting in 3s...");
-        reconnectTimer = setTimeout(connect, 3000);
-      };
-
-      ws.onerror = (err) => {
-        console.error("Ring-0 Sentinel: Telemetry WebSocket Error", err);
-        ws?.close();
-      };
-
-      ws.onmessage = (e) => {
-        try {
-          const event = JSON.parse(e.data);
-          queueRef.current = [event, ...queueRef.current].slice(0, 200);
-        } catch (err) {
-          console.error("WS parse error", err);
-        }
-      };
-    };
-
-    connect();
-
-    const flushTimer = setInterval(() => {
-      if (queueRef.current.length > 0) {
-        setEvents(queueRef.current.slice(0, 150));
-      }
-    }, 800);
-
-    return () => {
-      ws?.close();
-      if (reconnectTimer) clearTimeout(reconnectTimer);
-      clearInterval(flushTimer);
-    };
-  }, []);
 
   const getConfig = (ev: Event) => {
     const cfg = EVENT_CONFIG[ev.event_type] || { icon: Cpu, label: ev.event_type, colorSet: "slate" };
@@ -128,22 +69,22 @@ export function TelemetryFeed() {
       {/* Connection status - fixed header */}
       <div className={clsx(
         "flex items-center gap-2 px-4 py-1.5 shrink-0 text-[9px] font-bold uppercase tracking-widest border-b",
-        connected ? "bg-emerald-500/5 text-emerald-500 border-emerald-500/10" : "bg-rose-500/5 text-rose-400 border-rose-500/10"
+        connected && !error ? "bg-emerald-500/5 text-emerald-500 border-emerald-500/10" : "bg-rose-500/5 text-rose-400 border-rose-500/10"
       )}>
-        <div className={clsx("w-1.5 h-1.5 rounded-full", connected ? "bg-emerald-500 animate-pulse" : "bg-rose-500")} />
-        {connected ? "Flujo Ring-0 Activo" : "Conectando al Kernel..."}
+        <div className={clsx("w-1.5 h-1.5 rounded-full", connected && !error ? "bg-emerald-500 animate-pulse" : "bg-rose-500")} />
+        {error ? error : connected ? "Flujo Ring-0 Activo" : "Reconectando al Kernel..."}
       </div>
 
       {/* Scrollable area - strictly contained */}
       <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar p-4 space-y-1.5 border-t border-white/5">
       {visibleEvents.length === 0 && (
         <div className="flex flex-col items-center justify-center h-full text-slate-600 gap-4">
-          <div className="phase-ring p-6">
+          <div className="p-6 opacity-20 border-2 border-dashed border-slate-700 rounded-full animate-pulse">
             <Terminal className="w-10 h-10 text-slate-700" />
           </div>
           <div className="text-center space-y-1">
             <p className="uppercase tracking-[0.25em] font-bold text-[10px]">Esperando Eventos Ring-0</p>
-            <p className="text-[9px] text-slate-700 normal-case tracking-normal">La telemetría del kernel aparecerá aquí en tiempo real</p>
+            <p className="text-[9px] text-slate-800 normal-case tracking-normal">La telemetría del kernel aparecerá aquí en tiempo real</p>
           </div>
         </div>
       )}
@@ -159,7 +100,7 @@ export function TelemetryFeed() {
               "px-3 py-2 border rounded-lg transition-all animate-slide-in group",
               colors.border,
               colors.bg,
-              isCritical && "severity-critical",
+              isCritical && "shadow-[0_0_15px_rgba(244,63,94,0.15)] bg-rose-500/10 border-rose-500/40",
               ev.event_type.includes("SANITIZED") && "border-emerald-500/50 bg-emerald-500/10"
             )}
             style={{ animationDelay: `${i * 20}ms` }}
@@ -176,8 +117,8 @@ export function TelemetryFeed() {
 
                 {/* Icon + Label */}
                 <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                  <Icon className={clsx("w-3.5 h-3.5 shrink-0", colors.text, ev.event_type === "BIO_PULSE" && "bio-heartbeat")} />
-                  <span className={clsx("font-bold uppercase tracking-wider truncate text-[11px]", colors.text)}>
+                  <Icon className={clsx("w-3.5 h-3.5 shrink-0", colors.text, ev.event_type === "BIO_PULSE" && "animate-pulse")} />
+                  <span className={clsx("font-black uppercase tracking-wider truncate text-[11px]", colors.text)}>
                     {label}
                   </span>
                 </div>

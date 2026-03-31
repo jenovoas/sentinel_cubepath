@@ -1,74 +1,50 @@
 "use client";
 
-import React, { useMemo, useState, useEffect } from "react";
-import { Activity, Network, HardDrive, Wifi, Server, Box, Cpu, Sparkles } from "lucide-react";
+import React, { useState, useEffect, useMemo } from "react";
+import { useTelemetry } from "../hooks/useTelemetry";
 import { clsx } from "clsx";
 import { motion, AnimatePresence } from "framer-motion";
+import { Wifi, Activity, Box, Server, HardDrive, Cpu, Sparkles } from "lucide-react";
 
 export function MyCNetNodeGraph({ phase, isOpen }: { phase: string, isOpen: boolean }) {
-  
-  // === TOPOLOGÍA B.A.T.M.A.N. (6 NODOS FÍSICOS) ===
-  // Referencia: mycnet/docs/MYCNET_IMPLEMENTATION_PLAN.md
-  
-  const nodes = useMemo(() => {
-    return [
-      { id: "n1", name: "Node 1", ip: "10.10.0.11", role: "Gateway", angle: 270, icon: Server },
-      { id: "n2", name: "Node 2", ip: "10.10.0.12", role: "MinIO / Ceph", angle: 330, icon: HardDrive },
-      { id: "n3", name: "Node 3", ip: "10.10.0.13", role: "MinIO / Ceph", angle: 30, icon: HardDrive },
-      { id: "n4", name: "Node 4", ip: "10.10.0.14", role: "Compute S60", angle: 90, icon: Cpu },
-      { id: "n5", name: "Node 5", ip: "10.10.0.15", role: "MinIO / Ceph", angle: 150, icon: HardDrive },
-      { id: "n6", name: "Node 6", ip: "10.10.0.16", role: "MinIO / Ceph", angle: 210, icon: HardDrive },
-    ];
-  }, []);
-
-  const [tqMetrics, setTqMetrics] = useState<Record<string, number>>({});
-  const [globalTick, setGlobalTick] = useState<number>(0);
+  const { tick } = useTelemetry();
+  const [nodes, setNodes] = useState<any[]>([]);
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   // CONEXIÓN DIRECTA AL KERNEL RING-0 (Axum S60)
-  const host = typeof window !== "undefined" ? window.location.hostname : "localhost";
-  const apiBase = `http://${host}:8000`;
+  const apiBase = `/api`;
 
-  // Fetch del Pulso Vital (Tick) desde el Backend S60
   useEffect(() => {
-    const fetchTick = async () => {
+    const fetchTopology = async () => {
       try {
-        // Usamos el mismo endpoint maestro que el CrystalLattice para garantizar acoplamiento puro
-        const res = await fetch(`${apiBase}/api/v1/lattice/state`);
+        const res = await fetch(`${apiBase}/api/v1/mycnet/topology`);
         if (res.ok) {
           const data = await res.json();
-          setGlobalTick(data.tick);
+          setNodes(data.nodes || []);
+          setLoading(false);
         }
       } catch (error) {
-        // Fallback or ignore
+        console.error("Error fetching topology", error);
       }
     };
-    
-    fetchTick();
-    const interval = setInterval(fetchTick, 150); // Mismo Polling Rate que el Crystal Lattice
-    return () => clearInterval(interval);
+    fetchTopology();
+    const iv = setInterval(fetchTopology, 2000);
+    return () => clearInterval(iv);
   }, [apiBase]);
 
-  // Simular fluctuación Orgánica de TQ anclada al Latido Cuántico S60
-  useEffect(() => {
-    const newTq: Record<string, number> = {};
-    
-    // Modulación YHWH: La fase y amplitud dependen directamente de la métrica S60 del Tick Central
-    const phaseMod = Math.sin(globalTick * 0.1);
-    const vPhase = Math.cos(globalTick * 0.05);
-    
-    newTq["n1-n2"] = Math.floor(240 + Math.abs(vPhase) * 15);
-    newTq["n2-n3"] = Math.floor(250 + Math.abs(Math.sin(globalTick * 0.07)) * 5);
-    newTq["n3-n4"] = Math.floor(230 + Math.abs(phaseMod) * 20);
-    newTq["n4-n5"] = Math.floor(220 + Math.abs(Math.cos(globalTick * 0.03)) * 25);
-    newTq["n5-n6"] = Math.floor(245 + Math.abs(Math.sin(globalTick * 0.12)) * 10);
-    newTq["n6-n1"] = 255; // Core Backbone Intacto
-    
-    newTq["n1-n4"] = Math.floor(190 + Math.abs(phaseMod) * 40); // Enlace cruzado diagonal
-    newTq["n2-n6"] = Math.floor(210 + Math.abs(Math.cos(globalTick * 0.09)) * 30); // Enlace cruzado
-
-    setTqMetrics(newTq);
-  }, [globalTick]);
+  // Derivación de métricas TQ basadas en la amplitud real de los nodos
+  const tqMetrics = useMemo(() => {
+    const metrics: Record<string, number> = {};
+    nodes.forEach((node, i) => {
+      // Simulamos enlace con el siguiente nodo en la lista para visualización de red
+      const next = nodes[(i + 1) % nodes.length];
+      const key = `${node.id}-${next.id}`;
+      // TQ real = (amp_a + amp_b) / factor_s60
+      metrics[key] = Math.floor(((node.amplitude + next.amplitude) / 25920000) * 255);
+    });
+    return metrics;
+  }, [nodes]);
 
   // Función para convertir TQ (0-255) a formato S60 [d; m, s]
   const renderS60 = (tq: number) => {
@@ -138,7 +114,7 @@ export function MyCNetNodeGraph({ phase, isOpen }: { phase: string, isOpen: bool
              <Activity className={`w-3 h-3 ${isOpen ? 'text-emerald-400 animate-pulse' : 'text-rose-500'}`} />
            </div>
            <span className={`text-[10px] font-black uppercase tracking-widest mt-0.5 ${isOpen ? 'text-emerald-400' : 'text-rose-500'} mono flex items-center gap-1`}>
-             {getPhaseDesc()} [{(globalTick % 60).toString().padStart(2, '0')}]
+             {getPhaseDesc()} [{(tick % 60).toString().padStart(2, '0')}]
            </span>
         </div>
       </div>
@@ -201,7 +177,7 @@ export function MyCNetNodeGraph({ phase, isOpen }: { phase: string, isOpen: bool
                           textAnchor="middle"
                           className="font-bold tracking-widest"
                         >
-                          {globalTick > 0 ? `TQ ${tq}/255` : "NO SIGNAL"}
+                          {tick > 0 ? `TQ ${tq}/255` : "NO SIGNAL"}
                         </text>
                      )}
 
@@ -355,25 +331,19 @@ export function MyCNetNodeGraph({ phase, isOpen }: { phase: string, isOpen: bool
                     </div>
                     <div className="flex justify-between items-center text-[10px] border-b border-white/5 pb-1">
                       <span className="text-slate-400 font-bold uppercase tracking-widest">MAC bat0</span>
-                      <span className="text-slate-300 mono">b2:a4:f9:{selectedNodeData.id.replace('n','0')}:{(globalTick % 99).toString().padStart(2, '0')}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-[10px] border-b border-white/5 pb-1">
-                      <span className="text-slate-400 font-bold uppercase tracking-widest">I/O Flujo</span>
-                      <span className="text-indigo-400 mono">{(globalTick * 1.4 % 800).toFixed(1)} Mbps</span>
-                    </div>
-
-                    {/* Vertex AI Diagnóstico Predictivo */}
-                    <div className="mt-2 text-[10px] border border-fuchsia-500/30 bg-fuchsia-500/10 rounded overflow-hidden">
-                      <div className="bg-fuchsia-500/20 px-2 py-1 border-b border-fuchsia-500/30 flex items-center justify-between">
-                         <span className="text-fuchsia-300 font-bold uppercase tracking-widest flex items-center gap-1">
-                           <Sparkles className="w-3 h-3" /> Vertex AI Telemetry
-                         </span>
-                         <span className="text-[8px] text-fuchsia-400 mono">v2.0</span>
-                      </div>
                       <div className="p-2 space-y-1">
                          <p className="flex justify-between"><span className="text-slate-400">Gen Status:</span> <span className="text-emerald-400 font-bold mono">OPTIMAL</span></p>
-                         <p className="flex justify-between"><span className="text-slate-400">Predictive Fade:</span> <span className="text-fuchsia-200 mono">{(Math.abs(Math.cos(globalTick*0.05))*100).toFixed(1)}%</span></p>
+                         <p className="flex justify-between"><span className="text-slate-400">Predictive Fade:</span> <span className="text-fuchsia-200 mono">{(Math.abs(Math.cos(tick*0.05))*100).toFixed(1)}%</span></p>
                       </div>
+                    </div>
+                    
+                    <div className="pt-2">
+                       <span className="block text-slate-400 text-[10px] border-b border-white/5 pb-1">MAC bat0</span>
+                       <span className="text-slate-300 mono text-[9px]">b2:a4:f9:{selectedNodeData.id.replace('n','0')}:{(tick % 99).toString().padStart(2, '0')}</span>
+                    </div>
+                    <div className="pt-1">
+                       <span className="block text-slate-400 text-[10px] border-b border-white/5 pb-1">I/O Flujo</span>
+                       <span className="text-indigo-400 mono text-[9px]">{(tick * 1.4 % 800).toFixed(1)} Mbps</span>
                     </div>
                     
                     <div className="pt-2">

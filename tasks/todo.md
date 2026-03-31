@@ -1,10 +1,19 @@
-# Plan de Trabajo: Prueba de Verdad Absoluta (Restauración E2E)
+# 🛡️ Reconexión de Inteligencia (Ring-0)
+## Restauración Crítica - "Host Fénix"
 
-- [ ] Escribir `tests/e2e_hackathon_validator.py` EXPORTANDO Y EJECUTANDO LITERALMENTE la suite completa de Python (`test_telemetry_sanitizer.py`), apuntando de forma real y directa vía HTTP/WebSocket al binario de Rust corriendo en `127.0.0.1:8000/api/v1/truth_claim`. Cero simuladores.
+Se rehabilitan las funciones autonómicas del eBPF y la orquestación ML / Caché en base al `ENGINEERING_MANIFESTO.md` y `PROTOCOLO_YATRA.md`.
 
-## Fase 3: Ejecución de la Falla y Demostración de Falseo
-- [ ] Inyectar payloads de inyección SQL, AIOpsDoom, y exploits contra el servidor `sentinel-cortex` corriendo en `release` mode y revelar sus fallas exactas antes de "suponer" cómo arreglarlas en Rust.
+### Fase 1: Autonomía de Defensas (XDP y LSM)
+- [ ] Editar `backend/src/main.rs`.
+- [ ] Ubicar el bridge eBPF (`ebpf::EbpfBridge`).
+- [ ] Enlazar `CortexEvent` crítico (Event_type: `EXEC_BLOCKED` o severidad > 2) hacia `bridge.set_quarantine_mode(true)`. 
+- [ ] El Sentinel sellará activamente Fénix sin falsos positivos de estado en UI.
 
-## Fase 4: Solución Precisa y Acotada
-- [ ] Mapear el verdadero código de Sanitización en Rust según los resultados arrojados por la consola, auditado bloque por bloque sin sobrescribir el archivo entero. 
-- [ ] Implementar la encriptación S60 y medir la latencia eBPF con pruebas que pasen contra el framework externo (Python script).
+### Fase 2: Memoria Neuronal (Reflejos n8n)
+- [ ] Editar `backend/Cargo.toml` sumando `reqwest` (cliente REST MPSC `tokio`).
+- [ ] Configurar inyección de Webhook. Cuando la `NeuralMemory` dispare saturación entrópica, mandar el Payload al Webhook del flujo de N8N.
+- [ ] Confirmar puerto local para n8n (o ruta default).
+
+### Fase 3: Recuperar TruthSync (Redis + ML)
+- [ ] Añadir `redis` en backend para Toki.
+- [ ] Adaptar TruthSync (`src/truthsync.rs`) para consultar el Edge de Redis (port 6379 o `REDIS_URL`) antes del oráculo `analyze_claim`, devolviendo el estado en < 1ms si el Claim ya está en caché.

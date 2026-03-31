@@ -16,7 +16,13 @@ import {
   Crosshair,
   Play,
   RotateCcw,
+  Terminal,
+  Globe,
+  ChevronRight,
+  Layout,
+  Shield
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { clsx } from "clsx";
 
 interface AIOpsShieldViewProps {
@@ -24,21 +30,22 @@ interface AIOpsShieldViewProps {
   events?: any[];
 }
 
-// Simulación determinista de métricas derivables de los datos reales del backend
+// Derivación de métricas de integridad desde los datos del núcleo S60
 function derivedMetrics(status: any) {
-  const bioCoherence = status?.bio_coherence ?? 0;
+  const integrity = status?.integrity || {};
+  const bioCoherence = integrity.bio_coherence ?? 0;
   const maxCoherence = 12_960_000;
-  const quantumLoad = status?.quantum_load ?? 0;
-  const effectiveMass = status?.effective_mass ?? 12_960_000;
-  const portalIntensity = status?.portal_intensity ?? 0;
+  const quantumLoad = integrity.quantum_load ?? 0;
+  const effectiveMass = integrity.effective_mass ?? 12_960_000;
+  const portalIntensity = (status?.s60_resonance || 0) * (maxCoherence / 100); 
   const isSealed = status?.ring_status === "SEALED";
 
   return {
     isSealed,
-    xdpActivo: status?.xdp_firewall === "ACTIVE_XDP",
-    lsmEnforce: status?.lsm_cognitive === "ENFORCING" || status?.lsm_cognitive === "RING-0",
-    harmSync: status?.harmonic_sync === "STABLE" || status?.harmonic_sync === "RESONANCE_MAX",
-    crystalActivo: status?.crystal_oscillator_active === true,
+    xdpActivo: integrity.xdp_firewall === "ACTIVE",
+    lsmEnforce: integrity.lsm_cognitive === "ENFORCING" || integrity.lsm_cognitive === "RING-0",
+    harmSync: integrity.harmonic_sync === "STABLE" || integrity.harmonic_sync === "RESONANCE_MAX",
+    crystalActivo: integrity.crystal_oscillator_active === true,
     // Porcentaje de coherencia bio [0..100]
     pctBio: Math.min(100, (Math.abs(bioCoherence) / maxCoherence) * 100),
     // Carga cognitiva del kernel [0..100]
@@ -46,11 +53,11 @@ function derivedMetrics(status: any) {
     // Saturación de masa efectiva
     pctMasa: Math.min(100, (effectiveMass / maxCoherence) * 100),
     // Intensidad del portal (métricas de osciladores) en porcentaje
-    pctPortal: Math.min(100, (portalIntensity / maxCoherence) * 100),
+    pctPortal: status?.s60_resonance || 0,
     // Ratio P322 — constante armónica Plimpton 322
-    p322: (0.999840 + (bioCoherence % 1000) / 10_000_000).toFixed(6),
+    p322: integrity.p322_ratio_integrity !== undefined ? Math.round(integrity.p322_ratio_integrity).toLocaleString() : "---",
     // Latencia cortex
-    latenciaMs: (status?.cortex_latency_ms || 0.039).toFixed(3),
+    latenciaMs: status?.cortex_latency_ms !== undefined ? (status.cortex_latency_ms).toFixed(3) : "0.000",
   };
 }
 
@@ -70,8 +77,10 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
     return () => clearInterval(timer);
   }, []);
 
-  // Inicializar estados de sectores desde datos reales
+  // Inicializar estados de sectores
   useEffect(() => {
+    const handleTrigger = async (type: "NORMAL" | "DOOM" | "CHAOS") => {
+    };
     const newStates: Record<string, "OK" | "ALERTA" | "BLOQUEADO"> = {};
     SECTORES.forEach(s => {
       if (m.isSealed && (s === "EXEC" || s === "NET")) {
@@ -87,7 +96,7 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
     setSectorStates(newStates);
   }, [m.isSealed, m.xdpActivo, m.lsmEnforce]);
 
-  // El log de escaneo se va construyendo con los eventos reales del telemetry feed
+  // El log de escaneo se va construyendo con los eventos del telemetry feed
   useEffect(() => {
     if (events.length > 0) {
       const amenazas = events
@@ -135,7 +144,7 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
       estado: "CERTIFICADO",
       icon: ShieldCheck,
       color: "amber",
-      valor: `Bio: ${m.pctBio.toFixed(1)}%`,
+      valor: `Bio: ${Math.round(m.pctBio)}%`,
       activo: true,
     },
     {
@@ -156,7 +165,7 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
     BLOQUEADO: "text-rose-400 border-rose-500/40 bg-rose-500/10",
   };
 
-  const amenazasReales = events
+  const activeThreats = events
     .filter(e => e.severity >= 3 || e.event_type?.includes("BLOCK") || e.event_type?.includes("ALERT") || e.event_type?.includes("THREAT"))
     .slice(0, 6);
 
@@ -241,7 +250,7 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-[8px] text-slate-600 font-bold uppercase tracking-widest">Integridad P322</p>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Inspección Ring-0 Crystal & Neural — Telemetría de Cristales</p>
                 <p className="text-xs font-black text-emerald-200 mono">{m.p322}</p>
               </div>
             </div>
@@ -313,10 +322,10 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
                 <p className="text-[9px] font-black uppercase tracking-widest text-slate-500">Métricas del Motor S60</p>
 
                 {[
-                  { label: "Coherencia Bio-Cognitiva", val: m.pctBio, color: "rose", unit: `${m.pctBio.toFixed(1)}%` },
-                  { label: "Carga del Kernel (Quantum)", val: m.pctCarga, color: "sky", unit: `${m.pctCarga.toFixed(1)}%` },
-                  { label: "Intensidad Portal Crystal", val: m.pctPortal, color: "violet", unit: `${m.pctPortal.toFixed(1)}%` },
-                  { label: "Masa Efectiva S60", val: m.pctMasa, color: "emerald", unit: `${m.pctMasa.toFixed(0)}%` },
+                  { label: "Coherencia Bio-Cognitiva", val: m.pctBio, color: "rose", unit: `${Math.round(m.pctBio)}%` },
+                  { label: "Carga del Kernel (Quantum)", val: m.pctCarga, color: "sky", unit: `${Math.round(m.pctCarga)}%` },
+                  { label: "Intensidad Portal Crystal", val: m.pctPortal, color: "violet", unit: `${Math.round(m.pctPortal)}%` },
+                  { label: "Masa Efectiva S60", val: m.pctMasa, color: "emerald", unit: `${Math.round(m.pctMasa)}%` },
                 ].map(({ label, val, color, unit }) => (
                   <div key={label} className="space-y-1">
                     <div className="flex justify-between text-[8px] font-black uppercase text-slate-500">
@@ -396,7 +405,7 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
             </div>
 
             <div className="flex-1 space-y-2 font-mono text-[9px] overflow-y-auto relative z-10 custom-scrollbar">
-              {amenazasReales.length > 0 ? amenazasReales.map((ev: any, i: number) => {
+              {activeThreats.length > 0 ? activeThreats.map((ev: any, i: number) => {
                 const hora = ev.timestamp_ns
                   ? new Date(ev.timestamp_ns / 1_000_000).toLocaleTimeString("es-CL", { hour12: false })
                   : "—";
@@ -452,7 +461,7 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
               <div className="grid grid-cols-3 gap-2">
                 {[
                   { label: "Total eventos", val: events.length },
-                  { label: "Amenazas", val: amenazasReales.length },
+                  { label: "Amenazas", val: activeThreats.length },
                   { label: "Severidad máx.", val: events.length > 0 ? Math.max(...events.map(e => e.severity || 0)) : 0 },
                 ].map(({ label, val }) => (
                   <div key={label} className="text-center p-2 bg-slate-900/60 rounded-lg border border-white/5">
@@ -463,14 +472,16 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
               </div>
               <div className="flex items-center justify-between text-[9px] font-black uppercase tracking-widest">
                 <span className="text-slate-500">Protección del Sistema</span>
-                <span className={clsx("font-black", amenazasReales.length === 0 ? "text-emerald-400" : "text-amber-400")}>
-                  {amenazasReales.length === 0 ? "100% PROTEGIDO" : `${Math.max(0, 100 - amenazasReales.length * 5)}% ACTIVO`}
+                <span className={clsx("font-black", activeThreats.length === 0 ? "text-emerald-400" : "text-amber-400")}>
+                  {activeThreats.length === 0 ? "100% PROTEGIDO" : `${Math.max(0, 100 - activeThreats.length * 5)}% ACTIVO`}
                 </span>
               </div>
-              <div className="h-1.5 w-full bg-slate-950 rounded-full overflow-hidden border border-white/5">
-                <div
-                  className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-full transition-all duration-1000"
-                  style={{ width: amenazasReales.length === 0 ? "100%" : `${Math.max(0, 100 - amenazasReales.length * 5)}%` }}
+              <div className="w-full h-1.5 bg-slate-900 rounded-full mt-2 overflow-hidden">
+                <motion.div 
+                  className="h-full bg-emerald-500" 
+                  initial={{ width: 0 }}
+                  animate={{ width: activeThreats.length === 0 ? "100%" : `${Math.max(0, 100 - activeThreats.length * 5)}%` }}
+                  style={{ width: activeThreats.length === 0 ? "100%" : `${Math.max(0, 100 - activeThreats.length * 5)}%` }}
                 />
               </div>
             </div>

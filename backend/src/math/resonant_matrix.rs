@@ -15,7 +15,7 @@ const MAX_AMP_RAW: i64 = 129_600_000; // S60(10, 0, 0, 0, 0)
 /// La bomba (pump_energy) es lo que convierte la matrix de un sistema que
 /// simplemente decae en un Cristal de Tiempo real: un oscilador que lucha
 /// activamente contra la entropía para mantener persistencia indefinida.
-/// Sin ella, el sistema completo es un mockup.
+/// Sin ella, el sistema completo se rompe.
 ///
 /// El HexagonalController (Pilar 2) gestiona el control de fase:
 /// cuando un rift (ataque) se detecta, control_rift() estabiliza los
@@ -44,7 +44,7 @@ pub struct ResonantMatrix {
     pub hex_controller: HexagonalController,
 }
 
-/// Raíz cuadrada entera (Newton-Raphson) — cero f64, YATRA PURE
+/// Raíz cuadrada entera (Newton-Raphson)
 fn isqrt(n: usize) -> usize {
     if n == 0 { return 0; }
     let mut x = n;
@@ -138,7 +138,7 @@ impl ResonantMatrix {
             // Aplicar flujo de energía
             self.crystals[i].amplitude = self.crystals[i].amplitude + transfers[i];
             
-            // CLAMP: evitar desbordamiento i64
+            // CLAMP: evitar desbordamiento
             let raw = self.crystals[i].amplitude.to_raw().clamp(-MAX_AMP_RAW, MAX_AMP_RAW);
             self.crystals[i].amplitude = SPA::from_raw(raw);
 

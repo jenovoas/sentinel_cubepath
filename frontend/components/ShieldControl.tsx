@@ -14,18 +14,18 @@ export function ShieldControl({ status }: ShieldControlProps) {
 
   const host = typeof window !== "undefined" ? window.location.hostname : "localhost";
 
-  const injectPulse = async (type: "NORMAL" | "DOOM" | "CHAOS") => {
+  const triggerValidation = async (type: "NORMAL" | "DOOM" | "CHAOS") => {
     setLoading(true);
     const configs = {
       NORMAL: { payload: "HARMONIC-AXION-1.0", threshold: 6_480_000 },
-      DOOM:   { payload: "AIOpsDoom inject: sudo rm -rf /", threshold: 12_000_000 },
-      CHAOS:  { payload: "DROP TABLE users;", threshold: 9_000_000 },
+      DOOM:   { payload: "AIOps-Threat-Alpha", threshold: 12_000_000 },
+      CHAOS:  { payload: "Anomaly-Delta-Detected", threshold: 9_000_000 },
     };
     const cfg = configs[type];
 
     try {
       // Impacto directo al endpoint que activa el guardián TelemetrySanitizer real
-      const res = await fetch(`http://${host}:8000/api/v1/truth_claim`, {
+      const res = await fetch(`/api/v1/truth_claim`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -67,7 +67,7 @@ export function ShieldControl({ status }: ShieldControlProps) {
       <div className="space-y-4 flex-1">
         <div className="grid grid-cols-3 gap-2">
           <button
-            onClick={() => injectPulse("NORMAL")}
+            onClick={() => triggerValidation("NORMAL")}
             disabled={loading}
             className="flex flex-col items-center p-3 rounded-xl border border-sky-500/20 bg-sky-500/5 hover:bg-sky-500/10 transition-colors group"
           >
@@ -76,21 +76,21 @@ export function ShieldControl({ status }: ShieldControlProps) {
           </button>
           
           <button
-            onClick={() => injectPulse("DOOM")}
+            onClick={() => triggerValidation("DOOM")}
             disabled={loading}
             className="flex flex-col items-center p-3 rounded-xl border border-rose-500/20 bg-rose-500/5 hover:bg-rose-500/10 transition-colors group"
           >
             <Activity className="w-5 h-5 text-rose-400 mb-2 group-hover:animate-pulse" />
-            <span className="text-[10px] font-bold text-rose-400 uppercase tracking-tighter">Doom Axion</span>
+            <span className="text-[10px] font-bold text-rose-400 uppercase tracking-tighter">Threat A</span>
           </button>
 
           <button
-            onClick={() => injectPulse("CHAOS")}
+            onClick={() => triggerValidation("CHAOS")}
             disabled={loading}
             className="flex flex-col items-center p-3 rounded-xl border border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 transition-colors group"
           >
             <Terminal className="w-5 h-5 text-amber-400 mb-2 group-hover:rotate-12 transition-transform" />
-            <span className="text-[10px] font-bold text-amber-400 uppercase tracking-tighter">Chaos Inject</span>
+            <span className="text-[10px] font-bold text-amber-400 uppercase tracking-tighter">Anomaly B</span>
           </button>
         </div>
 

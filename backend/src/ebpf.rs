@@ -106,6 +106,16 @@ impl EbpfBridge {
                     // LANE 1: Security Audit Log — severidad alta o eventos de bloqueo
                     if sv >= 2 || et <= 2 || et >= 10 {
                         let _ = wal_clone.log_security(event.clone());
+                        // Autonomía Defensiva Real: Aislar Fénix instantáneamente si entra un Rootkit o Exec anómalo
+                        // Se efectúa dentro del context de Ring-0
+                        use libbpf_rs::MapHandle;
+                        let map_res = MapHandle::from_pinned_path("/sys/fs/bpf/tc_firewall_config");
+                        if let Ok(map) = map_res {
+                            let key: u32 = 0;
+                            let value: u32 = 1;
+                            let _ = map.update(&key.to_ne_bytes(), &value.to_ne_bytes(), libbpf_rs::MapFlags::ANY);
+                            tracing::warn!("🚨 DEFENSA AUTÓNOMA GATILLADA: Cuarentena de red TC XDP activada en Ring-0 por evento eBPF {:?}", et);
+                        }
                     }
 
                     let _ = tx_clone.send(event);

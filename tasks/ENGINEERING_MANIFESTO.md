@@ -12,7 +12,7 @@
 
 ## 📐 ARQUITECTURA DE NODOS (UBICACIÓN FÍSICA)
 
-- **SENTINEL-CUBEPATH (Remoto)**: Nodo de la HACKATÓN (4GB RAM). Único objetivo de despliegue, ejecución y pruebas. Puerto SSH: **4222**.
+- **SENTINEL-CUBEPATH**: Nodo de la HACKATÓN (4GB RAM). Único objetivo de despliegue, ejecución y pruebas.
 
 ## 🧬 ESPECIFICACIONES TÉCNICAS (TRUTH MODE)
 
