@@ -116,17 +116,12 @@ export function TelemetryFeed() {
     }
   };
 
-  // Eventos puramente de heartbeat — sólo confirman que el canal está vivo.
-  // No aportan información al operador, los filtramos del feed visible.
-  const HEARTBEAT_TYPES = new Set([
-    "MATRIX_SYNC", "ENCRYPT_PULSE",
-  ]);
-  const isHeartbeat = (type: string) =>
-    HEARTBEAT_TYPES.has(type) ||
+  // Solo filtrar los eventos de capa de protocolo puro que no aportan info operacional
+  const isNoise = (type: string) =>
     type.startsWith("YHWH_PHASE_") ||
     type.startsWith("ENCRYPT_LAYER_");
 
-  const visibleEvents = events.filter(ev => !isHeartbeat(ev.event_type));
+  const visibleEvents = events.filter(ev => !isNoise(ev.event_type));
 
   return (
     <div ref={feedRef} className="absolute inset-0 flex flex-col w-full font-mono text-[10px] overflow-hidden">

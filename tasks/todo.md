@@ -1,51 +1,10 @@
-# 🛠️ Sentinel Ring-0: Task List (Hackatón Soberana)
+# Plan de Trabajo: Prueba de Verdad Absoluta (Restauración E2E)
 
-Lista de tareas para la ejecución del despliegue en CubePath (Rocky Linux 10, 4GB RAM).
+- [ ] Escribir `tests/e2e_hackathon_validator.py` EXPORTANDO Y EJECUTANDO LITERALMENTE la suite completa de Python (`test_telemetry_sanitizer.py`), apuntando de forma real y directa vía HTTP/WebSocket al binario de Rust corriendo en `127.0.0.1:8000/api/v1/truth_claim`. Cero simuladores.
 
----
+## Fase 3: Ejecución de la Falla y Demostración de Falseo
+- [ ] Inyectar payloads de inyección SQL, AIOpsDoom, y exploits contra el servidor `sentinel-cortex` corriendo en `release` mode y revelar sus fallas exactas antes de "suponer" cómo arreglarlas en Rust.
 
-## 📅 Hito 0: Preparación Local (Hecho)
-
-- [x] Initializar Git y realizar el primer commit maestro.
-- [x] Refactorizar `EbpfBridge` (de Mock a libbpf-rs real).
-- [x] Sincronizar axiomas matemáticos S60.
-- [x] Copiar código fuente de eBPF (`backend/ebpf/`).
-- [x] Crear el `Makefile` para guardianes Ring 0.
-- [x] Optimizar `Dockerfile` para Rocky Linux y restringir hilos (`-j 2`).
-- [x] Rediseñar la UI para estética Cyber-Dark Premium.
-- [x] Crear plan maestro de despliegue (`MASTER_S60_PLAN.md`).
-
----
-
-## 📅 Hito 1: Infraestructura de Instancia (Completado)
-
-- [x] Crear instancia de Rocky Linux 10 en CubePath (4GB RAM).
-- [x] Clonar el repositorio `sentinel-cubepath`.
-- [x] Instalar dependencias: `clang`, `llvm`, `libbpf-devel`, `rustup`.
-- [x] Habilitar el sistema de archivos BPF: `mount -t bpf bpf /sys/fs/bpf/`.
-- [x] Configurar `/etc/ssh/sshd_config` acorde a las necesidades de la hackatón.
-
----
-
-## 📅 Hito 2: Compilación y Carga (Completado)
-
-- [x] Compilar guardianes: `cd backend/ebpf && make all`.
-- [x] Cargar módulos LSM/XDP: `make load`.
-- [x] Compilar backend: `cargo build --release -j 2`.
-- [x] Compilar frontend: `npm run build`.
-
----
-
-## 📅 Hito 3: Validación Final (En ejecución)
-
-- [x] Iniciar el API de Sentinel (`./target/release/sentinel-cortex`).
-- [x] Iniciar el Dashboard en el puerto 3000 (Verificado en `vps23309.cubepath.net`).
-- [x] Probar el **Arco de Reflejo**: Verificar bloqueo de red al llegar la Coherencia Bio a 0.
-- [x] Comprobar el log de RingBuffer del kernel (`bpftool prog list`).
-- [x] cambiar el puerto 22 al 4222 (Verificado en el nodo, dual-stack activo)
-- [x] mañana eliminar el puerto 22 (Seguridad durante transición)
-- [x] verificar log y reinicios del servidor
-
----
-
-**Soberanía Lógica = Estabilidad del Sistema.** 🛡️
+## Fase 4: Solución Precisa y Acotada
+- [ ] Mapear el verdadero código de Sanitización en Rust según los resultados arrojados por la consola, auditado bloque por bloque sin sobrescribir el archivo entero. 
+- [ ] Implementar la encriptación S60 y medir la latencia eBPF con pruebas que pasen contra el framework externo (Python script).

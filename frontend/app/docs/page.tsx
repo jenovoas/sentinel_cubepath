@@ -41,11 +41,17 @@ export default function DocsIndex() {
     fetch(`/internal-docs-api`)
       .then((res) => res.json())
       .then((data) => {
-        setDocs(data);
+        if (Array.isArray(data)) {
+          setDocs(data);
+        } else {
+          setDocs([]);
+          console.error("Docs API returned non-array:", data);
+        }
         setLoading(false);
       })
       .catch((err) => {
         console.error("Error fetching docs:", err);
+        setDocs([]);
         setLoading(false);
       });
   }, []);
@@ -64,17 +70,22 @@ export default function DocsIndex() {
       fetch(`/internal-docs-api/search?q=${encodeURIComponent(searchQuery)}`)
         .then((res) => res.json())
         .then((data) => {
-          setSearchResults(data);
-          setIsSearching(false);
-          // Si hay resultados de búsqueda, expandimos todas las carpetas que los contienen
-          if (data.length > 0) {
-            const foldersToOpen = new Set<string>();
-            data.forEach((path: string) => {
-              const parts = path.split("/");
-              foldersToOpen.add(parts.length === 1 ? "ROOT DOCUMENTS" : parts[0].toUpperCase());
-            });
-            setOpenFolders(prev => new Set([...Array.from(prev), ...Array.from(foldersToOpen)]));
+          if (Array.isArray(data)) {
+            setSearchResults(data);
+            // Si hay resultados de búsqueda, expandimos todas las carpetas que los contienen
+            if (data.length > 0) {
+              const foldersToOpen = new Set<string>();
+              data.forEach((path: string) => {
+                const parts = path.split("/");
+                foldersToOpen.add(parts.length === 1 ? "ROOT DOCUMENTS" : parts[0].toUpperCase());
+              });
+              setOpenFolders(prev => new Set([...Array.from(prev), ...Array.from(foldersToOpen)]));
+            }
+          } else {
+            setSearchResults([]);
+            console.error("Search API returned non-array:", data);
           }
+          setIsSearching(false);
         })
         .catch((err) => {
           console.error("Search error:", err);

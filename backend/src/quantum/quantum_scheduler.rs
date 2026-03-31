@@ -1,0 +1,218 @@
+// src/quantum/quantum_scheduler.rs
+//! Quantum Scheduler - Adiabatic Task Orchestration
+//!
+//! Implements portal-locked task execution for maximum energy efficiency.
+//! Based on EXP-029-V2 optimizations achieving 94.4% portal-lock efficiency.
+//!
+//! Main tick called by TimeCrystal @ 41.77 Hz (AXION_RESONANCE_RATIO).
+
+use crate::math::SPA as S60;
+use crate::quantum::bio_resonator::BioResonator;
+use crate::quantum::portal_detector::PortalDetector;
+use std::collections::VecDeque;
+use std::sync::{Arc, Mutex};
+
+/// Task types for Sentinel operations
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum TaskType {
+    /// ZPE Reactor tuning
+    ZPETune,
+    /// BCI synchronization
+    BCISync,
+    /// Lattice garbage collection
+    LatticeGC,
+    /// S60 state backup (critical)
+    BackupS60,
+    /// Phase alignment
+    PhaseAlign,
+}
+
+/// A task to be scheduled
+pub struct Task {
+    /// Unique task identifier
+    pub id: u64,
+    /// Type of task
+    pub task_type: TaskType,
+    /// Energy cost in Joules
+    pub cost: u32,
+    /// Callback function pointer (C-compatible)
+    pub callback: extern "C" fn(),
+}
+
+/// Scheduler statistics for telemetry
+#[derive(Debug, Clone, Copy)]
+pub struct SchedulerStats {
+    /// Tasks executed during portals
+    pub tasks_in_portal: u64,
+    /// Tasks forced due to overflow
+    pub tasks_forced: u64,
+    /// Net energy saved (can be negative)
+    pub energy_saved: i64,
+    /// Portal-lock efficiency (S60)
+    pub efficiency: S60,
+}
+
+/// Quantum Scheduler - Adiabatic task execution
+pub struct QuantumScheduler {
+    /// Task queue (FIFO)
+    task_queue: VecDeque<Task>,
+    /// Reference to BioResonator
+    bio_resonator: Arc<Mutex<BioResonator>>,
+    /// Portal detector instance
+    portal_detector: PortalDetector,
+    /// Maximum queue size before forced execution
+    overflow_limit: usize,
+    /// Counter: tasks executed in portal
+    tasks_in_portal: u64,
+    /// Counter: tasks forced (overflow)
+    tasks_forced: u64,
+    /// Net energy saved
+    energy_saved: i64,
+    /// Current time in S60 (updated each tick from TimeCrystal)
+    current_time: S60,
+}
+
+impl QuantumScheduler {
+    /// Create new scheduler with BioResonator reference.
+    pub fn new(bio_ref: Arc<Mutex<BioResonator>>) -> Self {
+        QuantumScheduler {
+            task_queue: VecDeque::new(),
+            bio_resonator: bio_ref,
+            portal_detector: PortalDetector::new(),
+            overflow_limit: 20, // V2 optimized
+            tasks_in_portal: 0,
+            tasks_forced: 0,
+            energy_saved: 0,
+            current_time: S60::zero(),
+        }
+    }
+
+    /// Main tick — llamado por el TimeCrystal @ 41.77 Hz (AXION_RESONANCE_RATIO).
+    /// Recibe el tiempo actual del cristal de tiempo en S60.
+    pub fn tick(&mut self, current_time: S60) {
+        self.current_time = current_time;
+
+        // 1. Decay bio-resonance entropy
+        {
+            let mut bio = self.bio_resonator.lock().unwrap();
+            bio.tick_entropy(S60::zero(), 0); // Decay natural sin señal externa
+        }
+
+        // 2. Check Dead Man's Switch
+        let pilot_absent = {
+            let bio = self.bio_resonator.lock().unwrap();
+            bio.time_since_pulse_ms() > 30_000
+        };
+        if pilot_absent {
+            self.emergency_shutdown();
+            return;
+        }
+
+        // 3. Check portals
+        let penta_portal = self.portal_detector.is_portal_open(current_time.to_raw().unsigned_abs());
+        let bio_portal = {
+            let bio = self.bio_resonator.lock().unwrap();
+            bio.coherence > S60::new(0, 30, 0, 0, 0) // coherencia > 0.5
+        };
+
+        // 4. Execute if DUAL PORTAL (both conditions met)
+        if penta_portal && bio_portal && !self.task_queue.is_empty() {
+            let batch_size = self.adaptive_batch_size(current_time);
+            self.execute_batch(batch_size);
+        }
+        // 5. Overflow handler
+        else if self.task_queue.len() > self.overflow_limit {
+            self.force_execute_one();
+        }
+    }
+
+    /// Add task to queue
+    pub fn enqueue(&mut self, task: Task) {
+        self.task_queue.push_back(task);
+    }
+
+    /// Adaptive batch sizing based on resonance intensity
+    fn adaptive_batch_size(&self, t: S60) -> usize {
+        let resonance = self.portal_detector.calculate_resonance(t.to_raw().unsigned_abs());
+
+        let t90 = S60::new(0, 54, 0, 0, 0);
+        let t85 = S60::new(0, 51, 0, 0, 0);
+        let t80 = S60::new(0, 48, 0, 0, 0);
+
+        if resonance > t90 {
+            5
+        } else if resonance > t85 {
+            4
+        } else if resonance > t80 {
+            3
+        } else {
+            2
+        }
+    }
+
+    /// Execute batch of tasks (portal-locked)
+    fn execute_batch(&mut self, max_tasks: usize) {
+        let actual = std::cmp::min(max_tasks, self.task_queue.len());
+        for _ in 0..actual {
+            if let Some(task) = self.task_queue.pop_front() {
+                (task.callback)();
+                self.tasks_in_portal += 1;
+                self.energy_saved += (task.cost as i64) * 2;
+            }
+        }
+    }
+
+    /// Force execute one task (overflow)
+    fn force_execute_one(&mut self) {
+        if let Some(task) = self.task_queue.pop_front() {
+            (task.callback)();
+            self.tasks_forced += 1;
+            self.energy_saved -= (task.cost as i64) * 2;
+        }
+    }
+
+    /// Emergency shutdown — Dead Man's Switch activated
+    fn emergency_shutdown(&mut self) {
+        eprintln!("⚠️  DEAD MAN SWITCH ACTIVATED - PILOT ABSENT");
+        eprintln!("🛑 INITIATING EMERGENCY SHUTDOWN...");
+        self.flush_critical_tasks();
+        std::process::exit(0);
+    }
+
+    /// Flush only critical tasks (BackupS60)
+    fn flush_critical_tasks(&mut self) {
+        let tasks: Vec<Task> = self.task_queue.drain(..).collect();
+        for task in tasks {
+            if task.task_type == TaskType::BackupS60 {
+                (task.callback)();
+            }
+        }
+    }
+
+    /// Get current statistics
+    pub fn get_stats(&self) -> SchedulerStats {
+        let total = self.tasks_in_portal + self.tasks_forced;
+        let efficiency = if total > 0 {
+            let num = S60::from_int(self.tasks_in_portal as i64);
+            let den = S60::from_int(total as i64);
+            num.div_safe(den).unwrap_or(S60::zero())
+        } else {
+            S60::zero()
+        };
+
+        SchedulerStats {
+            tasks_in_portal: self.tasks_in_portal,
+            tasks_forced: self.tasks_forced,
+            energy_saved: self.energy_saved,
+            efficiency,
+        }
+    }
+
+    pub fn queue_len(&self) -> usize { self.task_queue.len() }
+    pub fn is_queue_empty(&self) -> bool { self.task_queue.is_empty() }
+    pub fn reset_stats(&mut self) {
+        self.tasks_in_portal = 0;
+        self.tasks_forced = 0;
+        self.energy_saved = 0;
+    }
+}

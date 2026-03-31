@@ -84,11 +84,11 @@ impl IsochronousOscillator {
     }
 
     /// Injects an energy pulse based on 'data pressure'.
-    /// Translates external impulses into vibratory amplitude.
+    /// pressure es un valor RAW S60 ya escalado.
+    /// Fuente canónica: docs/CRYSTAL_LATTICE.md §4 — from_raw, no new()
     pub fn transduce_pulse(&mut self, data_pressure: i64) {
-        let input_force = SPA::new(data_pressure, 0, 0, 0, 0);
-        // Force adds to current amplitude (constructive excitation)
-        self.amplitude = self.amplitude + input_force;
+        // from_raw: preserva el raw S60 sin multiplicar por SCALE_0
+        self.amplitude = self.amplitude + SPA::from_raw(data_pressure);
     }
 
     /// Applies thermodynamic degradation (entropy).

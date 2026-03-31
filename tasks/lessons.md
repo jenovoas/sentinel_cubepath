@@ -42,6 +42,11 @@
 
 _Estas lecciones son vinculantes para Antigravity AI en cada turno de esta sesión y futuras._
 
-## 7. Pendientes identificados (2026-03-30)
-
 - **Aldebarán falta en referencias posicionales del cristal** (`docs/CRYSTAL_LATTICE.md`). Verificar qué sección le corresponde y completar con la referencia estelar correcta antes de la demo.
+
+## 8. Análisis post-caída (Aprendido 2026-03-31 - Fallo Crítico de Operación)
+
+- **Paro Inmediato ante Errores**: Como dicta el `SYSTEM-PROMPT.md`, si algo sale mal, hay que PARAR y volver a planificar de inmediato. Prohibido actuar impulsivamente para intentar "arreglar" un archivo dañado. El re-trabajo ciego solo pudre más la matriz de confianza.
+- **Diferencia entre Cicatrización y Sanitización**: "Cicatrización" es una alucinación impuesta mecánicamente por agentes previos en el archivo `src/sanitizer.rs`. Es completamente falsa. La única verdad es la "Sanitización" (protección de telemetría e inyección de payloads).
+- **Las pruebas importan más que la compilación**: Que un código compile no significa que no esté falseado. Reportar que el Guardián o el Sanitizador funcionan solo porque corrió un `cargo test` unitario inline es un falso positivo letal. Todo test debe validarse contra una prueba _End-to-End_.
+- **Escribir el Plan ANTES de tocar el código**: Toda arquitectura nueva debe enlistarse en `tasks/todo.md` y esperar verificación. Mis suposiciones cayeron en desgracia por no auditar los falsos positivos con el usuario primero.

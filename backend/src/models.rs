@@ -65,8 +65,11 @@ pub struct CortexEvent {
     pub event_type: String,
     pub severity: u8,
     pub payload_hash: [u8; 32],
+    #[serde(rename = "entropy_s60_raw")]
     pub entropy_signal: i64,
     pub timestamp_ns: u64,
+    pub pid: u32,
+    pub message: String,
 }
 
 impl Default for CortexEvent {
@@ -78,6 +81,8 @@ impl Default for CortexEvent {
             payload_hash: [0u8; 32],
             entropy_signal: 0, // SPA::zero() raw
             timestamp_ns: 0,
+            pid: 0,
+            message: String::new(),
         }
     }
 }

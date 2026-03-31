@@ -1,4 +1,5 @@
 use crate::math::core::S60PID;
+use crate::math::hexagonal_control::HexagonalController;
 use crate::math::isochronous_oscillator::IsochronousOscillator;
 use crate::math::spa::SPA;
 use serde::{Deserialize, Serialize};
@@ -16,6 +17,10 @@ const MAX_AMP_RAW: i64 = 129_600_000; // S60(10, 0, 0, 0, 0)
 /// activamente contra la entropía para mantener persistencia indefinida.
 /// Sin ella, el sistema completo es un mockup.
 ///
+/// El HexagonalController (Pilar 2) gestiona el control de fase:
+/// cuando un rift (ataque) se detecta, control_rift() estabiliza los
+/// 6 vecinos hexagonales redistribuyendo sus fases en Base-60.
+///
 /// Fuente canónica: quantum/time_crystal.py — ResonantBuffer + S60PID
 #[derive(Serialize, Deserialize)]
 pub struct ResonantMatrix {
@@ -32,13 +37,25 @@ pub struct ResonantMatrix {
     /// Fuente: quantum/time_crystal.py — S60PID(Kp=0.5, Ki=0.16, Kd=0.08)
     pub pids: Vec<S60PID>,
     /// Amplitud objetivo por nodo (setpoint del PID).
-    /// Un nodo con target > 0 será mantenido vivo por la bomba.
     pub target_amplitudes: Vec<SPA>,
+    /// Pilar 2: Controlador Geométrico Hexagonal.
+    /// Mantiene las fases de los nodos y estabiliza rifts.
+    /// Sincroniza a través del cristal de tiempo (Salto-17).
+    pub hex_controller: HexagonalController,
+}
+
+/// Raíz cuadrada entera (Newton-Raphson) — cero f64, YATRA PURE
+fn isqrt(n: usize) -> usize {
+    if n == 0 { return 0; }
+    let mut x = n;
+    let mut y = (x + 1) / 2;
+    while y < x { x = y; y = (x + n / x) / 2; }
+    x
 }
 
 impl ResonantMatrix {
     pub fn new(size: usize) -> Self {
-        let width = (size as f64).sqrt() as usize;
+        let width = isqrt(size);
         let height = width;
         let crystals = (0..size)
             .map(|i| IsochronousOscillator::new(&format!("Node-{}", i)))
@@ -49,6 +66,11 @@ impl ResonantMatrix {
         let ki = SPA::new(0, 10, 0, 0, 0).to_raw(); // 0.1666
         let kd = SPA::new(0,  5, 0, 0, 0).to_raw(); // 0.0833
         let pids: Vec<S60PID> = (0..size).map(|_| S60PID::new(kp, ki, kd, 0)).collect();
+
+        // Pilar 2: HexagonalController para size nodos en radio hexagonal.
+        // Radio = (isqrt(size) + 1) / 2 — cero f64, misma cobertura para 1024 nodos.
+        let hex_radius = ((isqrt(size) + 1) / 2) as i64;
+        let hex_controller = HexagonalController::new(hex_radius);
 
         let mut matrix = ResonantMatrix {
             crystals,
@@ -61,6 +83,7 @@ impl ResonantMatrix {
             damping: SPA::new(0, 3, 14, 8, 0), // MERCURY_DAMPING: 3;14,8
             pids,
             target_amplitudes: vec![SPA::zero(); size],
+            hex_controller,
         };
 
         // SEED ENERGY — centro de la matriz 32×32
@@ -171,13 +194,56 @@ impl ResonantMatrix {
         }
     }
 
+    /// Coherencia global: promedio de amplitudes raw de nodos activos (solo nodos con amplitud > 0).
+    /// Fuente canónica: docs/CRYSTAL_LATTICE.md §5
     pub fn global_coherence(&self) -> i64 {
         let active: Vec<_> = self.crystals.iter()
             .filter(|c| c.amplitude.to_raw() > 0)
             .collect();
         if active.is_empty() { return 0; }
-        // Usar saturating_add para evitar overflow en la suma
+        // saturating_add evita overflow en la suma acumulada
         let total = active.iter().fold(0i64, |acc, c| acc.saturating_add(c.amplitude.to_raw()));
         total / active.len() as i64
+    }
+
+    /// Estabiliza el fluido de la red (Liquid Lattice Stabilization).
+    /// Se activa cuando la coherencia supera el umbral S60 (0;50,0,0) = 50/60 en escala raw.
+    /// Fuente: quantum/time_crystal.py — stabilize_fluid()
+    pub fn stabilize_fluid(&mut self) {
+        // Umbral equivalente a SPA(0;50,0,0) en raw: (50 * 216_000) = 10_800_000
+        let threshold_raw: i64 = SPA::new(0, 50, 0, 0, 0).to_raw();
+        let coherence = self.global_coherence();
+        
+        if coherence > threshold_raw {
+            // Aplicar amortiguamiento extra (Surfactante Cuántico — fricción sexagesimal)
+            for crystal in self.crystals.iter_mut() {
+                let damp = (crystal.amplitude * SPA::new(0, 0, 10, 0, 0)) / SPA::new(60, 0, 0, 0, 0);
+                crystal.amplitude = crystal.amplitude - damp;
+            }
+        }
+    }
+
+    /// Control de Rift (Pilar 2 — HexagonalController).
+    ///
+    /// Cuando un rift (evento de ataque/anomalía) es detectado en `center_idx`,
+    /// el HexagonalController estabiliza los 6 vecinos hexagonales redistribuyendo
+    /// sus fases en Base-60 con el patrón de rotación Salto-17.
+    ///
+    /// Se sincroniza a través del cristal de tiempo — debe llamarse en el mismo
+    /// tick en que el evento eBPF reporta el ataque.
+    ///
+    /// Retorna la coherencia resultante del nodo central tras la estabilización.
+    pub fn control_rift(&mut self, center_idx: usize) -> SPA {
+        let (status, coherence, _affected) =
+            self.hex_controller.control_rift_propagation(center_idx);
+
+        // Si la estabilización fue exitosa, actualizar la fase del cristal central
+        if status == SPA::one() {
+            if let Some(phase) = self.hex_controller.get_node_phase(center_idx) {
+                self.crystals[center_idx].phase = phase;
+            }
+        }
+
+        coherence
     }
 }

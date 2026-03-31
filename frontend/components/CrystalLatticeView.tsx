@@ -442,11 +442,52 @@ export function CrystalLatticeView() {
         )}
       </div>
 
-      {/* ── PORTAL & NEURAL ── */}
+      {/* ── VISUALIZACIÓN CENTRAL ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-        {/* PANEL COMPLETO */}
-        <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* COMPONENTE: RED CRISTALINA 32x32 */}
+        <div className="lg:col-span-8 glass-card border-sky-500/20 bg-slate-950/80 relative overflow-hidden flex flex-col justify-center items-center min-h-[500px]">
+          {/* Fondo radar decorativo */}
+          <div className="absolute inset-0 pointer-events-none opacity-20">
+            <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] -translate-x-1/2 -translate-y-1/2 border border-sky-500/10 rounded-full" />
+            <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] -translate-x-1/2 -translate-y-1/2 border border-sky-500/20 rounded-full" />
+          </div>
+
+          <div 
+            className="relative z-10 w-full max-w-[500px] aspect-square grid gap-[1px]"
+            style={{ gridTemplateColumns: `repeat(${LATTICE_GRID}, minmax(0, 1fr))` }}
+          >
+            {lattice?.lattice
+              ? lattice.lattice.map((cell, i) => {
+                  const bg = nodeColor(cell);
+                  const isCenter = i === 528;
+                  const isActive = cell.amplitude_raw > 0;
+                  return (
+                    <div
+                      key={i}
+                      className={clsx(
+                        "relative flex items-center justify-center rounded-[2px] transition-all duration-300",
+                        isCenter ? "ring-1 ring-white ring-offset-1 ring-offset-slate-950 z-20 scale-125" : "",
+                        isActive ? "hover:scale-150 hover:z-30 cursor-pointer shadow-[0_0_10px_rgba(0,0,0,0.5)] opacity-100" : "opacity-20"
+                      )}
+                      style={{ backgroundColor: bg }}
+                      title={`Nodo ${i}\nFase: ${(cell.phase_raw / S60_SCALE * 360).toFixed(1)}°\nAmp: ${(cell.amplitude_raw / S60_SCALE * 100).toFixed(1)}%`}
+                    >
+                      {isActive && (
+                        <div className="absolute inset-0 bg-white mix-blend-overlay opacity-30 animate-pulse" />
+                      )}
+                      {isCenter && <div className="w-0.5 h-0.5 bg-white rounded-full animate-ping" />}
+                    </div>
+                  );
+                })
+              : Array.from({ length: 1024 }).map((_, i) => (
+                  <div key={i} className="bg-slate-900/40 rounded-[2px] aspect-square" />
+                ))}
+          </div>
+        </div>
+
+        {/* SIDE PANELS VERTICALES */}
+        <div className="lg:col-span-4 flex flex-col gap-6">
 
 
           {/* PORTAL HEPTA-RESONANCIA */}

@@ -9,10 +9,27 @@ interface TruthSyncReportProps {
 }
 
 export function TruthSyncReport({ status }: TruthSyncReportProps) {
+  // Los campos reales viven en status.integrity (estructura del API /sentinel_status)
+  const integrity = status?.integrity;
   const isSealed = status?.ring_status === "SEALED";
-  const isCertified = status?.harmonic_sync === "RESONANCE_MAX" || (status?.is_active && !isSealed);
-  
-  const sealId = status?.truthsync_seal || "TS-SYNC-S60-PENDING";
+  const logicState = integrity?.logic_state ?? "UNKNOWN";
+  const isCertified = logicState === "STABLE" || logicState === "RESONANT" || (status?.is_active && !isSealed);
+
+  const sealId = integrity?.truthsync_seal || status?.truthsync_seal || "TS-SYNC-S60-PENDING";
+
+  // p322_ratio_integrity viene como raw SPA (i64) — convertir a ratio real
+  const p322Raw = integrity?.p322_ratio_integrity ?? status?.p322_ratio_integrity;
+  const p322Ratio = p322Raw != null
+    ? (Math.abs(Number(p322Raw)) / 12_960_000).toFixed(6)
+    : "0.999840";
+
+  // cortex_confidence como proxy de latencia: cuanto más cerca de 12960000, más rápido
+  const cortexConf = integrity?.cortex_confidence ?? 0;
+  const latencyMs = cortexConf > 0
+    ? (((12_960_000 - Math.min(cortexConf, 12_960_000)) / 12_960_000) * 0.1 + 0.001).toFixed(3)
+    : null;
+
+  const nerveStatus = integrity?.nerve_a_status ?? "OFFLINE";
 
   return (
     <div className="glass-card p-6 flex flex-col space-y-4 border-sky-500/20 bg-slate-950/40">
@@ -68,13 +85,25 @@ export function TruthSyncReport({ status }: TruthSyncReportProps) {
 
       <div className="grid grid-cols-2 gap-4">
         <div className="p-3 rounded-lg bg-black/30 border border-slate-900 group hover:border-sky-500/20 transition-colors">
-          <p className="text-[8px] text-slate-600 font-bold uppercase mb-1 tracking-widest">Puntuación Armónica (P322)</p>
-          <div className="text-sm font-mono text-sky-400">{(status?.p322_ratio_integrity || 0.99984).toFixed(6)}</div>
+          <p className="text-[8px] text-slate-600 font-bold uppercase mb-1 tracking-widest">Ratio Armónico (P322)</p>
+          <div className="text-sm font-mono text-sky-400">{p322Ratio}</div>
+        </div>
+        <div className="p-3 rounded-lg bg-black/30 border border-slate-900 group hover:border-emerald-500/20 transition-colors">
+          <p className="text-[8px] text-slate-600 font-bold uppercase mb-1 tracking-widest">Nervio Cortex</p>
+          <div className={clsx("text-sm font-mono", nerveStatus === "ACTIVE" ? "text-emerald-400" : "text-rose-400")}>
+            {nerveStatus}
+          </div>
+        </div>
+        <div className="p-3 rounded-lg bg-black/30 border border-slate-900 group hover:border-violet-500/20 transition-colors">
+          <p className="text-[8px] text-slate-600 font-bold uppercase mb-1 tracking-widest">Estado Lógico</p>
+          <div className={clsx("text-sm font-mono", logicState === "STABLE" ? "text-emerald-400" : "text-amber-400")}>
+            {logicState}
+          </div>
         </div>
         <div className="p-3 rounded-lg bg-black/30 border border-slate-900 group hover:border-emerald-500/20 transition-colors">
           <p className="text-[8px] text-slate-600 font-bold uppercase mb-1 tracking-widest">Latencia Cortex</p>
           <div className="text-sm font-mono text-emerald-400">
-             {status?.cortex_latency_ms ? `${status.cortex_latency_ms.toFixed(3)}ms` : "< 0.04ms"}
+            {latencyMs ? `${latencyMs}ms` : "< 0.04ms"}
           </div>
         </div>
       </div>

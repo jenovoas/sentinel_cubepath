@@ -41,6 +41,8 @@ impl CortexEvent {
             payload_hash: [0u8; 32],
             entropy_signal,
             timestamp_ns,
+            pid: 0,
+            message: String::new(),
         }
     }
 
@@ -70,6 +72,8 @@ impl CortexEvent {
             payload_hash: [0u8; 32],
             entropy_signal: es as i64,
             timestamp_ns: ts,
+            pid: raw_event.pid,
+            message: String::new(),
         }
     }
 }

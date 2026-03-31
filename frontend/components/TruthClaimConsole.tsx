@@ -24,7 +24,9 @@ export function TruthClaimConsole() {
     setResult(null);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"}/api/v1/truth_claim`, {
+      const apiBase = process.env.NEXT_PUBLIC_API_URL
+        ?? (typeof window !== "undefined" ? window.location.origin : "");
+      const res = await fetch(`${apiBase}/api/v1/truth_claim`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -53,7 +55,7 @@ export function TruthClaimConsole() {
   };
 
   return (
-    <div className="space-y-4 flex-1 flex flex-col">
+    <div className="flex flex-col h-full overflow-hidden gap-3">
       {/* Loading overlay for analytical feel */}
       {loading && (
         <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center gap-4 animate-in fade-in duration-300 rounded-xl border border-emerald-500/20">
@@ -68,8 +70,8 @@ export function TruthClaimConsole() {
         </div>
       )}
 
-      {/* Input area */}
-      <div className="relative group min-h-[100px] flex-1">
+      {/* Input area — altura fija, no crece */}
+      <div className="relative group shrink-0" style={{ height: "90px" }}>
         <textarea
           value={claim}
           onChange={(e) => setClaim(e.target.value)}
@@ -83,7 +85,7 @@ export function TruthClaimConsole() {
       </div>
 
       {/* Quick demo buttons */}
-      <div className="flex gap-1.5 flex-wrap">
+      <div className="flex gap-1.5 flex-wrap shrink-0">
         {DEMO_CLAIMS.slice(0, 3).map((demo, i) => (
           <button
             key={i}
@@ -99,18 +101,18 @@ export function TruthClaimConsole() {
       <button
         onClick={verifyClaim}
         disabled={loading || !claim}
-        className="sentinel-btn sentinel-btn-primary w-full disabled:opacity-40 disabled:scale-100 disabled:cursor-not-allowed"
+        className="sentinel-btn sentinel-btn-primary w-full shrink-0 disabled:opacity-40 disabled:scale-100 disabled:cursor-not-allowed"
       >
         {loading ? <Loader2 className="w-4 h-4 spinner" /> : <Scale className="w-4 h-4" />}
         {loading ? "Analizando firma armónica..." : "Verificar Intención Cognitiva"}
       </button>
 
-      {/* Result */}
+      {/* Result — scrollable si desborda */}
       {result && (
         <div
           className={clsx(
-            "p-5 rounded-xl border animate-fade-up",
-            result.error 
+            "p-4 rounded-xl border animate-fade-up overflow-y-auto custom-scrollbar",
+            result.error
               ? "bg-slate-900/50 border-rose-500/20"
               : result.claim_valid
               ? "bg-emerald-500/5 border-emerald-500/15"
@@ -164,27 +166,51 @@ export function TruthClaimConsole() {
                 </div>
               </div>
 
-              {/* Details */}
-              <div className="mt-5 pt-4 border-t border-white/5 grid grid-cols-3 gap-3">
-                <div className="space-y-0.5">
-                  <div className="text-[8px] uppercase font-bold tracking-[0.15em] text-slate-600">Estado Armónico</div>
-                  <div className={clsx("text-[10px] font-bold mono", result.claim_valid ? "text-emerald-400" : "text-rose-400")}>
-                    {result.harmonic_state}
+              {/* Métricas S60 — 4 filas compactas */}
+              <div className="mt-3 pt-3 border-t border-white/5 space-y-1.5">
+                {[
+                  { label: "Lattice", val: result.lattice_coherence ?? 0, color: "bg-sky-500", text: "text-sky-400" },
+                  { label: "Bio", val: result.bio_resonance ?? 0, color: "bg-rose-500", text: "text-rose-400" },
+                  { label: "P322", val: result.plimpton_integrity ?? 0, color: "bg-violet-500", text: "text-violet-400" },
+                  { label: "SNN", val: result.neural_confidence ?? 0, color: "bg-amber-500", text: "text-amber-400" },
+                ].map(({ label, val, color, text }) => (
+                  <div key={label} className="flex items-center gap-2">
+                    <span className="text-[8px] uppercase font-bold text-slate-600 w-8 shrink-0">{label}</span>
+                    <div className="flex-1 h-1 bg-slate-950 rounded-full overflow-hidden">
+                      <div className={`h-full ${color} transition-all duration-700`} style={{ width: `${val * 100}%` }} />
+                    </div>
+                    <span className={`text-[9px] mono font-bold w-7 text-right ${text}`}>{(val * 100).toFixed(0)}%</span>
                   </div>
+                ))}
+              </div>
+
+              {/* Estado + Vector + Bloqueos en una línea */}
+              <div className="mt-2 pt-2 border-t border-white/5 flex items-center justify-between gap-2">
+                <div className={clsx("text-[8px] font-bold mono truncate", result.claim_valid ? "text-emerald-400" : "text-rose-400")}>
+                  {result.harmonic_state}
                 </div>
-                <div className="space-y-0.5 text-center">
-                  <div className="text-[8px] uppercase font-bold tracking-[0.15em] text-slate-600">Bloqueos Ring-0</div>
-                  <div className={clsx("text-[10px] font-bold mono", result.ring0_intercepts > 0 ? "text-rose-400" : "text-emerald-400")}>
-                    {result.ring0_intercepts}
-                  </div>
+                <div className={clsx("text-[8px] font-bold mono shrink-0", result.threat_vector === "NOMINAL" ? "text-emerald-400" : "text-amber-400")}>
+                  {result.threat_vector ?? "NOMINAL"}
                 </div>
-                <div className="space-y-0.5 text-right">
-                  <div className="text-[8px] uppercase font-bold tracking-[0.15em] text-slate-600">Verificación</div>
-                  <div className="text-[10px] font-bold mono text-sky-400 flex items-center justify-end gap-1">
-                    <Sparkles className="w-2.5 h-2.5" /> S60
-                  </div>
+                <div className={clsx("text-[8px] font-bold mono flex items-center gap-0.5 shrink-0", result.ring0_intercepts > 0 ? "text-rose-400" : "text-emerald-400")}>
+                  <Sparkles className="w-2 h-2" />{result.ring0_intercepts} bloqueos
                 </div>
               </div>
+
+              {/* Categorías — chips inline */}
+              {result.threat_categories?.length > 0 && (
+                <div className="mt-1.5 flex flex-wrap gap-1">
+                  {result.threat_categories.map((cat: string, i: number) => {
+                    const isThreat = cat.endsWith("_ATTACK") || cat.endsWith("_INJECTION") || cat.endsWith("_ATTEMPT") || cat.endsWith("_SIGNATURE") || cat.endsWith("_TAMPERING") || cat.endsWith("_EXFILTRATION");
+                    return (
+                      <span key={i} className={clsx(
+                        "px-1 py-0.5 rounded text-[7px] font-black mono border",
+                        isThreat ? "bg-rose-500/10 border-rose-500/20 text-rose-400" : "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                      )}>{cat}</span>
+                    );
+                  })}
+                </div>
+              )}
             </>
           )}
         </div>

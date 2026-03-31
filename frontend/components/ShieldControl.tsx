@@ -14,34 +14,31 @@ export function ShieldControl({ status }: ShieldControlProps) {
 
   const host = typeof window !== "undefined" ? window.location.hostname : "localhost";
 
-  const simulateAttack = async (type: "NORMAL" | "DOOM" | "CHAOS") => {
+  const injectPulse = async (type: "NORMAL" | "DOOM" | "CHAOS") => {
     setLoading(true);
-    // Energy values mapeados a aritmética S60 real — EXP-027/EXP-035
     const configs = {
-      NORMAL: { energy: 12_960_000,   idx: 528, label: "HARMONIC-AXION", pulse: "EXP-035" },
-      DOOM:   { energy: 3_735_928_559, idx: 496, label: "BLOQUEADO",      pulse: "DOOM-0xDEADBEEF" },
-      CHAOS:  { energy: -12_960_000,  idx: 512, label: "ALERTA",         pulse: "CHAOS-NEG-ENTROPY" },
+      NORMAL: { payload: "HARMONIC-AXION-1.0", threshold: 6_480_000 },
+      DOOM:   { payload: "AIOpsDoom inject: sudo rm -rf /", threshold: 12_000_000 },
+      CHAOS:  { payload: "DROP TABLE users;", threshold: 9_000_000 },
     };
     const cfg = configs[type];
 
     try {
-      // Usa el endpoint REAL del Ring-0 backend — inject_truth_pulse
-      const res = await fetch(`http://${host}:8000/api/v1/inject_truth_pulse`, {
+      // Impacto directo al endpoint que activa el guardián TelemetrySanitizer real
+      const res = await fetch(`http://${host}:8000/api/v1/truth_claim`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          pulse_type: cfg.pulse,
-          energy_s60_raw: cfg.energy,
-          severity: type === "DOOM" ? 2 : type === "CHAOS" ? 1 : 0,
-          index: cfg.idx,
-          metadata: cfg.label,
+          engine: "ShieldControl-Ring0",
+          claim_payload: cfg.payload,
+          trust_threshold_raw: cfg.threshold
         }),
       });
-      const data = res.ok ? await res.json() : null;
-      setLastResult({ type, success: !!data, tick: data?.tick });
+      const data = res.ok ? await res.json() : { error: "FALLO DEL CORTEX (HTTP 500)" };
+      setLastResult({ type, success: !!data.claim_valid, raw_json: data });
     } catch (e) {
       console.error(e);
-      setLastResult({ type, success: false });
+      setLastResult({ type, success: false, raw_json: { error: "CONEXION RECHAZADA" } });
     } finally {
       setLoading(false);
     }
@@ -70,7 +67,7 @@ export function ShieldControl({ status }: ShieldControlProps) {
       <div className="space-y-4 flex-1">
         <div className="grid grid-cols-3 gap-2">
           <button
-            onClick={() => simulateAttack("NORMAL")}
+            onClick={() => injectPulse("NORMAL")}
             disabled={loading}
             className="flex flex-col items-center p-3 rounded-xl border border-sky-500/20 bg-sky-500/5 hover:bg-sky-500/10 transition-colors group"
           >
@@ -79,7 +76,7 @@ export function ShieldControl({ status }: ShieldControlProps) {
           </button>
           
           <button
-            onClick={() => simulateAttack("DOOM")}
+            onClick={() => injectPulse("DOOM")}
             disabled={loading}
             className="flex flex-col items-center p-3 rounded-xl border border-rose-500/20 bg-rose-500/5 hover:bg-rose-500/10 transition-colors group"
           >
@@ -88,7 +85,7 @@ export function ShieldControl({ status }: ShieldControlProps) {
           </button>
 
           <button
-            onClick={() => simulateAttack("CHAOS")}
+            onClick={() => injectPulse("CHAOS")}
             disabled={loading}
             className="flex flex-col items-center p-3 rounded-xl border border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 transition-colors group"
           >
@@ -97,21 +94,22 @@ export function ShieldControl({ status }: ShieldControlProps) {
           </button>
         </div>
 
-        <div className="console-box bg-black/40 border border-slate-800 rounded-lg p-3 font-mono text-[10px] h-32 overflow-hidden relative">
-          <div className="text-emerald-500/70 mb-1">{" >> SENTINEL_CORTEX_INIT_COMPLETE"}</div>
-          <div className="text-slate-500">{" >> LISTENING FOR COGNITIVE ARTIFACTS..."}</div>
-          {lastResult && (
+        <div className="console-box bg-black/40 border border-slate-800 rounded-lg p-3 font-mono text-[9px] h-32 overflow-y-auto relative whitespace-pre-wrap flex flex-col-reverse">
+          {lastResult ? (
             <div className={clsx(
-              "mt-2 animate-in fade-in slide-in-from-left-2",
-              lastResult.type === "DOOM" ? "text-rose-400" : "text-sky-400"
+              "mt-2 animate-in fade-in slide-in-from-left-2 break-all",
+              lastResult.success ? "text-sky-400" : "text-rose-400"
             )}>
-              {lastResult.type === "DOOM" 
-                ? `[!] AIOpsDoom DETECTED: Sanitizing 0x${(3735928559).toString(16).toUpperCase()}...` 
-                : "[*] Pulse Accepted: Harmonic phase 1.0 verified."}
+              {`>> RESPUESTA CRUDA DEL CORTEX (TruthClaim):\n${JSON.stringify(lastResult.raw_json, null, 2)}`}
             </div>
+          ) : (
+            <>
+              <div className="text-slate-600 mt-1">{" >> BPF_LOADER: Attached to /sys/fs/bpf/tc_firewall_config [FD: 62]"}</div>
+              <div className="text-slate-500">{" >> LISTENING FOR COGNITIVE ARTIFACTS..."}</div>
+              <div className="text-emerald-500/70 mb-1">{" >> SENTINEL_CORTEX_INIT_COMPLETE"}</div>
+            </>
           )}
-          <div className="text-slate-600 mt-1">{" >> BPF_LOADER: Attached to /sys/fs/bpf/tc_firewall_config [FD: 62]"}</div>
-          <div className="absolute bottom-2 right-2 flex gap-1">
+          <div className="fixed bottom-2 right-2 flex gap-1">
             <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
             <div className="w-1 h-1 rounded-full bg-emerald-500/50" />
           </div>

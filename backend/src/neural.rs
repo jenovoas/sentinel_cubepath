@@ -81,11 +81,10 @@ impl NeuralMemory {
         }
     }
 
-    /// Promedio de la tasa de disparo de toda la red (S60).
     pub fn firing_rate(&self) -> S60 {
         if self.membranes.is_empty() { return S60::zero(); }
         let sum = self.membranes.iter().fold(S60::zero(), |acc, m| acc + m.firing_rate());
-        S60::from_raw(sum.to_raw() / self.membranes.len() as i64)
+        sum.div_safe(S60::from_int(self.membranes.len() as i64)).unwrap_or(S60::zero())
     }
 
     pub fn observe(&mut self, node_idx: usize, signal: S60, ts: u64) -> bool {

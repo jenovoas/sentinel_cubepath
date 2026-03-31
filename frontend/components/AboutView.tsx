@@ -283,6 +283,8 @@ export function AboutView() {
         const ev = JSON.parse(e.data);
         const id = matrixId.current++;
         if (ev.event_type === "BIO_PULSE") setLastBio(Date.now());
+        if (ev.event_id !== undefined) setTick(ev.event_id);
+        
         setMatrix(prev => [{ type: ev.event_type, sev: ev.severity, id }, ...prev].slice(0, 80));
         setNewCells(prev => {
           const s = new Set(prev); s.add(id);
@@ -608,33 +610,48 @@ export function AboutView() {
           <div className="relative h-28 flex items-center justify-center select-none overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(139,92,246,0.12)_0%,transparent_70%)]" />
             {/* Anillos */}
-            {[56, 40, 24].map(r => (
-              <motion.div key={r}
-                className="absolute rounded-full border border-violet-500/10"
-                style={{ width: r * 2, height: r * 2, left: "50%", top: "50%", transform: "translate(-50%,-50%)" }}
-                animate={{ scale: [1, 1.04, 1], opacity: [0.3, 0.8, 0.3] }}
-                transition={{ duration: 3 + r * 0.03, repeat: Infinity }}
-              />
-            ))}
+            {[56, 40, 24].map((r, ringIdx) => {
+              const ringActive = (tick % 3) === ringIdx;
+              return (
+                <motion.div key={r}
+                  className="absolute rounded-full border border-violet-500/20"
+                  style={{ width: r * 2, height: r * 2, left: "50%", top: "50%", transform: "translate(-50%,-50%)" }}
+                  animate={{ 
+                    scale: ringActive ? 1.05 : 1, 
+                    opacity: ringActive ? 0.8 : 0.3 
+                  }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                />
+              )
+            })}
             {/* 6 nodos hexagonales */}
             {[0,1,2,3,4,5].map(i => {
               const a = (i * 60 - 30) * Math.PI / 180;
               const r = 38;
+              const nodeActive = (tick % 6) === i;
+              const secondaryActive = (tick % 6) === (i + 3) % 6; // diametrically opposed
               return (
                 <motion.div key={i}
-                  className="absolute w-4 h-4 rounded-full border border-violet-500/50 bg-violet-500/15"
+                  className="absolute w-4 h-4 rounded-full border border-violet-500/50"
                   style={{ left: `calc(50% + ${r * Math.cos(a)}px)`, top: `calc(50% + ${r * Math.sin(a)}px)`, transform: "translate(-50%,-50%)" }}
-                  animate={{ scale: [1, 1.4, 1], opacity: [0.4, 1, 0.4] }}
-                  transition={{ duration: 2.6, repeat: Infinity, delay: i * 0.43 }}
+                  animate={{ 
+                    scale: nodeActive ? 1.5 : (secondaryActive ? 1.2 : 1), 
+                    opacity: nodeActive ? 1 : (secondaryActive ? 0.7 : 0.3),
+                    backgroundColor: nodeActive ? "rgba(139, 92, 246, 0.4)" : "rgba(139, 92, 246, 0.1)"
+                  }}
+                  transition={{ duration: 0.15 }}
                 />
               );
             })}
             {/* Nodo central */}
             <motion.div
-              className="absolute w-6 h-6 rounded-full bg-violet-500/30 border-2 border-violet-400/70 shadow-[0_0_20px_rgba(139,92,246,0.5)]"
+              className="absolute w-6 h-6 rounded-full border-2 border-violet-400 shadow-[0_0_20px_rgba(139,92,246,0.6)]"
               style={{ left: "50%", top: "50%", transform: "translate(-50%,-50%)" }}
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 2.4, repeat: Infinity }}
+              animate={{ 
+                scale: tick % 2 === 0 ? 1.2 : 1,
+                backgroundColor: tick % 2 === 0 ? "rgba(139, 92, 246, 0.5)" : "rgba(139, 92, 246, 0.2)"
+              }}
+              transition={{ duration: 0.15 }}
             />
           </div>
 

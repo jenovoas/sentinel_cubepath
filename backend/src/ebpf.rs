@@ -1,10 +1,9 @@
 //! eBPF Bridge for Sentinel Ring-0
 //! 
-//! Consumes real kernel events from BPF RingBuffer (256KB) 
+//! Consumes kernel events from BPF RingBuffer (256KB) 
 //! and forwards them to the Cortex Engine.
 
-use crate::nerves::bridge::CortexEvent;
-use serde::{Deserialize, Serialize};
+use crate::models::CortexEvent;
 use std::time::Duration;
 use tokio::sync::broadcast;
 
@@ -71,17 +70,41 @@ impl EbpfBridge {
 
 
 
-                    let event = CortexEvent {
-                        timestamp_ns: raw.timestamp_ns,
-                        pid: raw.pid,
-                        event_type: raw.event_type,
-                        entropy_signal: raw.entropy_signal,
-                        severity: raw.severity,
+                    // Copias locales para evitar referencias a campos packed
+                    let ts  = raw.timestamp_ns;
+                    let pid = raw.pid;
+                    let et  = raw.event_type;
+                    let es  = raw.entropy_signal;
+                    let sv  = raw.severity;
+
+                    let (event_type_str, message) = match et {
+                        1  => ("FILE_BLOCKED",   "Archivo bloqueado por LSM cognitivo"),
+                        2  => ("EXEC_BLOCKED",   "Ejecución bloqueada por Guardian Ring-0"),
+                        3  => ("FILE_ALLOWED",   "Acceso a archivo verificado"),
+                        4  => ("EXEC_ALLOWED",   "Ejecución verificada por whitelist"),
+                        5  => ("NETWORK_BURST",  "Anomalía de red detectada"),
+                        6  => ("NETWORK_NORMAL", "Tráfico de red normal"),
+                        7  => ("SYSTEM_METRIC",  "Métrica del sistema"),
+                        8  => ("BIO_PULSE",      "Pulso bio-soberano (17s)"),
+                        9  => ("PHASE_RESYNC",   "Reset QHC T=68s"),
+                        10 => ("PTRACE_CHECK",   "Intento de PTRACE interceptado"),
+                        11 => ("CHMOD_CHECK",    "Cambio de permisos interceptado"),
+                        _  => ("SYSTEM_METRIC",  "Evento kernel desconocido"),
                     };
 
-                    // LANE 1: Security Audit Log (WAL)
-                    // If severity >= 2 or it's a BLOCKED/CHECK event, it goes to Lane 1
-                    if raw.severity >= 2 || (raw.event_type <= 2) || (raw.event_type >= 10) {
+                    let event = CortexEvent {
+                        event_id: ts,
+                        event_type: event_type_str.to_string(),
+                        severity: sv,
+                        payload_hash: [0u8; 32],
+                        entropy_signal: es as i64,
+                        timestamp_ns: ts,
+                        pid,
+                        message: message.to_string(),
+                    };
+
+                    // LANE 1: Security Audit Log — severidad alta o eventos de bloqueo
+                    if sv >= 2 || et <= 2 || et >= 10 {
                         let _ = wal_clone.log_security(event.clone());
                     }
 
