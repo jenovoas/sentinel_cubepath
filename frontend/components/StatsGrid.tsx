@@ -33,15 +33,15 @@ export function StatsGrid({ status }: StatsGridProps) {
     {
       id: "integrity",
       label: "Integridad Sistema",
-      value: status?.ring_status === "SEALED" ? "SELLADO" : "BRECHA",
+      value: integrity.logic_state || "ESTABLE",
       icon: Activity,
-      color: status?.ring_status === "SEALED" ? "text-emerald-400" : "text-rose-400",
-      glow: status?.ring_status === "SEALED" ? "glow-emerald" : "glow-rose",
-      borderColor: status?.ring_status === "SEALED" ? "border-emerald-500/20" : "border-rose-500/20",
-      bgAccent: status?.ring_status === "SEALED" ? "from-emerald-500/10" : "from-rose-500/10",
-      pulse: status?.ring_status === "SEALED",
-      subtitle: "Bloqueo Ring-0",
-      explanation: "Monitor de integridad de archivos y procesos mediante hooks LSM. Una 'BRECHA' indica una desviación en la firma de ejecución del kernel.",
+      color: integrity.logic_state === "STABLE" || !integrity.logic_state ? "text-emerald-400" : "text-rose-400",
+      glow: integrity.logic_state === "STABLE" || !integrity.logic_state ? "glow-emerald" : "glow-rose",
+      borderColor: integrity.logic_state === "STABLE" || !integrity.logic_state ? "border-emerald-500/20" : "border-rose-500/20",
+      bgAccent: integrity.logic_state === "STABLE" || !integrity.logic_state ? "from-emerald-500/10" : "from-rose-500/10",
+      pulse: false,
+      subtitle: "Estado Lógico LSM",
+      explanation: "Monitor de integridad de archivos y procesos mediante hooks LSM. Refleja el estado lógico real del kernel: STABLE indica operación normal sin desviaciones de firma.",
       technical: `LSM Hook Status: ${integrity.lsm_cognitive || "ACTIVO"}\nFirma TruthSync: ${integrity.truthsync_seal || "N/A"}\nEstado Lógico: ${integrity.logic_state || "ESTABLE"}`
     },
     {

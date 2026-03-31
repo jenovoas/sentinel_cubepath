@@ -21,7 +21,18 @@ export function MyCNetNodeGraph({ phase, isOpen }: { phase: string, isOpen: bool
         const res = await fetch(`${apiBase}/api/v1/mycnet/topology`);
         if (res.ok) {
           const data = await res.json();
-          setNodes(data.nodes || []);
+          const roleIconMap: Record<string, any> = {
+            "Gateway": Server,
+            "Compute S60": Cpu,
+          };
+          const processed = (data.nodes || []).map((node: any) => ({
+            ...node,
+            angle: Math.atan2(node.r, node.q) * 180 / Math.PI,
+            name: node.id,
+            ip: node.ip ?? "—",
+            icon: roleIconMap[node.role] ?? HardDrive,
+          }));
+          setNodes(processed);
           setLoading(false);
         }
       } catch (error) {
@@ -132,7 +143,7 @@ export function MyCNetNodeGraph({ phase, isOpen }: { phase: string, isOpen: bool
               {/* DIBUJO DE RUTAS (EDGES) */}
               {nodes.map((node, i) => {
                  const next = nodes[(i + 1) % nodes.length];
-                 const edgeKey = `n${i+1}-n${((i+1)%6)+1}`;
+                 const edgeKey = `${node.id}-${next.id}`;
                  const tq = tqMetrics[edgeKey] || 0;
                  const activeRoute = tq > 230 && isOpen;
 
@@ -330,21 +341,20 @@ export function MyCNetNodeGraph({ phase, isOpen }: { phase: string, isOpen: bool
                       <span className="text-emerald-400 uppercase font-black">{selectedNodeData.role}</span>
                     </div>
                     <div className="flex justify-between items-center text-[10px] border-b border-white/5 pb-1">
-                      <span className="text-slate-400 font-bold uppercase tracking-widest">MAC bat0</span>
-                      <div className="p-2 space-y-1">
-                         <p className="flex justify-between"><span className="text-slate-400">Gen Status:</span> <span className="text-emerald-400 font-bold mono">OPTIMAL</span></p>
-                         <p className="flex justify-between"><span className="text-slate-400">Predictive Fade:</span> <span className="text-fuchsia-200 mono">{(Math.abs(Math.cos(tick*0.05))*100).toFixed(1)}%</span></p>
-                      </div>
+                      <span className="text-slate-400 font-bold uppercase tracking-widest">Amplitud S60</span>
+                      <span className="text-emerald-400 font-bold mono">{selectedNodeData.amplitude?.toLocaleString() ?? "—"}</span>
                     </div>
-                    
+
                     <div className="pt-2">
                        <span className="block text-slate-400 text-[10px] border-b border-white/5 pb-1">MAC bat0</span>
-                       <span className="text-slate-300 mono text-[9px]">b2:a4:f9:{selectedNodeData.id.replace('n','0')}:{(tick % 99).toString().padStart(2, '0')}</span>
+                       <span className="text-slate-300 mono text-[9px]">{selectedNodeData.mac ?? "No disponible"}</span>
                     </div>
-                    <div className="pt-1">
-                       <span className="block text-slate-400 text-[10px] border-b border-white/5 pb-1">I/O Flujo</span>
-                       <span className="text-indigo-400 mono text-[9px]">{(tick * 1.4 % 800).toFixed(1)} Mbps</span>
-                    </div>
+                    {selectedNodeData.io_mbps != null && (
+                      <div className="pt-1">
+                        <span className="block text-slate-400 text-[10px] border-b border-white/5 pb-1">I/O Flujo</span>
+                        <span className="text-indigo-400 mono text-[9px]">{selectedNodeData.io_mbps.toFixed(1)} Mbps</span>
+                      </div>
+                    )}
                     
                     <div className="pt-2">
                       <span className="block text-[8px] text-slate-500 font-black uppercase tracking-[0.2em] mb-2">Vecinos (TQ &gt; 230)</span>

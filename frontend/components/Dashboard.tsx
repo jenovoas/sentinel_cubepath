@@ -162,33 +162,6 @@ export function Dashboard() {
                
                <div className="space-y-6">
                   <TruthSyncReport status={status} />
-
-                  {/* Bio-Resonance */}
-                  <div className="glass-card p-5 border-l-4 border-l-rose-500/30 bg-slate-950/40">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <Heart className="w-4 h-4 text-rose-500 animate-[pulse_2s_infinite]" />
-                        <h3 className="font-bold text-[10px] uppercase tracking-[0.2em] text-slate-200">Núcleo Bio-Resonancia</h3>
-                      </div>
-                      <span className="text-[9px] font-bold text-rose-500/80 mono uppercase">Enlace Vivo</span>
-                    </div>
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3">
-                        <div className="flex-1 bg-slate-900 rounded-full h-2 overflow-hidden border border-white/5">
-                          <div
-                            className="h-full rounded-full bg-gradient-to-r from-rose-600 via-rose-500 to-rose-400 shadow-[0_0_10px_rgba(244,63,94,0.3)] transition-all duration-1000"
-                            style={{ width: `${status?.integrity?.bio_coherence ? Math.min(100, (status.integrity.bio_coherence / 12960000) * 100) : 0}%` }}
-                          />
-                        </div>
-                        <span className="text-[10px] mono text-rose-400 font-bold w-10 text-right">
-                          {status?.integrity?.bio_coherence ? `${((status.integrity.bio_coherence / 12960000) * 100).toFixed(0)}%` : "0%"}
-                        </span>
-                      </div>
-                      <p className="text-[8px] font-medium text-slate-600 uppercase tracking-widest leading-relaxed">
-                        Umbral de estabilidad SNN: 88.4% requerido para bloqueo Ring-0 total.
-                      </p>
-                    </div>
-                  </div>
                </div>
             </div>
 
@@ -404,7 +377,7 @@ export function Dashboard() {
                <div className="grid grid-cols-2 gap-4">
                   {[
                     { label: "Intercepción Kernel Ring-0", status: status?.integrity?.xdp_firewall === "ACTIVE_XDP" ? "ENFORCE" : "STANDBY", desc: "Evaluar syscalls y buffer predictivo S60" },
-                    { label: "Motor S60 Base", status: "ACTIVE", desc: "Resonancia Plimpton 322 en curso" },
+                    { label: "Motor S60 Base", status: (status?.s60_resonance || 0) > 0 ? "ACTIVE" : "STANDBY", desc: "Resonancia Plimpton 322 en curso" },
                     { label: "Inyección Bio-Pulso", status: (status?.integrity?.bio_coherence || 0) > 0 ? "ACTIVE" : "STANDBY", desc: "Recepción de telemetría BCI" },
                     { label: "Registro Auditoría (WAL)", status: "ENABLED", desc: "Escribiendo en /var/log/sentinel" },
                   ].map((p, i) => (
