@@ -69,6 +69,7 @@ pub struct AppState {
     pub lsm_active: std::sync::atomic::AtomicBool,
     pub threat_count: std::sync::atomic::AtomicU32,
     pub semantic_router: Arc<crate::quantum::semantic_router::SemanticRouter>,
+    pub event_log: Mutex<VecDeque<CortexEvent>>,  // Buffer persistente de eventos para polling
 }
 
 #[tokio::main]
@@ -99,6 +100,7 @@ async fn main() -> anyhow::Result<()> {
         lsm_active: std::sync::atomic::AtomicBool::new(false),
         threat_count: std::sync::atomic::AtomicU32::new(0),
         semantic_router: Arc::new(crate::quantum::semantic_router::SemanticRouter::new()),
+        event_log: Mutex::new(VecDeque::with_capacity(200)),
     });
 
     // 3a. eBPF Ring Buffer Bridge — eventos reales del kernel
@@ -625,8 +627,7 @@ async fn inject_pulse_handler(
     }
     drop(lattice);
 
-    // Emitir CortexEvent al stream para que el frontend lo reciba vía WebSocket
-    // Si severity >= 3 aparece en el panel de Amenazas y cuenta como threat
+    // Emitir CortexEvent al stream y persistir en event_log
     if req.severity >= 1 {
         let label = req.metadata.clone().unwrap_or_else(|| req.pulse_type.clone());
         let event = CortexEvent {
@@ -636,13 +637,19 @@ async fn inject_pulse_handler(
             payload_hash: [0u8; 32],
             entropy_signal: req.energy_s60_raw,
             timestamp_ns: tick * 1_000_000,
-            pid: 0,
+            pid: idx as u32,
             message: format!("Pulso Ring-0: {} [E={}, idx={}]", label, req.energy_s60_raw, idx),
         };
-        let _ = state.event_stream.send(event);
+        // Broadcast WebSocket (clientes conectados lo reciben en tiempo real)
+        let _ = state.event_stream.send(event.clone());
+        // Persistir para el endpoint de polling /api/v1/events
+        {
+            let mut log = state.event_log.lock().await;
+            log.push_front(event);
+            if log.len() > 200 { log.pop_back(); }
+        }
         if req.severity >= 3 {
             state.threat_count.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
-            // Registrar en recent_blocks para elevar quantum_load
             let mut blocks = state.recent_blocks.lock().await;
             blocks.push_back(idx);
             if blocks.len() > 10 { blocks.pop_front(); }
@@ -907,23 +914,8 @@ async fn truth_claim_handler(
 async fn events_polling_handler(
     State(state): State<Arc<AppState>>,
 ) -> Json<Vec<CortexEvent>> {
-    // recent_blocks es VecDeque<usize> — contiene índices de nodos interceptados
-    // Generamos eventos reales basados en los índices del lattice actuales
-    let tick = state.global_tick.load(std::sync::atomic::Ordering::Relaxed);
-    let blocks = state.recent_blocks.lock().await;
-    let events: Vec<CortexEvent> = blocks.iter().enumerate().map(|(i, &idx)| {
-        CortexEvent {
-            event_id: tick.wrapping_sub(i as u64),
-            event_type: "RING0_INTERCEPT".to_string(),
-            severity: 2,
-            payload_hash: [0u8; 32],
-            entropy_signal: ((idx as i64).wrapping_mul(17)) % 12_960_000, // Salto-17
-            timestamp_ns: tick.wrapping_sub(i as u64).wrapping_mul(1_000_000),
-            pid: (idx % 65535) as u32,
-            message: format!("Intercepción Ring-0 en nodo lattice idx={}", idx),
-        }
-    }).collect();
-    Json(events)
+    let log = state.event_log.lock().await;
+    Json(log.iter().cloned().collect())
 }
 
 /// Handler WebSocket de Telemetría Ring-0

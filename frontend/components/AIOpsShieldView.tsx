@@ -413,9 +413,32 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
                   </div>
                 );
               }) : (
-                <div className="flex flex-col items-center justify-center h-48 text-center text-slate-700">
-                   <Activity className="w-8 h-8 mb-2 opacity-10 animate-pulse" />
-                   <p className="text-[9px] font-black uppercase tracking-widest">Escaneo Pasivo</p>
+                <div className="flex flex-col gap-3">
+                  {/* Estado vacío con contexto */}
+                  <div className="flex flex-col items-center justify-center py-4 text-center border border-dashed border-slate-800 rounded-xl">
+                    <Activity className="w-6 h-6 mb-2 text-slate-700 animate-pulse" />
+                    <p className="text-[8px] font-black uppercase tracking-widest text-slate-600">Escaneo Pasivo — Sin Amenazas Activas</p>
+                  </div>
+                  {/* Qué está monitorizando */}
+                  <div className="space-y-1.5">
+                    <p className="text-[7px] font-black uppercase tracking-widest text-slate-600 px-1">Vectores bajo vigilancia Ring-0</p>
+                    {[
+                      { label: "EXEC_HIJACK", desc: "execve con payload inyectado o binario mutado" },
+                      { label: "NET_EXFIL", desc: "tráfico saliente anómalo vía XDP hook" },
+                      { label: "FILE_TAMPER", desc: "escritura fuera de dominio S60 permitido" },
+                      { label: "PROC_FORK", desc: "fork bomb / escalada de privilegios UID 0" },
+                      { label: "MEM_INJECT", desc: "ptrace / mmap con flags RWX simultáneos" },
+                      { label: "SYS_CALL_ANOMALY", desc: "secuencia de syscalls fuera del patrón P322" },
+                    ].map((v) => (
+                      <div key={v.label} className="flex items-start gap-2 px-2 py-1.5 rounded-lg bg-slate-900/40 border border-white/5">
+                        <div className="w-1 h-1 rounded-full bg-rose-800 mt-1.5 shrink-0" />
+                        <div>
+                          <span className="text-[8px] font-black text-rose-900/80 tracking-wider">{v.label}</span>
+                          <p className="text-[7px] text-slate-600 leading-snug">{v.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

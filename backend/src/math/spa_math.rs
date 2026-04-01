@@ -1,6 +1,6 @@
 //! # 🛡️ BASE-60 MATHEMATICAL FUNCTIONS - RUST CORE 🛡️
 //!
-//! Power series implementation for ME-60OS.
+//! Power series implementation
 //! Guaranteed zero-decimal contamination.
 
 use super::spa::SPA;
