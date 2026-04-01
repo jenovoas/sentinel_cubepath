@@ -612,20 +612,45 @@ async fn inject_pulse_handler(
 ) -> Json<serde_json::Value> {
     let mut lattice = state.lattice.lock().await;
     let tick = state.global_tick.load(std::sync::atomic::Ordering::SeqCst);
-    
+
     // Índice configurable — por defecto centro de la matriz 32x32 (16*32+16 = 528)
     let idx = req.index
         .map(|i| i.min(lattice.size() - 1))
         .unwrap_or(528);
     lattice.inject(idx, req.energy_s60_raw);
-    
+
     // Etiqueta visual en el heatmap si se proporciona
     if let Some(ref label) = req.metadata {
         lattice.metadata_map[idx] = Some(label.clone());
     }
-    
-    info!("⚡ Pulso inyectado: {} → idx={} (E={})", req.pulse_type, idx, req.energy_s60_raw);
-    
+    drop(lattice);
+
+    // Emitir CortexEvent al stream para que el frontend lo reciba vía WebSocket
+    // Si severity >= 3 aparece en el panel de Amenazas y cuenta como threat
+    if req.severity >= 1 {
+        let label = req.metadata.clone().unwrap_or_else(|| req.pulse_type.clone());
+        let event = CortexEvent {
+            event_id: tick,
+            event_type: req.pulse_type.clone(),
+            severity: req.severity,
+            payload_hash: [0u8; 32],
+            entropy_signal: req.energy_s60_raw,
+            timestamp_ns: tick * 1_000_000,
+            pid: 0,
+            message: format!("Pulso Ring-0: {} [E={}, idx={}]", label, req.energy_s60_raw, idx),
+        };
+        let _ = state.event_stream.send(event);
+        if req.severity >= 3 {
+            state.threat_count.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+            // Registrar en recent_blocks para elevar quantum_load
+            let mut blocks = state.recent_blocks.lock().await;
+            blocks.push_back(idx);
+            if blocks.len() > 10 { blocks.pop_front(); }
+        }
+    }
+
+    info!("⚡ Pulso inyectado: {} → idx={} (E={}, sev={})", req.pulse_type, idx, req.energy_s60_raw, req.severity);
+
     Json(serde_json::json!({ "status": "pulsed", "tick": tick, "idx": idx }))
 }
 
