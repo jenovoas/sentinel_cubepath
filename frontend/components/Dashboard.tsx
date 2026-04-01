@@ -4,12 +4,13 @@ import React, { useState, useEffect } from "react";
 import { useTelemetry } from "../hooks/useTelemetry";
 import { clsx } from "clsx";
 import { 
-  ShieldAlert, 
-  ShieldCheck, 
   Zap, 
   Timer, 
   Heart,
   Lock as LockIcon,
+  ShieldCheck,
+  ShieldAlert,
+  Activity
 } from "lucide-react";
 
 // Componentes
@@ -20,7 +21,6 @@ import { TruthClaimConsole } from "./TruthClaimConsole";
 import { TruthSyncReport } from "./TruthSyncReport";
 import { MyCNetNodeGraph } from "./MyCNetNodeGraph";
 import { AboutView } from "./AboutView";
-import { CrystalLatticeView } from "./CrystalLatticeView";
 import { MonitoringView } from "./MonitoringView";
 import { AIOpsShieldView } from "./AIOpsShieldView";
 import { AIOpsIntercept } from "./AIOpsIntercept";
@@ -44,7 +44,7 @@ export function Dashboard() {
     const handleHashChange = () => {
       if (typeof window !== "undefined") {
         const hash = window.location.hash.replace("#", "");
-        if (hash && ["about", "dashboard", "matrix", "observability", "aiops_shield", "mycnet", "vault", "settings", "n8n_reflex"].includes(hash)) {
+        if (hash && ["about", "dashboard", "observability", "aiops_shield", "mycnet", "vault", "settings", "n8n_reflex"].includes(hash)) {
           setActiveTabRaw(hash);
         } else {
           setActiveTabRaw("about");
@@ -177,7 +177,7 @@ export function Dashboard() {
               <div className="flex gap-2 shrink-0">
                 <span className={clsx(
                   "px-2 py-0.5 bg-slate-950 border rounded text-[8px] font-bold mono",
-                  status?.integrity?.xdp_firewall === "ACTIVE_XDP" ? "border-emerald-500/30 text-emerald-400" : "border-white/5 text-slate-400"
+                  (status?.integrity?.xdp_firewall === "ACTIVE" || status?.integrity?.xdp_firewall === "ACTIVE_XDP") ? "border-emerald-500/30 text-emerald-400" : "border-white/5 text-slate-400"
                 )}>XDP: {status?.integrity?.xdp_firewall || "BYPASS"}</span>
                 <span className={clsx(
                   "px-2 py-0.5 bg-slate-950 border rounded text-[8px] font-bold mono",
@@ -186,8 +186,6 @@ export function Dashboard() {
               </div>
             </div>
           </div>
-        ) : activeTab === "matrix" ? (
-          <CrystalLatticeView />
         ) : activeTab === "observability" ? (
           <MonitoringView />
         ) : activeTab === "n8n_reflex" ? (
@@ -225,8 +223,8 @@ export function Dashboard() {
                       { op: "Filtro XDP", algo: "BPF_MAP_LOOKUP_ELEM", complexity: "O(1)", latency: status?.integrity?.cortex_latency_ms ? `${(status.integrity.cortex_latency_ms * 1000).toFixed(1)} ns` : "---", mem: "64 B/entrada", color: "emerald" },
                       { op: "Hook LSM", algo: "Análisis Bitmask S60", complexity: "O(1)", latency: status?.integrity?.cortex_latency_ms ? `${(status.integrity.cortex_latency_ms * 1000).toFixed(1)} ns` : "---", mem: "32 B/hook", color: "emerald" },
                       { op: "Aritmética S60", algo: "Punto Fijo i64×i64", complexity: "O(1)", latency: status?.integrity?.cortex_latency_ms ? `${(status.integrity.cortex_latency_ms * 1000).toFixed(1)} ns` : "---", mem: "8 B/SPA", color: "sky" },
-                      { op: "Escaneo TruthSync", algo: "Búsqueda Plimpton 322", complexity: "O(1)", latency: "---", mem: "256 B/caché", color: "amber" },
-                      { op: "Hub SNN", algo: "Búsqueda Vector de Memoria", complexity: "O(log N)", latency: " < 300 ns", mem: "1 KB/nodo", color: "slate" },
+                      { op: "Escaneo TruthSync", algo: "Validación Plimpton 322", complexity: "O(1)", latency: status?.integrity?.truthsync_latency_ms ? `${status.integrity.truthsync_latency_ms} ms` : "---", mem: "256 B/caché", color: "amber" },
+                      { op: "Memoria Neural", algo: "LIF Observation", complexity: "O(1)", latency: status?.integrity?.cortex_latency_ms ? " < 300 ns" : "---", mem: "1 KB/nodo", color: "slate" },
                     ].map((row) => (
                       <tr key={row.op} className="border-b border-white/5 hover:bg-white/2 transition-colors">
                         <td className="py-2.5 pr-4 font-bold text-white">{row.op}</td>
@@ -261,9 +259,14 @@ export function Dashboard() {
                 <h1 className="text-3xl font-black uppercase tracking-tighter text-white">IA Ops Shield</h1>
                 <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.3em] mt-1">Matriz Defensa Cognitiva S60 — Ring-0 Kernel Sync</p>
               </div>
-              <div className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[10px] font-black text-emerald-400 tracking-widest uppercase">Guardián Activo</span>
+              <div className={clsx(
+                "px-4 py-2 border rounded-xl flex items-center gap-3",
+                status?.integrity?.ring_status === "SEALED" ? "bg-rose-500/10 border-rose-500/20" : "bg-emerald-500/10 border-emerald-500/20"
+              )}>
+                <div className={clsx("w-2 h-2 rounded-full animate-pulse", status?.integrity?.ring_status === "SEALED" ? "bg-rose-400" : "bg-emerald-400")} />
+                <span className={clsx("text-[10px] font-black tracking-widest uppercase", status?.integrity?.ring_status === "SEALED" ? "text-rose-400" : "text-emerald-400")}>
+                  {status?.integrity?.ring_status === "SEALED" ? "Guardián Sellado" : "Guardián Activo"}
+                </span>
               </div>
             </div>
             <AIOpsShieldView status={status} events={events} />
@@ -281,25 +284,10 @@ export function Dashboard() {
               </div>
             </div>
             <MyCNetNodeGraph phase={yhwhPhase} isOpen={networkOpen} />
-            <div className="grid grid-cols-2 gap-4">
-              <div className="glass-card p-5 space-y-3">
-                <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">Nodo Local — FENIX</h3>
-                <div className="space-y-2 text-[10px] font-mono">
-                  <div className="flex justify-between"><span className="text-slate-500">Rol</span><span className="text-emerald-400 font-bold">GUARDIAN_PRIMARIO</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">Fase</span><span className="text-white font-bold">{yhwhPhase}</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">Aritmética</span><span className="text-sky-400 font-bold">S60 / Base-60</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">Estado Sync</span><span className={`font-bold ${networkOpen ? "text-emerald-400" : "text-rose-400"}`}>{networkOpen ? "RESONANTE" : "SELLADO"}</span></div>
-                </div>
-              </div>
-              <div className="glass-card p-5 space-y-3">
-                <h3 className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-300">Nodo Remoto — CUBEPATH</h3>
-                <div className="space-y-2 text-[10px] font-mono">
-                  <div className="flex justify-between"><span className="text-slate-500">Rol</span><span className="text-amber-400 font-bold">REMOTO_S60</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">Protocolo</span><span className="text-white font-bold">Sincronía Fase YHWH</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">Frecuencia</span><span className="text-sky-400 font-bold">41 Hz cristal</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">Entropía</span><span className="text-slate-400 font-bold">CONTROLADA</span></div>
-                </div>
-              </div>
+            <div className="p-6 glass-card border-dashed flex flex-col items-center justify-center text-slate-500 min-h-[140px]">
+               <Zap className="w-8 h-8 opacity-20 mb-3" />
+               <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Malla de Sincronía Activa: {status?.mycnet_nodes || 0} Nodos Detectados</p>
+               <p className="text-[8px] uppercase tracking-[0.2em] opacity-30 mt-1">Sincronización P2P vía Protocolo YHWH en curso</p>
             </div>
           </div>
         ) : activeTab === "vault" ? (
@@ -347,7 +335,13 @@ export function Dashboard() {
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center"><span className="text-[9px] text-slate-500 uppercase font-black">Profundidad Intercepción LSM</span><span className="text-[10px] text-white font-mono">{status?.integrity?.lsm_cognitive || "RING-0"}</span></div>
-                    <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden"><div className="h-full bg-emerald-500 w-[100%]" /></div>
+                    <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
+                      <div className={clsx(
+                        "h-full transition-all duration-1000",
+                        status?.integrity?.lsm_cognitive === "ENFORCING" ? "bg-emerald-500 w-full" : 
+                        status?.integrity?.lsm_cognitive === "LINKING" ? "bg-amber-500 w-1/2" : "bg-rose-500 w-0"
+                      )} />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -357,7 +351,7 @@ export function Dashboard() {
                 <div className="flex items-center gap-6">
                   <div className="flex-1 space-y-1">
                     <p className="text-[9px] text-slate-500 uppercase font-black">Frecuencia Base S60</p>
-                    <p className="text-2xl font-black text-white italic">41.00 <span className="text-xs text-slate-600">Hz</span></p>
+                    <p className="text-2xl font-black text-white italic">{status?.crystal_frequency_hz || "---"} <span className="text-xs text-slate-600">Hz</span></p>
                   </div>
                   <div className="w-12 h-12 rounded-full border-2 border-slate-800 flex items-center justify-center">
                     <Timer className="w-6 h-6 text-sky-400 opacity-30" />
@@ -376,8 +370,8 @@ export function Dashboard() {
                </div>
                <div className="grid grid-cols-2 gap-4">
                   {[
-                    { label: "Intercepción Kernel Ring-0", status: status?.integrity?.xdp_firewall === "ACTIVE_XDP" ? "ENFORCE" : "STANDBY", desc: "Evaluar syscalls y buffer predictivo S60" },
-                    { label: "Motor S60 Base", status: (status?.s60_resonance || 0) > 0 ? "ACTIVE" : "STANDBY", desc: "Resonancia Plimpton 322 en curso" },
+                    { label: "Intercepción Kernel Ring-0", status: (status?.integrity?.xdp_firewall === "ACTIVE" || status?.integrity?.xdp_firewall === "ACTIVE_XDP") ? "ENFORCE" : "STANDBY", desc: "Evaluar syscalls y buffer predictivo S60" },
+                    { label: "Motor S60 Base", status: (status?.integrity?.s60_resonance || 0) > 0 ? "ACTIVE" : "STANDBY", desc: "Resonancia Plimpton 322 en curso" },
                     { label: "Inyección Bio-Pulso", status: (status?.integrity?.bio_coherence || 0) > 0 ? "ACTIVE" : "STANDBY", desc: "Recepción de telemetría BCI" },
                     { label: "Registro Auditoría (WAL)", status: "ENABLED", desc: "Escribiendo en /var/log/sentinel" },
                   ].map((p, i) => (
@@ -394,7 +388,7 @@ export function Dashboard() {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full min-h-[400px] text-slate-600 space-y-4 glass-card border-dashed">
-             <ShieldAlert className="w-12 h-12 opacity-20" />
+             <ShieldAlert style={{ width: '48px', height: '48px' }} className="w-12 h-12 opacity-20" />
              <p className="text-[10px] font-black uppercase tracking-widest opacity-30 italic">Modulo: {activeTab} en proceso de sincronización s60...</p>
           </div>
         )}

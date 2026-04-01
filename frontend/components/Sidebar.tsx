@@ -77,7 +77,6 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
     { id: "about", label: "Proyecto", icon: Info },
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "aiops_shield", label: "AIOps Shield", icon: ShieldAlert },
-    { id: "matrix", label: "S60 Laboratory", icon: Microscope },
     { id: "mycnet", label: "MyCNet", icon: Network },
     { id: "vault", label: "Vault", icon: Terminal },
     { id: "docs", label: "Docs", icon: BookOpen },

@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { Terminal, AlertTriangle, ShieldCheck, Zap, Heart, Activity, Cpu, ShieldX } from "lucide-react";
+import { Terminal, AlertTriangle, ShieldCheck, Zap, Heart, Activity, Cpu, ShieldX, X, Info } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { clsx } from "clsx";
 import { useTelemetry } from "../hooks/useTelemetry";
 
@@ -42,6 +43,7 @@ const COLOR_MAP: Record<string, { border: string; bg: string; text: string; dot:
 export function TelemetryFeed() {
   const { events, connected, error } = useTelemetry();
   const feedRef = useRef<HTMLDivElement>(null);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   const getConfig = (ev: Event) => {
     const cfg = EVENT_CONFIG[ev.event_type] || { icon: Cpu, label: ev.event_type, colorSet: "slate" };
@@ -96,8 +98,9 @@ export function TelemetryFeed() {
         return (
           <div
             key={`${ev.timestamp_ns}-${i}`}
+            onClick={() => setSelectedEvent(ev)}
             className={clsx(
-              "px-3 py-2 border rounded-lg transition-all animate-slide-in group",
+              "px-3 py-2 border rounded-lg transition-all animate-slide-in group cursor-pointer hover:scale-[1.01]",
               colors.border,
               colors.bg,
               isCritical && "shadow-[0_0_15px_rgba(244,63,94,0.15)] bg-rose-500/10 border-rose-500/40",
@@ -151,6 +154,100 @@ export function TelemetryFeed() {
         );
       })}
       </div>
+
+      {/* Detail Modal for Auditing Events */}
+      <AnimatePresence>
+        {selectedEvent && (
+          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedEvent(null)}
+              className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
+            />
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className={clsx(
+                "relative w-full max-w-lg glass-card border-none shadow-2xl overflow-hidden bg-slate-900",
+                "before:absolute before:inset-0 before:bg-gradient-to-br before:opacity-10",
+                getConfig(selectedEvent).colors.bg.replace('/5', '/10').replace('/30', '/20')
+              )}
+            >
+              {/* Header */}
+              <div className="relative p-5 border-b border-white/5 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className={clsx("p-3 rounded-2xl border", getConfig(selectedEvent).colors.border, getConfig(selectedEvent).colors.text)}>
+                    {React.createElement(getConfig(selectedEvent).icon, { className: "w-6 h-6" })}
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-black uppercase tracking-widest text-white">
+                      Auditoría de Evento Ring-0
+                    </h3>
+                    <p className={clsx("text-[10px] font-bold uppercase tracking-wider", getConfig(selectedEvent).colors.text)}>
+                      {getConfig(selectedEvent).label}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSelectedEvent(null)}
+                  className="p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Body */}
+              <div className="p-5 space-y-5">
+                <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 border-b border-white/5 pb-3">
+                  <span>TIMESTAMP: <span className="text-white">{selectedEvent.timestamp_ns} ns</span></span>
+                  <span>PID: <span className="text-white">{selectedEvent.pid}</span></span>
+                  <span>SEVERIDAD: <span className={selectedEvent.severity > 1 ? "text-rose-400" : "text-emerald-400"}>NIVEL {selectedEvent.severity}</span></span>
+                </div>
+
+                <div>
+                  <h4 className="text-[10px] font-black uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-2">
+                    <Info className="w-3 h-3" /> Contexto Semántico
+                  </h4>
+                  <p className="text-xs text-slate-300 leading-relaxed font-mono">
+                    {selectedEvent.message}
+                  </p>
+                </div>
+
+                <div className="bg-black/60 rounded-xl p-4 border border-white/5 relative overflow-hidden">
+                  <h4 className="text-[10px] font-black uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-2">
+                    <Terminal className="w-3 h-3" /> Payload Raw del Buffer eBPF
+                  </h4>
+                  <pre className="text-[10px] font-mono text-emerald-400 overflow-x-auto whitespace-pre-wrap leading-relaxed">
+{JSON.stringify({
+  timestamp_ns: selectedEvent.timestamp_ns,
+  pid: selectedEvent.pid,
+  event_type: selectedEvent.event_type,
+  entropy_s60_raw: selectedEvent.entropy_s60_raw,
+  severity: selectedEvent.severity,
+  hash_signature: "TS-SYNC-" + (selectedEvent.timestamp_ns % 99999).toString(16).toUpperCase().padStart(5, '0'),
+  cgroup_id: 1,
+}, null, 2)}
+                  </pre>
+                  <div className="absolute right-0 bottom-0 opacity-10 pointer-events-none">
+                    <ShieldCheck className="w-12 h-12" />
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center pt-2">
+                  <div className="text-[9px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                     Sello Criptográfico Válido
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

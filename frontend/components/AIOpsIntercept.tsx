@@ -110,7 +110,7 @@ export function AIOpsIntercept() {
               >
                 <div className="flex items-start gap-4">
                   <div className="p-3 bg-rose-500 rounded-2xl shadow-[0_0_20px_rgba(244,63,94,0.4)]">
-                    <ShieldAlert className="w-8 h-8 text-white" />
+                    <ShieldAlert className="w-8 h-8 text-white" style={{ width: '32px', height: '32px' }} />
                   </div>
                   <div className="flex-1 space-y-1">
                     <div className="flex items-center justify-between">

@@ -31,11 +31,11 @@ function buildBootLines(status: any, tick: number) {
   const sync     = status?.integrity?.harmonic_sync ?? "ESTABLE";
 
   return [
-    { text: `> Iniciando Sentinel Ring-0 v1.0.0 – 0 amenazas interceptadas`, level: "dim" },
+    { text: `> Iniciando Sentinel Ring-0 v1.0.0 – ${status?.threat_count ?? 0} amenazas interceptadas`, level: "dim" },
     { text: `[${xdpOk ? "OK" : "WARN"}] eBPF Ring-0: XDP ${xdpFull ? "ACTIVE_XDP" : "STANDBY"} · LSM ${lsmMode}`, level: xdpOk ? "ok" : "warn" },
     { text: `[OK] Motor S60 Base-60 · tick #${tick.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} · P322 ratio ${p322}`, level: "ok" },
-    { text: `[${crystalOk ? "OK" : "STANDBY"}] Cristal de Tiempo @ 41.77 Hz · sync harmónico ${sync}`, level: crystalOk ? "ok" : "dim" },
-    { text: `[${bioOk ? "OK" : "WARN"}] Bio-Resonador coherencia ${bioPct}% · Latencia ${lat ? lat.toFixed(3) : "---"}ms`, level: bioOk ? "ok" : "warn" },
+    { text: `[${crystalOk ? "OK" : "STANDBY"}] Cristal de Tiempo @ ${status?.crystal_frequency_hz ?? 41} Hz · sync harmónico ${sync}`, level: crystalOk ? "ok" : "dim" },
+    { text: `[${bioOk ? "OK" : "WARN"}] Bio-Resonador coherencia ${bioPct}% · Latencia ${(lat !== undefined && lat !== null) ? lat.toFixed(3) : "---"}ms`, level: bioOk ? "ok" : "warn" },
     { text: `[OK] TruthSync ${seal} · Sello Plimpton 322 Activo`, level: "ok" },
     {
       text: isSealed
@@ -655,7 +655,7 @@ export function AboutView() {
         <motion.div 
           onClick={() => setSelectedModule({
             icon: Activity, name: "Sincronía de Núcleo", badge: "Fase Ring-0", 
-            primaryKey: "latencia", primaryVal: lat ? `${lat.toFixed(3)}ms` : "0.000ms",
+            primaryKey: "latencia", primaryVal: (lat !== undefined && lat !== null) ? `${lat.toFixed(3)}ms` : "---ms",
             secondaryKey: "resonancia", secondaryVal: status?.integrity?.s60_resonance ? `${(status.integrity.s60_resonance / 129600).toFixed(2)}%` : "0.00%",
             detail: "El motor S60 opera en el 'Kernel Layer 0'. La Sincronía de Núcleo representa la alineación entre el cristal de tiempo interno y los eventos del sistema."
           })}
@@ -672,7 +672,7 @@ export function AboutView() {
                <div className="space-y-1"><p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Coherencia</p><div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden"><motion.div className="h-full bg-violet-500" animate={{ width: `${bioCoherencePct}%` }} /></div></div>
             </div>
             <div className="space-y-4">
-               <div><p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Latencia</p><p className="text-2xl font-black text-sky-400 mono">{lat ? `${lat.toFixed(3)}ms` : "0.000ms"}</p></div>
+               <div><p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Latencia</p><p className="text-2xl font-black text-sky-400 mono">{(lat !== undefined && lat !== null) ? `${lat.toFixed(3)}ms` : "---ms"}</p></div>
                <div><p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Sello P322</p><p className="text-lg font-black text-amber-400 mono">{p322}</p></div>
             </div>
             <div className="flex flex-col items-center justify-center bg-emerald-500/5 rounded-2xl border border-emerald-500/10 p-4">

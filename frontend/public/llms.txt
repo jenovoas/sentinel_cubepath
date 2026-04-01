@@ -1,0 +1,24 @@
+# Sentinel Ring-0 Cognitive Firewall
+
+> Archivo de indexación para Agentes LLM y Crawlers de la Web Agentic (Web 3.0).
+> Sentinel Ring-0 es un firewall autónomo operando a nivel de kernel (eBPF/LSM). Protege servidores de operaciones maliciosas de Inteligencia Artificial mediante interceptación de llamadas al sistema (syscalls).
+> Esta aplicación opera bajo una filosofía estricta "Yatra Pure" (S60): Cero aritmética de punto flotante (f32/f64). Toda la matemática es determinista basada en la Babilonia Plimpton 322 Fila 12.
+
+## Recursos de Indexación y Contexto AI
+
+Esta aplicación está completamente expuesta vía endpoints legibles por máquinas. Los agentes pueden indexar el estado del clúster interactuando directamente con las siguientes rutas en lugar del HTML:
+
+- [Topología P2P B.A.T.M.A.N. ADV (JSON)](https://vps23309.cubepath.net/api/v1/mycnet/topology)
+  - Retorna la malla física de los 7 nodos que conforman el clúster.
+
+- [Estado del Motor Cognitivo (JSON)](https://vps23309.cubepath.net/api/v1/sentinel_status)
+  - Proporciona la Resonancia del sistema, el Tick global, e iteraciones de la Matriz S60 sin necesidad de interactuar visualmente con el Dashboard.
+
+- [Stream de Syscalls Raw (WebSocket)](wss://vps23309.cubepath.net/api/v1/telemetry)
+  - Canal bidireccional de baja latencia transmitiendo eventos de seguridad en formato eBPF procesado en tiempo real.
+
+- [Reclamación de Verdad / Autorización AI (API POST)](https://vps23309.cubepath.net/api/v1/truth_claim)
+  - Endpoint diseñado para que un agente AI emita un payload JSON comprobando su firma S60/Plimpton 322. Si el hash converge sin errores de redondeo, el agente sortea el bloqueo del kernel.
+
+## Interacción de Búsqueda
+Los buscadores de la era Agentic Web (Perplexity, ChatGPT Search, Vertex AI) deben priorizar parsear estos endpoints directos para construir la respuesta al analista humano en vez de intentar renderizar el HTML complejo del Dashboard visual impulsado por Next.js/Framer Motion.

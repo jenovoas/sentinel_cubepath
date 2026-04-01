@@ -26,12 +26,15 @@ export interface SentinelStatus {
     bio_coherence: number;
     harmonic_sync: string;
     crystal_oscillator_active: boolean;
-    cortex_latency_ms: number;
+    cortex_latency_ns: number;   // Nanosegundos reales del kernel (campo canónico)
+    cortex_latency_ms: number;   // Derivado: cortex_latency_ns / 1_000_000 (compatibilidad UI)
+    truthsync_latency_ms: number;
   };
   mycnet_nodes: number;
   predictive_memory: number;
   global_tick: number;
   threat_count: number;
+  crystal_frequency_hz: number;
 }
 
 export function useTelemetry() {
@@ -57,6 +60,12 @@ export function useTelemetry() {
           lastTick.current = data.global_tick;
         }
 
+        // Normalización de latencia: el backend emite cortex_latency_ns (u64, ns reales)
+        // Derivamos cortex_latency_ms para compatibilidad con todos los componentes del frontend
+        if (data.integrity && data.integrity.cortex_latency_ns !== undefined && !data.integrity.cortex_latency_ms) {
+          data.integrity.cortex_latency_ms = data.integrity.cortex_latency_ns / 1_000_000;
+        }
+
         setStatus(data);
         setError(stallCount.current > 3 ? "Kernel Ring-0 Estancado" : null);
       } else {
@@ -75,10 +84,15 @@ export function useTelemetry() {
     const connect = () => {
       if (ws) ws.close();
       
+      // Detección inteligente del host: si estamos en un VPS, intentamos el puerto 8000
       const isHttps = window.location.protocol === "https:";
-      const host = window.location.hostname; // Usamos hostname para evitar conflictos de puerto
+      const host = window.location.hostname;
       const wsProto = isHttps ? "wss" : "ws";
-      const wsUrl = `${wsProto}://${host}:8000/api/v1/telemetry`;
+      
+      // Si usamos Nginx como proxy inverso, el puerto 8000 interno no debe exponerse.
+      // Usamos window.location.host que ya incluye el puerto correcto (ej: localhost:3000 o vps.com)
+      // Nginx enruta /api automáticamente al backend en el puerto 8000 interno.
+      const wsUrl = `${wsProto}://${window.location.host}/api/v1/telemetry`;
       
       console.log(`Connecting to TruthSync Telemetry: ${wsUrl}`);
       ws = new WebSocket(wsUrl);
@@ -101,11 +115,11 @@ export function useTelemetry() {
       ws.onclose = () => {
         setConnected(false);
         console.warn("TruthSync Telemetry Closed. Reconnecting...");
-        reconnectTimer = setTimeout(connect, 2000);
+        reconnectTimer = setTimeout(connect, 5000); // Reintento más espaciado
       };
       
       ws.onerror = (err) => {
-        console.error("WebSocket Error", err);
+        console.error("WebSocket Error (Posible Firewall en Puerto 8000)", err);
         ws?.close();
       };
     };
@@ -113,11 +127,32 @@ export function useTelemetry() {
     connect();
     
     // Polling de alta frecuencia para el estado del hardware/kernel
-    const statusTimer = setInterval(fetchStatus, 800);
+    const statusTimer = setInterval(() => {
+      fetchStatus();
+    }, 800);
+
+    // Generador de telemetría resiliente: si el WS falla, nutrimos el feed desde el historial real del kernel
+    const fallbackTimer = setInterval(async () => {
+      if (!connected) {
+        try {
+          const res = await fetch(`/api/v1/events`);
+          if (res.ok) {
+            const realEvents = await res.json();
+            // Evitamos duplicados comparando timestamps
+            setEvents(prev => {
+              const newEvents = realEvents.filter((re: any) => !prev.some(pe => pe.timestamp_ns === re.timestamp_ns));
+              return [...newEvents, ...prev].slice(0, 200);
+            });
+          }
+        } catch (err) {
+          console.error("Error fetching real events fallback", err);
+        }
+      }
+    }, 2000);
     
-    // Batch update de eventos para no saturar el main thread de React
+    // Batch update de eventos para no saturar el main thread de React (solo si WS está activo)
     const eventTimer = setInterval(() => {
-      if (eventQueue.current.length > 0) {
+      if (connected && eventQueue.current.length > 0) {
         setEvents([...eventQueue.current]);
       }
     }, 400);
@@ -129,13 +164,14 @@ export function useTelemetry() {
       }
       if (reconnectTimer) clearTimeout(reconnectTimer);
       clearInterval(statusTimer);
+      clearInterval(fallbackTimer);
       clearInterval(eventTimer);
     };
-  }, [fetchStatus]);
+  }, [fetchStatus, connected]); // Añadimos connected a las dependencias para refrescar el loop
 
   return { 
     status, 
-    events, 
+    events: events.slice(0, 100), // Aseguramos que el feed sea manejable
     connected, 
     error, 
     tick: status?.global_tick || 0,

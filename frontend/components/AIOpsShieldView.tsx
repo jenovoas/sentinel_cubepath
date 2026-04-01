@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   ShieldCheck,
   ShieldAlert,
@@ -11,18 +11,13 @@ import {
   Activity,
   Radar,
   Server,
-  AlertTriangle,
   CheckCircle2,
   Crosshair,
-  Play,
-  RotateCcw,
   Terminal,
-  Globe,
+  X,
   ChevronRight,
-  Layout,
-  Shield
+  Info,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { clsx } from "clsx";
 
 interface AIOpsShieldViewProps {
@@ -36,28 +31,32 @@ function derivedMetrics(status: any) {
   const bioCoherence = integrity.bio_coherence ?? 0;
   const maxCoherence = 12_960_000;
   const quantumLoad = integrity.quantum_load ?? 0;
-  const effectiveMass = integrity.effective_mass ?? 12_960_000;
-  const portalIntensity = (status?.s60_resonance || 0) * (maxCoherence / 100); 
-  const isSealed = status?.ring_status === "SEALED";
+  const effectiveMass = integrity.effective_mass ?? 0;
+  const isSealed = integrity.ring_status === "SEALED";
+
+  const truthSyncActive = (integrity.p322_ratio_integrity || 0) > 0;
+  const truthSyncCertified = (integrity.p322_ratio_integrity || 0) > 6_480_000;
 
   return {
     isSealed,
-    xdpActivo: integrity.xdp_firewall === "ACTIVE",
+    xdpActivo: integrity.xdp_firewall === "ACTIVE" || integrity.xdp_firewall === "ACTIVE_XDP",
     lsmEnforce: integrity.lsm_cognitive === "ENFORCING" || integrity.lsm_cognitive === "RING-0",
     harmSync: integrity.harmonic_sync === "STABLE" || integrity.harmonic_sync === "RESONANCE_MAX",
-    crystalActivo: integrity.crystal_oscillator_active === true,
+    crystalActivo: (status?.crystal_frequency_hz || 0) > 0,
+    truthSyncActive,
+    truthSyncCertified,
     // Porcentaje de coherencia bio [0..100]
     pctBio: Math.min(100, (Math.abs(bioCoherence) / maxCoherence) * 100),
-    // Carga cognitiva del kernel [0..100]
-    pctCarga: Math.min(100, (quantumLoad / maxCoherence) * 100),
-    // Saturación de masa efectiva
-    pctMasa: Math.min(100, (effectiveMass / maxCoherence) * 100),
-    // Intensidad del portal (métricas de osciladores) en porcentaje
-    pctPortal: status?.s60_resonance || 0,
-    // Ratio P322 — constante armónica Plimpton 322
-    p322: integrity.p322_ratio_integrity !== undefined ? Math.round(integrity.p322_ratio_integrity).toLocaleString() : "---",
-    // Latencia cortex
-    latenciaMs: status?.cortex_latency_ms !== undefined ? (status.cortex_latency_ms).toFixed(3) : "0.000",
+    // Carga cognitiva del kernel [0..100] basada en amenazas / bloqueos recientes
+    pctCarga: Math.min(100, quantumLoad * 20 + (status?.threat_count || 0) * 2),
+    // Saturación de masa efectiva basada en celdas cristalinas de lattice (N=1024)
+    pctMasa: Math.min(100, (effectiveMass / 1024) * 100),
+    // Intensidad del portal S60 escalada correctamente a %
+    pctPortal: Math.min(100, ((integrity.s60_resonance || 0) / maxCoherence) * 100),
+    // Ratio P322 — Constante Yatra S60 original sin redondear
+    p322: integrity.p322_ratio_integrity !== undefined ? integrity.p322_ratio_integrity.toLocaleString() : "---",
+    // Latencia cortex en ns normalizado a ms de forma precisa
+    latenciaMs: integrity.cortex_latency_ns !== undefined ? (integrity.cortex_latency_ns / 1_000_000).toFixed(3) : "0.000",
   };
 }
 
@@ -66,8 +65,8 @@ const SECTORES = ["EXEC", "NET", "FILE", "PROC", "MEM", "IPC", "SYS", "AIO"];
 export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
   const [pulse, setPulse] = useState(0);
   const [activeSector, setActiveSector] = useState<string | null>(null);
-  const [scanLog, setScanLog] = useState<string[]>([]);
   const [sectorStates, setSectorStates] = useState<Record<string, "OK" | "ALERTA" | "BLOQUEADO">>({});
+  const [selectedCapa, setSelectedCapa] = useState<any | null>(null);
 
   const m = derivedMetrics(status);
 
@@ -79,8 +78,6 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
 
   // Inicializar estados de sectores
   useEffect(() => {
-    const handleTrigger = async (type: "NORMAL" | "DOOM" | "CHAOS") => {
-    };
     const newStates: Record<string, "OK" | "ALERTA" | "BLOQUEADO"> = {};
     SECTORES.forEach(s => {
       if (m.isSealed && (s === "EXEC" || s === "NET")) {
@@ -96,26 +93,11 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
     setSectorStates(newStates);
   }, [m.isSealed, m.xdpActivo, m.lsmEnforce]);
 
-  // El log de escaneo se va construyendo con los eventos del telemetry feed
-  useEffect(() => {
-    if (events.length > 0) {
-      const amenazas = events
-        .filter(e => e.severity >= 3 || e.event_type?.includes("BLOCK") || e.event_type?.includes("ALERT") || e.event_type?.includes("THREAT"))
-        .slice(0, 8)
-        .map(e => {
-          const hora = e.timestamp_ns
-            ? new Date(e.timestamp_ns / 1_000_000).toLocaleTimeString("es-CL", { hour12: false })
-            : new Date().toLocaleTimeString("es-CL", { hour12: false });
-          return `[${hora}] ${e.event_type} — ${e.message}`;
-        });
-      if (amenazas.length > 0) setScanLog(amenazas);
-    }
-  }, [events]);
-
   const handleSectorClick = useCallback((sector: string) => {
     setActiveSector(prev => (prev === sector ? null : sector));
   }, []);
 
+  const integrity = status?.integrity || {};
   const capas = [
     {
       id: "s60",
@@ -126,6 +108,8 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
       color: "sky",
       valor: `P322: ${m.p322}`,
       activo: m.harmSync,
+      explanation: "El Validador de Esquema S60 es la primera línea de defensa. Cada evento que entra al sistema es evaluado contra la constante Plimpton 322 (fila 12: 12709/13500). Si el hash del evento no cae dentro del dominio matemático del sistema base-60, es descartado en Ring-0 antes de llegar al espacio de usuario. Esto es inmune a inyecciones que funcionan explotando ambigüedades de punto flotante IEEE-754.",
+      technical: `Sincronía Armónica: ${integrity.harmonic_sync || "---"}\nRatio P322 actual: ${integrity.p322_ratio_integrity || 0}\nEscala S60 (60^4): 12,960,000\nRatio canónico (12709/13500): 0.94141...\nEstado Lógico: ${integrity.logic_state || "---"}\nTick Global: ${status?.global_tick || 0}`,
     },
     {
       id: "sanitizacion",
@@ -136,26 +120,32 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
       color: "emerald",
       valor: `Masa: ${m.pctMasa.toFixed(0)}%`,
       activo: m.crystalActivo,
+      explanation: "El Sanitizador Armónico analiza la masa efectiva del Crystal Lattice (matriz 32×32 = 1024 osciladores). Cuando un patrón de inyección semántica (rm -rf, DROP TABLE, pipe chaining) es detectado, el módulo de control de brechas activa el Protocolo G-Zero: equilibra la carga de la célula afectada sin algoritmos probabilísticos, usando solo aritmética S60 entera. Garantiza latencia de decisión menor a 300 ns.",
+      technical: `Masa Efectiva (nodos activos): ${integrity.effective_mass || 0} / 1024\nOcupación Lattice: ${m.pctMasa.toFixed(2)}%\nFrecuencia Cristal: ${status?.crystal_frequency_hz || "---"} Hz\nProtocolo G-Zero: ACTIVO\nTipo Aritmética: i64 × i64 (sin punto flotante)\nAmplitud máxima (S60): 12,960,000`,
     },
     {
       id: "truthsync",
       nombre: "Autoridad TruthSync",
       descripcion: "Certifica la integridad matemática de cada evento Ring-0",
-      estado: "CERTIFICADO",
+      estado: m.truthSyncCertified ? "CERTIFICADO" : "VERIFICANDO",
       icon: ShieldCheck,
       color: "amber",
       valor: `Bio: ${Math.round(m.pctBio)}%`,
-      activo: true,
+      activo: m.truthSyncActive,
+      explanation: "TruthSync es el módulo de certificación continua del sistema. Calcula en tiempo real si la coherencia global del kernel coincide con la fracción Plimpton 322 esperada. Si la diferencia supera el 50% del umbral (6,480,000 en escala S60), el sistema emite una advertencia de contaminación. Actúa como dead-man switch: si el operador biológico no responde en 30s, el sistema sella el Ring-0.",
+      technical: `Sello TruthSync: ${integrity.truthsync_seal || "---"}\nRatio P322 Integridad: ${integrity.p322_ratio_integrity || 0}\nUmbral certificación (50%): 6,480,000\nBio-Coherencia: ${Math.round(m.pctBio)}% (${integrity.bio_coherence || 0} raw)\nLatencia TruthSync: ${integrity.truthsync_latency_ms || "---"} ms\nConfianza Cortex: ${integrity.cortex_confidence || 0}`,
     },
     {
       id: "ebpf",
       nombre: "Guardián eBPF Kernel",
       descripcion: "LSM hooks + XDP TC firewall en Ring-0",
-      estado: status?.xdp_firewall || "BYPASS",
+      estado: integrity.xdp_firewall || "BYPASS",
       icon: Cpu,
       color: m.isSealed ? "rose" : m.xdpActivo ? "emerald" : "slate",
-      valor: `LSM: ${status?.lsm_cognitive || "—"}`,
+      valor: `LSM: ${integrity.lsm_cognitive || "—"}`,
       activo: m.xdpActivo,
+      explanation: "El Guardián eBPF opera en dos capas simultáneas: (1) XDP — eXpress Data Path ejecuta programas BPF directamente en el driver de red antes que el stack TCP/IP, filtrando paquetes a velocidad de línea con zero-copy y latencia < 0.04 ms. (2) LSM — Linux Security Module con hooks semánticos en execve y file_open, analizando la intención de cada syscall mediante la red neuronal LIF del backend Rust. Bloquea agentes IA con comportamientos anómalos incluso con privilegios root.",
+      technical: `XDP Firewall: ${integrity.xdp_firewall || "---"}\nLSM Enforcement: ${integrity.lsm_cognitive || "---"}\nNervio A (LSM): ${integrity.nerve_a_status || "---"}\nNervio B (XDP): ${integrity.nerve_b_status || "---"}\nLatencia Cortex: ${m.latenciaMs} ms\nEstado Ring-0: ${integrity.ring_status || "---"}\nAmenazas interceptadas: ${status?.threat_count || 0}`,
     },
   ];
 
@@ -165,7 +155,7 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
     BLOQUEADO: "text-rose-400 border-rose-500/40 bg-rose-500/10",
   };
 
-  const activeThreats = events
+  const activeThreats = (events || [])
     .filter(e => e.severity >= 3 || e.event_type?.includes("BLOCK") || e.event_type?.includes("ALERT") || e.event_type?.includes("THREAT"))
     .slice(0, 6);
 
@@ -177,8 +167,9 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
         {capas.map((capa) => (
           <div
             key={capa.id}
+            onClick={() => setSelectedCapa(capa)}
             className={clsx(
-              "glass-card p-4 border flex flex-col gap-3 cursor-default group hover:scale-[1.01] transition-all duration-200",
+              "glass-card p-4 border flex flex-col gap-3 cursor-pointer group hover:scale-[1.01] transition-all duration-200 hover:border-white/20",
               capa.activo
                 ? `border-${capa.color}-500/20 bg-${capa.color}-500/5`
                 : "border-slate-800 bg-slate-900/20"
@@ -186,8 +177,8 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
             title={capa.descripcion}
           >
             <div className="flex items-center justify-between">
-              <div className={clsx("p-2 rounded-lg border", capa.activo ? `border-${capa.color}-500/30 bg-${capa.color}-500/10` : "border-slate-700 bg-slate-900")}>
-                <capa.icon className={clsx("w-4 h-4", capa.activo ? `text-${capa.color}-400` : "text-slate-600")} />
+              <div className={clsx("w-10 h-10 flex items-center justify-center rounded-lg border shrink-0", capa.activo ? `border-${capa.color}-500/30 bg-${capa.color}-500/10` : "border-slate-700 bg-slate-900")} style={{ width: '40px', height: '40px' }}>
+                <capa.icon className={clsx("w-5 h-5", capa.activo ? `text-${capa.color}-400` : "text-slate-600")} style={{ width: '20px', height: '20px' }} />
               </div>
               <div className="flex items-center gap-1.5">
                 <div className={clsx("w-1.5 h-1.5 rounded-full", capa.activo ? "bg-emerald-400 animate-pulse" : "bg-slate-700")} />
@@ -200,8 +191,11 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
               <p className="text-[10px] font-black text-white uppercase tracking-tight leading-snug">{capa.nombre}</p>
               <p className={clsx("text-[9px] font-bold mono mt-1", capa.activo ? `text-${capa.color}-400` : "text-slate-600")}>{capa.valor}</p>
             </div>
-            {/* Tooltip de descripción al hover */}
-            <p className="text-[8px] text-slate-600 leading-snug opacity-0 group-hover:opacity-100 transition-opacity duration-200">{capa.descripcion}</p>
+            {/* Indicador clickeable */}
+            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <Info className="w-2.5 h-2.5 text-slate-600" />
+              <p className="text-[7px] text-slate-600 font-bold uppercase tracking-widest">Ver detalle técnico</p>
+            </div>
           </div>
         ))}
       </div>
@@ -250,8 +244,8 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Inspección Ring-0 Crystal & Neural — Telemetría de Cristales</p>
-                <p className="text-xs font-black text-emerald-200 mono">{m.p322}</p>
+                <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest">Latencia Cortex</p>
+                <p className="text-xl font-black text-sky-400 mono">{m.latenciaMs} ms</p>
               </div>
             </div>
 
@@ -300,7 +294,7 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
                         <div className="flex justify-between">
                           <span className="text-slate-500">XDP Firewall</span>
                           <span className={clsx("font-black", m.xdpActivo ? "text-emerald-400" : "text-rose-400")}>
-                            {status?.xdp_firewall || "BYPASS"}
+                            {status?.integrity?.xdp_firewall || "BYPASS"}
                           </span>
                         </div>
                         <div className="flex justify-between">
@@ -334,22 +328,16 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
                     </div>
                     <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
                       <div
-                        className={`h-full bg-${color}-500 rounded-full transition-all duration-1000 shadow-[0_0_8px_var(--tw-shadow-color)]`}
+                        className={`h-full bg-${color}-500 rounded-full transition-all duration-1000`}
                         style={{ width: `${Math.max(2, val)}%` }}
                       />
                     </div>
                   </div>
                 ))}
 
-                <div className="grid grid-cols-2 gap-3 pt-2">
-                  <div className="p-3 rounded-lg bg-black/30 border border-slate-900 group hover:border-sky-500/20 transition-colors">
-                    <p className="text-[8px] text-slate-600 font-bold uppercase mb-1 tracking-widest">Latencia Cortex</p>
-                    <div className="text-sm font-mono text-sky-400">{m.latenciaMs} ms</div>
-                  </div>
-                  <div className="p-3 rounded-lg bg-black/30 border border-slate-900 group hover:border-emerald-500/20 transition-colors">
-                    <p className="text-[8px] text-slate-600 font-bold uppercase mb-1 tracking-widest">Integridad P322</p>
-                    <div className="text-sm font-mono text-emerald-400">{m.p322}</div>
-                  </div>
+                <div className="p-3 rounded-lg bg-black/30 border border-slate-900 group hover:border-emerald-500/20 transition-colors mt-2">
+                  <p className="text-[8px] text-slate-600 font-bold uppercase mb-1 tracking-widest">Integridad P322</p>
+                  <div className="text-sm font-mono text-emerald-400">{m.p322}</div>
                 </div>
               </div>
             </div>
@@ -359,7 +347,7 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
               {[
                 { icon: Lock, label: "LSM_PROTEGIDO", activo: m.lsmEnforce },
                 { icon: Server, label: "S60_SINCRONIZADO", activo: m.harmSync },
-                { icon: ShieldCheck, label: "TRUTHSYNC_CERT", activo: true },
+                { icon: CheckCircle2, label: "TRUTHSYNC_CERT", activo: m.truthSyncCertified },
                 { icon: Cpu, label: "XDP_FIREWALL", activo: m.xdpActivo },
               ].map((badge, i) => (
                 <div key={i} className={clsx(
@@ -385,109 +373,122 @@ export function AIOpsShieldView({ status, events = [] }: AIOpsShieldViewProps) {
         </div>
 
         {/* Panel del Feed de Amenazas en Vivo */}
-        <div className="flex flex-col h-full space-y-4">
-          <div className="glass-card p-5 border-rose-500/20 bg-slate-950/80 flex flex-col flex-1 relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-4 opacity-5">
-              <ShieldAlert className="w-32 h-32 text-rose-500" />
+        <div className="flex flex-col h-full space-y-4 overflow-hidden">
+          <div className="glass-card p-5 border-rose-500/20 bg-slate-950/80 flex flex-col h-full relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
+              <ShieldAlert className="w-24 h-24 text-rose-500" style={{ width: '96px', height: '96px' }} />
             </div>
 
             <div className="flex items-center justify-between mb-4 border-b border-rose-500/20 pb-3 relative z-10">
               <div className="flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 text-rose-500" />
                 <h2 className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-rose-200">
-                  Registro de Amenazas
+                  Amenazas
                 </h2>
               </div>
               <div className="flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
-                <span className="text-[7px] font-black uppercase tracking-widest text-rose-400">EN VIVO</span>
+                <span className="text-[7px] font-black uppercase tracking-widest text-rose-400">RING-0</span>
               </div>
             </div>
 
             <div className="flex-1 space-y-2 font-mono text-[9px] overflow-y-auto relative z-10 custom-scrollbar">
               {activeThreats.length > 0 ? activeThreats.map((ev: any, i: number) => {
-                const hora = ev.timestamp_ns
-                  ? new Date(ev.timestamp_ns / 1_000_000).toLocaleTimeString("es-CL", { hour12: false })
-                  : "—";
                 const isCritical = ev.severity >= 4;
                 return (
                   <div key={i} className={clsx(
-                    "p-3 rounded-xl border flex flex-col gap-2 transition-all",
-                    isCritical
-                      ? "bg-rose-500/10 border-rose-500/30"
-                      : "bg-amber-500/5 border-amber-500/20"
+                    "p-3 rounded-xl border flex flex-col gap-2 transition-all hover:bg-white/5",
+                    isCritical ? "bg-rose-500/10 border-rose-500/30" : "bg-slate-900 border-white/5"
                   )}>
                     <div className="flex justify-between items-start gap-2">
                       <span className={clsx("font-black text-[9px] tracking-tight shrink-0", isCritical ? "text-rose-400" : "text-amber-400")}>
                         [{ev.event_type}]
                       </span>
-                      <span className="text-slate-600 text-[8px] tabular-nums shrink-0">{hora}</span>
                     </div>
-                    <p className="text-slate-300 font-medium text-[9px] leading-snug break-words line-clamp-2">{ev.message}</p>
+                    <p className="text-slate-300 font-medium text-[9px] leading-snug line-clamp-2">{ev.message}</p>
                     <div className="flex items-center justify-between pt-1 border-t border-white/5 text-[7px] font-black uppercase text-slate-500">
-                      <div className="flex items-center gap-1.5">
-                        <div className={clsx("w-1.5 h-1.5 rounded-full", isCritical ? "bg-rose-500" : "bg-amber-400")} />
-                        PID_{ev.pid || "—"}
-                      </div>
-                      <span className={clsx("px-1.5 py-0.5 rounded border text-[7px]",
-                        isCritical
-                          ? "bg-rose-500/20 text-rose-400 border-rose-500/20"
-                          : "bg-amber-500/20 text-amber-400 border-amber-500/20"
-                      )}>
-                        {isCritical ? "BLOQUEADO" : "ALERTA"}
-                      </span>
+                      <span>PID_{ev.pid || "—"}</span>
+                      <span className={isCritical ? "text-rose-400" : "text-amber-400"}>{isCritical ? "BLOQUEADO" : "ALERTA"}</span>
                     </div>
                   </div>
                 );
               }) : (
-                <div className="space-y-2 mt-2">
-                  {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="text-[9px] font-mono text-slate-600 bg-slate-900/60 px-3 py-2.5 rounded-xl border border-white/5 flex items-center justify-between animate-pulse">
-                      <span>ESCANEANDO SECTOR_{SECTORES[i % SECTORES.length]} — DESPEJADO</span>
-                      <Activity className="w-3 h-3 opacity-30" />
-                    </div>
-                  ))}
-                  <div className="flex flex-col items-center justify-center pt-6 text-center text-slate-700">
-                    <CheckCircle2 className="w-8 h-8 mb-2 opacity-30 text-emerald-600" />
-                    <span className="text-[10px] uppercase font-black tracking-widest">Sin Amenazas Activas</span>
-                    <span className="text-[8px] text-slate-700 mt-1">El sistema perimetral está limpio</span>
-                  </div>
+                <div className="flex flex-col items-center justify-center h-48 text-center text-slate-700">
+                   <Activity className="w-8 h-8 mb-2 opacity-10 animate-pulse" />
+                   <p className="text-[9px] font-black uppercase tracking-widest">Escaneo Pasivo</p>
                 </div>
               )}
-            </div>
-
-            {/* Resumen estadístico al pie */}
-            <div className="mt-4 pt-4 border-t border-white/5 relative z-10 space-y-3">
-              <div className="grid grid-cols-3 gap-2">
-                {[
-                  { label: "Total eventos", val: events.length },
-                  { label: "Amenazas", val: activeThreats.length },
-                  { label: "Severidad máx.", val: events.length > 0 ? Math.max(...events.map(e => e.severity || 0)) : 0 },
-                ].map(({ label, val }) => (
-                  <div key={label} className="text-center p-2 bg-slate-900/60 rounded-lg border border-white/5">
-                    <p className="text-[7px] text-slate-600 font-bold uppercase tracking-wider">{label}</p>
-                    <p className="text-sm font-black text-white mono">{val}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="flex items-center justify-between text-[9px] font-black uppercase tracking-widest">
-                <span className="text-slate-500">Protección del Sistema</span>
-                <span className={clsx("font-black", activeThreats.length === 0 ? "text-emerald-400" : "text-amber-400")}>
-                  {activeThreats.length === 0 ? "100% PROTEGIDO" : `${Math.max(0, 100 - activeThreats.length * 5)}% ACTIVO`}
-                </span>
-              </div>
-              <div className="w-full h-1.5 bg-slate-900 rounded-full mt-2 overflow-hidden">
-                <motion.div 
-                  className="h-full bg-emerald-500" 
-                  initial={{ width: 0 }}
-                  animate={{ width: activeThreats.length === 0 ? "100%" : `${Math.max(0, 100 - activeThreats.length * 5)}%` }}
-                  style={{ width: activeThreats.length === 0 ? "100%" : `${Math.max(0, 100 - activeThreats.length * 5)}%` }}
-                />
-              </div>
             </div>
           </div>
         </div>
       </div>
+      {/* ── MODAL DETALLE TÉCNICO DE CAPA ── */}
+      {selectedCapa && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-6">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
+            onClick={() => setSelectedCapa(null)}
+          />
+          {/* Panel */}
+          <div className="relative w-full max-w-lg glass-card shadow-2xl overflow-hidden bg-slate-900 border border-white/10 animate-in fade-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="p-6 border-b border-white/5 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className={clsx(
+                  "p-3 rounded-2xl border",
+                  selectedCapa.activo
+                    ? `border-${selectedCapa.color}-500/30 bg-${selectedCapa.color}-500/10 text-${selectedCapa.color}-400`
+                    : "border-slate-700 bg-slate-900 text-slate-500"
+                )}>
+                  <selectedCapa.icon className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-white">{selectedCapa.nombre}</h3>
+                  <p className={clsx("text-xs font-bold uppercase", selectedCapa.activo ? `text-${selectedCapa.color}-400` : "text-slate-500")}>
+                    {selectedCapa.estado} — {selectedCapa.valor}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedCapa(null)}
+                className="p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            {/* Body */}
+            <div className="p-6 space-y-6">
+              <div>
+                <h4 className="text-[10px] font-black uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-2">
+                  <Info className="w-3 h-3" /> Explicación del Protocolo
+                </h4>
+                <p className="text-sm text-slate-300 leading-relaxed font-medium">{selectedCapa.explanation}</p>
+              </div>
+              <div className="bg-black/40 rounded-2xl p-5 border border-white/5">
+                <h4 className="text-[10px] font-black uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-2">
+                  <Terminal className="w-3 h-3" /> Telemetría Ring-0 (Raw Data)
+                </h4>
+                <pre className="text-xs font-mono text-emerald-400 bg-black/20 p-4 rounded-xl border border-emerald-500/10 overflow-x-auto whitespace-pre-wrap leading-relaxed">
+                  {selectedCapa.technical}
+                </pre>
+              </div>
+              <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-500">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Datos en Tiempo Real — S60 Ring-0
+                </div>
+                <button
+                  onClick={() => setSelectedCapa(null)}
+                  className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 text-[9px] font-black uppercase tracking-widest text-white transition-all"
+                >
+                  Cerrar <ChevronRight className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

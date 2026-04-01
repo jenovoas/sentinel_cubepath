@@ -63,7 +63,7 @@ export function TruthSyncReport({ status }: TruthSyncReportProps) {
             "p-3 rounded-full border shadow-2xl",
             isCertified ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400" : "border-rose-500/40 bg-rose-500/10 text-rose-400"
           )}>
-            {isCertified ? <ShieldCheck className="w-8 h-8" /> : <AlertTriangle className="w-8 h-8" />}
+            {isCertified ? <ShieldCheck className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
           </div>
         </div>
 

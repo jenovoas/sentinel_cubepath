@@ -151,13 +151,13 @@ const AUTOMATIONS = [
   {
     id: "phi3",
     name: "Phi-3 Mini Cognitive Core",
-    description: "Simulación de inferencia perimetral IA",
+    description: "Análisis de Inferencia Proyectado",
     icon: Terminal,
     color: "indigo",
     trigger: "Threat Analysis",
-    lastRun: "Hace 1 día",
-    status: "active",
-    logs: ["Cargando pesos de inferencia...", "Inferencia Exitosa: Ataque Nulo.", "Core offline."]
+    lastRun: "PLANIFICADO",
+    status: "planned",
+    logs: ["Esperando asignación de recursos...", "Modelo Phi-3 identificado como target.", "Arquitectura lista."]
   },
   {
     id: "watchdog1",
@@ -188,12 +188,8 @@ export function N8nView() {
   const [visibleLogs, setVisibleLogs] = useState<Record<string, boolean>>({});
 
   const handleRun = (id: string) => {
-    setRunning(prev => ({ ...prev, [id]: true }));
+    // Modo Verdad: No permitimos ejecuciones simuladas si n8n no está desplegado.
     toggleLogs(id, true);
-    // Simulamos la ejecución del webhook para la hackatón
-    setTimeout(() => {
-      setRunning(prev => ({ ...prev, [id]: false }));
-    }, 3000);
   };
 
   const toggleLogs = (id: string, forceShow?: boolean) => {
@@ -214,14 +210,20 @@ export function N8nView() {
             </div>
             <div>
               <h2 className="text-xl font-black uppercase tracking-[0.2em] text-white flex items-center gap-3">
-                Arcos de Reflejo (n8n API)
-                <span className="px-2 py-0.5 border text-[7px] tracking-widest rounded font-black bg-violet-500/10 text-violet-400 border-violet-500/20">
-                  SÓLO LECTURA
+                Arquitectura de Reflejos
+                <span className="px-2 py-0.5 border text-[7px] tracking-widest rounded font-black bg-amber-500/10 text-amber-400 border-amber-500/20">
+                  PRÓXIMA FASE
                 </span>
               </h2>
-              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">
-                Visualización segura de automatizaciones
-              </p>
+              <div className="flex flex-col gap-1 mt-1">
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                  Planificación de automatizaciones para Sentinel Ring-0
+                </p>
+                <div className="flex items-center gap-2 px-2 py-1 bg-rose-500/10 border border-rose-500/20 rounded max-w-fit mt-1">
+                   <AlertTriangle className="w-3 h-3 text-rose-400" />
+                   <p className="text-[8px] text-rose-400 font-black uppercase tracking-tighter">Despliegue n8n requiere 16GB RAM (Nodo Actual: 4GB — Sentinel-CubePath)</p>
+                </div>
+              </div>
             </div>
           </div>
           <button 
@@ -256,9 +258,9 @@ export function N8nView() {
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-1">
-                    <span className="text-[8px] font-black uppercase text-emerald-400 tracking-widest px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded">ACTIVO</span>
+                    <span className="text-[8px] font-black uppercase text-amber-400 tracking-widest px-2 py-0.5 bg-amber-500/10 border border-amber-500/20 rounded">PLANIFICADO</span>
                     <span className="text-[8px] text-slate-600 font-bold uppercase tracking-widest flex items-center gap-1">
-                      <Clock className="w-2.5 h-2.5" /> {auto.lastRun}
+                      <Clock className="w-2.5 h-2.5" /> ESTATUS: PENDIENTE
                     </span>
                   </div>
                 </div>
@@ -273,24 +275,24 @@ export function N8nView() {
                   <div className="flex items-center gap-2">
                     <button 
                       onClick={() => toggleLogs(auto.id)}
-                      className="p-1.5 text-slate-500 hover:text-white hover:bg-white/5 rounded transition-colors"
-                      title="Ver Registros"
+                      className="p-1.5 text-slate-500 hover:text-white hover:bg-white/5 rounded transition-colors flex items-center gap-2 px-3 border border-white/5"
                     >
                       <Terminal className="w-4 h-4" />
+                      <span className="text-[8px] font-black uppercase tracking-widest">Ver Diseño</span>
                     </button>
                     {isRunning ? (
                       <button 
-                        onClick={() => setRunning(prev => ({ ...prev, [auto.id]: false }))}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[9px] font-black uppercase tracking-widest rounded hover:bg-rose-500/30 transition-colors"
+                        disabled
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 border border-white/5 text-slate-600 text-[9px] font-black uppercase tracking-widest rounded cursor-not-allowed"
                       >
-                        <Square className="w-3 h-3 fill-rose-500" /> Parar
+                        <Square className="w-3 h-3 fill-slate-700" /> Parar
                       </button>
                     ) : (
                       <button 
                         onClick={() => handleRun(auto.id)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[9px] font-black uppercase tracking-widest rounded hover:bg-emerald-500/30 transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 border border-white/5 text-slate-500 text-[9px] font-black uppercase tracking-widest rounded hover:border-amber-500/30 hover:text-amber-400 transition-colors"
                       >
-                        <Play className="w-3 h-3 fill-emerald-500" /> Ejecutar
+                        <Play className="w-3 h-3 fill-slate-700" /> Inspeccionar
                       </button>
                     )}
                   </div>

@@ -2,8 +2,24 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Sentinel Ring-0 | Cognitive Firewall",
-  description: "Seguridad IA Avanzada a Nivel Kernel para Agentes Autónomos",
+  metadataBase: new URL("https://vps23309.cubepath.net"),
+  title: "Sentinel Ring-0 | Firewall Cognitivo y Telemetría S60",
+  description: "Observabilidad eBPF/LSM de núcleo. Aislamiento matemático puro (Yatra S60) sin coma flotante para agentes de inteligencia artificial y protección P2P Hexagonal. Hackatón CubePath 2026.",
+  keywords: ["Hacker", "Cyber", "eBPF", "Plimpton 322", "WebAssembly", "Axum", "Rust", "Next.js", "Sextagesimal", "LSM", "XDP", "MyCNet"],
+  authors: [{ name: "Jaime Novoa" }],
+  openGraph: {
+    title: "Sentinel Ring-0 | Cognitive Firewall S60",
+    description: "Operaciones deterministas en Ring-0. Defendiendo arquitecturas Linux de AI Autónoma bajo aritmética Yatra S60.",
+    url: "https://vps23309.cubepath.net",
+    siteName: "Sentinel-Cubepath",
+    locale: "es_CL",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sentinel Ring-0 | Firewall Cognitivo",
+    description: "Aislamiento Matemático S60. Protección eBPF/LSM.",
+  },
   icons: {
     icon: '/favicon.png',
   },
