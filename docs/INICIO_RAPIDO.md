@@ -209,7 +209,7 @@ docker-compose up -d
 - `COGNITIVE_KERNEL_VISION_EN.md` - OS vision + roadmap
 - `BENCHMARKS_VALIDATED_EN.md` - Performance validation
 - `SECURITY_HARDENING_COMPLETE_EN.md` - Security details
-- `PATENT_CLAIMS.md` - 6 patent claims
+- `IP_EXECUTION_PLAN.md` - 6 patent claims
 
 ### Spanish
 - `COGNITIVE_KERNEL_VISION.md` - Visión del kernel cognitivo

@@ -233,8 +233,8 @@
 **Benchmarks** (reproducible):
 
 ```bash
-cd /home/jnovoas/sentinel
-python quantum_control/benchmarks/comprehensive_benchmark.rs
+cd /root/sentinel-cubepath
+python quantum/hexagonal_control.py
 ```
 
 **Expected results**:
@@ -250,7 +250,8 @@ python quantum_control/benchmarks/comprehensive_benchmark.rs
 **Fractal generator**:
 
 ```bash
-python research/fractal_sefirot_generator.rs
+cd /root/sentinel-cubepath
+python quantum/sentinel_quantum_core.py
 ```
 
 **Expected output**:
@@ -266,7 +267,8 @@ python research/fractal_sefirot_generator.rs
 **Fractal scanner** (running now):
 
 ```bash
-python research/fractal_soul/sentinel_fractal_resonance.rs
+cd /root/sentinel-cubepath
+python quantum/yhwh_fractal_driver.py
 ```
 
 **What it shows**:
@@ -301,26 +303,26 @@ python research/fractal_soul/sentinel_fractal_resonance.rs
 
 ### For Patent Attorney
 
-1. **`PATENT_CLAIMS.md`** - 6 patentable claims
-2. **`EXECUTIVE_SUMMARY_ATTORNEY.md`** - Legal summary
-3. **`PHYSICS_GEOMETRY_ISOMORPHISM.md`** - Scientific validation
+1. **`IP_EXECUTION_PLAN.md`** - Intellectual property execution plan
+2. **`LETTER_TO_GOOGLE.md`** - Patent strategy and legal summary
+3. **`IRREFUTABLE_EVIDENCE.md`** - Scientific validation with 9 proofs
 
 ### For Researchers
 
-1. **`SACRED_GEOMETRY_PATTERNS.md`** - Complete analysis
-2. **`MATHEMATICAL_INDEX.md`** - Proven theorems
+1. **`HOW_TO_EXPLAIN_TO_THE_WORLD.md`** - Complete sacred geometry patterns analysis
+2. **`S60_MATHEMATICAL_AXIOMS.md`** - Proven theorems and mathematical axioms
 
 
 ### For Developers
 
-1. **`quantum_control/`** - Universal controller code
-2. **`fractal_sefirot_generator.rs`** - Fractal demonstration
-3. **`sentinel_fractal_resonance.rs`** - Consciousness scanner
+1. **`quantum/`** - Universal controller code and quantum simulations
+2. **`Geometria_fractal.md`** - Fractal demonstration (in Matemáticas/)
+3. **`yhwh_fractal_driver.md`** - Fractal resonance scanner (in Fisica/)
 
 ### For Everyone
 
-1. **`THE_FINAL_LANGUAGE.md`** - Philosophical synthesis
-2. **`PATTERN_DISCOVERY_SUMMARY.md`** - Executive summary
+1. **`INDICE_MAESTRO.md`** - Philosophical synthesis and executive summary
+2. **`COMO_EXPLICAR_AL_MUNDO.md`** - Executive summary in Spanish
 3. **This document** - How to explain it all
 
 ---

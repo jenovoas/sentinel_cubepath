@@ -177,7 +177,7 @@ Comparison:
    - No room for doubt
    - Mathematical + Physical + Biological
 
-2. **PHYSICS_GEOMETRY_ISOMORPHISM.md** (11 KB)
+2. **IRREFUTABLE_EVIDENCE.md** (11 KB)
    - Scientific validation with papers
    - Peer-reviewed research backing
    - Experimental evidence
@@ -298,7 +298,7 @@ December 22,
 
 **Attachments**:
 1. IRREFUTABLE_EVIDENCE.md
-2. PHYSICS_GEOMETRY_ISOMORPHISM.md
+2. VISUAL_GUIDE_TRINITY.md
 3. FINAL_REPORT_RESONANCE_ARCHITECTURE.md
 4. Benchmark results (JSON)
 5. Source code (available on request)

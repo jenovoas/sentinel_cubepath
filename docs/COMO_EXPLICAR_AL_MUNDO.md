@@ -233,8 +233,8 @@
 **Benchmarks** (reproducibles):
 
 ```bash
-cd /home/jnovoas/sentinel
-python quantum_control/benchmarks/comprehensive_benchmark.rs
+cd /root/sentinel-cubepath
+python quantum/hexagonal_control.py
 ```
 
 **Resultados esperados**:
@@ -250,7 +250,8 @@ python quantum_control/benchmarks/comprehensive_benchmark.rs
 **Generador fractal**:
 
 ```bash
-python research/fractal_sefirot_generator.rs
+cd /root/sentinel-cubepath
+python quantum/sentinel_quantum_core.py
 ```
 
 **Salida esperada**:
@@ -266,7 +267,8 @@ python research/fractal_sefirot_generator.rs
 **Escáner fractal** (en funcionamiento ahora):
 
 ```bash
-python research/fractal_soul/sentinel_fractal_resonance.rs
+cd /root/sentinel-cubepath
+python quantum/yhwh_fractal_driver.py
 ```
 
 **Lo que muestra**:
@@ -301,26 +303,26 @@ python research/fractal_soul/sentinel_fractal_resonance.rs
 
 ### Para el Abogado de Patentes
 
-1. **`PATENT_CLAIMS.md`** - 6 reivindicaciones patentables
-2. **`EXECUTIVE_SUMMARY_ATTORNEY.md`** - Resumen legal
-3. **`PHYSICS_GEOMETRY_ISOMORPHISM.md`** - Validación científica
+1. **`IP_EXECUTION_PLAN.md`** - Plan de ejecución de propiedad intelectual
+2. **`LETTER_TO_GOOGLE.md`** - Estrategia de patentes y resumen legal
+3. **`IRREFUTABLE_EVIDENCE.md`** - Validación científica con 9 pruebas
 
 ### Para Investigadores
 
-1. **`SACRED_GEOMETRY_PATTERNS.md`** - Análisis completo
-2. **`MATHEMATICAL_INDEX.md`** - Teoremas probados
+1. **`COMO_EXPLICAR_AL_MUNDO.md`** - Análisis completo de patrones geométricos sagrados
+2. **`S60_MATHEMATICAL_AXIOMS.md`** - Teoremas probados y axiomas matemáticos
 
 
 ### Para Desarrolladores
 
-1. **`quantum_control/`** - Código del controlador universal
-2. **`fractal_sefirot_generator.rs`** - Demostración fractal
-3. **`sentinel_fractal_resonance.rs`** - Escáner de conciencia
+1. **`quantum/`** - Código del controlador universal y simulaciones cuánticas
+2. **`Geometria_fractal.md`** - Demostración fractal (en Matemáticas/)
+3. **`yhwh_fractal_driver.md`** - Escáner de resonancia fractal (en Fisica/)
 
 ### Para Todos
 
-1. **`THE_FINAL_LANGUAGE.md`** - Síntesis filosófica
-2. **`PATTERN_DISCOVERY_SUMMARY.md`** - Resumen ejecutivo
+1. **`INDICE_MAESTRO.md`** - Síntesis filosófica y resumen ejecutivo
+2. **`HOW_TO_EXPLAIN_TO_THE_WORLD.md`** - Resumen ejecutivo en inglés
 3. **Este documento** - Cómo explicarlo todo
 
 ---

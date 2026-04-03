@@ -25,9 +25,9 @@
 
 ### CATEGORÍA 2: Innovaciones Técnicas (1-6)
 
-#### 2. [`PATENT_CLAIMS.md`](file:///home/jnovoas/sentinel/PATENT_CLAIMS.md)
+#### 2. [`IP_EXECUTION_PLAN.md`](docs/IP_EXECUTION_PLAN.md)
 
-**Propósito**: 6 claims principales validados  
+**Propósito**: Plan de ejecución de propiedad intelectual con 6 claims principales validados  
 **Contenido**:
 
 - Claim 1: Dual-Lane

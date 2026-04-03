@@ -84,10 +84,10 @@ CRITICAL_FILES = [
     "../docs/ARQUITECTURA_COMPLETA_INTEGRADA.md",   # Complete Architecture
     "../docs/INTEGRACION_MAESTRA_QUANTUM_TRINITY.md", # Quantum Integration
     "../research/PLIMPTON_322_DECODED.md",          # Mathematical Research
-    "../research/PHYSICS_GEOMETRY_ISOMORPHISM.md",  # Physics Research
-    "../research/FRACTAL_SOUL_RESEARCH.md",         # Consciousness Research
-    "../research/DIGITAL_ARCHAEOLOGY.md",           # Historical Analysis
-    "../research/SACRED_GEOMETRY_PATTERNS.md",      # Geometric Patterns
+    "../docs/IRREFUTABLE_EVIDENCE.md",  # Physics Research
+    "../docs/Fisica/yhwh_fractal_driver.md",         # Consciousness Research
+    "../quantum/extract_babylonian_identity.py",           # Historical Analysis
+    "../docs/COMO_EXPLICAR_AL_MUNDO.md",      # Geometric Patterns
     
     # PHASE 7: SILICON SYNTHESIS - FROZEN
     "hardware_synthesis.py",             # Synthesis Simulator
