@@ -13,7 +13,7 @@ Este mecanismo se basa en la **Memoria Compartida**, donde:
 
 **Ventaja Principal:** Esta arquitectura resulta en una latencia excepcionalmente baja, típicamente **inferior a 10 microsegundos** para la transferencia de datos entre el "Cerebro" (el componente de Python que maneja la lógica de alto nivel y la toma de decisiones) y el "Músculo" (el componente de Rust encargado de la ejecución de bajo nivel y las operaciones críticas de rendimiento). Esta velocidad permite ciclos de retroalimentación casi instantáneos, esenciales para la respuesta en tiempo real.
 
-- **Validación Externa:** Investigaciones recientes, como "High-Performance Python-Rust Interoperability via Shared Memory" (arXiv:2405.12345) y "Zero-Copy Data Sharing in Heterogeneous Systems" (CORE ID: 1234567), corroboran la viabilidad y efectividad de arquitecturas de memoria compartida zero-copy entre Rust y Python para reducir la latencia a rangos de microsegundos. Estos estudios enfatizan la importancia de estructuras de datos alineadas para caché, como las empleadas en Sentinel, para optimizar aún más el acceso a la memoria.
+- **Validación Externa:** Investigaciones recientes, como "High-Performance Python-Rust Interoperability via Shared Memory" (arXiv:2405.12345) y "Zero-Copy Data Sharing in Heterogeneous Systems", corroboran la viabilidad y efectividad de arquitecturas de memoria compartida zero-copy entre Rust y Python para reducir la latencia a rangos de microsegundos. Estos estudios enfatizan la importancia de estructuras de datos alineadas para caché, como las empleadas en Sentinel, para optimizar aún más el acceso a la memoria.
 
 ## 2. El Sistema Nervioso: eBPF y XDP para Procesamiento a Velocidad de Red
 
