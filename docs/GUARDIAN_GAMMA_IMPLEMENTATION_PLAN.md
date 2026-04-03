@@ -1,7 +1,6 @@
 # Guardian Gamma Implementation Plan
 
 **Goal**: Implement Human-in-the-Loop (HITL) interface for critical security decisions  
-**Time estimate**: 2-3 hours  
 **Status**: Planning
 
 ---
@@ -11,11 +10,13 @@
 **Purpose**: Allow human to validate critical decisions from Guardian Alpha and Beta
 
 **When it triggers**:
+
 - Guardian Alpha blocks a binary (potential false positive)
 - Guardian Beta detects anomaly in telemetry (needs human judgment)
 - System encounters unknown threat pattern
 
 **How it works**:
+
 1. Guardian Alpha/Beta makes decision
 2. If confidence < threshold, escalate to Gamma
 3. Human reviews context and evidence
@@ -29,17 +30,20 @@
 ### Components
 
 **1. Decision Queue**
+
 - Store pending decisions
 - Priority-based ordering
 - Timeout handling
 
 **2. Web Interface**
+
 - Dashboard showing pending decisions
 - Context display (logs, evidence)
 - Approve/Deny/Modify buttons
 - Feedback mechanism
 
 **3. API Endpoints**
+
 - POST /gamma/decision - Create decision request
 - GET /gamma/pending - List pending decisions
 - POST /gamma/approve/:id - Approve decision
@@ -47,6 +51,7 @@
 - POST /gamma/feedback/:id - Provide feedback
 
 **4. Integration Layer**
+
 - Connect to Guardian Alpha (eBPF events)
 - Connect to Guardian Beta (telemetry events)
 - Notification system (email, Slack, etc)
@@ -56,23 +61,27 @@
 ## Implementation Steps
 
 ### Phase 1: Backend (1 hour)
+
 - [ ] Create `guardian_gamma_service.rs`
 - [ ] Decision queue (PostgreSQL table)
 - [ ] API endpoints
 - [ ] Integration with Alpha/Beta
 
 ### Phase 2: Frontend (1 hour)
+
 - [ ] Gamma dashboard page
 - [ ] Decision card component
 - [ ] Approve/Deny UI
 - [ ] Real-time updates (WebSocket)
 
 ### Phase 3: Integration (30 min)
+
 - [ ] Connect Alpha to Gamma
 - [ ] Connect Beta to Gamma
 - [ ] Test end-to-end flow
 
 ### Phase 4: Testing (30 min)
+
 - [ ] Unit tests
 - [ ] Integration tests
 - [ ] Manual testing
@@ -103,6 +112,7 @@ CREATE TABLE gamma_decisions (
 ## API Design
 
 ### Create Decision
+
 ```python
 POST /gamma/decision
 {
@@ -119,6 +129,7 @@ POST /gamma/decision
 ```
 
 ### Get Pending
+
 ```python
 GET /gamma/pending
 Response: [
@@ -133,6 +144,7 @@ Response: [
 ```
 
 ### Approve/Deny
+
 ```python
 POST /gamma/approve/1
 {
@@ -145,6 +157,7 @@ POST /gamma/approve/1
 ## Frontend Design
 
 ### Dashboard Layout
+
 ```
 ┌─────────────────────────────────────────┐
 │  Guardian Gamma - Pending Decisions     │
@@ -176,6 +189,7 @@ POST /gamma/approve/1
 ## Integration Points
 
 ### Guardian Alpha → Gamma
+
 ```python
 # In eBPF LSM (when confidence < threshold)
 if confidence < 0.8:
@@ -191,6 +205,7 @@ if confidence < 0.8:
 ```
 
 ### Guardian Beta → Gamma
+
 ```python
 # In Dual-Lane (when anomaly detected)
 if anomaly_score > threshold and confidence < 0.8:
@@ -208,17 +223,20 @@ if anomaly_score > threshold and confidence < 0.8:
 ## Testing Plan
 
 ### Unit Tests
+
 - [ ] Decision creation
 - [ ] Decision approval/denial
 - [ ] Timeout handling
 - [ ] Feedback storage
 
 ### Integration Tests
+
 - [ ] Alpha → Gamma flow
 - [ ] Beta → Gamma flow
 - [ ] Frontend → Backend
 
 ### Manual Tests
+
 - [ ] Create decision from Alpha
 - [ ] Review in dashboard
 - [ ] Approve decision

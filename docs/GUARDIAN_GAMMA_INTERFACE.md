@@ -1,4 +1,4 @@
-### Por qué los 3 Guardianes son Necesarios
+# Por qué los 3 Guardianes son Necesarios
 
 **Ninguno puede funcionar solo**:
 
@@ -117,21 +117,25 @@ LOS 3 JUNTOS:
 ### Características Clave
 
 **1. Latencia Mínima**
+
 - Conversational UI: <100ms
 - Dashboard updates: Real-time (WebSocket)
 - Override controls: Instantáneo
 
 **2. Amplificación, No Reemplazo**
+
 - Humano toma decisiones críticas
 - IA proporciona contexto y análisis
 - Sistema ejecuta con velocidad de máquina
 
 **3. Detector de Disonancia**
+
 - Cuando IA sugiere algo que "no se siente bien"
 - Alerta visual inmediata
 - Humano puede override sin fricción
 
 **4. Feedback Loop**
+
 - Cada decisión humana entrena al sistema
 - False positives/negatives se corrigen
 - Sistema aprende del operador
@@ -215,16 +219,19 @@ Decisión: Manual (crítica)
 ### 1. Exoesqueleto Cognitivo
 
 **No es**:
+
 - Automatización que reemplaza al humano
 - IA que toma todas las decisiones
 - Sistema que "sabe más" que el operador
 
 **Es**:
+
 - Amplificación de capacidad humana
 - IA como asistente, no como jefe
 - Sistema que ejecuta a velocidad de máquina las decisiones humanas
 
 **Analogía**: Iron Man
+
 - Tony Stark (Gamma) tiene la inteligencia y estrategia
 - JARVIS (Alpha) proporciona análisis y sugerencias
 - Suit (Beta) ejecuta con fuerza sobrehumana
@@ -235,12 +242,14 @@ Decisión: Manual (crítica)
 **Qué es**: Cuando algo "no se siente bien"
 
 **Cómo funciona**:
+
 - IA hace sugerencia
 - Sistema calcula "expected human response"
 - Si hay mismatch → ALERTA DE DISONANCIA
 - Humano valida o rechaza
 
 **Por qué es crítico**:
+
 - Intuición humana detecta patrones que IA no ve
 - Sentido común > Algoritmo en casos edge
 - Última línea de defensa contra AIOpsDoom
@@ -250,25 +259,28 @@ Decisión: Manual (crítica)
 **Diferencia clave**:
 
 **Sistemas tradicionales**:
+
 ```
 Humano → Observa → Sistema
 (Humano está "fuera")
 ```
 
 **Cognitive OS**:
+
 ```
 Humano ⇄ Sistema
 (Humano es PARTE del sistema)
 ```
 
 **Resultado**:
+
 - Latencia cognitiva ~0
 - Flujo natural de trabajo
 - Simbiosis, no supervisión
 
 ---
 
-##  CLAIM 7: GUARDIAN GAMMA
+## CLAIM 7: GUARDIAN GAMMA
 
 ### Título de Patente
 
@@ -301,11 +313,13 @@ Humano ⇄ Sistema
 ### Prior Art
 
 **Búsqueda realizada**:
+
 - Google Patents: "human-in-the-loop" + "kernel"
 - IEEE Xplore: "HITL" + "operating system"
 - ACM Digital Library: "cognitive architecture" + "human"
 
 **Resultado**: **ZERO prior art** para:
+
 - Humano como componente arquitectural del OS
 - Interfaz de amplificación (no supervisión)
 - Detector de disonancia
@@ -316,6 +330,7 @@ Humano ⇄ Sistema
 **Estimación**: -10M
 
 **Justificación**:
+
 - Único sistema con humano integrado arquitecturalmente
 - Defensa contra AIOpsDoom (intuición > algoritmo)
 - Aplicable a todos los sistemas críticos

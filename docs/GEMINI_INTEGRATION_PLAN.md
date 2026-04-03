@@ -1,12 +1,12 @@
-#  Plan de Integración: Gemini como LLM Local de Sentinel
+# Plan de Integración: Gemini como LLM Local de Sentinel ring-0
 
-**Fecha**: 22 Diciembre , 22:45  
-**Objetivo**: Integrar Gemini como motor de IA para todos los componentes de Sentinel  
+**Objetivo**: Integrar Gemini como motor de IA para todos los componentes de Sentinel-cubepath que requieran capacidades de lenguaje natural, análisis semántico y toma de decisiones.
+
 **Fase**: Usar Gemini API hasta que Google preste hardware local
 
 ---
 
-##  VISIÓN GENERAL
+## VISIÓN GENERAL
 
 **Gemini será el "Semi-Dios del Mundo Cuántico"** - El cerebro de IA que potencia:
 
@@ -27,6 +27,7 @@
 **Con Gemini**: Semantic analysis
 
 **Implementación**:
+
 ```python
 # backend/src/aiops_shield_gemini.rs
 
@@ -65,6 +66,7 @@ class AIOpsShieldGemini:
 ```
 
 **Beneficios**:
+
 - ✅ Detecta ataques zero-day (no solo patterns conocidos)
 - ✅ Explica el razonamiento (Guardian Gamma)
 - ✅ Aprende de nuevos patrones
@@ -79,6 +81,7 @@ class AIOpsShieldGemini:
 **Con Gemini**: Síntesis inteligente + detección de contradicciones
 
 **Implementación**:
+
 ```python
 # backend/src/truth_algorithm_gemini.rs
 
@@ -122,6 +125,7 @@ class TruthAlgorithmGemini:
 ```
 
 **Beneficios**:
+
 - ✅ Síntesis inteligente de múltiples fuentes
 - ✅ Detección de contradicciones sutiles
 - ✅ E de credibilidad de fuentes
@@ -134,6 +138,7 @@ class TruthAlgorithmGemini:
 **Con Gemini**: Semantic verification en Ring 0
 
 **Implementación**:
+
 ```python
 # backend/src/cognitive_kernel_gemini.rs
 
@@ -178,6 +183,7 @@ class CognitiveKernelGemini:
 ```
 
 **Integración con eBPF LSM**:
+
 ```python
 # eBPF LSM llama a Gemini antes de permitir execve
 # Si Gemini dice "block" → return -EACCES
@@ -259,21 +265,6 @@ class LLMCache:
 
 ---
 
-## 💰 COSTOS ESTIMADOS
-
-### Con Gemini API
-
-**Gemini 1.5 Flash** (más barato):
-- Input:  / 1M tokens
-- Output: .30 / 1M tokens
-
-**Estimación mensual** (10K requests/día):
-- Promedio: 500 tokens input + 200 tokens output por request
-- 10K requests × 30 días = 300K requests/mes
-- Input: 150M tokens ×  = .25
-- Output: 60M tokens × .30 = .00
-- **Total: ~/mes** (muy barato con cache)
-
 ### Con Gemini Local (cuando Google preste hardware)
 
 - **Costo**:  (hardware prestado)
@@ -283,43 +274,50 @@ class LLMCache:
 
 ---
 
-##  ROADMAP DE IMPLEMENTACIÓN
+## ROADMAP DE IMPLEMENTACIÓN
 
 ### Fase 1: Fundación (1 semana)
+
 - [ ] Crear `LLMEngine` abstraction layer
 - [ ] Implementar `LLMCache` con Redis
 - [ ] Setup Gemini API credentials
 - [ ] Tests básicos de conectividad
 
 ### Fase 2: AIOpsDoom Integration (1 semana)
+
 - [ ] Implementar `AIOpsShieldGemini`
 - [ ] Benchmarks de latencia
 - [ ] Comparar accuracy vs regex patterns
 - [ ] Optimizar prompts
 
 ### Fase 3: Truth Algorithm Integration (1 semana)
+
 - [ ] Implementar `TruthAlgorithmGemini`
 - [ ] Integrar con source search
 - [ ] Validar síntesis vs baseline
 - [ ] Optimizar cache
 
 ### Fase 4: Cognitive Kernel POC (2 semanas)
+
 - [ ] Implementar `CognitiveKernelGemini`
 - [ ] Integrar con eBPF LSM
 - [ ] Benchmarks de latencia crítica
 - [ ] Validar decisiones
 
 ### Fase 5: Guardian Gamma Enhancement (1 semana)
+
 - [ ] Implementar recomendaciones
 - [ ] UI para mostrar reasoning
 - [ ] Learning from decisions
 
 ### Fase 6: Anomaly & Incident (1 semana)
+
 - [ ] Implementar detección
 - [ ] Implementar triage
 - [ ] Integrar con alerting
 
 ### Fase 7: Production Hardening (2 semanas)
+
 - [ ] Rate limiting
 - [ ] Error handling
 - [ ] Monitoring
@@ -329,15 +327,17 @@ class LLMCache:
 
 ---
 
-##  MÉTRICAS DE ÉXITO
+## MÉTRICAS DE ÉXITO
 
 ### Técnicas
+
 - ✅ Latencia <100ms para AIOpsDoom
 - ✅ Cache hit rate >90%
 - ✅ Accuracy >95% en detección
 - ✅ Uptime >99.9%
 
 ### Negocio
+
 - ✅ Costo </mes (con API)
 - ✅ Reducción 50% en falsos positivos
 - ✅ Reducción 80% en tiempo de triage
@@ -350,18 +350,20 @@ class LLMCache:
 **Cuando estén listos para prestar hardware**:
 
 Necesitamos:
+
 - 1x servidor con GPU (A100 o similar)
 - Gemini 1.5 Pro local deployment
 - Soporte técnico para optimización
 
 A cambio ofrecemos:
+
 - Caso de uso real y validado
 - Feedback de producción
 - Colaboración en research
 - Reconocimiento en papers/patents
 
-**Contacto**: jaime.novoase@gmail.com
+**Contacto**: <jaime.novoase@gmail.com>
 
 ---
 
-**"Gemini + Sentinel =  cognitiva"** 
+**"Gemini + Sentinel =  cognitiva"**
