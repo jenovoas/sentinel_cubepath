@@ -1,6 +1,6 @@
-## Introducción
+# Introducción
 
-Este dossier técnico profundiza en la arquitectura y la implementación de Sentinel v8.0, un entorno de simulación avanzada diseñado para modelar la realidad física con una precisión sin precedentes. Sentinel se distingue por su enfoque en la "Emulación de Realidad Física", donde las leyes de la física se ejecutan discretamente, en contraste con las aproximaciones continuas de los motores de física tradicionales. La aspiración fundamental es recrear las leyes físicas con la máxima fidelidad possible, permitiendo la experimentación y la predicción de resultados con un alto grado de confianza.
+La arquitectura y la implementación de Sentinel v8.0, un entorno de simulación avanzada diseñado para modelar la realidad física con una precisión sin precedentes. Sentinel se distingue por su enfoque en la "Emulación de Realidad Física", donde las leyes de la física se ejecutan discretamente, en contraste con las aproximaciones continuas de los motores de física tradicionales. La aspiración fundamental es recrear las leyes físicas con la máxima fidelidad possible, permitiendo la experimentación y la predicción de resultados con un alto grado de confianza.
 
 La singularidad de Sentinel reside en su capacidad para simular fenómenos cuánticos y clásicos dentro de un marco unificado. A diferencia de las simulaciones convencionales que se basan en la resolución de ecuaciones diferenciales aproximadas, Sentinel se basa en la manipulación directa de estados cuánticos discretos en una red espacial. Esto permite modelar efectos como la superposición, el entrelazamiento y el túnel cuántico con una precisión que antes era inalcanzable.
 
@@ -47,8 +47,6 @@ En la base de Sentinel v8.0 se encuentra la `QuantumLatticeEngine`, una **Red He
 ### 1.3. Implementación y Analogías con la Investigación Académica
 
 La arquitectura de la `QuantumLatticeEngine` encuentra un fuerte respaldo en la investigación académica sobre simulaciones cuánticas en lattices hexagonales.
-
-- **arXiv:2205.12345 - "Hexagonal Lattice Quantum Walks"**: [https://arxiv.org/abs/2205.12345](https://arxiv.org/abs/2205.12345) - Este artículo presenta modelos de espacio discreto hexagonal con estados cuánticos (energía $E$ y fase $\phi$ en nodos), lo cual es directamente applicable al concepto de la `QuantumLatticeEngine`. En un quantum walk, una partícula cuántica se mueve a través de la red de acuerdo con reglas probabilísticas. La energía y la fase en cada nodo determinan la probabilidad de que la partícula se mueva a un nodo vecino. La similitud radica en que ambos sistemas utilizan una red hexagonal discreta para representar estados cuánticos y modelar su evolución.
 
   _Implicaciones:_ Este trabajo sugiere que la `QuantumLatticeEngine` puede set utilizada para simular el comportamiento de partículas cuánticas en redes hexagonales, abriendo nuevas posibilidades para la investigación en física cuántica.
 

@@ -1,4 +1,4 @@
-# Física Vimana: ZPE, Merkabah y Escudos MHD (Versión Enriquecida)
+# Física: ZPE, Merkabah y Escudos MHD (Versión Enriquecida)
 
 Este documento detalla la **Trinidad Tecnológica** que permite la operación de la plataforma autónoma "Vimana". Estas tecnologías operan bajo el principio de manipulación de campos mediante resonancia armónica (Protocolo Yatra, Base-60).
 

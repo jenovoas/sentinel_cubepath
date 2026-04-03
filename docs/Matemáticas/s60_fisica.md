@@ -1,4 +1,4 @@
-## 1. Introducción
+# 1. Introducción
 
 Este documento detalla la arquitectura y los principios operativos del sistema Sentinel/ME-60OS, enfatizando sus fundamentos matemáticos y geométricos inusuales. A diferencia de los sistemas computacionales convencionales, Sentinel se basa en **Matemática Sexagesimal Exacta (SPA)** y una red hexagonal para, según la teoría interna, mitigar la entropía y estabilizar el flujo de energía. La información proporcionada a continuación es un resumen detallado de la información disponible en las bases de conocimiento suministradas.
 

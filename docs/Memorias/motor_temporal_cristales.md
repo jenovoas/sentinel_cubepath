@@ -1,6 +1,6 @@
-## Introducción
+# Introducción
 
-Este dossier técnico detalla el diseño y la implementación del Motor Temporal en Sentinel v8.0, un componente crítico para mantener la coherencia temporal sin depender de relojes de sistema convencionales sujetos a fluctuaciones e imprecisiones. El Motor Temporal se basa en el concepto de un "Crystal de Tiempo" (TimeCrystalClock), un oscilador que rompe la simetría de traslación temporal, y está implementado en el archivo `time_crystal_clock.py`. El objetivo principal es proporcionar una base temporal estable y precisa para operaciones sensibles al tiempo, como el cifrado dinámico.
+El diseño y la implementación del Motor Temporal en Sentinel v8.0, un componente crítico para mantener la coherencia temporal sin depender de relojes de sistema convencionales sujetos a fluctuaciones e imprecisiones. El Motor Temporal se basa en el concepto de un "Crystal de Tiempo" (TimeCrystalClock), un oscilador que rompe la simetría de traslación temporal, y está implementado en el archivo `time_crystal_clock.py`. El objetivo principal es proporcionar una base temporal estable y precisa para operaciones sensibles al tiempo, como el cifrado dinámico.
 
 ## 1. Arquitectura del TimeCrystalClock
 

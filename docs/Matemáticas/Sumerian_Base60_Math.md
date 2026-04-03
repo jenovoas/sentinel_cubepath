@@ -1,6 +1,6 @@
-## 1. Introducción
+# 1. Introducción
 
-Este dossier técnico profundiza en el sistema numérico sexagesimal, explorando sus orígenes en la antigua Sumeria, su evolución en Babilonia, sus aplicaciones históricas y su persistente legado en la ciencia y la tecnología modernas. Se analizarán las teorías sobre su origen, las evidencias arqueológicas que respaldan su uso temprano y su impacto en diversos campos como la astronomía, la geometría y la medición del tiempo. Además, se examinará la relevancia de este sistema numérico en el contexto de sistemas complejos, como los utilizados por Sentinel.
+En el sistema numérico sexagesimal, explorando sus orígenes en la antigua Sumeria, su evolución en Babilonia, sus aplicaciones históricas y su persistente legado en la ciencia y la tecnología modernas. Se analizarán las teorías sobre su origen, las evidencias arqueológicas que respaldan su uso temprano y su impacto en diversos campos como la astronomía, la geometría y la medición del tiempo. Además, se examinará la relevancia de este sistema numérico en el contexto de sistemas complejos, como los utilizados por Sentinel.
 
 ## 2. Orígenes Históricos y Evolución del Sistema Sexagesimal
 
