@@ -6,7 +6,8 @@ Completar la integración de algoritmos cuánticos (QAOA y VQE) con Sentinel Cor
 
 ## Estado Actual ✅
 
-### Completado:
+### Completado
+
 1. ✅ **Core simulators** implementados:
    - `sentinel_quantum_core.rs` - QAOA, VQE, multi-membrane Hamiltonian
    - `quantum_lite.rs` - Versión segura para laptop
@@ -24,7 +25,8 @@ Completar la integración de algoritmos cuánticos (QAOA y VQE) con Sentinel Cor
    - `QUANTUM_CONVERGENCE_ANALYSIS.md` - Análisis de 78 papers académicos
    - `COMPLETE_SUMMARY.md` - Resumen del ecosistema
 
-### Pendiente:
+### Pendiente
+
 1. ✅ **Ejecutar y validar** los casos de uso (10.2-Sigma validado)
 2. ✅ **Generar visualizaciones** de resultados (Nature-quality PNGs generados)
 3. ✅ **Documentar resultados** en formato ejecutivo (QUANTUM_IMPLEMENTATION_RESULTS.md)
@@ -42,6 +44,7 @@ Completar la integración de algoritmos cuánticos (QAOA y VQE) con Sentinel Cor
 **Propósito**: Script maestro que ejecuta todos los casos de uso y genera reportes.
 
 **Funcionalidad**:
+
 - Ejecuta buffer optimization con QAOA
 - Ejecuta threat detection con VQE
 - Ejecuta demo de algoritmos (QAOA vs VQE comparison)
@@ -50,6 +53,7 @@ Completar la integración de algoritmos cuánticos (QAOA y VQE) con Sentinel Cor
 - Maneja errores y memoria de forma segura
 
 **Salidas**:
+
 - `buffer_optimization_results.md` - Resultados detallados
 - `threat_detection_results.md` - Resultados detallados
 - `algorithm_comparison_results.md` - Comparación QAOA vs VQE
@@ -62,6 +66,7 @@ Completar la integración de algoritmos cuánticos (QAOA y VQE) con Sentinel Cor
 #### Archivo: `quantum/use_case_buffer_optimization.rs` [MODIFY]
 
 **Cambios**:
+
 - Mejorar gráficos con más detalles (speedup, memory usage)
 - Agregar tabla comparativa en el gráfico
 - Incluir métricas de mejora porcentual
@@ -69,6 +74,7 @@ Completar la integración de algoritmos cuánticos (QAOA y VQE) con Sentinel Cor
 #### Archivo: `quantum/use_case_threat_detection.rs` [MODIFY]
 
 **Cambios**:
+
 - Agregar visualización de patrones de amenazas detectados
 - Mostrar matriz de confusión (true positives, false positives)
 - Comparar con detección clásica
@@ -80,8 +86,9 @@ Completar la integración de algoritmos cuánticos (QAOA y VQE) con Sentinel Cor
 #### Archivo: `docs/QUANTUM_IMPLEMENTATION_RESULTS.md` [NEW]
 
 **Contenido**:
+
 1. **Executive Summary**: Resultados clave en 1 página
-2. **Buffer Optimization Results**: 
+2. **Buffer Optimization Results**:
    - Configuración óptima encontrada
    - Mejora en latencia y throughput
    - Comparación quantum vs classical
@@ -105,6 +112,7 @@ Completar la integración de algoritmos cuánticos (QAOA y VQE) con Sentinel Cor
 **Propósito**: Demo interactivo que muestra todo el flujo end-to-end.
 
 **Flujo**:
+
 1. Inicializa Sentinel Quantum Core (con checks de memoria)
 2. Ejecuta buffer optimization
 3. Aplica configuración óptima
@@ -121,6 +129,7 @@ Completar la integración de algoritmos cuánticos (QAOA y VQE) con Sentinel Cor
 #### Archivo: `quantum/README.md` [MODIFY]
 
 **Agregar secciones**:
+
 - **Validated Results**: Link a resultados reales
 - **Quick Demo**: Comando único para ejecutar todo
 - **Performance Benchmarks**: Tabla con métricas reales
@@ -129,6 +138,7 @@ Completar la integración de algoritmos cuánticos (QAOA y VQE) con Sentinel Cor
 #### Archivo: `docs/QUANTUM_CONVERGENCE_ANALYSIS.md` [MODIFY]
 
 **Agregar**:
+
 - Sección "Experimental Validation" con resultados reales
 - Links a visualizaciones generadas
 - Actualizar claims con evidencia cuantitativa
@@ -140,6 +150,7 @@ Completar la integración de algoritmos cuánticos (QAOA y VQE) con Sentinel Cor
 ### Tests Automatizados
 
 #### 1. Test de Casos de Uso
+
 ```bash
 cd /home/jnovoas/sentinel/quantum
 python3 -m pytest test_use_cases.rs -v
@@ -148,6 +159,7 @@ python3 -m pytest test_use_cases.rs -v
 **Archivo**: `quantum/test_use_cases.rs` [NEW]
 
 **Tests**:
+
 - `test_buffer_optimization_runs()` - Verifica que el caso de uso se ejecute sin errores
 - `test_buffer_optimization_produces_valid_config()` - Valida que la configuración sea válida
 - `test_threat_detection_runs()` - Verifica ejecución
@@ -155,12 +167,14 @@ python3 -m pytest test_use_cases.rs -v
 - `test_memory_safety()` - Verifica que no exceda memoria disponible
 
 #### 2. Test de Integración
+
 ```bash
 cd /home/jnovoas/sentinel/quantum
 cargo run --bin run_all_use_cases.rs --test-mode
 ```
 
 **Verifica**:
+
 - Todos los casos de uso se ejecutan
 - Todas las visualizaciones se generan
 - Todos los reportes se crean
@@ -169,7 +183,9 @@ cargo run --bin run_all_use_cases.rs --test-mode
 ### Tests Manuales
 
 #### 1. Verificar Visualizaciones
+
 **Pasos**:
+
 1. Ejecutar: `cargo run --bin run_all_use_cases.rs`
 2. Abrir cada PNG generado en `quantum/`
 3. Verificar que los gráficos sean legibles y profesionales
@@ -178,7 +194,9 @@ cargo run --bin run_all_use_cases.rs --test-mode
 **Criterio de éxito**: Todas las visualizaciones son claras y muestran resultados positivos
 
 #### 2. Revisar Documentación
+
 **Pasos**:
+
 1. Abrir `docs/QUANTUM_IMPLEMENTATION_RESULTS.md`
 2. Leer el executive summary
 3. Verificar que todos los links a imágenes funcionen
@@ -187,7 +205,9 @@ cargo run --bin run_all_use_cases.rs --test-mode
 **Criterio de éxito**: Documentación es clara, profesional y lista para compartir
 
 #### 3. Demo Integrado
+
 **Pasos**:
+
 1. Ejecutar: `python3 quantum/integrated_demo.rs`
 2. Esperar a que genere el dashboard HTML
 3. Abrir el HTML en navegador
@@ -201,30 +221,35 @@ cargo run --bin run_all_use_cases.rs --test-mode
 ## Orden de Ejecución
 
 ### Fase 1: Validación (1-2 horas)
+
 1. Crear `run_all_use_cases.rs`
 2. Ejecutar todos los casos de uso
 3. Generar todas las visualizaciones
 4. Verificar que todo funcione sin errores de memoria
 
 ### Fase 2: Documentación (1 hora)
+
 1. Crear `QUANTUM_IMPLEMENTATION_RESULTS.md`
 2. Consolidar todos los resultados
 3. Embeber visualizaciones
 4. Escribir executive summary
 
 ### Fase 3: Demo (1 hora)
+
 1. Crear `integrated_demo.rs`
 2. Generar dashboard HTML interactivo
 3. Probar en navegador
 4. Refinar visualizaciones
 
 ### Fase 4: Tests (30 min)
+
 1. Crear `test_use_cases.rs`
 2. Ejecutar pytest
 3. Verificar cobertura
 4. Documentar resultados de tests
 
 ### Fase 5: Actualización de Docs (30 min)
+
 1. Actualizar `quantum/README.md`
 2. Actualizar `QUANTUM_CONVERGENCE_ANALYSIS.md`
 3. Verificar links
@@ -235,19 +260,25 @@ cargo run --bin run_all_use_cases.rs --test-mode
 ## Riesgos y Mitigaciones
 
 ### Riesgo 1: Memoria Insuficiente
-**Mitigación**: 
+
+**Mitigación**:
+
 - Usar `quantum_lite.rs` con configuración segura (3 membranes, 5 levels)
 - Implementar checks de memoria antes de cada ejecución
 - Ofrecer modo "minimal" para laptops con poca RAM
 
 ### Riesgo 2: Resultados No Impresionantes
+
 **Mitigación**:
+
 - Ajustar parámetros de optimización para mostrar mejoras claras
 - Usar casos de uso realistas pero favorables
 - Documentar limitaciones honestamente
 
 ### Riesgo 3: Tiempo de Ejecución Largo
+
 **Mitigación**:
+
 - Limitar iteraciones de optimización (maxiter=30-50)
 - Usar configuraciones pequeñas pero válidas
 - Implementar progress bars para feedback
@@ -280,6 +311,7 @@ cargo run --bin run_all_use_cases.rs --test-mode
 
 > [!WARNING]
 > **Limitación de Hardware**: Recuerda que el ventilador de tu laptop está defectuoso. Durante la ejecución de casos de uso:
+>
 > - Monitorea temperatura constantemente
 > - Ejecuta en sesiones cortas (5-10 min)
 > - Usa base refrigerante si es posible
@@ -290,6 +322,7 @@ cargo run --bin run_all_use_cases.rs --test-mode
 
 > [!TIP]
 > **Optimización**: Si el tiempo de ejecución es muy largo, considera:
+>
 > - Reducir `maxiter` en QAOA/VQE (de 50 a 30)
 > - Usar `n_membranes=2` en lugar de 3
 > - Cachear resultados intermedios

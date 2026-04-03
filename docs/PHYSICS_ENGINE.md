@@ -6,8 +6,8 @@ Este documento detalla la reconstrucción del motor de física de Ring-0, basado
 
 El sistema utiliza aritmética de punto fijo sexagesimal (Base-60) para evitar la deriva inducida por el redondeo decimal en cálculos resonantes.
 
--   **Escala Maestro (SCALE_0):** ^4 = 12,960,000$ (Resolución de 12.9M unidades por entero).
--   **Unidad Natural (1.0):** Representada como `12,960,000` en crudo.
+- **Escala Maestro (SCALE_0):** ^4 = 12,960,000$ (Resolución de 12.9M unidades por entero).
+- **Unidad Natural (1.0):** Representada como `12,960,000` en crudo.
 
 ## 2. Protocolo G-Zero (Reducción de Masa)
 
@@ -25,9 +25,9 @@ La carga del Cortex no se mide en CPU%, sino en coherencia y presión de datos (
 
 $$ L_{eff} = \frac{M \times P}{C} $$
 
--   **M (Masa):** Carga estática del proceso.
--   **P (Memento):** Prioridad del proceso.
--   **C (Coherencia):** Estabilidad del sistema [0.0 - 1.0].
+- **M (Masa):** Carga estática del proceso.
+- **P (Memento):** Prioridad del proceso.
+- **C (Coherencia):** Estabilidad del sistema [0.0 - 1.0].
 
 ## 4. Implementación en Rust (`src/physics.rs`)
 

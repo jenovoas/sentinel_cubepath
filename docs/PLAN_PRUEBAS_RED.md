@@ -1,12 +1,12 @@
 # 📡 Plan de Pruebas: Distancias y Pérdidas de Señal en Sistema de Buffers
 
-**Fecha**: 20 Diciembre   
+
 **Propósito**: Validar performance de buffers en escenarios de red distribuida  
 **Componente**: Dual-Lane Architecture + Adaptive Buffers
 
 ---
 
-##  OBJETIVO
+## OBJETIVO
 
 Medir el impacto de la **distancia física** y **pérdidas de señal** en el sistema de buffers adaptativos, validando que la arquitectura mantiene performance bajo condiciones de red adversas.
 
@@ -17,6 +17,7 @@ Medir el impacto de la **distancia física** y **pérdidas de señal** en el sis
 ### 1. Distancia Física
 
 **Escenarios**:
+
 - **Local**: Cliente y servidor en misma máquina (localhost)
 - **LAN**: Cliente y servidor en misma red local (<1ms RTT)
 - **WAN Cercano**: Cliente y servidor en misma ciudad (5-20ms RTT)
@@ -26,6 +27,7 @@ Medir el impacto de la **distancia física** y **pérdidas de señal** en el sis
 ### 2. Pérdida de Paquetes
 
 **Niveles**:
+
 - **0%**: Red perfecta (baseline)
 - **0.1%**: Red excelente (fibra óptica)
 - **1%**: Red buena (típica LAN corporativa)
@@ -35,6 +37,7 @@ Medir el impacto de la **distancia física** y **pérdidas de señal** en el sis
 ### 3. Latencia de Red (RTT)
 
 **Rangos**:
+
 - **<1ms**: Localhost/LAN
 - **1-10ms**: LAN extendida
 - **10-50ms**: WAN nacional
@@ -45,6 +48,7 @@ Medir el impacto de la **distancia física** y **pérdidas de señal** en el sis
 ### 4. Jitter (Variación de Latencia)
 
 **Niveles**:
+
 - **<1ms**: Red estable
 - **1-5ms**: Red normal
 - **5-20ms**: Red variable
@@ -53,6 +57,7 @@ Medir el impacto de la **distancia física** y **pérdidas de señal** en el sis
 ### 5. Ancho de Banda
 
 **Escenarios**:
+
 - **10 Gbps**: Datacenter
 - **1 Gbps**: LAN corporativa
 - **100 Mbps**: Internet empresarial
@@ -66,6 +71,7 @@ Medir el impacto de la **distancia física** y **pérdidas de señal** en el sis
 ### Velocidad de Propagación
 
 **Fibra Óptica**:
+
 ```
 Velocidad luz en vacío:  c = 299,792,458 m/s
 Velocidad en fibra:      v = c / n
@@ -74,6 +80,7 @@ Velocidad efectiva:      v ≈ 204,000 km/s
 ```
 
 **Latencia por Distancia** (solo propagación):
+
 ```
 Latencia (ms) = Distancia (km) / 204 km/ms
 
@@ -85,6 +92,7 @@ Ejemplos:
 ```
 
 **Latencia Total** (RTT = Round Trip Time):
+
 ```
 RTT = 2 × (Latencia propagación + Latencia procesamiento + Latencia cola)
 
@@ -97,6 +105,7 @@ Donde:
 ### Pérdida de Señal (Atenuación)
 
 **Fibra Óptica**:
+
 ```
 Atenuación (dB) = α × Distancia (km)
 
@@ -110,6 +119,7 @@ Ejemplos:
 ```
 
 **Relación Señal/Ruido (SNR)**:
+
 ```
 SNR (dB) = Potencia señal (dBm) - Potencia ruido (dBm) - Atenuación (dB)
 
@@ -119,6 +129,7 @@ Umbral mínimo: ~10 dB para comunicación confiable
 ### Pérdida de Paquetes
 
 **Modelo de Gilbert-Elliott** (ráfagas de pérdidas):
+
 ```
 P(pérdida) = p / (p + q)
 
@@ -141,6 +152,7 @@ Ejemplo WiFi congestionado:
 **Objetivo**: Medir cómo la distancia afecta el throughput y latencia de buffers.
 
 **Setup**:
+
 ```python
 # Simular distancias con tc (Traffic Control)
 import subprocess
@@ -164,12 +176,14 @@ scenarios = [
 ```
 
 **Métricas**:
+
 - Throughput (eventos/segundo)
 - Latencia p50, p95, p99
 - Buffer utilization
 - Retransmisiones TCP
 
 **Hipótesis**:
+
 - Throughput disminuye con distancia
 - Latencia aumenta linealmente con distancia
 - Buffers adaptativos compensan mejor que estáticos
@@ -181,6 +195,7 @@ scenarios = [
 **Objetivo**: Validar que buffers adaptativos manejan mejor las pérdidas.
 
 **Setup**:
+
 ```python
 def setup_packet_loss(interface, loss_percent):
     """Simula pérdida de paquetes usando tc"""
@@ -195,12 +210,14 @@ loss_scenarios = [0, 0.1, 1, 5, 10]  # %
 ```
 
 **Métricas**:
+
 - Tasa de retransmisión
 - Throughput efectivo
 - Latencia de recuperación
 - Buffer overflow events
 
 **Hipótesis**:
+
 - Buffers adaptativos reducen retransmisiones
 - Throughput se degrada menos con buffers dinámicos
 
@@ -211,6 +228,7 @@ loss_scenarios = [0, 0.1, 1, 5, 10]  # %
 **Objetivo**: Medir estabilidad de buffers bajo latencia variable.
 
 **Setup**:
+
 ```python
 def setup_jitter(interface, delay_ms, jitter_ms):
     """Simula jitter usando tc"""
@@ -229,6 +247,7 @@ jitter_scenarios = [
 ```
 
 **Métricas**:
+
 - Variación de latencia (stddev)
 - Out-of-order packets
 - Buffer resize frequency
@@ -241,6 +260,7 @@ jitter_scenarios = [
 **Objetivo**: Validar que buffers se adaptan a bandwidth disponible.
 
 **Setup**:
+
 ```python
 def setup_bandwidth_limit(interface, rate_mbps):
     """Limita ancho de banda usando tc"""
@@ -257,6 +277,7 @@ bandwidth_scenarios = [1, 10, 100, 1000]  # Mbps
 ```
 
 **Métricas**:
+
 - Utilización de bandwidth
 - Queue depth
 - Packet drops
@@ -295,6 +316,7 @@ print(f"Santiago - Londres (12,000 km): {calculate_min_latency(12000):.2f} ms")
 ```
 
 **Output Esperado**:
+
 ```
 Santiago - Buenos Aires (1,400 km): 6.86 ms
 Santiago - São Paulo (3,000 km): 14.71 ms
@@ -336,6 +358,7 @@ print(f"Santiago - Miami RTT: {calculate_real_rtt(7000, 15):.2f} ms")
 ```
 
 **Output Esperado**:
+
 ```
 Santiago - Buenos Aires RTT: 27.71 ms
 Santiago - Miami RTT: 107.62 ms
@@ -420,6 +443,7 @@ for loss in [0, 0.1, 1, 5, 10]:
 ```
 
 **Output Esperado**:
+
 ```
 Throughput con diferentes pérdidas (1 Gbps, 50ms RTT):
   0% pérdida: 1000.00 Mbps (100.0% del bandwidth)
@@ -602,6 +626,7 @@ if __name__ == '__main__':
 ## 📊 MÉTRICAS ESPERADAS
 
 ### Baseline (Localhost)
+
 ```
 Throughput:      100,000 eventos/s
 Latencia p50:    0.01 ms
@@ -611,6 +636,7 @@ Buffer util:     50%
 ```
 
 ### WAN Medio (50ms RTT, 1% pérdida)
+
 ```
 Throughput:      ~70,000 eventos/s (-30%)
 Latencia p50:    ~0.5 ms (+50x)
@@ -620,6 +646,7 @@ Buffer util:     85%
 ```
 
 ### WAN Lejano (150ms RTT, 5% pérdida)
+
 ```
 Throughput:      ~40,000 eventos/s (-60%)
 Latencia p50:    ~2.0 ms (+200x)

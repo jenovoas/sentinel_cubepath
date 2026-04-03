@@ -4,7 +4,7 @@
 
 Integrar AIOpsShield + TruthSync en pipeline paralelo sin degradar latencia.
 
-**Claim 6 Patente**: Pipeline paralelo de protección telemétrica con 0ms overhead.
+** Pipeline paralelo de protección telemétrica con 0ms overhead.
 
 ---
 
