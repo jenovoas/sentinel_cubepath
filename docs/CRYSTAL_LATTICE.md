@@ -348,12 +348,14 @@ Por cada tick (cada 23,939,835 ns = 41.7713 Hz):
 ```
 
 La clave de cifrado es, por tanto, una función de:
+
 - El tiempo (timestamp en nanosegundos — nunca se repite)
 - La actividad neuronal (cuántas neuronas han disparado en la ventana actual)
 - La coherencia del lattice de cristales (cuánta energía hay en el sistema)
 - El ratio Plimpton 322 Fila 1 como constante matemática verificable
 
 Esto garantiza tres propiedades criptográficas deseables:
+
 1. **No repetición:** el timestamp en nanosegundos garantiza que la clave sea única en cada tick
 2. **Sensibilidad al estado:** la clave refleja el estado del sistema en ese instante exacto
 3. **Determinismo verificable:** dado el mismo estado del sistema, produce la misma clave
@@ -401,6 +403,7 @@ Para una firma criptográfica o un hash de verificación, cualquier diferencia d
 ### S60 Resuelve el No-Determinismo
 
 Con S60:
+
 ```rust
 let a = S60::from_raw(12960000) / S60::from_raw(3);  // 1/3 exacto en S60
 let b = a * S60::from_raw(3);                         // Debe ser 1 exacto
