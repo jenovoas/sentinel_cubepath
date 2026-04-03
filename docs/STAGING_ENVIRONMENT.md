@@ -1,14 +1,14 @@
 # 🧪 Staging Environment - Setup Guide
 
 **Purpose**: Isolated testing environment for HackMe challenge validation  
-**Status**: Ready to deploy  
-**Estimated Setup Time**: 30 minutes
+**Status**: Ready to deploy
 
 ---
 
-##  OBJECTIVES
+## OBJECTIVES
 
 **Staging environment will allow you to**:
+
 1. Test all security features in isolation
 2. Validate HackMe challenge scenarios
 3. Benchmark performance under load
@@ -51,29 +51,34 @@
 
 ### Key Differences from Production
 
-| Feature | Production | Staging |
-|---------|-----------|---------|
-| **Domain** | sentinel.example.com | staging.sentinel.example.com |
-| **SSL** | Let's Encrypt | Self-signed (or Cloudflare) |
-| **Data Retention** | 2 years | 7 days |
-| **Resources** | 32GB RAM, 8 CPU | 16GB RAM, 4 CPU |
-| **Monitoring** | 24/7 alerts | Business hours only |
-| **Backups** | Daily | None (ephemeral) |
+| Feature            | Production           | Staging                      |
+| ------------------ | -------------------- | ---------------------------- |
+| **Domain**         | sentinel.example.com | staging.sentinel.example.com |
+| **SSL**            | Let's Encrypt        | Self-signed (or Cloudflare)  |
+| **Data Retention** | 2 years              | 7 days                       |
+| **Resources**      | 32GB RAM, 8 CPU      | 16GB RAM, 4 CPU              |
+| **Monitoring**     | 24/7 alerts          | Business hours only          |
+| **Backups**        | Daily                | None (ephemeral)             |
 
 ---
 
 ## 📁 FILES TO CREATE
 
 ### 1. docker-compose.staging.yml
+
 ### 2. .env.staging
+
 ### 3. nginx/nginx.staging.conf
+
 ### 4. scripts/deploy-staging.sh
+
 ### 5. scripts/test-staging.sh
+
 ### 6. monitoring/alerts.staging.yml
 
 ---
 
-##  DEPLOYMENT STEPS
+## DEPLOYMENT STEPS
 
 ### Prerequisites
 
@@ -200,21 +205,25 @@ sudo iptables -D INPUT -p tcp --dport 3100 -j DROP
 ### Prometheus Queries
 
 **Service Health**:
+
 ```promql
 up{job="sentinel-backend"}
 ```
 
 **Request Rate**:
+
 ```promql
 rate(http_requests_total[5m])
 ```
 
 **Error Rate**:
+
 ```promql
 rate(http_requests_total{status=~"5.."}[5m])
 ```
 
 **Latency P95**:
+
 ```promql
 histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
 ```
@@ -232,7 +241,7 @@ groups:
         for: 5m
         annotations:
           summary: "Service {{ $labels.job }} is down"
-      
+
       - alert: HighErrorRate
         expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.05
         for: 10m
@@ -247,6 +256,7 @@ groups:
 ### Staging-Specific Security
 
 1. **Isolated Network**:
+
 ```yaml
 # docker-compose.staging.yml
 networks:
@@ -258,16 +268,19 @@ networks:
 ```
 
 2. **Limited Exposure**:
+
 - Only Nginx exposed to internet
 - All other services internal-only
 - Cloudflare Tunnel for additional protection
 
 3. **Ephemeral Data**:
+
 - 7-day retention (auto-delete)
 - No production data
 - Synthetic test data only
 
 4. **Access Control**:
+
 ```bash
 # IP whitelist (optional)
 # nginx.staging.conf
@@ -278,7 +291,7 @@ deny all;
 
 ---
 
-##  HACKME CHALLENGE PREPARATION
+## HACKME CHALLENGE PREPARATION
 
 ### Pre-Challenge Checklist
 
@@ -357,7 +370,7 @@ After staging validation:
 2. **Document Lessons Learned** in `STAGING_REPORT.md`
 3. **Prepare HackMe Announcement** with staging results
 4. **Deploy Production** with confidence
-5. **Launch Public Challenge** 
+5. **Launch Public Challenge**
 
 ---
 

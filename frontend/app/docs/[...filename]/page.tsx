@@ -1,4 +1,5 @@
 import React from "react";
+export const dynamic = 'force-dynamic';
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -22,12 +23,7 @@ function getMarkdownFiles(dir: string, base: string, fileList: string[] = []) {
   return fileList;
 }
 
-export async function generateStaticParams() {
-  const docsDir = path.join(process.cwd(), "../docs");
-  if (!fs.existsSync(docsDir)) return [];
-  const files = getMarkdownFiles(docsDir, docsDir);
-  return files.map((file) => ({ filename: file.split("/") }));
-}
+
 
 // ─── RESOLVE RELATIVE MD LINKS ───────────────────────────────────────────────
 
@@ -200,7 +196,7 @@ export default async function DocViewer({
 }: {
   params: { filename: string[] };
 }) {
-  const docsDir = path.join(process.cwd(), "../docs");
+  const docsDir = '/root/sentinel-cubepath/docs';
   const currentPath = params.filename.join("/");
   const filePath = path.join(docsDir, ...params.filename);
 

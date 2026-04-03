@@ -22,7 +22,9 @@ export async function GET() {
   try {
     const docsDir = '/root/sentinel-cubepath/docs';
     const files = getMarkdownFiles(docsDir, docsDir);
-    return NextResponse.json(files);
+    return NextResponse.json(files, {
+      headers: { 'Cache-Control': 'no-store' },
+    });
   } catch (err) {
     return NextResponse.json({ error: 'Failed to read docs' }, { status: 500 });
   }

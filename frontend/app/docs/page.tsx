@@ -38,7 +38,7 @@ export default function DocsIndex() {
   const [openFolders, setOpenFolders] = useState<Set<string>>(new Set(["ROOT DOCUMENTS"]));
 
   useEffect(() => {
-    fetch(`/internal-docs-api`)
+    fetch(`/internal-docs-api`, { cache: 'no-store' })
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -67,7 +67,7 @@ export default function DocsIndex() {
     setIsSearching(true);
     const timer = setTimeout(() => {
       // Usamos el endpoint de busqueda corregido
-      fetch(`/internal-docs-api/search?q=${encodeURIComponent(searchQuery)}`)
+      fetch(`/internal-docs-api/search?q=${encodeURIComponent(searchQuery)}`, { cache: 'no-store' })
         .then((res) => res.json())
         .then((data) => {
           if (Array.isArray(data)) {
