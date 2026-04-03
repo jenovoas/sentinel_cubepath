@@ -13,6 +13,7 @@ The membrane potential $V(t)$ of a neuron follows the differential equation:
 $$\tau_m \frac{dV}{dt} = -(V - V_{rest}) + R_m I(t)$$
 
 In our discrete Rust implementation:
+
 - **Integration**: $V_n = (V_{n-1} \cdot \text{Decay}) + \text{Amplitude}$
 - **Firing**: If $V_n \geq V_{threshold}$, then $Fire! \text{ and } V_n = 0$
 
