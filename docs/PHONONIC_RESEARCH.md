@@ -2,16 +2,15 @@
 
 **Un Estudio Computacional sobre la Persistencia de Datos de Alta Fidelidad**
 
-**Autores**: Jaime Novoa Sepúlveda, Equipo de Desollo ME-60OS  
-**Afiliación**: Laboratorio de Investigación ME-60OS — División Cuántica  
-**Fecha**:  de la fase de validación  
+**Autores**: Jaime Novoa Sepúlveda 
+**Afiliación**: Laboratorio de Investigación en Memoria Fonónica.
 **Clasificación**: Prepublicación / Borrador v1.1
 
 ---
 
 ## 🟥 Resumen
 
-Este estudio presenta una arquitectura de almacenamiento de datos distribuido basada en Cristales Temporales Forzados-Disipativos, simulados dentro de un estricto marco aritmético entero en Base-60 (Sexagesimal). La información no se representa como estados binarios estáticos, sino como patrones dinámicos de amplitud de osciladores armónicos. A través del entorno de simulación ME-60OS S60, exploramos los límites termodinámicos y de control teórico de la retención resonante de información.
+Este estudio presenta una arquitectura de almacenamiento de datos distribuido basada en Cristales Temporales Forzados-Disipativos, simulados dentro de un estricto marco aritmético entero en Base-60 (Sexagesimal). La información no se representa como estados binarios estáticos, sino como patrones dinámicos de amplitud de osciladores armónicos. A través del entorno de simulación en sentinel S60, exploramos los límites termodinámicos y de control teórico de la retención resonante de información.
 
 Se probaron dos modelos: un Codificador de Amplitud Monolítico y una Red Fonónica Distribuida. El enfoque monolítico, aunque conceptualmente elegante, mostró una inestabilidad catastrófica al operar en magnitudes superiores a ^{50}$, debido a la discretización y a la amplificación del término derivativo en el controlador PID. En cambio, la red distribuida —donde cada celda resonante almacena un solo carácter estabilizado por un lazo de retroalimentación local— logró una recuperación del 100% de la información tras una perturbación entrópica global.
 
